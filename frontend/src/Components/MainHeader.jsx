@@ -24,7 +24,7 @@ function MainHeader(){
             )}
             <div className={`fixed top-16 left-0 h-screen transform transition-transform duration-300 ${open ? "translate-x-0" : "-translate-x-full"}`}>
                 <Sidebar/>
-            </div>\
+            </div>
         </>
     );
 }
