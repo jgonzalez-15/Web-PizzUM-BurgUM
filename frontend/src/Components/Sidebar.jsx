@@ -1,10 +1,13 @@
+import { Link } from "react-router-dom"
+import SidebarItem from "./SidebarItem"
+
 function Sidebar(){
     return(
-        <div className="h-screen w-full bg-orange-400 flex flex-col">
-            <p className="m-2">Inicio</p>
-            <p className="m-2">Ingresar</p>
-            <p className="m-2">Comprar</p>
-            <p className="m-2">Mis Pedidos</p>
+        <div className="h-full w-64 bg-gray-100 flex flex-col">
+            <SidebarItem text='Inicio' route='/homepage'/>
+            <SidebarItem text='Comprar' route='/newOrder'/>
+            <SidebarItem text='Tus Pedidos' route='/orders'/>
+            <SidebarItem text='Tus Favoritos' route='/favourites'/>
         </div>
     )
 }

@@ -2,48 +2,29 @@ import { Link } from "react-router-dom"
 import Button from "../Components/Button"
 import Favourite from "../Components/Favourite"
 import { useState } from "react"
-import Sidebar from "../Components/Sidebar";
+import MainHeader from "../Components/MainHeader";
 
 function HomePage(){
-const [open, setOpen] = useState(false);
 
     return (
     <>
         <div className="min-h-screen flex flex-col justify-between">
-            <header className="flex justify-between items-center fixed top-0 w-full h-16 bg-white border-b-1 border-gray-300">
-                <div className="md:hidden m-2 h-12 w-12 bg-orange-400 flex items-center justify-center rounded-sm">
-                    <button className="text-white text-center" onClick={()=>setOpen(!open)}>
-                        ☰
-                    </button>
-                </div>
-                <h1 className="text-right md:text-left font-bold w-full m-2 ml-8">
-                    PizzUM & BurgUM
-                </h1>
-                <div className="hidden md:flex md:w-full md:m-2 md:justify-end md:items-center">
-                    <p className="m-2">Mis Pedidos</p>
-                    <Button text="Comprar" isPrimary={true}/>
-                    <Button text="Ingresar" isPrimary={false}/>
-                    
-                </div>
-            </header>
-            <div className="flex flex-1 justify-center items-start pt-16 ml-8 mr-8 md:ml-16 md:mr-16 max-w-screen">
-                {open && (
-                    <Sidebar/>
-                )}
+            <MainHeader className="z-10"/>
+            <div className="flex justify-center items-start pt-16 ml-8 mr-8 md:ml-16 md:mr-16 max-w-screen">
                 <div className="flex flex-col mx-auto justify-center m-4 max-w-full">
-                    <div className="flex bg-gray-100 w-full h-64 rounded-2xl shadow-2xl justify-center items-center flex-col">
-                        <h1 className="font-bold m-5 text-center">
+                    <div className="flex bg-gray-100 w-full h-64 2xl:h-[28rem] rounded-2xl shadow-2xl justify-center items-center flex-col">
+                        <h1 className="font-bold mt-2 md:m-2 text-center text-2xl md:text-4xl 2xl:text-5xl">
                             Armá tu nueva Creación favorita
                         </h1>
                         <div className="flex flex-col md:flex-row justify-center m-4">
-                            <Button text="Crear PizzUM" isPrimary={true}/>
-                            <Button text="Crear BurgUM" isPrimary={false}/>
+                            <Button text="Crear PizzUM" isPrimary={true} route='/design/pizza'/>
+                            <Button text="Crear BurgUM" isPrimary={false} route='/design/burger'/>
                         </div>
                     </div>
-                    <div className="mt-4 max-w-full">
-                        <h1 className="m-2 font-bold">Tus Favoritos</h1>
+                    <div className="mt-8 max-w-full">
+                        <Link to='/favourites' className="m-2 font-bold">Tus Favoritos: </Link>
                         <div className="max-w-full m-4">
-                            <div className="flex flex-row justify-start-safe w-full overflow-x-auto max-w-full">
+                            <div className="hidden md:flex md:flex-row md:justify-start-safe md:w-full md:overflow-x-auto md:max-w-full">
                                 <Favourite title="Pizza 1"/>
                                 <Favourite title="Pizza 2"/>
                                 <Favourite title="Hamburguesa 1"/>
@@ -51,14 +32,32 @@ const [open, setOpen] = useState(false);
                                 <Favourite title="Pizza 3"/>
                                 <Favourite title="Hamburguesa 3"/>
                             </div>
+                            <div className="flex flex-row justify-start-safe w-full overflow-x-auto max-w-full md:hidden">
+                                <div className="flex flex-col">
+                                    <Favourite title="Pizza 1"/>
+                                    <Favourite title="Pizza 2"/>
+                                </div>
+                                <div className="flex flex-col">
+                                    <Favourite title="Hamburguesa 2"/>
+                                    <Favourite title="Pizza 3"/>
+                                </div>
+                                <div className="flex flex-col">
+                                    <Favourite title="Hamburguesa 3"/>
+                                    <Favourite title="Hamburguesa 4"/>
+                                </div>
+                                <div className="flex flex-col">
+                                <Favourite title="Pizza 4"/>
+                                <Favourite title="Pizza 5"/>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <footer className="p-8 bg-gray-100 flex flex-col md:flex-row justify-between items-center md:items-start">
-                <p className="text-gray-600">Sobre nosotros</p>
-                <p className="text-gray-600">Contacto</p>
-                <p className="text-gray-600">PizzUM & BurgUM ©</p>
+            <footer className="p-8 bg-gray-200 flex flex-col md:flex-row justify-center items-center md:items-start">
+                    <p className="text-gray-600 ml-16 mr-16">Sobre nosotros</p>
+                    <p className="text-gray-600 ml-16 mr-16">Contacto</p>
+                    <p className="text-gray-600 ml-16 mr-16">PizzUM & BurgUM ©</p>
             </footer>
         </div>
     </>
