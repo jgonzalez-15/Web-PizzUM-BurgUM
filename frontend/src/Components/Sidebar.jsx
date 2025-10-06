@@ -3,11 +3,19 @@ import SidebarItem from "./SidebarItem"
 
 function Sidebar(){
     return(
-        <div className="h-full w-64 bg-gray-100 flex flex-col">
+        <div className="h-[calc(100vh-4rem)] w-64 justify-between bg-gray-100 flex flex-col">
+            <div className="flex flex-col">
             <SidebarItem text='Inicio' route='/homepage'/>
-            <SidebarItem text='Comprar' route='/newOrder'/>
-            <SidebarItem text='Tus Pedidos' route='/orders'/>
+            <SidebarItem text='Comprar' route='/order'/>
+            <SidebarItem text='Tus Pedidos' route='/viewOrders'/>
             <SidebarItem text='Tus Favoritos' route='/favourites'/>
+            <SidebarItem text='Administración' route='/admin'/>
+            </div>
+            <div className="w-full border-t">
+                <div className="w-full m-4">
+                    <Link to='/login' className="font-bold">Ingresar</Link>
+                </div>
+            </div>
         </div>
     )
 }
