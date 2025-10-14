@@ -13,7 +13,7 @@ import lombok.Setter;
 public class Domicilio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    String direccion;
+    private String direccion;
 
     private Domicilio(){}
 
