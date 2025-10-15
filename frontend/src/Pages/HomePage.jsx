@@ -5,15 +5,14 @@ import { useState } from "react"
 import MainHeader from "../Components/MainHeader";
 
 function HomePage(){
-
     return (
     <>
         <div className="min-h-screen flex flex-col justify-between">
             <MainHeader className="z-10"/>
             <div className="flex justify-center items-start pt-16 ml-8 mr-8 md:ml-16 md:mr-16 max-w-screen">
                 <div className="flex flex-col mx-auto justify-center m-4 max-w-full">
-                    <div className="flex bg-gray-100 w-full h-64 2xl:h-[28rem] rounded-2xl shadow-2xl justify-center items-center flex-col">
-                        <h1 className="font-bold mt-2 md:m-2 text-center text-2xl md:text-4xl 2xl:text-5xl">
+                    <div className="flex bg-black/50 bg-cover bg-top bg-[url('https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2024/01/09/pizzas-y-hamburguesas.jpeg')] bg-blend-multiply w-full h-64 2xl:h-[28rem] rounded-2xl shadow-2xl justify-center items-center flex-col">
+                        <h1 className="font-bold text-white mt-2 m-1 md:m-2 text-center text-2xl md:text-4xl 2xl:text-5xl">
                             Armá tu nueva Creación favorita
                         </h1>
                         <div className="flex flex-col md:flex-row justify-center m-4">
