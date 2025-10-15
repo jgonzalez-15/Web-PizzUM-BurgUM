@@ -5,4 +5,5 @@ import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
 
 public interface ClienteService {
     ClienteResponseDTO registrarCliente(ClienteRequestDTO dto);
+    ClienteResponseDTO login(String email, String password);
 }

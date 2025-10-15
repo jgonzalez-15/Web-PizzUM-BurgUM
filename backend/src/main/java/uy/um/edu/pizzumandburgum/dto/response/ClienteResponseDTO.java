@@ -1,6 +1,5 @@
 package uy.um.edu.pizzumandburgum.dto.response;
 
-import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +14,7 @@ public class ClienteResponseDTO {
     private long telefono;
     private Date fechaNac;
 
-    public ClienteResponseDTO() {
+    public ClienteResponseDTO(String email, String nombre, String apellido, long telefono) {
     }
 
     public ClienteResponseDTO(String email, String nombre, String apellido, long telefono, Date fechaNac) {

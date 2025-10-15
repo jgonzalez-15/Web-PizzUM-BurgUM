@@ -20,4 +20,11 @@ public class ClienteController {
         ClienteResponseDTO cliente = clienteService.registrarCliente(dto);
         return ResponseEntity.ok(cliente);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<ClienteResponseDTO>login(@Validated @RequestBody ClienteRequestDTO dto){
+        ClienteResponseDTO cliente = clienteService.login(dto.getEmail(), dto.getPassword());
+        return ResponseEntity.ok(cliente);
+    }
+
 }

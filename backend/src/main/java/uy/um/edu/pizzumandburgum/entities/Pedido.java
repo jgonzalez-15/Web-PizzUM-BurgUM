@@ -1,9 +1,6 @@
 package uy.um.edu.pizzumandburgum.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +16,8 @@ public class Pedido {
     float precio;
     Date fecha;
     String estado;
-
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
     Cliente clienteAsignado;
 
     public Pedido(){}

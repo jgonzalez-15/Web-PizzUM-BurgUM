@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 public class Cliente extends Usuario {
 
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clienteAsignado", cascade = CascadeType.ALL)
     private List<Pedido> pedidos;
 
     //Para JPA
