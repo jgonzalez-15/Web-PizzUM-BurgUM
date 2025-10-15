@@ -5,4 +5,5 @@ import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 
 public interface HamburguesaRepository extends JpaRepository<Hamburguesa,Long> {
 
+
 }

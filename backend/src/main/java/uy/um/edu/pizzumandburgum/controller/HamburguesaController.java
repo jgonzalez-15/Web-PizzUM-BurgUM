@@ -1,9 +1,10 @@
 package uy.um.edu.pizzumandburgum.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
 import uy.um.edu.pizzumandburgum.service.HamburguesaService;
 
 @RestController
@@ -12,4 +13,10 @@ import uy.um.edu.pizzumandburgum.service.HamburguesaService;
 public class HamburguesaController {
     @Autowired
     private HamburguesaService hamburguesaService;
+
+    @PostMapping
+    public ResponseEntity<HamburguesaResponseDTO> crearHamburguesa(@RequestBody HamburguesaResponseDTO hamburguesa) {
+        HamburguesaResponseDTO nueva = hamburguesaService.crearHamburguesa(hamburguesa);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nueva);
+    }
 }
