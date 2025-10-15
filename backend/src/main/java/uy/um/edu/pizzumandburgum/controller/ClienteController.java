@@ -1,9 +1,11 @@
 package uy.um.edu.pizzumandburgum.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
 import uy.um.edu.pizzumandburgum.service.ClienteService;
 
 @RestController
@@ -12,4 +14,10 @@ import uy.um.edu.pizzumandburgum.service.ClienteService;
 public class ClienteController {
     @Autowired
     private ClienteService clienteService;
+
+    @PostMapping("/registrar")
+    public ResponseEntity<ClienteResponseDTO> registrar(@Validated @RequestBody ClienteRequestDTO dto) {
+        ClienteResponseDTO cliente = clienteService.registrarCliente(dto);
+        return ResponseEntity.ok(cliente);
+    }
 }
