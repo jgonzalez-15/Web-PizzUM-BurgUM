@@ -8,7 +8,8 @@ function MainHeader(){
 
     return (
         <>
-            <header className="flex justify-center items-center fixed top-0 w-full h-16 bg-white border-b-[1px] border-gray-300">
+        <div className="z-10">
+            <header className="flex justify-center items-center fixed top-0 w-full max-w-screen h-16 bg-white border-b-[1px] border-gray-300">
                     <Link to='/homepage' className="text-center font-bold text-2xl w-full m-2">
                         PizzUM & BurgUM
                     </Link>
@@ -25,6 +26,7 @@ function MainHeader(){
             <div className={`fixed top-16 left-0 h-screen transform transition-transform duration-300 ${open ? "translate-x-0" : "-translate-x-full"}`}>
                 <Sidebar/>
             </div>
+        </div>
         </>
     );
 }
