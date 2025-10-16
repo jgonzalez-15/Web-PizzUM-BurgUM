@@ -18,8 +18,8 @@ public class Producto {
     String subtipo;
     boolean sinTacc;
 
-    @ManyToMany(mappedBy = "productos")
-    private List<Hamburguesa> hamburguesas = new ArrayList<>();
+    @OneToMany(mappedBy = "Productos", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HamburguesaProducto> ingredientesHamburguesa = new ArrayList<>();
 
     public Producto(){}
 

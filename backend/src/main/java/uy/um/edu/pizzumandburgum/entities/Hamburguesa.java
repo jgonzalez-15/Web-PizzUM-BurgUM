@@ -1,9 +1,6 @@
 package uy.um.edu.pizzumandburgum.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,19 +13,14 @@ import java.util.List;
 public class Hamburguesa extends Creacion {
     int cantCarnes;
 
-    @ManyToMany
-    @JoinTable(
-            name = "hamburguesa_producto",
-            joinColumns = @JoinColumn(name = "hamburguesa_id"),
-            inverseJoinColumns = @JoinColumn(name = "producto_id")
-    )
-    private List<Producto> productos = new ArrayList<>();
+    @OneToMany(mappedBy = "hamburguesa", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HamburguesaProducto> ingredientes = new ArrayList<>();
 
     public Hamburguesa(){}
 
-    public Hamburguesa(int cantCarnes, List<Producto> productos) {
+    public Hamburguesa(int cantCarnes, List<HamburguesaProducto> ingredientes) {
         this.cantCarnes = cantCarnes;
-        this.productos = productos;
+        this.ingredientes = ingredientes;
     }
 
 }
