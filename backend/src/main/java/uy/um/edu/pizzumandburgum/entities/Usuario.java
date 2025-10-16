@@ -3,11 +3,13 @@ package uy.um.edu.pizzumandburgum.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)  // Cada subclase tendrá su propia tabla
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 public abstract class Usuario {
@@ -31,11 +33,11 @@ public abstract class Usuario {
     private long telefono;
 
     @Column(nullable = false)
-    private Date fechaNac;
+    private LocalDate fechaNac;
 
     public Usuario(){}
 
-    public Usuario(String email, String nombre, String apellido, String password, long telefono, Date fechaNac) {
+    public Usuario(String email, String nombre, String apellido, String password, long telefono, LocalDate fechaNac) {
         this.email = email;
         this.nombre = nombre;
         this.apellido = apellido;

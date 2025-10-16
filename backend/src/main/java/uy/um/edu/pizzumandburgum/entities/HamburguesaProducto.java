@@ -15,11 +15,11 @@ public class HamburguesaProducto {
     private int cantidad; // número de unidades de ese producto
 
     @ManyToOne
-    @JoinColumn(name = "hamburguesa_id")
+    @JoinColumn(name = "hamburguesaId")
     private Hamburguesa hamburguesa;
 
     @ManyToOne
-    @JoinColumn(name = "producto_id")
+    @JoinColumn(name = "productoId")
     private Producto producto;
 
     public HamburguesaProducto() {}

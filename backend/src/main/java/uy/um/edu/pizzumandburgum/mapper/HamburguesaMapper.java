@@ -14,6 +14,6 @@ public class HamburguesaMapper {
     }
 
     public HamburguesaResponseDTO toResponseDTO(Hamburguesa hamburguesa) {
-        return new HamburguesaResponseDTO(hamburguesa.getId_creacion(),hamburguesa.getCantCarnes());
+        return new HamburguesaResponseDTO(hamburguesa.getCantCarnes(),hamburguesa.getIngredientes());
     }
 }

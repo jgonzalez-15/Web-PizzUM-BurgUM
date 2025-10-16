@@ -4,7 +4,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -27,5 +29,5 @@ public class ClienteRequestDTO {
     private long telefono;
 
     @NotBlank(message = "La fecha de _nacimiento es obligatorio")
-    private Date fechaNacimiento;
+    private LocalDate fechaNacimiento;
 }

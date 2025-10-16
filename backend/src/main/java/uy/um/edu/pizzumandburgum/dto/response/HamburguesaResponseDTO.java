@@ -18,6 +18,6 @@ public class HamburguesaResponseDTO {
 
     public HamburguesaResponseDTO(int cantCarnes, List<HamburguesaProducto> ingredientes) {
         this.cantCarnes = cantCarnes;
-        this.productos = ingredientes;
+        this.ingredientes = ingredientes;
     }
 }
