@@ -1,10 +1,12 @@
 package uy.um.edu.pizzumandburgum.mapper;
 
+import org.springframework.stereotype.Component;
 import uy.um.edu.pizzumandburgum.dto.request.HamburguesaProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
 
+@Component
 public class HamburguesaProductoMapper {
     public HamburguesaProducto toEntity(HamburguesaProductoRequestDTO dto) {
         HamburguesaProducto hamburguesa = new HamburguesaProducto();

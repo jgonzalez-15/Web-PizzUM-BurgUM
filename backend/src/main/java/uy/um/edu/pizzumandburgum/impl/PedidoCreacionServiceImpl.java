@@ -8,6 +8,7 @@ import uy.um.edu.pizzumandburgum.entities.PedidoCreacion;
 import uy.um.edu.pizzumandburgum.exceptions.CreacionNoEncontradaException;
 import uy.um.edu.pizzumandburgum.exceptions.PedidoNoEncontradoException;
 import uy.um.edu.pizzumandburgum.mapper.PedidoCreacionMapper;
+import uy.um.edu.pizzumandburgum.repository.CreacionRepository;
 import uy.um.edu.pizzumandburgum.repository.PedidoCreacionRepository;
 import uy.um.edu.pizzumandburgum.repository.PedidoRepository;
 import uy.um.edu.pizzumandburgum.service.PedidoCrecionService;
@@ -31,7 +32,7 @@ public class PedidoCreacionServiceImpl implements PedidoCrecionService {
     public PedidoCreacion agregarCreacion(Long pedidoId, Long creacionId, int cantidad) {
         Pedido pedido = (Pedido) pedidoRepository.findById(pedidoId).orElseThrow(() -> new PedidoNoEncontradoException());
 
-        Creacion creacion = creacionRepository.findById(creacionId).orElseThrow(() -> new CreacionNoEncontradaException());
+        Creacion creacion =(Creacion) creacionRepository.findById(String.valueOf(creacionId)).orElseThrow(() -> new CreacionNoEncontradaException());
 
         PedidoCreacion pedidoCreacion = new PedidoCreacion();
         pedidoCreacion.setCreacion(creacion);

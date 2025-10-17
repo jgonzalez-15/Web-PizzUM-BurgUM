@@ -1,6 +1,8 @@
 package uy.um.edu.pizzumandburgum.impl;
 
+import org.hibernate.annotations.SecondaryRow;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
 import uy.um.edu.pizzumandburgum.entities.PedidoBebida;
 import uy.um.edu.pizzumandburgum.entities.Producto;
@@ -12,6 +14,7 @@ import uy.um.edu.pizzumandburgum.repository.PedidoRepository;
 import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
 import uy.um.edu.pizzumandburgum.service.PedidoBebidaService;
 
+@Service
 public class PedidoBebidaServiceImpl implements PedidoBebidaService {
 
     @Autowired
