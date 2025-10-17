@@ -1,7 +1,9 @@
 package uy.um.edu.pizzumandburgum.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -11,10 +13,13 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public abstract class Creacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id_creacion;
+    private long id_creacion;
+    private float precio;
 
     @OneToMany(mappedBy = "creacion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoCreacion> creacionesPedido = new ArrayList<>();
@@ -22,11 +27,4 @@ public abstract class Creacion {
     @OneToMany(mappedBy = "creacion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Favoritos> creacionesFavoritas = new ArrayList<>();
 
-    public Creacion(){}
-
-    public Creacion(long id_creacion, List<PedidoCreacion> creacionesPedido, List<Favoritos> creacionesFavoritas) {
-        this.id_creacion = id_creacion;
-        this.creacionesPedido = creacionesPedido;
-        this.creacionesFavoritas = creacionesFavoritas;
-    }
 }

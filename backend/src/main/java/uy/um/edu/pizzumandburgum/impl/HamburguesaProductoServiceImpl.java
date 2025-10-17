@@ -2,6 +2,7 @@ package uy.um.edu.pizzumandburgum.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
 import uy.um.edu.pizzumandburgum.entities.Producto;
@@ -25,4 +26,17 @@ public class HamburguesaProductoServiceImpl implements HamburguesaProductoServic
         hp.setCantidad(cantidad);
         hamburguesaProductoRepository.save(hp);
     }
+
+    @Override
+    public float calcularPrecio(HamburguesaResponseDTO hamburguesaResponseDTO) {
+        float precio = 0;
+
+        for (HamburguesaProducto p : hamburguesaResponseDTO.getIngredientes()){
+            precio += p.getProducto().getPrecio() * p.getCantidad();
+        }
+
+        return precio;
+    }
+
+
 }

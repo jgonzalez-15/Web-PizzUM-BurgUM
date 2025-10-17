@@ -1,5 +1,6 @@
 package uy.um.edu.pizzumandburgum.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,9 +23,19 @@ public class ClienteController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ClienteResponseDTO>login(@Validated @RequestBody ClienteRequestDTO dto){
+    public ResponseEntity<ClienteResponseDTO>login(@Validated @RequestBody ClienteRequestDTO dto, HttpSession session){
         ClienteResponseDTO cliente = clienteService.login(dto.getEmail(), dto.getPassword());
+        session.setAttribute("email", cliente.getEmail());
         return ResponseEntity.ok(cliente);
     }
+
+    public ResponseEntity<String>cerrarSesion(HttpSession session){
+        session.invalidate();
+        return ResponseEntity.ok("Sesión cerrada correctamente");
+    }
+
+
+
+
 
 }

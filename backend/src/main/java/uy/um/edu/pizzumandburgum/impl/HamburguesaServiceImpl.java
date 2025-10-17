@@ -8,6 +8,7 @@ import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
 import uy.um.edu.pizzumandburgum.entities.Producto;
 import uy.um.edu.pizzumandburgum.exceptions.CantidadDeCarnesException;
+import uy.um.edu.pizzumandburgum.exceptions.HamburguesaNoEncontradaException;
 import uy.um.edu.pizzumandburgum.exceptions.SinCarneException;
 import uy.um.edu.pizzumandburgum.exceptions.SinPanException;
 import uy.um.edu.pizzumandburgum.mapper.HamburguesaMapper;
@@ -62,4 +63,17 @@ public class HamburguesaServiceImpl implements HamburguesaService {
 
 
     }
+
+    @Override
+    public void fijarPrecio(Long idHamburguesa) {
+        Hamburguesa hamburguesa = hamburguesaRepository.findById(idHamburguesa)
+                .orElseThrow(() -> new HamburguesaNoEncontradaException());
+
+        HamburguesaResponseDTO hamburguesaDTO = hamburguesaMapper.toResponseDTO(hamburguesa);
+        float precioTotal = hamburguesaProductoService.calcularPrecio(hamburguesaDTO);
+        hamburguesa.setPrecio(precioTotal);
+        hamburguesaRepository.save(hamburguesa);
+    }
+
+
 }

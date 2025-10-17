@@ -2,7 +2,9 @@ package uy.um.edu.pizzumandburgum.entities;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
@@ -14,7 +16,10 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Cliente extends Usuario {
+
 
     @OneToMany(mappedBy = "clienteAsignado", cascade = CascadeType.ALL)
     private List<Pedido> pedidos;
@@ -22,15 +27,4 @@ public class Cliente extends Usuario {
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Favoritos> creacionesFavoritas = new ArrayList<>();
 
-    //Para JPA
-
-
-    public Cliente() {
-    }
-
-    public Cliente(String email, String nombre, String apellido, String password, long telefono, LocalDate fechaNac, List<Pedido> pedidos, List<Favoritos> creacionesFavoritas) {
-        super(email, nombre, apellido, password, telefono, fechaNac);
-        this.pedidos = pedidos;
-        this.creacionesFavoritas = creacionesFavoritas;
-    }
 }

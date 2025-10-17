@@ -1,7 +1,9 @@
 package uy.um.edu.pizzumandburgum.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -10,6 +12,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +21,7 @@ public class Producto {
     String tipo;
     String subtipo;
     boolean sinTacc;
+    float precio;
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HamburguesaProducto> ingredientesHamburguesa = new ArrayList<>();
@@ -24,14 +29,4 @@ public class Producto {
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoBebida> bebidas = new ArrayList<>();
 
-    public Producto(){}
-
-    public Producto(long idProducto, String tipo, String subtipo, boolean sinTacc, List<HamburguesaProducto> ingredientesHamburguesa, List<PedidoBebida> bebidas) {
-        this.idProducto = idProducto;
-        this.tipo = tipo;
-        this.subtipo = subtipo;
-        this.sinTacc = sinTacc;
-        this.ingredientesHamburguesa = ingredientesHamburguesa;
-        this.bebidas = bebidas;
-    }
 }

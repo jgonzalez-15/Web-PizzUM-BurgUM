@@ -35,15 +35,22 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setEstado("En cola");
         pedido = pedidoRepository.save(pedido);
 
+        float precio = 0;
+
         // Asociar creaciones
         for (PedidoCreacion pc : pedidoRequest.getCreacionesPedido()) {
             pedidoCrecionService.agregarCreacion(pedido.getIdPedido(), pc.getCreacion().getId_creacion(), pc.getCantidad());
-        }
+            precio += pc.getCreacion().getPrecio() * pc.getCantidad();
+            }
+
 
         // Asociar bebidas
         for (PedidoBebida pb : pedidoRequest.getBebidas()) {
             pedidoBebidaService.agregarBebida(pedido.getIdPedido(), pb.getProducto().getIdProducto(), pb.getCantidad());
+            precio += pb.getCantidad()*pb.getProducto().getPrecio();
         }
+
+        pedido.setPrecio(precio);
 
         return pedidoMapper.toResponseDTO(pedido);
     }
