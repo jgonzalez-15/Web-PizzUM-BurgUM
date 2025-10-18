@@ -1,6 +1,8 @@
 package uy.um.edu.pizzumandburgum.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
 import uy.um.edu.pizzumandburgum.entities.Producto;
@@ -9,15 +11,13 @@ import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class HamburguesaResponseDTO {
+
     private int cantCarnes;
+    private float precio;
+    private boolean esFavorita;
     private List<HamburguesaProducto> ingredientes;
 
-    public HamburguesaResponseDTO() {
-    }
-
-    public HamburguesaResponseDTO(int cantCarnes, List<HamburguesaProducto> ingredientes) {
-        this.cantCarnes = cantCarnes;
-        this.ingredientes = ingredientes;
-    }
 }

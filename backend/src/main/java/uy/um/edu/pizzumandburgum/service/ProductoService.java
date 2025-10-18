@@ -1,4 +1,8 @@
 package uy.um.edu.pizzumandburgum.service;
 
+import uy.um.edu.pizzumandburgum.dto.request.ProductoDTO;
+import uy.um.edu.pizzumandburgum.entities.Producto;
+
 public interface ProductoService {
+    ProductoDTO agregarProducto (ProductoDTO productoDTO);
 }

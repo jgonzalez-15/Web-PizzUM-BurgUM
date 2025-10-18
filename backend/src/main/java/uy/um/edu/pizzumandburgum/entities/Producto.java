@@ -18,8 +18,8 @@ public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idProducto;
+    String nombre;
     String tipo;
-    String subtipo;
     boolean sinTacc;
     float precio;
 

@@ -52,7 +52,7 @@ public class ClienteServiceImpl implements ClienteService {
     public ClienteResponseDTO login(String email, String contrasenia) {
         Cliente cliente = clienteRepository.findById(email).orElseThrow(()->new ClienteNoExisteException());
 
-        if (!Objects.equals(cliente.getPassword(), contrasenia)){
+        if (!Objects.equals(cliente.getContrasenia(), contrasenia)){
             throw new ContraseniaInvalidaException();
         }
         return new ClienteResponseDTO(

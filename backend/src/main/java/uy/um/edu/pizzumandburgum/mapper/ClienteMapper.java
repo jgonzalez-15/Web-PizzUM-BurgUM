@@ -12,7 +12,7 @@ public class ClienteMapper {
         cliente.setNombre(dto.getNombre());
         cliente.setApellido(dto.getApellido());
         cliente.setEmail(dto.getEmail());
-        cliente.setPassword(dto.getPassword());
+        cliente.setContrasenia(dto.getContrasenia());
         cliente.setFechaNac(dto.getFechaNacimiento());
         cliente.setTelefono(dto.getTelefono());
         return cliente;

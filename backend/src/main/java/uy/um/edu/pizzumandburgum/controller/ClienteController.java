@@ -17,15 +17,21 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping("/registrar")
-    public ResponseEntity<ClienteResponseDTO> registrar(@Validated @RequestBody ClienteRequestDTO dto) {
+    public ResponseEntity<ClienteResponseDTO> registrar(@Validated @RequestBody ClienteRequestDTO dto,HttpSession session) {
         ClienteResponseDTO cliente = clienteService.registrarCliente(dto);
+
+        session.setAttribute("email", cliente.getEmail());
+        session.setAttribute("rol", "CLIENTE");
         return ResponseEntity.ok(cliente);
     }
 
     @PostMapping("/login")
     public ResponseEntity<ClienteResponseDTO>login(@Validated @RequestBody ClienteRequestDTO dto, HttpSession session){
-        ClienteResponseDTO cliente = clienteService.login(dto.getEmail(), dto.getPassword());
+        ClienteResponseDTO cliente = clienteService.login(dto.getEmail(), dto.getContrasenia());
+        // Guardar datos en la sesión
         session.setAttribute("email", cliente.getEmail());
+        session.setAttribute("rol", "CLIENTE"); // 🔹 asignamos el rol
+        session.setAttribute("nombre", cliente.getNombre());
         return ResponseEntity.ok(cliente);
     }
     @PostMapping("/cerrarSesion")
@@ -33,6 +39,8 @@ public class ClienteController {
         session.invalidate();
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
+
+
 
 
 

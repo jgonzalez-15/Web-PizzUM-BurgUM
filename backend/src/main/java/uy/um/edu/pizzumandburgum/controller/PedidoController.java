@@ -1,10 +1,12 @@
 package uy.um.edu.pizzumandburgum.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.service.MedioDePagoService;
+import uy.um.edu.pizzumandburgum.service.PedidoService;
 
 @RestController
 @RequestMapping("/api/pedido")
@@ -12,4 +14,13 @@ import uy.um.edu.pizzumandburgum.service.MedioDePagoService;
 public class PedidoController {
     @Autowired
     private MedioDePagoService medioDePagoService;
+
+    @Autowired
+    private PedidoService pedidoService;
+
+    @PostMapping("/realizar")
+    public ResponseEntity<PedidoResponseDTO> realizarPedido(@RequestBody PedidoRequestDTO dto) {
+        PedidoResponseDTO pedido = pedidoService.realizarPedido(dto);
+        return ResponseEntity.ok(pedido);
+    }
 }

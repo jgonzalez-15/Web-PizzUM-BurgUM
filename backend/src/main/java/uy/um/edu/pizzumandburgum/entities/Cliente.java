@@ -25,7 +25,7 @@ public class Cliente extends Usuario {
     private List<Pedido> pedidos;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Favoritos> creacionesFavoritas = new ArrayList<>();
+    private List<Creacion> creaciones = new ArrayList<>();
 
 
 }

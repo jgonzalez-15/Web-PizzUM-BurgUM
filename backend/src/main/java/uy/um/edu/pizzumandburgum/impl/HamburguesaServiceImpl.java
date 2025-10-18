@@ -47,8 +47,9 @@ public class HamburguesaServiceImpl implements HamburguesaService {
         if (!tienePan){
             throw new SinPanException();
         }
+        float precio = hamburguesaProductoService.calcularPrecio(hamburguesa);
         Hamburguesa nuevo = hamburguesaMapper.toEntity(hamburguesa);
-
+        nuevo.setPrecio(precio);
         Hamburguesa guardado = hamburguesaRepository.save(nuevo);
 
         // Delegamos la creación de ingredientes al service especializado
@@ -60,11 +61,7 @@ public class HamburguesaServiceImpl implements HamburguesaService {
                     hpDTO.getCantidad()
             );
         }
-
         return hamburguesaMapper.toResponseDTO(guardado);
-
-
-
     }
 
     @Override

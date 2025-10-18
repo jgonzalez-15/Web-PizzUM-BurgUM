@@ -1,17 +1,19 @@
 package uy.um.edu.pizzumandburgum.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class Usuario {
 
     @Id
@@ -25,7 +27,7 @@ public abstract class Usuario {
     private String apellido;
 
     @Column(nullable = false)
-    private String password;
+    private String contrasenia;
 
     @Column(nullable = false)
     private long telefono;
@@ -33,14 +35,4 @@ public abstract class Usuario {
     @Column(nullable = false)
     private LocalDate fechaNac;
 
-    public Usuario(){}
-
-    public Usuario(String email, String nombre, String apellido, String password, long telefono, LocalDate fechaNac) {
-        this.email = email;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.password = password;
-        this.telefono = telefono;
-        this.fechaNac = fechaNac;
-    }
 }
