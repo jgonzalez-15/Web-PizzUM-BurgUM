@@ -3,9 +3,7 @@ package uy.um.edu.pizzumandburgum.dto.request;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.cglib.core.Local;
-import uy.um.edu.pizzumandburgum.entities.Cliente;
-import uy.um.edu.pizzumandburgum.entities.PedidoBebida;
-import uy.um.edu.pizzumandburgum.entities.PedidoCreacion;
+import uy.um.edu.pizzumandburgum.entities.*;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -20,6 +18,8 @@ public class PedidoRequestDTO {
     Cliente clienteAsignado;
     private List<PedidoCreacion> creacionesPedido;
     private List<PedidoBebida> bebidas;
+    private MedioDePago medioDePago;
+    private Domicilio domicilio;
 
     public PedidoRequestDTO(float precio, LocalDate fecha, String estado, Cliente clienteAsignado, List<PedidoCreacion> creacionesPedido, List<PedidoBebida> bebidas) {
         this.precio = precio;

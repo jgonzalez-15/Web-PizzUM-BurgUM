@@ -27,5 +27,11 @@ public class Cliente extends Usuario {
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Creacion> creaciones = new ArrayList<>();
 
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClienteDomicilio> domicilios = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cliente",cascade = CascadeType.ALL, orphanRemoval = true)
+    private  List<MedioDePago> mediosDePago = new ArrayList<>();
+
 
 }

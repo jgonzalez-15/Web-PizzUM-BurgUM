@@ -4,13 +4,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uy.um.edu.pizzumandburgum.service.DomicilioService;
 
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ClienteDomicilio {
     @Id
     private Long id;
@@ -22,13 +26,4 @@ public class ClienteDomicilio {
     @ManyToOne
     @JoinColumn(name = "domicilio")
     private Domicilio domicilio;
-
-    public ClienteDomicilio() {
-    }
-
-    public ClienteDomicilio(Long id, Cliente cliente, Domicilio domicilio) {
-        this.id = id;
-        this.cliente = cliente;
-        this.domicilio = domicilio;
-    }
 }

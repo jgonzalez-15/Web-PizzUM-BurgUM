@@ -78,7 +78,7 @@ public class ClienteServiceImpl implements ClienteService {
 
         //Validar  Domicilio
 
-        return pedidoService.realizarPedido(pedidoRequestDTO);
+        return pedidoService.realizarPedido(pedidoRequestDTO.getClienteAsignado().getEmail(),pedidoRequestDTO.getDomicilio().getDireccion(),pedidoRequestDTO,pedidoRequestDTO.getMedioDePago().getNumero());
 
     }
 

@@ -6,14 +6,13 @@ import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoBebidaResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoCreacionDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
-import uy.um.edu.pizzumandburgum.entities.Pedido;
-import uy.um.edu.pizzumandburgum.entities.PedidoBebida;
-import uy.um.edu.pizzumandburgum.entities.PedidoCreacion;
+import uy.um.edu.pizzumandburgum.entities.*;
+import uy.um.edu.pizzumandburgum.exceptions.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.PedidoMapper;
+import uy.um.edu.pizzumandburgum.repository.ClienteDomicilioRepository;
+import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 import uy.um.edu.pizzumandburgum.repository.PedidoRepository;
-import uy.um.edu.pizzumandburgum.service.PedidoBebidaService;
-import uy.um.edu.pizzumandburgum.service.PedidoCrecionService;
-import uy.um.edu.pizzumandburgum.service.PedidoService;
+import uy.um.edu.pizzumandburgum.service.*;
 
 @Service
 public class PedidoServiceImpl implements PedidoService {
@@ -29,10 +28,26 @@ public class PedidoServiceImpl implements PedidoService {
     @Autowired
     private PedidoCrecionService pedidoCrecionService;
 
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
+    private ClienteDomicilioService clienteDomicilioService;
+
+    @Autowired
+    private MedioDePagoService medioDePagoService;
+
     @Override
-    public PedidoResponseDTO realizarPedido(PedidoRequestDTO pedidoRequest) {
+    public PedidoResponseDTO realizarPedido(String email,String direccion,PedidoRequestDTO pedidoRequest, Long numero) {
+        Cliente cliente = clienteRepository.findById(email).orElseThrow(() -> new ClienteNoExisteException());
+
+        Domicilio domicilio = clienteDomicilioService.obtenerDomicilio(email,direccion);
+
         Pedido pedido =  pedidoMapper.toEntity(pedidoRequest);
         pedido.setEstado("En cola");
+        pedido.setDomicilio(domicilio);
+        pedido.setClienteAsignado(cliente);
+        pedido.setMedioDePago(medioDePagoService.obtenerMedioDePago(cliente.getEmail(),numero));
         pedido = pedidoRepository.save(pedido);
 
         float precio = 0;
