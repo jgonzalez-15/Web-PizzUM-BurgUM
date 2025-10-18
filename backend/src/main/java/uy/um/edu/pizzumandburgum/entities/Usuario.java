@@ -13,10 +13,8 @@ import java.util.Date;
 @Getter
 @Setter
 public abstract class Usuario {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
 
+    @Id
     @Column(nullable = false, unique = true)
     private String email;
 

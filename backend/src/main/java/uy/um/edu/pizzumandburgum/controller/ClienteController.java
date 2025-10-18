@@ -28,7 +28,7 @@ public class ClienteController {
         session.setAttribute("email", cliente.getEmail());
         return ResponseEntity.ok(cliente);
     }
-
+    @PostMapping("/cerrarSesion")
     public ResponseEntity<String>cerrarSesion(HttpSession session){
         session.invalidate();
         return ResponseEntity.ok("Sesión cerrada correctamente");

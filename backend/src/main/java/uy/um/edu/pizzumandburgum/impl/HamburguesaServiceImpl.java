@@ -7,12 +7,10 @@ import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
 import uy.um.edu.pizzumandburgum.entities.Producto;
-import uy.um.edu.pizzumandburgum.exceptions.CantidadDeCarnesException;
-import uy.um.edu.pizzumandburgum.exceptions.HamburguesaNoEncontradaException;
-import uy.um.edu.pizzumandburgum.exceptions.SinCarneException;
-import uy.um.edu.pizzumandburgum.exceptions.SinPanException;
+import uy.um.edu.pizzumandburgum.exceptions.*;
 import uy.um.edu.pizzumandburgum.mapper.HamburguesaMapper;
 import uy.um.edu.pizzumandburgum.repository.HamburguesaRepository;
+import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
 import uy.um.edu.pizzumandburgum.service.HamburguesaProductoService;
 import uy.um.edu.pizzumandburgum.service.HamburguesaService;
 
@@ -26,6 +24,10 @@ public class HamburguesaServiceImpl implements HamburguesaService {
 
     @Autowired
     private HamburguesaProductoService hamburguesaProductoService;
+
+    @Autowired
+    private ProductoRepository productoRepository;
+
 
     @Override
     public HamburguesaResponseDTO crearHamburguesa(HamburguesaResponseDTO hamburguesa) {
@@ -51,6 +53,7 @@ public class HamburguesaServiceImpl implements HamburguesaService {
 
         // Delegamos la creación de ingredientes al service especializado
         for (HamburguesaProducto hpDTO : hamburguesa.getIngredientes()) {
+            Producto producto = productoRepository.findById(hpDTO.getProducto().getIdProducto()).orElseThrow(()->new ProductoNoExisteException());
             hamburguesaProductoService.agregarIngrediente(
                     guardado,
                     hpDTO.getProducto(),
