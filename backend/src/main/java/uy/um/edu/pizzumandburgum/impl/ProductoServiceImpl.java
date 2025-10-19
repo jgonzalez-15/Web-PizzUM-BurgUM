@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.ProductoDTO;
 import uy.um.edu.pizzumandburgum.entities.Producto;
+import uy.um.edu.pizzumandburgum.exceptions.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.ProductoYaExisteException;
 import uy.um.edu.pizzumandburgum.mapper.ProductoMapper;
 import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
@@ -27,4 +28,25 @@ public class ProductoServiceImpl implements ProductoService {
         productoRepository.save(producto);
         return productoMapper.toResponseDTO(producto);
     }
+
+    @Override
+    public void eliminarProducto(ProductoDTO productoDTO) {
+        Producto producto = productoMapper.toEntity(productoDTO);
+        if (!productoRepository.existsById(producto.getIdProducto())){
+            throw new ProductoNoExisteException();
+        }
+        productoRepository.deleteById(producto.getIdProducto());
+    }
+
+    @Override
+    public void modificarProducto(ProductoDTO productoviejoDTO, ProductoDTO productonuevoDTO) {
+        Producto producto = productoMapper.toEntity(productoviejoDTO);
+        producto.setTipo(productonuevoDTO.getTipo());
+        producto.setPrecio(productonuevoDTO.getPrecio());
+        producto.setSinTacc(productonuevoDTO.isSinTacc());
+        producto.setNombre(productonuevoDTO.getNombre());
+        productoRepository.save(producto);
+    }
+
+
 }

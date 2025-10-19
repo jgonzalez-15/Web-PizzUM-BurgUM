@@ -5,4 +5,6 @@ import uy.um.edu.pizzumandburgum.entities.Producto;
 
 public interface ProductoService {
     ProductoDTO agregarProducto (ProductoDTO productoDTO);
+    void eliminarProducto (ProductoDTO productoDTO);
+    void modificarProducto(ProductoDTO productoviejoDTO, ProductoDTO productonuevoDTO);
 }

@@ -29,4 +29,17 @@ public class ProductoController {
         ProductoDTO nuevo = productoService.agregarProducto(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
+    @DeleteMapping("/eliminar")
+    public ResponseEntity<Void> eliminarProducto(@RequestBody ProductoDTO productoDTO) {
+        productoService.eliminarProducto(productoDTO);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @PutMapping("/modificar")
+    public ResponseEntity<Void> modificarProducto(
+            @RequestBody ProductoDTO productoviejoDTO,@RequestBody ProductoDTO productonuevoDTO ) {
+        productoService.modificarProducto(productoviejoDTO,productonuevoDTO);
+        return ResponseEntity.ok().build();
+    }
 }

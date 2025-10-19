@@ -47,9 +47,9 @@ public class AdministradorController {
         return ResponseEntity.ok(admin);
     }*/
 
-    /*@PostMapping("/cerrarSesion")
+    @PostMapping("/cerrarSesion")
     public ResponseEntity<String>cerrarSesion(HttpSession session){
         session.invalidate();
         return ResponseEntity.ok("Sesión cerrada correctamente");
-    }*/
+    }
 }

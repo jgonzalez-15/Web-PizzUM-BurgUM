@@ -83,4 +83,10 @@ public class PedidoServiceImpl implements PedidoService {
         return pedido.getEstado();
     }
 
+    @Override
+    public void cambiarEstado(Long id, String estado) {
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new PedidoNoEncontradoException());
+        pedido.setEstado(estado);
+    }
+
 }
