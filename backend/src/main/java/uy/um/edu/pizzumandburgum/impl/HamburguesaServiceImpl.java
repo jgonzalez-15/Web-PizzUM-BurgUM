@@ -2,7 +2,6 @@ package uy.um.edu.pizzumandburgum.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uy.um.edu.pizzumandburgum.dto.request.HamburguesaProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
@@ -40,15 +39,15 @@ public class HamburguesaServiceImpl implements HamburguesaService {
 
         for (HamburguesaProducto hp: hamburguesa.getIngredientes()){
             Producto p = hp.getProducto();
-            if ("pan".equalsIgnoreCase(p.getTipo())){
+            if ("Pan".equalsIgnoreCase(p.getTipo())){
                 tienePan = true;
             }
         }
         if (!tienePan){
             throw new SinPanException();
         }
-        float precio = hamburguesaProductoService.calcularPrecio(hamburguesa);
         Hamburguesa nuevo = hamburguesaMapper.toEntity(hamburguesa);
+        float precio = this.fijarPrecio(nuevo.getId_creacion());
         nuevo.setPrecio(precio);
         Hamburguesa guardado = hamburguesaRepository.save(nuevo);
 
@@ -65,7 +64,7 @@ public class HamburguesaServiceImpl implements HamburguesaService {
     }
 
     @Override
-    public void fijarPrecio(Long idHamburguesa) {
+    public float fijarPrecio(Long idHamburguesa) {
         Hamburguesa hamburguesa = hamburguesaRepository.findById(idHamburguesa)
                 .orElseThrow(() -> new HamburguesaNoEncontradaException());
 
@@ -73,6 +72,7 @@ public class HamburguesaServiceImpl implements HamburguesaService {
         float precioTotal = hamburguesaProductoService.calcularPrecio(hamburguesaDTO);
         hamburguesa.setPrecio(precioTotal);
         hamburguesaRepository.save(hamburguesa);
+        return precioTotal;
     }
 
 

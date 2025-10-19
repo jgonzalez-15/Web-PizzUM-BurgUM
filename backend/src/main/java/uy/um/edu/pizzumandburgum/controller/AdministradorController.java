@@ -37,15 +37,19 @@ public class AdministradorController {
         return ResponseEntity.ok(admin);
     }
 
-    /*@PostMapping("/login")
-    public ResponseEntity<AdministradorDTO>login(@Validated @RequestBody AdministradorRequestDTO dto, HttpSession session){
-        AdministradorDTO admin = administradorService.login(dto.getEmail(), dto.getContrasenia());
-        // Guardar datos en la sesión
-        session.setAttribute("email", admin.getEmail());
-        session.setAttribute("rol", "Administrador"); // 🔹 asignamos el rol
-        session.setAttribute("nombre", admin.getNombre());
-        return ResponseEntity.ok(admin);
-    }*/
+    @PostMapping("/login")
+    public ResponseEntity<AdministradorDTO> login( @RequestParam String email,
+                                                  @RequestParam String contrasenia,
+                                                  HttpSession session) {
+
+        AdministradorDTO adminDTO = administradorService.login(email, contrasenia);
+
+        // Guardar sesión (opcional)
+        session.setAttribute("email", adminDTO.getEmail());
+        session.setAttribute("rol", "ADMIN");
+
+        return ResponseEntity.ok(adminDTO);
+    }
 
     @PostMapping("/cerrarSesion")
     public ResponseEntity<String>cerrarSesion(HttpSession session){

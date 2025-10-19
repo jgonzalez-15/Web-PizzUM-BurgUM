@@ -7,7 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.ProductoDTO;
 import uy.um.edu.pizzumandburgum.entities.Producto;
+import uy.um.edu.pizzumandburgum.mapper.ProductoMapper;
+import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
 import uy.um.edu.pizzumandburgum.service.ProductoService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/producto")
@@ -41,5 +46,11 @@ public class ProductoController {
             @RequestBody ProductoDTO productoviejoDTO,@RequestBody ProductoDTO productonuevoDTO ) {
         productoService.modificarProducto(productoviejoDTO,productonuevoDTO);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<ProductoDTO>> listarProductos() {
+        List<ProductoDTO> productos = productoService.listarProductos();
+        return ResponseEntity.ok(productos);
     }
 }

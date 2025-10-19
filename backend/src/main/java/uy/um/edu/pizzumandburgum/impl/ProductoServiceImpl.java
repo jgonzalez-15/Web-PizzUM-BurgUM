@@ -10,6 +10,9 @@ import uy.um.edu.pizzumandburgum.mapper.ProductoMapper;
 import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
 import uy.um.edu.pizzumandburgum.service.ProductoService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 public class ProductoServiceImpl implements ProductoService {
@@ -48,5 +51,16 @@ public class ProductoServiceImpl implements ProductoService {
         productoRepository.save(producto);
     }
 
+    @Override
+    public List<ProductoDTO> listarProductos() {
+        List<Producto> productos = productoRepository.findAll();
+        List<ProductoDTO> resultado = new ArrayList<>();
 
-}
+        for (Producto producto : productos) {
+            ProductoDTO dto = productoMapper.toResponseDTO(producto);
+            resultado.add(dto);
+        }
+
+        return resultado;
+        }
+    }

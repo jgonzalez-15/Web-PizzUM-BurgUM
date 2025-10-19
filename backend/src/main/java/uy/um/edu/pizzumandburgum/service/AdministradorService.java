@@ -7,4 +7,5 @@ import uy.um.edu.pizzumandburgum.entities.Administrador;
 
 public interface AdministradorService {
     AdministradorDTO agregarAdmin(AdministradorDTO dto);
+    AdministradorDTO login(String email, String contrasenia);
 }

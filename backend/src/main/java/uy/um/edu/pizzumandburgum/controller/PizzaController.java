@@ -1,9 +1,9 @@
 package uy.um.edu.pizzumandburgum.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import uy.um.edu.pizzumandburgum.dto.response.PizzaResponseDTO;
 import uy.um.edu.pizzumandburgum.service.PizzaService;
 
 @RestController
@@ -13,5 +13,10 @@ public class PizzaController {
     @Autowired
     private PizzaService pizzaService;
 
+    @PostMapping("/crear")
+    public ResponseEntity<PizzaResponseDTO> crearPizza(@RequestBody PizzaResponseDTO pizza) {
+        PizzaResponseDTO nuevaPizza = pizzaService.crearPizza(pizza);
+        return ResponseEntity.ok(nuevaPizza);
+    }
 
 }
