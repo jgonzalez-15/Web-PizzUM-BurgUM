@@ -7,7 +7,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
+import uy.um.edu.pizzumandburgum.entities.Pedido;
 import uy.um.edu.pizzumandburgum.service.ClienteService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/cliente")
@@ -15,6 +19,8 @@ import uy.um.edu.pizzumandburgum.service.ClienteService;
 public class ClienteController {
     @Autowired
     private ClienteService clienteService;
+
+
 
     @PostMapping("/registrar")
     public ResponseEntity<ClienteResponseDTO> registrar(@Validated @RequestBody ClienteRequestDTO dto,HttpSession session) {
@@ -39,11 +45,10 @@ public class ClienteController {
         session.invalidate();
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
-
-
-
-
-
-
+    @GetMapping("/{idCliente}/historial-pedidos")
+    public ResponseEntity<List<Pedido>> listarHistorialPedidos(@PathVariable String idCliente) {
+        List<Pedido> historial = clienteService.historialPedido(idCliente);
+        return ResponseEntity.ok(historial);
+    }
 
 }

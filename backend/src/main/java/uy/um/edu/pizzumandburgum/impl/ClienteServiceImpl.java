@@ -11,6 +11,7 @@ import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
+import uy.um.edu.pizzumandburgum.entities.Pedido;
 import uy.um.edu.pizzumandburgum.exceptions.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.ContraseniaInvalidaException;
 import uy.um.edu.pizzumandburgum.exceptions.EmailYaRegistradoException;
@@ -20,6 +21,7 @@ import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 import uy.um.edu.pizzumandburgum.service.ClienteService;
 import uy.um.edu.pizzumandburgum.service.PedidoService;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -80,6 +82,12 @@ public class ClienteServiceImpl implements ClienteService {
 
         return pedidoService.realizarPedido(pedidoRequestDTO.getClienteAsignado().getEmail(),pedidoRequestDTO.getDomicilio().getDireccion(),pedidoRequestDTO,pedidoRequestDTO.getMedioDePago().getNumero());
 
+    }
+
+    @Override
+    public List<Pedido> historialPedido(String email) {
+        Cliente cliente = clienteRepository.findById(email).orElseThrow(() -> new ClienteNoExisteException());
+        return cliente.getPedidos();
     }
 
 

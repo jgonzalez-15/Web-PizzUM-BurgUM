@@ -8,6 +8,7 @@ import uy.um.edu.pizzumandburgum.dto.response.PedidoCreacionDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.*;
 import uy.um.edu.pizzumandburgum.exceptions.ClienteNoExisteException;
+import uy.um.edu.pizzumandburgum.exceptions.PedidoNoEncontradoException;
 import uy.um.edu.pizzumandburgum.mapper.PedidoMapper;
 import uy.um.edu.pizzumandburgum.repository.ClienteDomicilioRepository;
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
@@ -67,4 +68,19 @@ public class PedidoServiceImpl implements PedidoService {
 
         return pedidoMapper.toResponseDTO(pedido);
     }
+
+    @Override
+    public void eliminarPedido(Long id) {
+        if (!pedidoRepository.existsById(id)) {
+            throw new PedidoNoEncontradoException();
+        }
+        pedidoRepository.deleteById(id);
+    }
+
+    @Override
+    public String consultarEstado(Long id) {
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new PedidoNoEncontradoException());
+        return pedido.getEstado();
+    }
+
 }
