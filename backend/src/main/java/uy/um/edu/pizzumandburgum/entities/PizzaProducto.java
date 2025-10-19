@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class HamburguesaProducto {
+public class PizzaProducto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,12 +19,10 @@ public class HamburguesaProducto {
     private int cantidad; // número de unidades de ese producto
 
     @ManyToOne
-    @JoinColumn(name = "hamburguesaId")
-    private Hamburguesa hamburguesa;
+    @JoinColumn(name = "pizzaId")
+    private Pizza pizza;
 
     @ManyToOne
     @JoinColumn(name = "productoId")
     private Producto producto;
-
-
 }

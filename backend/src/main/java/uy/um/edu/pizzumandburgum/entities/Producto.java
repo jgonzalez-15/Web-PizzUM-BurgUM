@@ -27,6 +27,9 @@ public class Producto {
     private List<HamburguesaProducto> ingredientesHamburguesa = new ArrayList<>();
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PizzaProducto> ingredientesPizza = new ArrayList<>();
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoBebida> bebidas = new ArrayList<>();
 
 }
