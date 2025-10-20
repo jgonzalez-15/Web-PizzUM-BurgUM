@@ -3,8 +3,13 @@ import Button from "../Components/Button"
 import Favourite from "../Components/Favourite"
 import { useState } from "react"
 import MainHeader from "../Components/MainHeader";
+import Footer from "../Components/Footer";
 
 function HomePage(){
+    if (window.pageYOffset > 0) {
+        window.scrollTo(0, 0);
+    }
+    
     return (
     <>
         <div className="min-h-screen flex flex-col justify-between">
@@ -45,19 +50,15 @@ function HomePage(){
                                     <Favourite title="Hamburguesa 4"/>
                                 </div>
                                 <div className="flex flex-col">
-                                <Favourite title="Pizza 4"/>
-                                <Favourite title="Pizza 5"/>
+                                    <Favourite title="Pizza 4"/>
+                                    <Favourite title="Pizza 5"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <footer className="p-8 bg-gray-200 flex flex-col md:flex-row justify-center items-center md:items-start">
-                    <p className="text-gray-600 ml-16 mr-16">Sobre nosotros</p>
-                    <p className="text-gray-600 ml-16 mr-16">Contacto</p>
-                    <p className="text-gray-600 ml-16 mr-16">PizzUM & BurgUM ©</p>
-            </footer>
+            <Footer/>
         </div>
     </>
     )

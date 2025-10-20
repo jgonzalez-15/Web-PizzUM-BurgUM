@@ -37,9 +37,9 @@ function IngredientAdder({ text, maxCount, ing}) {
         {filterGluten.map((ingredient) => (
           <Ingredient
             key={ingredient.id}
-            id={ingredient.id}
             name={ingredient.name}
             selected={ingredient.selected}
+            glutenFree={ingredient.glutenFree}
             toggleSelected={() => toggleSelected(ingredient.id)}
           />
         ))}
