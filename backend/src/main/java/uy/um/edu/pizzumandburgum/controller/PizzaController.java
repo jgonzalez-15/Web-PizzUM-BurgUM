@@ -14,8 +14,8 @@ public class PizzaController {
     private PizzaService pizzaService;
 
     @PostMapping("/crear")
-    public ResponseEntity<PizzaResponseDTO> crearPizza(@RequestBody PizzaResponseDTO pizza) {
-        PizzaResponseDTO nuevaPizza = pizzaService.crearPizza(pizza);
+    public ResponseEntity<PizzaResponseDTO> crearPizza(@RequestParam Long idPizza) {
+        PizzaResponseDTO nuevaPizza = pizzaService.crearPizza(idPizza);
         return ResponseEntity.ok(nuevaPizza);
     }
 

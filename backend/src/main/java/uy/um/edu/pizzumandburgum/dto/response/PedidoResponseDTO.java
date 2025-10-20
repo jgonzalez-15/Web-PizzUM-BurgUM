@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.PedidoBebida;
 import uy.um.edu.pizzumandburgum.entities.PedidoCreacion;
+import uy.um.edu.pizzumandburgum.entities.Producto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,9 +19,9 @@ public class PedidoResponseDTO {
     float precio;
     LocalDate fecha;
     String estado;
-    Cliente clienteAsignado;
+    String idClienteAsignado;
 
     private List<PedidoCreacion> creacionesPedido;
     private List<PedidoBebida> bebidas;
-    private Long medioDePago;
+    private Long idMedioDePago;
 }

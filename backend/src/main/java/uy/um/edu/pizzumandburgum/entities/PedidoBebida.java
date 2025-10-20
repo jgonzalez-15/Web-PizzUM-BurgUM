@@ -4,12 +4,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PedidoBebida {
     @Id
     private Long id;
@@ -24,13 +28,4 @@ public class PedidoBebida {
 
     private int cantidad;
 
-    public PedidoBebida() {
-    }
-
-    public PedidoBebida(Long id, Pedido pedido, Producto producto, int cantidad) {
-        this.id = id;
-        this.pedido = pedido;
-        this.producto = producto;
-        this.cantidad = cantidad;
-    }
 }

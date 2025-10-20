@@ -4,12 +4,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PedidoCreacion {
     @Id
     private Long id;
@@ -24,13 +28,4 @@ public class PedidoCreacion {
 
     private int cantidad;
 
-    public PedidoCreacion() {
-    }
-
-    public PedidoCreacion(Long id, Pedido pedido, Creacion creacion, int cantidad) {
-        this.id = id;
-        this.pedido = pedido;
-        this.creacion = creacion;
-        this.cantidad = cantidad;
-    }
 }

@@ -19,6 +19,6 @@ public class PedidoMapper {
     }
 
     public PedidoResponseDTO toResponseDTO(Pedido pedido) {
-        return new PedidoResponseDTO(pedido.getPrecio(), pedido.getFecha(),pedido.getEstado(),pedido.getClienteAsignado(),pedido.getCreacionesPedido(),pedido.getBebidas(), pedido.getMedioDePago().getNumero());
+        return new PedidoResponseDTO(pedido.getPrecio(), pedido.getFecha(),pedido.getEstado(),pedido.getClienteAsignado().getEmail(),pedido.getCreacionesPedido(),pedido.getBebidas(), pedido.getMedioDePago().getNumero());
     }
 }

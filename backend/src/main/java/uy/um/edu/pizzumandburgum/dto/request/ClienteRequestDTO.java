@@ -21,6 +21,6 @@ public class ClienteRequestDTO {
     private String apellido;
     private String email;
     private String contrasenia;
-    private long telefono;
+    private Long telefono;
     private LocalDate fechaNacimiento;
 }

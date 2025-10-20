@@ -6,6 +6,7 @@ import uy.um.edu.pizzumandburgum.dto.response.PizzaResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.*;
 import uy.um.edu.pizzumandburgum.exceptions.*;
 import uy.um.edu.pizzumandburgum.mapper.PizzaMapper;
+import uy.um.edu.pizzumandburgum.repository.PizzaProductoRepository;
 import uy.um.edu.pizzumandburgum.repository.PizzaRepository;
 import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
 import uy.um.edu.pizzumandburgum.service.PizzaProductoService;
@@ -25,10 +26,14 @@ public class PizzaServiceImpl implements PizzaService {
     @Autowired
     private ProductoRepository productoRepository;
 
+    @Autowired
+    private PizzaProductoRepository pizzaProductoRepository;
+
 
     @Override
-    public PizzaResponseDTO crearPizza(PizzaResponseDTO pizza) {
+    public PizzaResponseDTO crearPizza(Long idPizza) {
 
+        Pizza pizza = pizzaRepository.findByidCreacion(idPizza).orElseThrow(() -> new PizzaNoExisteException());
         boolean tieneMasa = false;
 
         for (PizzaProducto pp: pizza.getIngredientes()){
@@ -40,10 +45,9 @@ public class PizzaServiceImpl implements PizzaService {
         if (!tieneMasa){
             throw new SinMasaException();
         }
-        Pizza nuevo = pizzaMapper.toEntity(pizza);
-        float precio = this.fijarPrecio(nuevo.getId_creacion());
-        nuevo.setPrecio(precio);
-        Pizza guardado = pizzaRepository.save(nuevo);
+        float precio = this.fijarPrecio(pizza.getIdCreacion());
+        pizza.setPrecio(precio);
+        Pizza guardado = pizzaRepository.save(pizza);
 
         // Delegamos la creación de ingredientes al service especializado
         for (PizzaProducto pp : pizza.getIngredientes()) {
@@ -62,8 +66,7 @@ public class PizzaServiceImpl implements PizzaService {
         Pizza pizza = pizzaRepository.findById(String.valueOf(idPizza))
                 .orElseThrow(() -> new PizzaNoExisteException());
 
-        PizzaResponseDTO pizzaDTO = pizzaMapper.toResponseDTO(pizza);
-        float precioTotal = pizzaProductoService.calcularPrecio(pizzaDTO);
+        float precioTotal = pizzaProductoService.calcularPrecio(idPizza);
         pizza.setPrecio(precioTotal);
         pizzaRepository.save(pizza);
 

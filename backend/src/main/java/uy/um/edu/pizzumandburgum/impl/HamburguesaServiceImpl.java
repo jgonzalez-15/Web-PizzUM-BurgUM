@@ -8,6 +8,8 @@ import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
 import uy.um.edu.pizzumandburgum.entities.Producto;
 import uy.um.edu.pizzumandburgum.exceptions.*;
 import uy.um.edu.pizzumandburgum.mapper.HamburguesaMapper;
+import uy.um.edu.pizzumandburgum.mapper.HamburguesaProductoMapper;
+import uy.um.edu.pizzumandburgum.repository.HamburguesaProductoRepository;
 import uy.um.edu.pizzumandburgum.repository.HamburguesaRepository;
 import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
 import uy.um.edu.pizzumandburgum.service.HamburguesaProductoService;
@@ -27,9 +29,17 @@ public class HamburguesaServiceImpl implements HamburguesaService {
     @Autowired
     private ProductoRepository productoRepository;
 
+    @Autowired
+    private HamburguesaProductoMapper hamburguesaProductoMapper;
+
+    @Autowired
+    private HamburguesaProductoRepository hamburguesaProductoRepository;
+
 
     @Override
-    public HamburguesaResponseDTO crearHamburguesa(HamburguesaResponseDTO hamburguesa) {
+    public HamburguesaResponseDTO crearHamburguesa(Long idHamburguesa) {
+        Hamburguesa hamburguesa = hamburguesaRepository.findById(idHamburguesa).orElseThrow(()-> new HamburguesaNoEncontradaException());
+
         if (hamburguesa.getCantCarnes()>3){
             throw new CantidadDeCarnesException();
         } else if (hamburguesa.getCantCarnes()==0) {
@@ -38,7 +48,7 @@ public class HamburguesaServiceImpl implements HamburguesaService {
         boolean tienePan = false;
 
         for (HamburguesaProducto hp: hamburguesa.getIngredientes()){
-            Producto p = hp.getProducto();
+            Producto p =productoRepository.findById(hp.getProducto().getIdProducto()).orElseThrow(() -> new ProductoNoExisteException()) ;
             if ("Pan".equalsIgnoreCase(p.getTipo())){
                 tienePan = true;
             }
@@ -46,18 +56,17 @@ public class HamburguesaServiceImpl implements HamburguesaService {
         if (!tienePan){
             throw new SinPanException();
         }
-        Hamburguesa nuevo = hamburguesaMapper.toEntity(hamburguesa);
-        float precio = this.fijarPrecio(nuevo.getId_creacion());
-        nuevo.setPrecio(precio);
-        Hamburguesa guardado = hamburguesaRepository.save(nuevo);
+        float precio = this.fijarPrecio(hamburguesa.getIdCreacion());
+        hamburguesa.setPrecio(precio);
+        Hamburguesa guardado = hamburguesaRepository.save(hamburguesa);
 
         // Delegamos la creación de ingredientes al service especializado
-        for (HamburguesaProducto hpDTO : hamburguesa.getIngredientes()) {
-            Producto producto = productoRepository.findById(hpDTO.getProducto().getIdProducto()).orElseThrow(()->new ProductoNoExisteException());
+        for (HamburguesaProducto hp : hamburguesa.getIngredientes()) {
+            Producto producto = productoRepository.findById(hp.getProducto().getIdProducto()).orElseThrow(()->new ProductoNoExisteException());
             hamburguesaProductoService.agregarIngrediente(
-                    guardado,
-                    hpDTO.getProducto(),
-                    hpDTO.getCantidad()
+                    guardado.getIdCreacion(),
+                    hp.getProducto().getIdProducto(),
+                    hp.getCantidad()
             );
         }
         return hamburguesaMapper.toResponseDTO(guardado);
@@ -68,8 +77,7 @@ public class HamburguesaServiceImpl implements HamburguesaService {
         Hamburguesa hamburguesa = hamburguesaRepository.findById(idHamburguesa)
                 .orElseThrow(() -> new HamburguesaNoEncontradaException());
 
-        HamburguesaResponseDTO hamburguesaDTO = hamburguesaMapper.toResponseDTO(hamburguesa);
-        float precioTotal = hamburguesaProductoService.calcularPrecio(hamburguesaDTO);
+        float precioTotal = hamburguesaProductoService.calcularPrecio(idHamburguesa);
         hamburguesa.setPrecio(precioTotal);
         hamburguesaRepository.save(hamburguesa);
         return precioTotal;

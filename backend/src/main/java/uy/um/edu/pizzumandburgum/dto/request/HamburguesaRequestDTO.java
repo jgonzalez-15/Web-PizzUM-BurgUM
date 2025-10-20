@@ -18,6 +18,6 @@ public class HamburguesaRequestDTO {
     private int cantCarnes;
     private float precio;
     private boolean esFavorita;
-    private List<HamburguesaProducto> ingredientes;
+    private List<Long> ingredientes;
 
 }

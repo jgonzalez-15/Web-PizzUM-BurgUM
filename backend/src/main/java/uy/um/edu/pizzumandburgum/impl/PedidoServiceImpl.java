@@ -7,12 +7,9 @@ import uy.um.edu.pizzumandburgum.dto.response.PedidoBebidaResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoCreacionDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.*;
-import uy.um.edu.pizzumandburgum.exceptions.ClienteNoExisteException;
-import uy.um.edu.pizzumandburgum.exceptions.PedidoNoEncontradoException;
+import uy.um.edu.pizzumandburgum.exceptions.*;
 import uy.um.edu.pizzumandburgum.mapper.PedidoMapper;
-import uy.um.edu.pizzumandburgum.repository.ClienteDomicilioRepository;
-import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
-import uy.um.edu.pizzumandburgum.repository.PedidoRepository;
+import uy.um.edu.pizzumandburgum.repository.*;
 import uy.um.edu.pizzumandburgum.service.*;
 
 @Service
@@ -36,38 +33,56 @@ public class PedidoServiceImpl implements PedidoService {
     private ClienteDomicilioService clienteDomicilioService;
 
     @Autowired
+    private PedidoCreacionRepository pedidoCreacionRepository;
+
+    @Autowired
     private MedioDePagoService medioDePagoService;
 
+    @Autowired
+    private PedidoBebidaRepository pedidoBebidaRepository;
+
+    @Autowired
+    private ProductoRepository productoRepository;
+
     @Override
-    public PedidoResponseDTO realizarPedido(String email,String direccion,PedidoRequestDTO pedidoRequest, Long numero) {
+    public PedidoResponseDTO realizarPedido(String email, String direccion, Long idPedido, Long numero) {
         Cliente cliente = clienteRepository.findById(email).orElseThrow(() -> new ClienteNoExisteException());
+        MedioDePago medioDePago = medioDePagoService.obtenerMedioDePago(cliente.getEmail(), numero);
+        Domicilio domicilio = clienteDomicilioService.obtenerDomicilio(email, direccion);
 
-        Domicilio domicilio = clienteDomicilioService.obtenerDomicilio(email,direccion);
-
-        Pedido pedido =  pedidoMapper.toEntity(pedidoRequest);
+        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow(() -> new PedidoNoEncontradoException());
         pedido.setEstado("En cola");
         pedido.setDomicilio(domicilio);
         pedido.setClienteAsignado(cliente);
-        pedido.setMedioDePago(medioDePagoService.obtenerMedioDePago(cliente.getEmail(),numero));
+        pedido.setMedioDePago(medioDePago);
         pedido = pedidoRepository.save(pedido);
 
         float precio = 0;
 
-        for (PedidoCreacion pc : pedidoRequest.getCreacionesPedido()) {
-            pedidoCrecionService.agregarCreacion(pedido.getIdPedido(), pc.getCreacion().getId_creacion(), pc.getCantidad());
+        for (PedidoCreacion pc : pedido.getCreacionesPedido()) {
+            pedidoCrecionService.agregarCreacion(
+                    pedido.getIdPedido(),
+                    pc.getCreacion().getIdCreacion(),
+                    pc.getCantidad()
+            );
             precio += pc.getCreacion().getPrecio() * pc.getCantidad();
-            }
-
-
-        for (PedidoBebida pb : pedidoRequest.getBebidas()) {
-            pedidoBebidaService.agregarBebida(pedido.getIdPedido(), pb.getProducto().getIdProducto(), pb.getCantidad());
-            precio += pb.getCantidad()*pb.getProducto().getPrecio();
         }
 
-        pedido.setPrecio(precio);
+        for (PedidoBebida pb : pedido.getBebidas()) {
+            pedidoBebidaService.agregarBebida(
+                    pedido.getIdPedido(),
+                    pb.getProducto().getIdProducto(),
+                    pb.getCantidad()
+            );
 
-        return pedidoMapper.toResponseDTO(pedido);
-    }
+            precio += pb.getProducto().getPrecio() * pb.getCantidad();
+
+            pedido.setPrecio(precio);
+
+            return pedidoMapper.toResponseDTO(pedido);
+        }
+
+    return null;}
 
     @Override
     public void eliminarPedido(Long id) {
@@ -88,5 +103,4 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new PedidoNoEncontradoException());
         pedido.setEstado(estado);
     }
-
 }

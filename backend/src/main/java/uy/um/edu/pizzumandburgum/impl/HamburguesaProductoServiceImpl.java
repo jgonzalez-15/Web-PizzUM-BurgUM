@@ -6,20 +6,35 @@ import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
 import uy.um.edu.pizzumandburgum.entities.Producto;
+import uy.um.edu.pizzumandburgum.exceptions.HamburguesaNoEncontradaException;
+import uy.um.edu.pizzumandburgum.exceptions.HamburguesaProductoNoExisteException;
+import uy.um.edu.pizzumandburgum.exceptions.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.HamburguesaProductoMapper;
 import uy.um.edu.pizzumandburgum.repository.HamburguesaProductoRepository;
+import uy.um.edu.pizzumandburgum.repository.HamburguesaRepository;
+import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
 import uy.um.edu.pizzumandburgum.service.HamburguesaProductoService;
 
 @Service
 public class HamburguesaProductoServiceImpl implements HamburguesaProductoService {
 
     @Autowired
+    private HamburguesaRepository hamburguesaRepository;
+
+    @Autowired
     private HamburguesaProductoRepository hamburguesaProductoRepository;
 
     @Autowired
     private HamburguesaProductoMapper hamburguesaProductoMapper;
+
+    @Autowired
+    private ProductoRepository productoRepository;
+
+
     @Override
-    public void agregarIngrediente(Hamburguesa hamburguesa, Producto producto, int cantidad) {
+    public void agregarIngrediente(Long idHamburguesa, Long idProducto, int cantidad) {
+        Hamburguesa hamburguesa = hamburguesaRepository.findById(idHamburguesa).orElseThrow(()-> new HamburguesaNoEncontradaException());
+        Producto producto = productoRepository.findById(idProducto).orElseThrow(()->new ProductoNoExisteException());
         HamburguesaProducto hp = new HamburguesaProducto();
         hp.setHamburguesa(hamburguesa);
         hp.setProducto(producto);
@@ -28,11 +43,13 @@ public class HamburguesaProductoServiceImpl implements HamburguesaProductoServic
     }
 
     @Override
-    public float calcularPrecio(HamburguesaResponseDTO hamburguesaResponseDTO) {
+    public float calcularPrecio(Long idhamburguesa) {
         float precio = 0;
+        Hamburguesa hamburguesa = hamburguesaRepository.findById(idhamburguesa).orElseThrow(() -> new HamburguesaNoEncontradaException());
 
-        for (HamburguesaProducto p : hamburguesaResponseDTO.getIngredientes()){
-            precio += p.getProducto().getPrecio() * p.getCantidad();
+        for (HamburguesaProducto hp : hamburguesa.getIngredientes()){
+            Producto producto = productoRepository.findById(hp.getProducto().getIdProducto()).orElseThrow(()->new  ProductoNoExisteException());
+            precio += producto.getPrecio() * hp.getCantidad();
         }
 
         return precio;

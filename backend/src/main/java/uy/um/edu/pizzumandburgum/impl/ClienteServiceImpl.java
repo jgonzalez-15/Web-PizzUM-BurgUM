@@ -9,15 +9,17 @@ import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
+import uy.um.edu.pizzumandburgum.entities.Domicilio;
+import uy.um.edu.pizzumandburgum.entities.MedioDePago;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
-import uy.um.edu.pizzumandburgum.exceptions.ClienteNoExisteException;
-import uy.um.edu.pizzumandburgum.exceptions.ContraseniaInvalidaException;
-import uy.um.edu.pizzumandburgum.exceptions.EmailYaRegistradoException;
-import uy.um.edu.pizzumandburgum.exceptions.UsuarioNoEncontradoException;
+import uy.um.edu.pizzumandburgum.exceptions.*;
 import uy.um.edu.pizzumandburgum.mapper.ClienteMapper;
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
+import uy.um.edu.pizzumandburgum.repository.DomicilioRepository;
+import uy.um.edu.pizzumandburgum.repository.MedioDePagoRepository;
 import uy.um.edu.pizzumandburgum.service.ClienteService;
 import uy.um.edu.pizzumandburgum.service.PedidoService;
 
@@ -35,6 +37,11 @@ public class ClienteServiceImpl implements ClienteService {
     @Autowired
     private PedidoService pedidoService;
 
+    @Autowired
+    private MedioDePagoRepository medioDePagoRepository;
+
+    @Autowired
+    private DomicilioRepository domicilioRepository;
     @Override
     public ClienteResponseDTO registrarCliente(ClienteRequestDTO dto) {
         if (clienteRepository.existsByEmail(dto.getEmail())) {
@@ -75,12 +82,9 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public PedidoResponseDTO realizarPedido(PedidoRequestDTO pedidoRequestDTO) {
         Cliente cliente = clienteRepository.findById(pedidoRequestDTO.getClienteAsignado().getEmail()).orElseThrow(()->new UsuarioNoEncontradoException());
-
-        //Validar Medio de Pago
-
-        //Validar  Domicilio
-
-        return pedidoService.realizarPedido(pedidoRequestDTO.getClienteAsignado().getEmail(),pedidoRequestDTO.getDomicilio().getDireccion(),pedidoRequestDTO,pedidoRequestDTO.getMedioDePago().getNumero());
+        MedioDePago medioDePago = medioDePagoRepository.findById(pedidoRequestDTO.getMedioDePago().getNumero()).orElseThrow(() -> new MedioDePagoNoExisteException());
+        Domicilio domicilio = domicilioRepository.findById(pedidoRequestDTO.getDomicilio().getDireccion()).orElseThrow(() -> new DomicilioNoExisteException());
+        return pedidoService.realizarPedido(pedidoRequestDTO.getClienteAsignado().getEmail(),pedidoRequestDTO.getDomicilio().getDireccion(),pedidoRequestDTO.getIdPedido(),pedidoRequestDTO.getMedioDePago().getNumero());
 
     }
 

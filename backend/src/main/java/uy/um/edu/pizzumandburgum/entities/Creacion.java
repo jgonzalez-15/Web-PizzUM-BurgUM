@@ -18,7 +18,7 @@ import java.util.List;
 public abstract class Creacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_creacion;
+    private Long idCreacion;
     private float precio;
     private boolean esFavorita;
 

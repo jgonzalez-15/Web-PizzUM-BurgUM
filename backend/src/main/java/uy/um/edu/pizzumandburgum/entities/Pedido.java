@@ -20,7 +20,7 @@ import java.util.List;
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long idPedido;
+    Long idPedido;
     float precio;
     LocalDate fecha;
     String estado;
@@ -40,7 +40,7 @@ public class Pedido {
     private List<PedidoCreacion> creacionesPedido = new ArrayList<>();
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PedidoBebida> bebidas = new ArrayList<>();
+    private List<PedidoBebida>bebidas = new ArrayList<>();
 
 
 }

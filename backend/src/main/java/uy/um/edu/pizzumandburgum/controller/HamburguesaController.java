@@ -15,8 +15,8 @@ public class HamburguesaController {
     private HamburguesaService hamburguesaService;
 
     @PostMapping("/crearHamburguesa")
-    public ResponseEntity<HamburguesaResponseDTO> crearHamburguesa(@RequestBody HamburguesaResponseDTO hamburguesa) {
-        HamburguesaResponseDTO nueva = hamburguesaService.crearHamburguesa(hamburguesa);
+    public ResponseEntity<HamburguesaResponseDTO> crearHamburguesa(@RequestBody Long idHamburguesa) {
+        HamburguesaResponseDTO nueva = hamburguesaService.crearHamburguesa(idHamburguesa);
         return ResponseEntity.status(HttpStatus.CREATED).body(nueva);
     }
 }

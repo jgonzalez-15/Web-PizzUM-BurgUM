@@ -8,5 +8,5 @@ import uy.um.edu.pizzumandburgum.entities.Producto;
 
 public interface PizzaProductoService {
     public void agregarIngrediente(Pizza pizza, Producto producto, int cantidad);
-    public float calcularPrecio(PizzaResponseDTO pizzaResponseDTO);
+    public float calcularPrecio(Long idPizza);
 }

@@ -29,8 +29,8 @@ public class PedidoController {
     private PedidoRepository pedidoRepository;
 
     @PostMapping("/realizar")
-    public ResponseEntity<PedidoResponseDTO> realizarPedido(@RequestBody PedidoRequestDTO dto) {
-        PedidoResponseDTO pedido = pedidoService.realizarPedido(dto.getClienteAsignado().getEmail(),dto.getDomicilio().getDireccion(),dto,dto.getMedioDePago().getNumero());
+    public ResponseEntity<PedidoResponseDTO> realizarPedido(@RequestParam String email,@RequestParam String direccion,@RequestParam  Long idPedido,@RequestParam Long numero) {
+        PedidoResponseDTO pedido = pedidoService.realizarPedido(email,direccion,idPedido,numero);
         return ResponseEntity.ok(pedido);
     }
 

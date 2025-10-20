@@ -20,10 +20,10 @@ public class ClienteDomicilio {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "cliente")
+    @JoinColumn(name = "idCliente")
     private Cliente cliente;
 
     @ManyToOne
-    @JoinColumn(name = "domicilio")
+    @JoinColumn(name = "idDomicilio")
     private Domicilio domicilio;
 }

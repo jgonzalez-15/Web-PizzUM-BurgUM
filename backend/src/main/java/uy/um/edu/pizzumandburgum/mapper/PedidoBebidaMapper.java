@@ -11,7 +11,7 @@ public class PedidoBebidaMapper {
     public PedidoBebida toEntity(PedidoBebidaResponseDTO dto) {
         PedidoBebida pedidoBebida = new PedidoBebida();
         pedidoBebida.setPedido(dto.getPedido());
-        pedidoBebida.setProducto(dto.getProducto());
+        pedidoBebida.setPedido(dto.getPedido());
         pedidoBebida.setCantidad(dto.getCantidad());
 
         return pedidoBebida;

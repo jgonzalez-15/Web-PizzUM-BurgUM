@@ -16,6 +16,6 @@ public class MedioDePagoDTO {
     Long numero;
     Date vencimiento;
     String direccion;
-    Cliente cliente;
+    Cliente Cliente;
 
 }
