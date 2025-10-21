@@ -7,9 +7,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
-import uy.um.edu.pizzumandburgum.service.ClienteService;
+import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
 
 import java.util.List;
 

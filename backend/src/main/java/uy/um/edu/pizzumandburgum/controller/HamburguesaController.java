@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
-import uy.um.edu.pizzumandburgum.service.HamburguesaService;
+import uy.um.edu.pizzumandburgum.service.Interfaces.HamburguesaService;
 
 @RestController
 @RequestMapping("/api/hamburguesa")

@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
-import uy.um.edu.pizzumandburgum.service.ReporteService;
+import uy.um.edu.pizzumandburgum.service.Interfaces.ReporteService;
 
 import java.time.LocalDate;
 import java.util.List;

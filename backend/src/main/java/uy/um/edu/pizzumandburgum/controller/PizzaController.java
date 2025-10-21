@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.response.PizzaResponseDTO;
-import uy.um.edu.pizzumandburgum.service.PizzaService;
+import uy.um.edu.pizzumandburgum.service.Interfaces.PizzaService;
 
 @RestController
 @RequestMapping("/api/pizza")

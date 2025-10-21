@@ -6,14 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.AdministradorDTO;
-import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.request.ProductoDTO;
-import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
-import uy.um.edu.pizzumandburgum.entities.Administrador;
-import uy.um.edu.pizzumandburgum.entities.Producto;
-import uy.um.edu.pizzumandburgum.mapper.ProductoMapper;
-import uy.um.edu.pizzumandburgum.service.AdministradorService;
-import uy.um.edu.pizzumandburgum.service.ProductoService;
+import uy.um.edu.pizzumandburgum.service.Interfaces.AdministradorService;
 
 @RestController
 @RequestMapping("/api/administrador")

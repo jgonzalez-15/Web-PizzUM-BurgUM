@@ -3,14 +3,13 @@ package uy.um.edu.pizzumandburgum.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
-import uy.um.edu.pizzumandburgum.exceptions.PedidoNoEncontradoException;
+import uy.um.edu.pizzumandburgum.exceptions.Pedido.PedidoNoEncontradoException;
 import uy.um.edu.pizzumandburgum.mapper.PedidoMapper;
 import uy.um.edu.pizzumandburgum.repository.PedidoRepository;
-import uy.um.edu.pizzumandburgum.service.MedioDePagoService;
-import uy.um.edu.pizzumandburgum.service.PedidoService;
+import uy.um.edu.pizzumandburgum.service.Interfaces.MedioDePagoService;
+import uy.um.edu.pizzumandburgum.service.Interfaces.PedidoService;
 
 @RestController
 @RequestMapping("/api/pedido")
