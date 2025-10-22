@@ -12,6 +12,7 @@ public class PedidoMapper {
         pedido.setPrecio(dto.getPrecio());
         pedido.setFecha(dto.getFecha());
         pedido.setEstado(dto.getEstado());
+        pedido.setEstaPago(dto.isEstaPago());
         pedido.setCreacionesPedido(dto.getCreacionesPedido());
         pedido.setBebidas(dto.getBebidas());
         pedido.setClienteAsignado(dto.getClienteAsignado());
@@ -19,6 +20,6 @@ public class PedidoMapper {
     }
 
     public PedidoResponseDTO toResponseDTO(Pedido pedido) {
-        return new PedidoResponseDTO(pedido.getPrecio(), pedido.getFecha(),pedido.getEstado(),pedido.getClienteAsignado().getEmail(),pedido.getCreacionesPedido(),pedido.getBebidas(), pedido.getMedioDePago().getNumero());
+        return new PedidoResponseDTO(pedido.getPrecio(), pedido.getFecha(),pedido.getEstado(),pedido.getClienteAsignado().getEmail(), pedido.isEstaPago(), pedido.getCreacionesPedido(),pedido.getBebidas(), pedido.getMedioDePago().getNumero());
     }
 }

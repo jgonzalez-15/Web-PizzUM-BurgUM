@@ -24,6 +24,7 @@ public class PedidoRequestDTO {
     private float precio;
     private LocalDate fecha;
     private String estado;
+    private boolean estaPago;
     private Cliente  clienteAsignado;
     private List<PedidoCreacion> creacionesPedido;
     private List<PedidoBebida> bebidas;

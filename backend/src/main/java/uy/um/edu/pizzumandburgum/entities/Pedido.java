@@ -24,6 +24,7 @@ public class Pedido {
     float precio;
     LocalDate fecha;
     String estado;
+    boolean estaPago;
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente clienteAsignado;
@@ -41,6 +42,10 @@ public class Pedido {
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoBebida>bebidas = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "pedido")
+    private PagoDummy dummy;
 
 
 }

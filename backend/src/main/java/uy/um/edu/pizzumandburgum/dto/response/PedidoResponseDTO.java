@@ -20,6 +20,7 @@ public class PedidoResponseDTO {
     LocalDate fecha;
     String estado;
     String idClienteAsignado;
+    boolean estaPago;
 
     private List<PedidoCreacion> creacionesPedido;
     private List<PedidoBebida> bebidas;
