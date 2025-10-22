@@ -17,11 +17,11 @@ export default function OrderStatus({id, date, status}){
                     </div>
                     <div className="flex flex-col items-center">
                         <div className={`h-12 w-12 rounded-full ${status >= 1 ? "bg-orange-500" : "bg-gray-300"}`}/>
-                        <h1 className="text-center">Preparado</h1>
+                        <h1 className="text-center">Preparando</h1>
                     </div>
                     <div className="flex flex-col items-center">
                         <div className={`h-12 w-12 rounded-full ${status >= 2 ? "bg-orange-500" : "bg-gray-300"}`}/>
-                        <h1 className="text-center">Enviado</h1>
+                        <h1 className="text-center">Enviando</h1>
                     </div>
                     <div className="flex flex-col items-center">
                         <div className={`h-12 w-12 rounded-full ${status >= 3 ? "bg-orange-500" : "bg-gray-300"}`}/>
@@ -30,8 +30,8 @@ export default function OrderStatus({id, date, status}){
                 </div>
                 <div className="md:hidden">
                     {status == 0 ? (<h1 className="font-bold text-orange-400">Pedido</h1>):(<></>)}
-                    {status == 1 ? (<h1 className="font-bold text-orange-400">Preparado</h1>):(<></>)}
-                    {status == 2 ? (<h1 className="font-bold text-orange-400">Enviado</h1>):(<></>)}
+                    {status == 1 ? (<h1 className="font-bold text-orange-400">Preparando</h1>):(<></>)}
+                    {status == 2 ? (<h1 className="font-bold text-orange-400">Enviando</h1>):(<></>)}
                     {status == 3 ? (<h1 className="font-bold text-orange-400">Recibido</h1>):(<></>)}
                 </div>
                 {status == 0 && (

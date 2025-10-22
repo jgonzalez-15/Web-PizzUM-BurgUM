@@ -4,7 +4,11 @@ import MainHeader from "../Components/MainHeader"
 import { Link } from "react-router-dom"
 
 function Favourites(){
-    const [favouriteList, setFavouriteList] = useState([{name:"La mejor pizza de la historia mundial", type:"Pizza", price:123}])
+    if (window.pageYOffset > 0) {
+        window.scrollTo(0, 0);
+    }
+
+    const [favouriteList, setFavouriteList] = useState([{id: 10, name:"La mejor pizza de la historia mundial", type:"Pizza", price:123}])
 
     return(
         <>
@@ -24,7 +28,7 @@ function Favourites(){
                                 <h1>${favourite.price}</h1> 
                             </div>
                             <div className="flex flex-col justify-center h-24 w-24 md:h-48 md:w-48">
-                                <Link className={`h-full flex justify-center items-center transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-sm font-bold m-1 text-sm md:text-base 2xl:text-xl text-center max-w-64 bg-gray-300 text-black`}>
+                                <Link to="/viewCreation" state={{creationId: favourite.id}} className={`h-full flex justify-center items-center transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-sm font-bold m-1 text-sm md:text-base 2xl:text-xl text-center max-w-64 bg-gray-300 text-black`}>
                                     <h2 className="m-1 2xl:m-3">
                                         Detalles
                                     </h2>

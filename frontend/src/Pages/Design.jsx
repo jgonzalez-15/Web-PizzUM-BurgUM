@@ -43,6 +43,16 @@ function Design({type}){
                     <IngredientAdder text="Elegí tus carnes" maxCount={1} ing={[
                         {id: 1, name:"Carne 1", selected:false, glutenFree:true},
                         {id: 2, name:"Carne 2", selected:false, glutenFree:false}]}/>
+                    <div className="ml-16 mb-8">
+                    <label style={{ display: "block"}} className="text-xl font-bold">
+                    Cantidad de carnes:{" "}
+                    <select>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                    </label>
+                    </div>
                     <IngredientAdder text="Elegí tus salsas" maxCount={1} ing={[
                         {id: 1, name:"Salsa 1", selected:false, glutenFree:false},
                         {id: 2, name:"Salsa 2", selected:false, glutenFree:false},

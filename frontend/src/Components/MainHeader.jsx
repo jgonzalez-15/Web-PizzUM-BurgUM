@@ -25,8 +25,8 @@ function MainHeader(){
                     {!open && (<h1 className="text-center">☰</h1>)}
                 </button>
             </div>
-            <div className="z-10 m-2 h-12 w-12 fixed top-0 right-0 flex items-center justify-center rounded-sm" onClick={()=>{setShowCart(!showCart), setOpen(false)}}>
-                ⨿
+            <div className="z-10 m-2 h-12 w-12 fixed top-0 right-0 rounded-sm flex items-center justify-center" onClick={()=>{setShowCart(!showCart), setOpen(false)}}>
+                <div className="h-8 w-8 bg-[url('src/assets/carrito.png')] bg-center bg-contain bg-no-repeat"/>
             </div>
             {open && (
                 <div className="h-screen w-screen fixed top-16 left-0 bg-black/25" onClick={()=>{setShowCart(false), setOpen(false)}}/>
