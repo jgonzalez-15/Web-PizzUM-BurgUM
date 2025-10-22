@@ -4,6 +4,10 @@ import { Link } from "react-router-dom"
 import Footer from "../Components/Footer"
 
 function Login(){
+    if (window.pageYOffset > 0) {
+        window.scrollTo(0, 0);
+    }
+
     return(
         <>
         <div className="flex flex-col h-screen w-screen justify-between">

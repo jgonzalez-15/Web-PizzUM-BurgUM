@@ -32,27 +32,32 @@ function MainHeader(){
                 <div className="h-screen w-screen fixed top-16 left-0 bg-black/25" onClick={()=>{setShowCart(false), setOpen(false)}}/>
             )}
             {showCart && (
-                <>
-                <div className="h-screen w-screen fixed top-16 left-0 bg-black/25" onClick={()=>{setShowCart(false), setOpen(false)}}/>
-                <div className="fixed top-16 right-0 h-64 w-64 bg-white flex flex-col justify-between rounded-b-2xl rounded-l-2xl">
-                    <div className="m-4 mb-0">
-                        <div className="w-full">
-                            <h1 className="font-bold">Tu carrito:</h1>
-                            <div className="overflow-auto h-36 w-64 mt-4">
-                            {
-                                items.map((item) => (
-                                    <div key={item.id} className="m-2 mt-0 mr-8 md:m-4 flex flex-row justify-between items-center">
-                                        <h1>● {item.name}</h1>
-                                        <button className="h-6 w-6 rounded-sm font-bold text-red-600" onClick={() => removeItem(item.id)}>X</button>
-                                    </div>
-                                ))
-                            }
-                            </div>
-                        </div>
-                    </div>
-                    <SmallButton text="Ver tu pedido" isPrimary={true} route="/order"/>
+            <>
+                <div className="h-screen w-screen fixed top-16 left-0 bg-black/25 z-10" onClick={() => { setShowCart(false); setOpen(false); }}/>
+                <div className="fixed top-16 right-0 h-[70vh] w-64 bg-white rounded-b-2xl rounded-l-2xl z-20 flex flex-col">
+                <div className="p-4 border-b border-gray-300">
+                    <h1 className="font-bold">Tu carrito:</h1>
                 </div>
-                </>
+                <div className="flex-1 overflow-y-auto px-4 py-2">
+                    {items.length === 0 && (
+                    <p className="text-gray-500 text-sm italic text-center mt-2">
+                        Tu carrito está vacío
+                    </p>
+                    )}
+                    {items.map((item) => (
+                    <div key={item.id} className="flex flex-row justify-between items-center py-1 border-b border-gray-100">
+                        <h1>● {item.name}</h1>
+                        <button className="h-6 w-6 rounded-sm font-bold text-red-600" onClick={() => removeItem(item.id)}>
+                        X
+                        </button>
+                    </div>
+                    ))}
+                </div>
+                <div className="p-4 border-t border-gray-300 flex justify-center">
+                    <SmallButton text="Ver tu pedido" route="/order" isPrimary={true} />
+                </div>
+                </div>
+            </>
             )}
             <div className={`fixed top-16 left-0 h-screen transform transition-transform duration-300 ${open ? "translate-x-0" : "-translate-x-full"}`}>
                 <Sidebar/>
