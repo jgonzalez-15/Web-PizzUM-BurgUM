@@ -19,11 +19,11 @@ public class AdministradorController {
 
 
     @PostMapping("/agregarAdmin")
-    public ResponseEntity<AdministradorDTO> agregarAdmin(@Validated @RequestBody AdministradorDTO dto, HttpSession session) {
+    public ResponseEntity<AdministradorDTO> agregarAdmin(@Validated @RequestBody AdministradorDTO dto, HttpSession sesion) {
         AdministradorDTO admin = administradorService.agregarAdmin(dto);
 
-        session.setAttribute("email", admin.getEmail());
-        session.setAttribute("rol", "ADMIN");
+        sesion.setAttribute("email", admin.getEmail());
+        sesion.setAttribute("rol", "ADMIN");
 
 
 
@@ -45,8 +45,8 @@ public class AdministradorController {
     }
 
     @PostMapping("/cerrarSesion")
-    public ResponseEntity<String>cerrarSesion(HttpSession session){
-        session.invalidate();
+    public ResponseEntity<String>cerrarSesion(HttpSession sesion){
+        sesion.invalidate();
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
 }

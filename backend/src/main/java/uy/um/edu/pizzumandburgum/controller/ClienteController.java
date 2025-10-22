@@ -31,17 +31,17 @@ public class ClienteController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ClienteResponseDTO>login(@Validated @RequestBody ClienteRequestDTO dto, HttpSession session){
+    public ResponseEntity<ClienteResponseDTO>login(@Validated @RequestBody ClienteRequestDTO dto, HttpSession sesion){
         ClienteResponseDTO cliente = clienteService.login(dto.getEmail(), dto.getContrasenia());
         // Guardar datos en la sesión
-        session.setAttribute("email", cliente.getEmail());
-        session.setAttribute("rol", "CLIENTE"); // 🔹 asignamos el rol
-        session.setAttribute("nombre", cliente.getNombre());
+        sesion.setAttribute("email", cliente.getEmail());
+        sesion.setAttribute("rol", "CLIENTE"); // 🔹 asignamos el rol
+        sesion.setAttribute("nombre", cliente.getNombre());
         return ResponseEntity.ok(cliente);
     }
     @PostMapping("/cerrarSesion")
-    public ResponseEntity<String>cerrarSesion(HttpSession session){
-        session.invalidate();
+    public ResponseEntity<String>cerrarSesion(HttpSession sesion){
+        sesion.invalidate();
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
     @GetMapping("/{idCliente}/historial-pedidos")

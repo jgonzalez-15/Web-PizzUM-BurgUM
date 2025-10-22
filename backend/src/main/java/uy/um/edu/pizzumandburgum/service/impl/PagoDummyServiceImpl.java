@@ -3,11 +3,17 @@ package uy.um.edu.pizzumandburgum.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import uy.um.edu.pizzumandburgum.dto.request.PagoDummyRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PagoDummyResponseDTO;
+import uy.um.edu.pizzumandburgum.entities.MedioDePago;
 import uy.um.edu.pizzumandburgum.entities.PagoDummy;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
+import uy.um.edu.pizzumandburgum.exceptions.MedioDePago.MedioDePagoNoExisteException;
+import uy.um.edu.pizzumandburgum.exceptions.Pedido.PedidoNoEncontradoException;
+import uy.um.edu.pizzumandburgum.exceptions.Pedido.PedidoPagoException;
 import uy.um.edu.pizzumandburgum.exceptions.PedidoBebida.PedidoBebidaNoExisteException;
+import uy.um.edu.pizzumandburgum.repository.MedioDePagoRepository;
 import uy.um.edu.pizzumandburgum.repository.PagoDummyRepository;
 import uy.um.edu.pizzumandburgum.repository.PedidoRepository;
+import uy.um.edu.pizzumandburgum.service.Interfaces.MedioDePagoService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PagoDummyService;
 
 import java.time.LocalDateTime;
@@ -21,12 +27,23 @@ public class PagoDummyServiceImpl implements PagoDummyService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
+    @Autowired
+    private MedioDePagoService medioDePagoService;
+
     @Override
     public PagoDummyResponseDTO procesarPago(PagoDummyRequestDTO request) {
         Pedido pedido = pedidoRepository.findById(request.getIdPedido())
-                .orElseThrow(() -> new PedidoBebidaNoExisteException());
+                .orElseThrow(() -> new PedidoNoEncontradoException());
 
-        // Simular pago aprobado
+        if (pedido.isEstaPago()==true){
+            throw new PedidoPagoException();
+        }
+        MedioDePago medioDePago = medioDePagoService.obtenerMedioDePago(pedido.getClienteAsignado().getEmail(),pedido.getMedioDePago().getNumero());
+
+        if (medioDePago.getNumero() == null){
+            throw new MedioDePagoNoExisteException();
+        }
+
         PagoDummy pago = new PagoDummy();
         pago.setCodigoTransaccion("DUMMY-" + UUID.randomUUID());
         pago.setMonto(pedido.getPrecio());
