@@ -3,6 +3,9 @@ import IngredientAdder from "../Components/IngredientAdder"
 import { useState } from "react";
 import { DesignContext } from "../Components/context/DesignContext";
 import Button from "../Components/Button";
+import Footer from "../Components/Footer";
+import AddToCartButton from "../Components/AddToCartButton";
+import SmallButton from "../Components/SmallButton";
 
 function Design({type}){
     if (window.pageYOffset > 0) {
@@ -40,6 +43,16 @@ function Design({type}){
                     <IngredientAdder text="Elegí tus carnes" maxCount={1} ing={[
                         {id: 1, name:"Carne 1", selected:false, glutenFree:true},
                         {id: 2, name:"Carne 2", selected:false, glutenFree:false}]}/>
+                    <div className="ml-16 mb-8">
+                    <label style={{ display: "block"}} className="text-xl font-bold">
+                    Cantidad de carnes:{" "}
+                    <select>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                    </label>
+                    </div>
                     <IngredientAdder text="Elegí tus salsas" maxCount={1} ing={[
                         {id: 1, name:"Salsa 1", selected:false, glutenFree:false},
                         {id: 2, name:"Salsa 2", selected:false, glutenFree:false},
@@ -66,11 +79,11 @@ function Design({type}){
                     </div>
                     <div className="flex w-full max-w-screen justify-end-safe items-center">
                         <h1 className="mr-2">
-                            Solo productos sin gluten
+                            Solo sin gluten
                         </h1>
                         <button
                             onClick={() => setGlutenFreeOnly((prev) => !prev)}
-                            className={`h-6 w-6 rounded-lg font-semibold transition mr-16
+                            className={`h-4 w-4 rounded-lg font-semibold transition mr-16 md:h-6 md:w-6 text-xs md:text-base
                                 ${glutenFreeOnly ? "bg-orange-400" : "bg-transparent"} border-2`}
                         >
                         </button>
@@ -78,15 +91,11 @@ function Design({type}){
                     {content}
                 </div>
                 <div className="flex flex-col md:flex-row justify-center items-center m-8 mb-16">
-                    <Button text="Agregar a favoritos" isPrimary={false}/>
+                    <SmallButton text="Agregar a favoritos" isPrimary={false}/>
                     <div className="w-4"></div>
-                    <Button text="Agregar al carrito" isPrimary={true}/>
+                    <AddToCartButton isPrimary={true} item={{name : `Nueva ${type}`, description: "esto es una creacion", price: 130}}/>
                 </div>
-                <footer className="p-8 bg-gray-200 flex flex-col md:flex-row justify-center items-center md:items-start">
-                        <p className="text-gray-600 ml-16 mr-16">Sobre nosotros</p>
-                        <p className="text-gray-600 ml-16 mr-16">Contacto</p>
-                        <p className="text-gray-600 ml-16 mr-16">PizzUM & BurgUM ©</p>
-                </footer>
+                <Footer/>
             </div>
         </DesignContext.Provider>
         </>

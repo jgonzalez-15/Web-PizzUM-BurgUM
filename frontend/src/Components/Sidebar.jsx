@@ -11,7 +11,6 @@ function Sidebar(){
             <SidebarItem text='Comprar' route='/order'/>
             <SidebarItem text='Tus Pedidos' route='/viewOrders'/>
             <SidebarItem text='Tus Favoritos' route='/favourites'/>
-            <SidebarItem text='Administración' route='/admin'/>
             </div>
             <div className="w-full border-t">
                 <div className="w-full m-4">
