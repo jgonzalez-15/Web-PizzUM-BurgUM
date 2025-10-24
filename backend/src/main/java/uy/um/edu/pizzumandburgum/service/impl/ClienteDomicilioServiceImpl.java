@@ -23,10 +23,11 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
 
     @Autowired
     private ClienteDomicilioRepository clienteDomicilioRepository;
+
     @Override
-    public void agregarDomicilio(String idCliente, String idDomicilio) {
-        Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(() -> new ClienteNoExisteException());
-        Domicilio domicilio = domicilioRepository.findById(idDomicilio).orElseThrow(()-> new DomicilioNoExisteException());
+    public void agregarDomicilio(String idCliente, Long idDomicilio) {
+        Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(ClienteNoExisteException::new);
+        Domicilio domicilio = domicilioRepository.findById(idDomicilio).orElseThrow(DomicilioNoExisteException::new);
 
         ClienteDomicilio clienteDomicilio = new ClienteDomicilio();
         clienteDomicilio.setCliente(cliente);
@@ -35,16 +36,20 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
         clienteDomicilioRepository.save(clienteDomicilio);
     }
 
+
     @Override
-    public Domicilio obtenerDomicilio(String clienteId, String direccion) {
+    public Domicilio obtenerDomicilio(String clienteId, Long idDomicilio) {
         Cliente cliente = clienteRepository.findByEmail(clienteId);
-        Domicilio domicilio = new Domicilio(direccion,null);
-        domicilio.setDireccion(direccion);
-        for (ClienteDomicilio d : cliente.getDomicilios() ){
-            if (d.getDomicilio().equals(domicilio.getDireccion())){
-               return domicilioRepository.findById(d.getDomicilio().getDireccion()).orElseThrow(() -> new DomicilioNoExisteException());
+        if (cliente == null) {
+            throw new ClienteNoExisteException();
+        }
+
+        for (ClienteDomicilio cd : cliente.getDomicilios()) {
+            if (cd.getDomicilio().getId() == idDomicilio) {
+                return domicilioRepository.findById(idDomicilio).orElseThrow(DomicilioNoExisteException::new);
             }
         }
-        return null;
+
+        throw new DomicilioNoExisteException();
     }
 }

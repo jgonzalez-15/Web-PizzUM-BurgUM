@@ -43,10 +43,10 @@ public class PedidoServiceImpl implements PedidoService {
     private ProductoRepository productoRepository;
 
     @Override
-    public PedidoResponseDTO realizarPedido(String email, String direccion, Long idPedido, Long numero) {
+    public PedidoResponseDTO realizarPedido(String email, long idDomicilio, Long idPedido, Long numero) {
         Cliente cliente = clienteRepository.findById(email).orElseThrow(() -> new ClienteNoExisteException());
         MedioDePago medioDePago = medioDePagoService.obtenerMedioDePago(cliente.getEmail(), numero);
-        Domicilio domicilio = clienteDomicilioService.obtenerDomicilio(email, direccion);
+        Domicilio domicilio = clienteDomicilioService.obtenerDomicilio(email, idDomicilio);
 
         Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow(() -> new PedidoNoEncontradoException());
         pedido.setEstado("En cola");

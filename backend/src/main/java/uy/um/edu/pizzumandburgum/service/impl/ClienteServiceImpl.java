@@ -89,8 +89,8 @@ public class ClienteServiceImpl implements ClienteService {
     public PedidoResponseDTO realizarPedido(PedidoRequestDTO pedidoRequestDTO) {
         Cliente cliente = clienteRepository.findById(pedidoRequestDTO.getClienteAsignado().getEmail()).orElseThrow(()->new UsuarioNoEncontradoException());
         MedioDePago medioDePago = medioDePagoRepository.findById(pedidoRequestDTO.getMedioDePago().getNumero()).orElseThrow(() -> new MedioDePagoNoExisteException());
-        Domicilio domicilio = domicilioRepository.findById(pedidoRequestDTO.getDomicilio().getDireccion()).orElseThrow(() -> new DomicilioNoExisteException());
-        return pedidoService.realizarPedido(pedidoRequestDTO.getClienteAsignado().getEmail(),pedidoRequestDTO.getDomicilio().getDireccion(),pedidoRequestDTO.getIdPedido(),pedidoRequestDTO.getMedioDePago().getNumero());
+        Domicilio domicilio = domicilioRepository.findById(pedidoRequestDTO.getDomicilio().getId()).orElseThrow(() -> new DomicilioNoExisteException());
+        return pedidoService.realizarPedido(pedidoRequestDTO.getClienteAsignado().getEmail(),pedidoRequestDTO.getDomicilio().getId(),pedidoRequestDTO.getIdPedido(),pedidoRequestDTO.getMedioDePago().getNumero());
 
     }
 
