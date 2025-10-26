@@ -47,55 +47,30 @@ public class HamburguesaServiceImpl implements HamburguesaService {
 
     @Override
     public HamburguesaResponseDTO crearHamburguesa(HamburguesaRequestDTO dto) {
-        // 1. Validaciones de negocio
         if (dto.getCantCarnes() > 3) {
             throw new CantidadDeCarnesException();
         }
         if (dto.getCantCarnes() == 0) {
             throw new SinCarneException();
         }
-
-        // 2. Crear hamburguesa base
-        Hamburguesa hamburguesa = new Hamburguesa();
-        hamburguesa.setCantCarnes(dto.getCantCarnes());
-        hamburguesa.setEsFavorita(dto.isEsFavorita());
-
-        // 3. Validar ingredientes, pan y calcular precio en UN solo loop
+        Hamburguesa hamburguesa = hamburguesaMapper.toEntity(dto);
         boolean tienePan = false;
         float precioTotal = 0;
 
-        for (HamburguesaProductoRequestDTO ingredienteDto : dto.getIngredientes()) {
-            // Buscar producto UNA sola vez
-            Producto producto = productoRepository.findById(ingredienteDto.getIdProducto())
-                    .orElseThrow(() -> new ProductoNoExisteException());
-
-            // Validar si tiene pan
+        for (HamburguesaProducto hp : hamburguesa.getIngredientes()) {
+            Producto producto = hp.getProducto();
             if ("Pan".equalsIgnoreCase(producto.getTipo())) {
                 tienePan = true;
             }
-
-            // Calcular precio en memoria
-            precioTotal += producto.getPrecio() * ingredienteDto.getCantidad();
+            precioTotal += producto.getPrecio() * hp.getCantidad();
         }
 
-        // Validar que tenga pan
         if (!tienePan) {
             throw new SinPanException();
         }
 
-        // 4. Setear precio y GUARDAR hamburguesa (para obtener el ID)
         hamburguesa.setPrecio(precioTotal);
         Hamburguesa guardado = hamburguesaRepository.save(hamburguesa);
-
-        // 5. AHORA agregar ingredientes (ya tenemos el ID de la hamburguesa)
-        for (HamburguesaProductoRequestDTO ingredienteDto : dto.getIngredientes()) {
-            hamburguesaProductoService.agregarIngrediente(
-                    guardado.getId(),
-                    ingredienteDto.getIdProducto(),
-                    ingredienteDto.getCantidad()
-            );
-        }
-
         return hamburguesaMapper.toResponseDTO(guardado);
     }
 

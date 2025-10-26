@@ -3,6 +3,8 @@ package uy.um.edu.pizzumandburgum.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.HamburguesaProductoRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.request.HamburguesaRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.response.HamburguesaProductoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
 import uy.um.edu.pizzumandburgum.entities.Producto;
@@ -31,14 +33,15 @@ public class HamburguesaProductoServiceImpl implements HamburguesaProductoServic
 
 
     @Override
-    public void agregarIngrediente(Long idHamburguesa, Long idProducto, int cantidad) {
-        Hamburguesa hamburguesa = hamburguesaRepository.findById(idHamburguesa).orElseThrow(()-> new HamburguesaNoEncontradaException());
-        Producto producto = productoRepository.findById(idProducto).orElseThrow(()->new ProductoNoExisteException());
+    public HamburguesaProductoResponseDTO agregarIngrediente(HamburguesaProductoRequestDTO dto) {
+        Hamburguesa hamburguesa = hamburguesaRepository.findById(dto.getIdHamburguesa()).orElseThrow(()-> new HamburguesaNoEncontradaException());
+        Producto producto = productoRepository.findById(dto.getIdProducto()).orElseThrow(()->new ProductoNoExisteException());
         HamburguesaProducto hp = new HamburguesaProducto();
         hp.setHamburguesa(hamburguesa);
         hp.setProducto(producto);
-        hp.setCantidad(cantidad);
-        hamburguesaProductoRepository.save(hp);
+        hp.setCantidad(dto.getCantidad());
+        HamburguesaProducto guardado = hamburguesaProductoRepository.save(hp);
+        return hamburguesaProductoMapper.toResponseDTO(guardado);
     }
 
     @Override

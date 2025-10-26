@@ -21,26 +21,30 @@ public class HamburguesaMapper {
     @Autowired
     private ProductoRepository productoRepository;
 
+    @Autowired
+    private HamburguesaProductoMapper hamburguesaProductoMapper;
+
     public HamburguesaResponseDTO toResponseDTO(Hamburguesa hamburguesa) {
-        List<HamburguesaProductoRequestDTO> ingredientesDTO = new ArrayList<>();
+        HamburguesaResponseDTO dto = new HamburguesaResponseDTO();
 
-        for (HamburguesaProducto hp : hamburguesa.getIngredientes()) {
-            HamburguesaProductoRequestDTO dto = new HamburguesaProductoRequestDTO();
-            dto.setIdProducto(hp.getProducto().getIdProducto());
-            dto.setCantidad(hp.getCantidad());
+        dto.setIdCreacion(hamburguesa.getId());
+        dto.setCantCarnes(hamburguesa.getCantCarnes());
+        dto.setPrecio(hamburguesa.getPrecio());
+        dto.setEsFavorita(hamburguesa.isEsFavorita());
 
-            ingredientesDTO.add(dto);
-        };
+        List<HamburguesaProductoResponseDTO> ingredientesDTO = new ArrayList<>();
 
-        return new HamburguesaResponseDTO(
-                hamburguesa.getId(),
-                hamburguesa.getCantCarnes(),
-                hamburguesa.getPrecio(),
-                hamburguesa.isEsFavorita(),
-                ingredientesDTO
-        );
-
+        if (hamburguesa.getIngredientes() != null && !hamburguesa.getIngredientes().isEmpty()) {
+            for (HamburguesaProducto hp : hamburguesa.getIngredientes()) {
+                ingredientesDTO.add(hamburguesaProductoMapper.toResponseDTO(hp));
+            }
         }
+
+        dto.setIngredientes(ingredientesDTO);
+
+        return dto;
+    }
+
     public Hamburguesa toEntity(HamburguesaRequestDTO dto) {
         Hamburguesa hamburguesa = new Hamburguesa();
         hamburguesa.setCantCarnes(dto.getCantCarnes());
@@ -57,7 +61,7 @@ public class HamburguesaMapper {
 
             hi.setHamburguesa(hamburguesa);
             hi.setProducto(producto);
-            hi.setCantidad(hi.getCantidad());
+            hi.setCantidad(hp.getCantidad());
 
             ingredientes.add(hi);
         }
