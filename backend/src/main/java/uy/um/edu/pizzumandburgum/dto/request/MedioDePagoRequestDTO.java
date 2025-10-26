@@ -5,15 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
-import uy.um.edu.pizzumandburgum.entities.Pedido;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DomicilioRequestDTO {
-    private String direccion;
+public class MedioDePagoRequestDTO {
+    Long numero;
+    LocalDate vencimiento;
+    String direccion;
+    ClienteResponseDTO Cliente;
 }

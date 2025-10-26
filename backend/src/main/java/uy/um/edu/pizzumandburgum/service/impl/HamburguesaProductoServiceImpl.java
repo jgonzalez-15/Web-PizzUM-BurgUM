@@ -2,6 +2,7 @@ package uy.um.edu.pizzumandburgum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uy.um.edu.pizzumandburgum.dto.request.HamburguesaProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
 import uy.um.edu.pizzumandburgum.entities.Producto;

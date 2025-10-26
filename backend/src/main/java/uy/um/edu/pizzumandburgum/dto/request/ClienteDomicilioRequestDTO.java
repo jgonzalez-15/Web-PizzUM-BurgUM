@@ -9,10 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductoDTO {
-    private Long idProducto;
-    private String tipo;
-    private String nombre;
-    private boolean sinTacc;
-    private float precio;
+public class ClienteDomicilioRequestDTO {
+    private String email;
+    private Long idDomicilio;
 }

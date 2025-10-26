@@ -15,10 +15,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HamburguesaResponseDTO {
-
+    private long idCreacion;
     private int cantCarnes;
     private float precio;
     private boolean esFavorita;
-    private List<HamburguesaProducto> ingredientes;
+    private List<HamburguesaProductoRequestDTO> ingredientes;
 
 }

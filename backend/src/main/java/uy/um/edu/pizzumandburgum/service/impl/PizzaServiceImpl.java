@@ -14,6 +14,9 @@ import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PizzaProductoService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PizzaService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class PizzaServiceImpl implements PizzaService {
     @Autowired
@@ -35,7 +38,7 @@ public class PizzaServiceImpl implements PizzaService {
     @Override
     public PizzaResponseDTO crearPizza(Long idPizza) {
 
-        Pizza pizza = pizzaRepository.findByidCreacion(idPizza).orElseThrow(() -> new PizzaNoExisteException());
+        Pizza pizza = pizzaRepository.findById(idPizza).orElseThrow(() -> new PizzaNoExisteException());
         boolean tieneMasa = false;
 
         for (PizzaProducto pp: pizza.getIngredientes()){
@@ -47,7 +50,7 @@ public class PizzaServiceImpl implements PizzaService {
         if (!tieneMasa){
             throw new SinMasaException();
         }
-        float precio = this.fijarPrecio(pizza.getIdCreacion());
+        float precio = this.fijarPrecio(pizza.getId());
         pizza.setPrecio(precio);
         Pizza guardado = pizzaRepository.save(pizza);
 
@@ -73,5 +76,16 @@ public class PizzaServiceImpl implements PizzaService {
         pizzaRepository.save(pizza);
 
         return precioTotal;
+    }
+
+    @Override
+    public List<PizzaResponseDTO> listarPizzas() {
+        List<Pizza>pizzas = pizzaRepository.findAll();
+        List<PizzaResponseDTO> retornar = new ArrayList<>();
+
+        for(Pizza pizza: pizzas){
+            retornar.add(pizzaMapper.toResponseDTO(pizza));
+        }
+        return retornar;
     }
 }

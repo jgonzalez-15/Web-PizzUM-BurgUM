@@ -12,8 +12,7 @@ import java.util.List;
 public interface ClienteService {
     ClienteResponseDTO registrarCliente(ClienteRequestDTO dto);
     ClienteResponseDTO login(String email, String password);
-    HamburguesaResponseDTO diseñarHamburguesa (HamburguesaResponseDTO hamburguesaResponseDTO);
-    PedidoResponseDTO realizarPedido (PedidoRequestDTO pedidoRequestDTO);
     List<Pedido> historialPedido(String email);
+    List<ClienteResponseDTO> listarClientes();
 
 }

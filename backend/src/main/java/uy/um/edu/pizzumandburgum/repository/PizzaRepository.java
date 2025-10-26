@@ -6,6 +6,6 @@ import uy.um.edu.pizzumandburgum.entities.Pizza;
 import java.util.Optional;
 
 public interface PizzaRepository extends JpaRepository<Pizza, String> {
-    public Optional<Pizza> findByidCreacion(Long id);
+    public Optional<Pizza> findById(Long id);
 
 }

@@ -25,6 +25,7 @@ import uy.um.edu.pizzumandburgum.repository.MedioDePagoRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PedidoService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,13 +54,11 @@ public class ClienteServiceImpl implements ClienteService {
         if (dto.getContrasenia().length() < 8){
             throw new ContraseniaInvalidaException();
         }
-        // Convertir DTO → Entity
+
         Cliente nuevo = clienteMapper.toEntity(dto);
 
-        // Guardar en la base
         Cliente guardado = clienteRepository.save(nuevo);
 
-        // Convertir Entity → DTO de respuesta
         return clienteMapper.toResponseDTO(guardado);
     }
 
@@ -77,21 +76,6 @@ public class ClienteServiceImpl implements ClienteService {
                 cliente.getTelefono(),
                 cliente.getFechaNac()
         );
-
-    }
-
-    @Override
-    public HamburguesaResponseDTO diseñarHamburguesa(HamburguesaResponseDTO hamburguesaResponseDTO) {
-        return null;
-    }
-
-    @Override
-    public PedidoResponseDTO realizarPedido(PedidoRequestDTO pedidoRequestDTO) {
-        Cliente cliente = clienteRepository.findById(pedidoRequestDTO.getClienteAsignado().getEmail()).orElseThrow(()->new UsuarioNoEncontradoException());
-        MedioDePago medioDePago = medioDePagoRepository.findById(pedidoRequestDTO.getMedioDePago().getNumero()).orElseThrow(() -> new MedioDePagoNoExisteException());
-        Domicilio domicilio = domicilioRepository.findById(pedidoRequestDTO.getDomicilio().getDireccion()).orElseThrow(() -> new DomicilioNoExisteException());
-        return pedidoService.realizarPedido(pedidoRequestDTO.getClienteAsignado().getEmail(),pedidoRequestDTO.getDomicilio().getDireccion(),pedidoRequestDTO.getIdPedido(),pedidoRequestDTO.getMedioDePago().getNumero());
-
     }
 
     @Override
@@ -100,5 +84,13 @@ public class ClienteServiceImpl implements ClienteService {
         return cliente.getPedidos();
     }
 
-
+    @Override
+    public List<ClienteResponseDTO> listarClientes() {
+        List <Cliente> clientes = clienteRepository.findAll();
+        List <ClienteResponseDTO>retornar = new ArrayList<>();
+        for (Cliente cliente: clientes){
+            retornar.add(clienteMapper.toResponseDTO(cliente));
+        }
+        return retornar;
+    }
 }
