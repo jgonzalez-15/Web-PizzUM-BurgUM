@@ -24,7 +24,7 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
     @Autowired
     private ClienteDomicilioRepository clienteDomicilioRepository;
     @Override
-    public void agregarDomicilio(String idCliente, String idDomicilio) {
+    public void agregarDomicilio(String idCliente, Long idDomicilio) {
         Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(() -> new ClienteNoExisteException());
         Domicilio domicilio = domicilioRepository.findById(idDomicilio).orElseThrow(()-> new DomicilioNoExisteException());
 
@@ -33,12 +33,15 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
         clienteDomicilio.setDomicilio(domicilio);
 
         clienteDomicilioRepository.save(clienteDomicilio);
+
+        cliente.getDomicilios().add(clienteDomicilio);
+        domicilio.getClientes().add(clienteDomicilio);
     }
 
     @Override
     public Domicilio obtenerDomicilio(String clienteId, String direccion) {
-        Cliente cliente = clienteRepository.findByEmail(clienteId);
-        Domicilio domicilio = new Domicilio(direccion,null);
+        Cliente cliente = clienteRepository.findByEmail(clienteId).orElseThrow(() -> new ClienteNoExisteException());
+        Domicilio domicilio = new Domicilio();
         domicilio.setDireccion(direccion);
         for (ClienteDomicilio d : cliente.getDomicilios() ){
             if (d.getDomicilio().equals(domicilio.getDireccion())){

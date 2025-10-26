@@ -31,7 +31,7 @@ public class PizzaProductoServiceImpl implements PizzaProductoService {
     @Override
     public float calcularPrecio(Long idPizza) {
         float precio = 0;
-        Pizza pizza = pizzaRepository.findByidCreacion(idPizza).orElseThrow(() -> new PizzaNoExisteException());
+        Pizza pizza = pizzaRepository.findById(idPizza).orElseThrow(() -> new PizzaNoExisteException());
 
         for (PizzaProducto pp : pizza.getIngredientes()){
             precio += pp.getProducto().getPrecio() * pp.getCantidad();

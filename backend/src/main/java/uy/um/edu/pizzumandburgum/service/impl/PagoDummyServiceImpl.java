@@ -35,7 +35,7 @@ public class PagoDummyServiceImpl implements PagoDummyService {
         Pedido pedido = pedidoRepository.findById(request.getIdPedido())
                 .orElseThrow(() -> new PedidoNoEncontradoException());
 
-        if (pedido.isEstaPago()==true){
+        if (pedido.isEstaPago()){
             throw new PedidoPagoException();
         }
         MedioDePago medioDePago = medioDePagoService.obtenerMedioDePago(pedido.getClienteAsignado().getEmail(),pedido.getMedioDePago().getNumero());

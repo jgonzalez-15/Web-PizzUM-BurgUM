@@ -3,6 +3,7 @@ package uy.um.edu.pizzumandburgum.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
 import uy.um.edu.pizzumandburgum.exceptions.Pedido.PedidoNoEncontradoException;
@@ -28,8 +29,8 @@ public class PedidoController {
     private PedidoRepository pedidoRepository;
 
     @PostMapping("/realizar")
-    public ResponseEntity<PedidoResponseDTO> realizarPedido(@RequestParam String email,@RequestParam String direccion,@RequestParam  Long idPedido,@RequestParam Long numero) {
-        PedidoResponseDTO pedido = pedidoService.realizarPedido(email,direccion,idPedido,numero);
+    public ResponseEntity<PedidoResponseDTO> realizarPedido(@RequestBody PedidoRequestDTO dto) {
+        PedidoResponseDTO pedido = pedidoService.realizarPedido(dto);
         return ResponseEntity.ok(pedido);
     }
 

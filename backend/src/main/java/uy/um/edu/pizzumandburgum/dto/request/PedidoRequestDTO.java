@@ -20,14 +20,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PedidoRequestDTO {
-    private Long idPedido;
-    private float precio;
-    private LocalDate fecha;
-    private String estado;
-    private boolean estaPago;
-    private Cliente  clienteAsignado;
-    private List<PedidoCreacion> creacionesPedido;
-    private List<PedidoBebida> bebidas;
-    private MedioDePago medioDePago;
-    private Domicilio domicilio;
+
+        private String estado;
+        private boolean estaPago;
+
+        private Long idCliente;
+        private Long idDomicilio;
+        private Long idMedioDePago;
+
+        private List<PedidoCreacionDTO> creaciones;
+        private List<PedidoBebidaResponseDTO> bebidas;
 }

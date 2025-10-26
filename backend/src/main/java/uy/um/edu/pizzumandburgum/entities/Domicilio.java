@@ -19,7 +19,11 @@ import java.util.Objects;
 public class Domicilio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String direccion;
+
+    @OneToMany(mappedBy = "domicilio", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClienteDomicilio> clientes = new ArrayList<>();
 
     @OneToMany(mappedBy = "domicilio", cascade = CascadeType.ALL)
     private List<Pedido> pedidos;

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
 public class MedioDePago {
     @Id
     Long numero;
-    Date vencimiento;
+    LocalDate vencimiento;
     String direccion;
     @ManyToOne(optional = false)
     @JoinColumn (name = "cliente_id")

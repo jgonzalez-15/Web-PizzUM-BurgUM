@@ -2,13 +2,21 @@ package uy.um.edu.pizzumandburgum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.response.PedidoBebidaResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.PedidoCreacionDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.*;
+import uy.um.edu.pizzumandburgum.exceptions.Creacion.CreacionNoEncontradaException;
+import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Pedido.PedidoNoEncontradoException;
+import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.PedidoMapper;
 import uy.um.edu.pizzumandburgum.repository.*;
 import uy.um.edu.pizzumandburgum.service.Interfaces.*;
+
+import java.time.LocalDate;
 
 @Service
 public class PedidoServiceImpl implements PedidoService {
@@ -42,45 +50,83 @@ public class PedidoServiceImpl implements PedidoService {
     @Autowired
     private ProductoRepository productoRepository;
 
-    @Override
-    public PedidoResponseDTO realizarPedido(String email, String direccion, Long idPedido, Long numero) {
-        Cliente cliente = clienteRepository.findById(email).orElseThrow(() -> new ClienteNoExisteException());
-        MedioDePago medioDePago = medioDePagoService.obtenerMedioDePago(cliente.getEmail(), numero);
-        Domicilio domicilio = clienteDomicilioService.obtenerDomicilio(email, direccion);
+    @Autowired
+    private DomicilioRepository domicilioRepository;
 
-        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow(() -> new PedidoNoEncontradoException());
+    @Autowired
+    private CreacionRepository creacionRepository;
+    @Override
+    public PedidoResponseDTO realizarPedido(PedidoRequestDTO dto) {
+        Cliente cliente = clienteRepository.findById(String.valueOf(dto.getIdCliente())).orElseThrow(() -> new ClienteNoExisteException());
+
+        MedioDePago medioDePago = medioDePagoService.obtenerMedioDePago(
+                cliente.getEmail(),
+                dto.getIdMedioDePago()
+        );
+
+        Domicilio domicilioTemp = domicilioRepository.findById(dto.getIdDomicilio())
+                .orElseThrow(() -> new DomicilioNoExisteException());
+
+        Domicilio domicilio = clienteDomicilioService.obtenerDomicilio(
+                cliente.getEmail(),
+                domicilioTemp.getDireccion()
+        );
+
+        // 4. Crear el pedido base usando el mapper
+        Pedido pedido = pedidoMapper.toEntity(dto);
         pedido.setEstado("En cola");
-        pedido.setDomicilio(domicilio);
         pedido.setClienteAsignado(cliente);
+        pedido.setDomicilio(domicilio);
         pedido.setMedioDePago(medioDePago);
+        pedido.setFecha(LocalDate.now());
+
+        // 5. GUARDAR PRIMERO para obtener el ID
         pedido = pedidoRepository.save(pedido);
 
-        float precio = 0;
+        // 6. Procesar creaciones (hamburguesas/pizzas) y calcular precio
+        float precioTotal = 0f;
 
-        for (PedidoCreacion pc : pedido.getCreacionesPedido()) {
-            pedidoCrecionService.agregarCreacion(
-                    pedido.getIdPedido(),
-                    pc.getCreacion().getIdCreacion(),
-                    pc.getCantidad()
-            );
-            precio += pc.getCreacion().getPrecio() * pc.getCantidad();
+        if (dto.getCreaciones() != null && !dto.getCreaciones().isEmpty()) {
+            for (PedidoCreacionDTO creacionDto : dto.getCreaciones()) {
+                // Agregar la creación al pedido
+                pedidoCrecionService.agregarCreacion(
+                        pedido.getIdPedido(),
+                        creacionDto.getCreacion().getId(),
+                        creacionDto.getCantidad()
+                );
+
+                // Buscar la creación para obtener su precio
+                Creacion creacion = creacionRepository.findById(creacionDto.getCreacion().getId())
+                        .orElseThrow(() -> new CreacionNoEncontradaException());
+
+                precioTotal += creacion.getPrecio() * creacionDto.getCantidad();
+            }
         }
 
-        for (PedidoBebida pb : pedido.getBebidas()) {
-            pedidoBebidaService.agregarBebida(
-                    pedido.getIdPedido(),
-                    pb.getProducto().getIdProducto(),
-                    pb.getCantidad()
-            );
+        // 7. Procesar bebidas
+        if (dto.getBebidas() != null && !dto.getBebidas().isEmpty()) {
+            for (PedidoBebidaResponseDTO bebidaDto : dto.getBebidas()) {
+                // Agregar la bebida al pedido
+                pedidoBebidaService.agregarBebida(
+                        pedido.getIdPedido(),
+                        bebidaDto.getProducto().getIdProducto(),
+                        bebidaDto.getCantidad()
+                );
 
-            precio += pb.getProducto().getPrecio() * pb.getCantidad();
+                // Buscar el producto para obtener su precio
+                Producto bebida = productoRepository.findById(bebidaDto.getProducto().getIdProducto())
+                        .orElseThrow(() -> new ProductoNoExisteException());
 
-            pedido.setPrecio(precio);
-
-            return pedidoMapper.toResponseDTO(pedido);
+                precioTotal += bebida.getPrecio() * bebidaDto.getCantidad();
+            }
         }
 
-    return null;}
+        // 8. Actualizar el precio y guardar
+        pedido.setPrecio(precioTotal);
+        pedido = pedidoRepository.save(pedido);
+
+        // 9. Convertir a DTO y retornar
+        return pedidoMapper.toResponseDTO(pedido);}
 
     @Override
     public void eliminarPedido(Long id) {

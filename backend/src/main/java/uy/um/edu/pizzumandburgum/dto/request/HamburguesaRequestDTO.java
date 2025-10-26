@@ -14,10 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HamburguesaRequestDTO {
-
     private int cantCarnes;
-    private float precio;
     private boolean esFavorita;
-    private List<Long> ingredientes;
+    private List<HamburguesaProductoRequestDTO> ingredientes;
 
 }

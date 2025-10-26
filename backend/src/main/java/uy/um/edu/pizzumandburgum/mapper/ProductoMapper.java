@@ -16,6 +16,6 @@ public class ProductoMapper {
     }
 
     public ProductoDTO toResponseDTO(Producto producto) {
-        return new ProductoDTO(producto.getTipo(),producto.getNombre(),producto.isSinTacc(),producto.getPrecio());
+        return new ProductoDTO(producto.getIdProducto(), producto.getTipo(),producto.getNombre(),producto.isSinTacc(),producto.getPrecio());
     }
 }

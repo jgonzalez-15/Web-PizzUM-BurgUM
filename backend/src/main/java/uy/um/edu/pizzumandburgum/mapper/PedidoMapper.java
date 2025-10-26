@@ -9,13 +9,8 @@ import uy.um.edu.pizzumandburgum.entities.Pedido;
 public class PedidoMapper {
     public Pedido toEntity(PedidoRequestDTO dto) {
         Pedido pedido = new Pedido();
-        pedido.setPrecio(dto.getPrecio());
-        pedido.setFecha(dto.getFecha());
         pedido.setEstado(dto.getEstado());
         pedido.setEstaPago(dto.isEstaPago());
-        pedido.setCreacionesPedido(dto.getCreacionesPedido());
-        pedido.setBebidas(dto.getBebidas());
-        pedido.setClienteAsignado(dto.getClienteAsignado());
         return pedido;
     }
 

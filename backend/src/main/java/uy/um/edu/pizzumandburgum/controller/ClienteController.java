@@ -50,4 +50,10 @@ public class ClienteController {
         return ResponseEntity.ok(historial);
     }
 
+    @GetMapping("/listar")
+    public ResponseEntity<List<ClienteResponseDTO>> mostrarCliente() {
+        List<ClienteResponseDTO> clientes = clienteService.listarClientes();
+        return ResponseEntity.ok(clientes);
+    }
+
 }
