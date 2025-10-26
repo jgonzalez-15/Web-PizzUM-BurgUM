@@ -35,7 +35,7 @@ public class ClienteController {
         ClienteResponseDTO cliente = clienteService.login(dto.getEmail(), dto.getContrasenia());
         // Guardar datos en la sesión
         sesion.setAttribute("email", cliente.getEmail());
-        sesion.setAttribute("rol", "CLIENTE"); // 🔹 asignamos el rol
+        sesion.setAttribute("rol", "CLIENTE");
         sesion.setAttribute("nombre", cliente.getNombre());
         return ResponseEntity.ok(cliente);
     }
@@ -48,6 +48,11 @@ public class ClienteController {
     public ResponseEntity<List<Pedido>> listarHistorialPedidos(@PathVariable String idCliente) {
         List<Pedido> historial = clienteService.historialPedido(idCliente);
         return ResponseEntity.ok(historial);
+    }
+    @GetMapping("/listar")
+    public ResponseEntity<List<ClienteResponseDTO>> mostrarCliente() {
+        List<ClienteResponseDTO> clientes = clienteService.listarClientes();
+        return ResponseEntity.ok(clientes);
     }
 
 }

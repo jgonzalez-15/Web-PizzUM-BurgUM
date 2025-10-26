@@ -19,7 +19,7 @@ import java.util.Objects;
 public class Domicilio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String calle;
     private String numero;

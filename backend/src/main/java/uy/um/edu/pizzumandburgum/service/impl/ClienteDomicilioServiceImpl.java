@@ -2,11 +2,14 @@ package uy.um.edu.pizzumandburgum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uy.um.edu.pizzumandburgum.dto.request.ClienteDomicilioRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.response.ClienteDomicilioResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.ClienteDomicilio;
 import uy.um.edu.pizzumandburgum.entities.Domicilio;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
+import uy.um.edu.pizzumandburgum.mapper.ClienteDomicilioMapper;
 import uy.um.edu.pizzumandburgum.repository.ClienteDomicilioRepository;
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 import uy.um.edu.pizzumandburgum.repository.DomicilioRepository;
@@ -24,16 +27,20 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
     @Autowired
     private ClienteDomicilioRepository clienteDomicilioRepository;
 
+    @Autowired
+    private ClienteDomicilioMapper clienteDomicilioMapper;
+
     @Override
-    public void agregarDomicilio(String idCliente, Long idDomicilio) {
-        Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(ClienteNoExisteException::new);
-        Domicilio domicilio = domicilioRepository.findById(idDomicilio).orElseThrow(DomicilioNoExisteException::new);
+    public ClienteDomicilioResponseDTO agregarDomicilio(ClienteDomicilioRequestDTO clienteDomicilioRequestDTO) {
+        Cliente cliente = clienteRepository.findById(clienteDomicilioRequestDTO.getEmailCliente()).orElseThrow(ClienteNoExisteException::new);
+        Domicilio domicilio = domicilioRepository.findById(clienteDomicilioRequestDTO.getIdDomicilio()).orElseThrow(DomicilioNoExisteException::new);
 
         ClienteDomicilio clienteDomicilio = new ClienteDomicilio();
         clienteDomicilio.setCliente(cliente);
         clienteDomicilio.setDomicilio(domicilio);
 
-        clienteDomicilioRepository.save(clienteDomicilio);
+        ClienteDomicilio guardado = clienteDomicilioRepository.save(clienteDomicilio);
+        return clienteDomicilioMapper.toResponseDTO(guardado);
     }
 
 

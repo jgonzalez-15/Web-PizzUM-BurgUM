@@ -15,5 +15,6 @@ public interface ClienteService {
     HamburguesaResponseDTO diseñarHamburguesa (HamburguesaResponseDTO hamburguesaResponseDTO);
     PedidoResponseDTO realizarPedido (PedidoRequestDTO pedidoRequestDTO);
     List<Pedido> historialPedido(String email);
+    List<ClienteResponseDTO> listarClientes();
 
 }
