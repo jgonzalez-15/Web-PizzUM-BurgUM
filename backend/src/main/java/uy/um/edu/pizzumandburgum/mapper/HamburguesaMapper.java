@@ -21,26 +21,35 @@ public class HamburguesaMapper {
     @Autowired
     private ProductoRepository productoRepository;
 
+    @Autowired
+    private HamburguesaProductoMapper hamburguesaProductoMapper;
+
+    @Autowired
+    private ClienteMapper clienteMapper;
+
     public HamburguesaResponseDTO toResponseDTO(Hamburguesa hamburguesa) {
-        List<HamburguesaProductoRequestDTO> ingredientesDTO = new ArrayList<>();
+        HamburguesaResponseDTO dto = new HamburguesaResponseDTO();
 
-        for (HamburguesaProducto hp : hamburguesa.getIngredientes()) {
-            HamburguesaProductoRequestDTO dto = new HamburguesaProductoRequestDTO();
-            dto.setIdProducto(hp.getProducto().getIdProducto());
-            dto.setCantidad(hp.getCantidad());
-
-            ingredientesDTO.add(dto);
-        };
-
-        return new HamburguesaResponseDTO(
-                hamburguesa.getId(),
-                hamburguesa.getCantCarnes(),
-                hamburguesa.getPrecio(),
-                hamburguesa.isEsFavorita(),
-                ingredientesDTO
-        );
-
+        dto.setIdCreacion(hamburguesa.getId());
+        dto.setCantCarnes(hamburguesa.getCantCarnes());
+        dto.setPrecio(hamburguesa.getPrecio());
+        dto.setEsFavorita(hamburguesa.isEsFavorita());
+        if (hamburguesa.getCliente() != null) {
+            dto.setCliente(clienteMapper.toResponseDTO(hamburguesa.getCliente()));
         }
+        List<HamburguesaProductoResponseDTO> ingredientesDTO = new ArrayList<>();
+
+        if (hamburguesa.getIngredientes() != null && !hamburguesa.getIngredientes().isEmpty()) {
+            for (HamburguesaProducto hp : hamburguesa.getIngredientes()) {
+                ingredientesDTO.add(hamburguesaProductoMapper.toResponseDTO(hp));
+            }
+        }
+
+        dto.setIngredientes(ingredientesDTO);
+
+        return dto;
+    }
+
     public Hamburguesa toEntity(HamburguesaRequestDTO dto) {
         Hamburguesa hamburguesa = new Hamburguesa();
         hamburguesa.setCantCarnes(dto.getCantCarnes());
@@ -57,7 +66,7 @@ public class HamburguesaMapper {
 
             hi.setHamburguesa(hamburguesa);
             hi.setProducto(producto);
-            hi.setCantidad(hi.getCantidad());
+            hi.setCantidad(hp.getCantidad());
 
             ingredientes.add(hi);
         }

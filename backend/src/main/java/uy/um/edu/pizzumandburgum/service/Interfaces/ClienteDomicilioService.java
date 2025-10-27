@@ -1,8 +1,10 @@
 package uy.um.edu.pizzumandburgum.service.Interfaces;
 
+import uy.um.edu.pizzumandburgum.dto.request.ClienteDomicilioRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.response.ClienteDomicilioResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Domicilio;
 
 public interface ClienteDomicilioService {
-    void agregarDomicilio(String idCliente, Long idDomicilio);
+    ClienteDomicilioResponseDTO agregarDomicilio(ClienteDomicilioRequestDTO dto);
     Domicilio obtenerDomicilio(String clienteId, String direccion);
 }

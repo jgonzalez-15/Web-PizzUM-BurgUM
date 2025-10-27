@@ -1,6 +1,7 @@
 package uy.um.edu.pizzumandburgum.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteDomicilioRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ClienteDomicilioResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
@@ -11,7 +12,7 @@ import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteExcep
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 import uy.um.edu.pizzumandburgum.repository.DomicilioRepository;
 
-
+@Component
 public class ClienteDomicilioMapper {
 
     @Autowired

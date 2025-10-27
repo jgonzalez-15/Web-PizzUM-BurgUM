@@ -13,8 +13,8 @@ import uy.um.edu.pizzumandburgum.entities.Producto;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PedidoBebidaResponseDTO {
-    private Pedido Pedido;
-    private Producto Producto;
+    private Long id;
+    private ProductoDTO Producto;
     private int cantidad;
 
 }

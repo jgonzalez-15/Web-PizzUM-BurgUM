@@ -14,5 +14,5 @@ public interface ClienteService {
     ClienteResponseDTO login(String email, String password);
     List<Pedido> historialPedido(String email);
     List<ClienteResponseDTO> listarClientes();
-
+    HamburguesaResponseDTO asociarHamburguesa(String emailCliente, Long idHamburguesa);
 }

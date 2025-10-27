@@ -16,13 +16,8 @@ public class MedidoDePagoController {
     private MedioDePagoService medioDePagoService;
 
     @PostMapping("añadir")
-    public ResponseEntity<MedioDePagoDTO> aniadirMedioDePago(
-            @RequestBody MedioDePagoRequestDTO request) {
-
+    public ResponseEntity<MedioDePagoDTO> aniadirMedioDePago(@RequestBody MedioDePagoRequestDTO request) {
         MedioDePagoDTO response = medioDePagoService.aniadirMedioDePago(request);
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

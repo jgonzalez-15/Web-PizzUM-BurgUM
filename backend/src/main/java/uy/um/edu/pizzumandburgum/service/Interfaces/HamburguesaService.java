@@ -9,4 +9,5 @@ public interface HamburguesaService {
     HamburguesaResponseDTO crearHamburguesa(HamburguesaRequestDTO hamburguesaRequestDTO);
     float fijarPrecio(Long idHamburguesa);
     List<HamburguesaResponseDTO> listarHamburguesas();
+
 }

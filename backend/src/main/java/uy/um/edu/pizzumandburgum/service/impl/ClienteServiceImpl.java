@@ -8,10 +8,8 @@ import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
-import uy.um.edu.pizzumandburgum.entities.Cliente;
-import uy.um.edu.pizzumandburgum.entities.Domicilio;
-import uy.um.edu.pizzumandburgum.entities.MedioDePago;
-import uy.um.edu.pizzumandburgum.entities.Pedido;
+import uy.um.edu.pizzumandburgum.entities.*;
+import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.HamburguesaNoEncontradaException;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.MedioDePago.MedioDePagoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
@@ -19,8 +17,10 @@ import uy.um.edu.pizzumandburgum.exceptions.Usuario.ContraseniaInvalidaException
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.EmailYaRegistradoException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.UsuarioNoEncontradoException;
 import uy.um.edu.pizzumandburgum.mapper.ClienteMapper;
+import uy.um.edu.pizzumandburgum.mapper.HamburguesaMapper;
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 import uy.um.edu.pizzumandburgum.repository.DomicilioRepository;
+import uy.um.edu.pizzumandburgum.repository.HamburguesaRepository;
 import uy.um.edu.pizzumandburgum.repository.MedioDePagoRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PedidoService;
@@ -45,6 +45,12 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
     private DomicilioRepository domicilioRepository;
+
+    @Autowired
+    private HamburguesaRepository hamburguesaRepository;
+
+    @Autowired
+    private HamburguesaMapper hamburguesaMapper;
     @Override
     public ClienteResponseDTO registrarCliente(ClienteRequestDTO dto) {
         if (clienteRepository.existsByEmail(dto.getEmail())) {
@@ -92,5 +98,20 @@ public class ClienteServiceImpl implements ClienteService {
             retornar.add(clienteMapper.toResponseDTO(cliente));
         }
         return retornar;
+    }
+
+    @Override
+    public HamburguesaResponseDTO asociarHamburguesa(String emailCliente, Long idHamburguesa) {
+        Cliente cliente = clienteRepository.findById(emailCliente)
+                .orElseThrow(ClienteNoExisteException::new);
+        Hamburguesa hamburguesa = hamburguesaRepository.findById(idHamburguesa)
+                .orElseThrow(()-> new HamburguesaNoEncontradaException());
+
+        cliente.getCreaciones().add(hamburguesa);
+        hamburguesa.setCliente(cliente);
+
+        clienteRepository.save(cliente);
+
+        return hamburguesaMapper.toResponseDTO(hamburguesa);
     }
 }

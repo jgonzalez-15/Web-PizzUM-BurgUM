@@ -19,6 +19,8 @@ import java.util.List;
 @NoArgsConstructor
 public class MedioDePago {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     Long numero;
     LocalDate vencimiento;
     String direccion;
