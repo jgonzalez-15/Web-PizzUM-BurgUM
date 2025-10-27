@@ -14,11 +14,11 @@ import { useState } from 'react'
 import Options from './Pages/Options'
 
 function App() {
-  const [session, setSession] = useState("Admin")
+  const [session, setSession] = useState("Client")
 
   let routes
 
-  if (session == "Client" || session =="Guest"){
+  if (session === "Client" || session === "Guest"){
     routes = (
       <>
       <CartProvider>
@@ -54,7 +54,7 @@ function App() {
 
   return (
     <>
-    {routes}
+      {routes}
     </>
   )
 }
