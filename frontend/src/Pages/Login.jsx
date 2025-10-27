@@ -20,8 +20,8 @@ function Login(){
                         <h4 className="ml-2">Contraseña:</h4>
                         <input type="password" className="bg-gray-200 rounded-2xl mt-1 mb-4 p-1"/>
                         <div className="flex flex-row justify-center mt-4">
-                            <SmallButton text='Cancelar' isPrimary={false} route={useLocation().state?.from}/>
-                            <SmallButton text='Ingresar' isPrimary={true} route={useLocation().state?.from}/>
+                            <SmallButton text='Cancelar' isPrimary={false} route="/"/>
+                            <SmallButton text='Ingresar' isPrimary={true} route="/"/>
                         </div>
                     </form>
                     <Link to='/register' className="m-1 text-blue-800/50 underline hover:text-blue-800">Registrarse</Link>
