@@ -35,22 +35,22 @@ public class PedidoController {
     }
 
     @DeleteMapping("/{id}/cancelarPedido")
-    public ResponseEntity<Void> cancelarPedido(@PathVariable Long idPedido){
-        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow(() -> new PedidoNoEncontradoException());
+    public ResponseEntity<Void> cancelarPedido(@PathVariable ("id") Long id){
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new PedidoNoEncontradoException());
         if (pedido.getEstado().equals("En Cola")){
         }
-        pedidoService.eliminarPedido(idPedido);
+        pedidoService.eliminarPedido(id);
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/{id}/estado")
-    public ResponseEntity<String> consultarEstado(@PathVariable Long id) {
+    public ResponseEntity<String> consultarEstado(@PathVariable ("id") Long id) {
         String estado = pedidoService.consultarEstado(id);
         return ResponseEntity.ok(estado);
     }
 
     @PutMapping("/{id}/cambiarEstado")
-    public ResponseEntity<Void> cambiarEstado(@PathVariable Long id, @RequestParam String estado) {
-        pedidoService.cambiarEstado(id, estado);
+    public ResponseEntity<Void> cambiarEstado(@PathVariable ("id") Long id) {
+        pedidoService.cambiarEstado(id);
         return ResponseEntity.ok().build();
     }
 }

@@ -15,6 +15,7 @@ public class DomicilioServiceImpl implements DomicilioService {
     @Autowired
     private DomicilioRepository domicilioRepository;
 
+    @Autowired
     private DomicilioMapper domicilioMapper;
 
 

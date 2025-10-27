@@ -23,6 +23,7 @@ public class DomicilioMapper {
     public Domicilio toEntity(DomicilioRequestDTO dto) {
         Domicilio domicilio = new Domicilio();
         domicilio.setDireccion(dto.getDireccion());
+
         return domicilio;
     }
 

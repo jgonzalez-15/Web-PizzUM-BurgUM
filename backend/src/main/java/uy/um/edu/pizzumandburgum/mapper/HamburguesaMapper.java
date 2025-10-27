@@ -24,6 +24,9 @@ public class HamburguesaMapper {
     @Autowired
     private HamburguesaProductoMapper hamburguesaProductoMapper;
 
+    @Autowired
+    private ClienteMapper clienteMapper;
+
     public HamburguesaResponseDTO toResponseDTO(Hamburguesa hamburguesa) {
         HamburguesaResponseDTO dto = new HamburguesaResponseDTO();
 
@@ -31,7 +34,9 @@ public class HamburguesaMapper {
         dto.setCantCarnes(hamburguesa.getCantCarnes());
         dto.setPrecio(hamburguesa.getPrecio());
         dto.setEsFavorita(hamburguesa.isEsFavorita());
-
+        if (hamburguesa.getCliente() != null) {
+            dto.setCliente(clienteMapper.toResponseDTO(hamburguesa.getCliente()));
+        }
         List<HamburguesaProductoResponseDTO> ingredientesDTO = new ArrayList<>();
 
         if (hamburguesa.getIngredientes() != null && !hamburguesa.getIngredientes().isEmpty()) {

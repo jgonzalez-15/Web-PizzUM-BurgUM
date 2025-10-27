@@ -20,5 +20,6 @@ public class HamburguesaResponseDTO {
     private float precio;
     private boolean esFavorita;
     private List<HamburguesaProductoResponseDTO> ingredientes;
+    private ClienteResponseDTO cliente;
 
 }

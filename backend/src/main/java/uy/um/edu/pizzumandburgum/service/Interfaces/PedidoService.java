@@ -7,5 +7,5 @@ public interface PedidoService {
     PedidoResponseDTO realizarPedido(PedidoRequestDTO dto);
     void eliminarPedido(Long id);
     String consultarEstado(Long id);
-    void cambiarEstado(Long id, String estado);
+    void cambiarEstado(Long id);
 }

@@ -9,6 +9,7 @@ import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.*;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.CreacionNoEncontradaException;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
+import uy.um.edu.pizzumandburgum.exceptions.Pedido.EstadoInvalidoException;
 import uy.um.edu.pizzumandburgum.exceptions.Pedido.PedidoNoEncontradoException;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
@@ -17,6 +18,8 @@ import uy.um.edu.pizzumandburgum.repository.*;
 import uy.um.edu.pizzumandburgum.service.Interfaces.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PedidoServiceImpl implements PedidoService {
@@ -57,7 +60,7 @@ public class PedidoServiceImpl implements PedidoService {
     private CreacionRepository creacionRepository;
     @Override
     public PedidoResponseDTO realizarPedido(PedidoRequestDTO dto) {
-        Cliente cliente = clienteRepository.findById(String.valueOf(dto.getIdCliente())).orElseThrow(() -> new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(() -> new ClienteNoExisteException());
 
         MedioDePago medioDePago = medioDePagoService.obtenerMedioDePago(
                 cliente.getEmail(),
@@ -90,7 +93,7 @@ public class PedidoServiceImpl implements PedidoService {
             for (PedidoCreacionDTO creacionDto : dto.getCreaciones()) {
                 // Agregar la creación al pedido
                 pedidoCrecionService.agregarCreacion(
-                        pedido.getIdPedido(),
+                        pedido.getId(),
                         creacionDto.getCreacion().getId(),
                         creacionDto.getCantidad()
                 );
@@ -108,7 +111,7 @@ public class PedidoServiceImpl implements PedidoService {
             for (PedidoBebidaResponseDTO bebidaDto : dto.getBebidas()) {
                 // Agregar la bebida al pedido
                 pedidoBebidaService.agregarBebida(
-                        pedido.getIdPedido(),
+                        pedido.getId(),
                         bebidaDto.getProducto().getIdProducto(),
                         bebidaDto.getCantidad()
                 );
@@ -129,11 +132,23 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoMapper.toResponseDTO(pedido);}
 
     @Override
-    public void eliminarPedido(Long id) {
-        if (!pedidoRepository.existsById(id)) {
-            throw new PedidoNoEncontradoException();
+    public void eliminarPedido(Long idPedido) {
+        Pedido pedido = pedidoRepository.findById(idPedido)
+                .orElseThrow(() -> new PedidoNoEncontradoException());
+
+        List<PedidoCreacion> creacionesDelPedido = new ArrayList<>(pedido.getCreacionesPedido());
+
+        for (PedidoCreacion pc : creacionesDelPedido) {
+            Creacion creacion = pc.getCreacion();
+            pedido.getCreacionesPedido().remove(pc);
+
+            if (!creacion.isEsFavorita()) {
+                creacionRepository.delete(creacion);
+            }
         }
-        pedidoRepository.deleteById(id);
+
+
+        pedidoRepository.delete(pedido);
     }
 
     @Override
@@ -143,8 +158,17 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public void cambiarEstado(Long id, String estado) {
+    public void cambiarEstado(Long id) {
         Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new PedidoNoEncontradoException());
-        pedido.setEstado(estado);
+        List<String> estados = List.of("En Cola", "En Preparacion", "En Camino", "Entregado");
+
+        int indiceActual = estados.indexOf(pedido.getEstado());
+        if (indiceActual != -1 && indiceActual < estados.size() - 1) {
+            pedido.setEstado(estados.get(indiceActual + 1));
+        }
+        else{
+            throw new EstadoInvalidoException();
+        }
+        pedidoRepository.save(pedido);
     }
 }

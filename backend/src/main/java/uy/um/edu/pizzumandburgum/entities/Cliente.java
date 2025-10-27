@@ -1,6 +1,7 @@
 package uy.um.edu.pizzumandburgum.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,15 +23,19 @@ public class Cliente extends Usuario {
 
 
     @OneToMany(mappedBy = "clienteAsignado", cascade = CascadeType.ALL)
-    private List<Pedido> pedidos;
+    @JsonIgnore
+    private List<Pedido> pedidos = new ArrayList<>();
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Creacion> creaciones = new ArrayList<>();
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<ClienteDomicilio> domicilios = new ArrayList<>();
 
     @OneToMany(mappedBy = "cliente",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private  List<MedioDePago> mediosDePago = new ArrayList<>();
 
 

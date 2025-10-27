@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
 
@@ -35,7 +36,7 @@ public class ClienteController {
         ClienteResponseDTO cliente = clienteService.login(dto.getEmail(), dto.getContrasenia());
         // Guardar datos en la sesión
         sesion.setAttribute("email", cliente.getEmail());
-        sesion.setAttribute("rol", "CLIENTE"); // 🔹 asignamos el rol
+        sesion.setAttribute("rol", "CLIENTE");
         sesion.setAttribute("nombre", cliente.getNombre());
         return ResponseEntity.ok(cliente);
     }
@@ -55,5 +56,15 @@ public class ClienteController {
         List<ClienteResponseDTO> clientes = clienteService.listarClientes();
         return ResponseEntity.ok(clientes);
     }
+
+    @PostMapping("/asociarHamburguesa")
+    public ResponseEntity<HamburguesaResponseDTO> asociarHamburguesa(
+            @PathVariable String email,
+            @PathVariable Long idHamburguesa) {
+
+        HamburguesaResponseDTO response = clienteService.asociarHamburguesa(email, idHamburguesa);
+        return ResponseEntity.ok(response);
+    }
+
 
 }

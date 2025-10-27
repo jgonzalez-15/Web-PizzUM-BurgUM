@@ -6,6 +6,7 @@ import uy.um.edu.pizzumandburgum.dto.request.MedioDePagoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.MedioDePago;
+import uy.um.edu.pizzumandburgum.exceptions.MedioDePago.MedioDePagoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.ClienteMapper;
 import uy.um.edu.pizzumandburgum.mapper.MedioDePagoMapper;
@@ -26,15 +27,9 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
 
 
     @Override
-    public MedioDePago obtenerMedioDePago(String email,Long numero) {
-        Cliente cliente = clienteRepository.findById(email).orElseThrow(() -> new ClienteNoExisteException());
-
-        for (MedioDePago medioDePago : cliente.getMediosDePago()){
-            if (medioDePago.getNumero().equals(numero)){
-                return medioDePago;
-            }
-        }
-        return null;
+    public MedioDePago obtenerMedioDePago(String email, Long id) {
+        return medioDePagoRepository.findByClienteEmailAndId(email,id )
+                .orElseThrow(() -> new MedioDePagoNoExisteException());
     }
 
     @Override
