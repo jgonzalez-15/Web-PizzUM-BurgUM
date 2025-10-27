@@ -1,24 +1,27 @@
 import './App.css'
+import { SessionContext } from './Components/context/SessionContext'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { CartProvider } from './Components/context/CartItems'
+import { useContext} from 'react'
+
 import HomePage from './Pages/HomePage'
 import Design from './Pages/Design'
-import { Routes, Route, Navigate } from 'react-router-dom'
 import Orders from './Pages/Orders'
 import NewOrder from './Pages/NewOrder'
 import Login from './Pages/Login'
 import Backoffice from './Pages/Backoffice'
 import Favourites from './Pages/Favourites'
-import { CartProvider } from './Components/context/CartItems'
 import ViewCreation from './Pages/ViewCreation'
 import Register from './Pages/Register'
-import { useState } from 'react'
 import Options from './Pages/Options'
 
+
 function App() {
-  const [session, setSession] = useState("Client")
+  const { sessionType } = useContext(SessionContext)
 
   let routes
 
-  if (session === "Guest"){
+  if (sessionType == "Guest"){
     routes = (
       <>
       <CartProvider>
@@ -35,7 +38,7 @@ function App() {
       </CartProvider>
     </>
     )
-  }else if (session === "Client"){
+  }else if (sessionType == "Client"){
     routes = (
       <>
       <CartProvider>
@@ -56,7 +59,7 @@ function App() {
     </>
     )
   }
-  else if (session == "Admin"){
+  else if (sessionType == "Admin"){
     routes = (
       <>
       <Routes>
