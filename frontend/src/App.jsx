@@ -11,6 +11,7 @@ import { CartProvider } from './Components/context/CartItems'
 import ViewCreation from './Pages/ViewCreation'
 import Register from './Pages/Register'
 import { useState } from 'react'
+import Options from './Pages/Options'
 
 function App() {
   const [session, setSession] = useState("Admin")
@@ -33,6 +34,7 @@ function App() {
           <Route path='/admin' element={<Navigate to="/login" replace/>}/>
           <Route path='/favourites' element={<Favourites/>}/>
           <Route path='/viewCreation' element={<ViewCreation/>}/>
+          <Route path='/config' element={<Options/>}/>
         </Routes>
       </CartProvider>
     </>
