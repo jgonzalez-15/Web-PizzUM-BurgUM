@@ -1,7 +1,8 @@
-import MainHeader from "../Components/MainHeader";
-import Footer from "../Components/Footer";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+
+import MainHeader from "../Components/MainHeader";
+import Footer from "../Components/Footer";
 import SmallButton from "../Components/SmallButton";
 import AddToCartButton from "../Components/AddToCartButton"
 
@@ -98,7 +99,7 @@ export default function ViewCreation(){
                     <SmallButton text="Eliminar de favotiros" isPrimary={false}/>
                     <AddToCartButton isPrimary={true}/>
                 </div>
-                
+
             </div>
             <Footer/>
         </div>

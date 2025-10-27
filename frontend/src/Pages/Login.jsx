@@ -1,6 +1,6 @@
-import { useLocation } from "react-router-dom"
-import SmallButton from "../Components/SmallButton"
 import { Link } from "react-router-dom"
+
+import SmallButton from "../Components/SmallButton"
 import Footer from "../Components/Footer"
 
 function Login(){

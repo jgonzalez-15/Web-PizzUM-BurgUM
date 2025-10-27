@@ -1,9 +1,8 @@
 import { useState } from "react"
+
 import MainHeader from "../Components/MainHeader"
 import OrderStatus from "../Components/OrderStatus"
 import Footer from "../Components/Footer"
-import SmallButton from "../Components/SmallButton"
-import GetFetch from "../Components/GetFetch"
 
 function Orders(){
     if (window.pageYOffset > 0) {

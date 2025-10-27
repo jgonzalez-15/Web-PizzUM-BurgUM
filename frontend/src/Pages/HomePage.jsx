@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom"
+import { useState } from "react"
+
 import Button from "../Components/Button"
 import Favourite from "../Components/Favourite"
-import { useState } from "react"
 import MainHeader from "../Components/MainHeader";
 import Footer from "../Components/Footer";
-import GetFetch from "../Components/GetFetch";
 
 function HomePage(){
     if (window.pageYOffset > 0) {
@@ -45,7 +45,7 @@ function HomePage(){
                             )}
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
             <Footer/>

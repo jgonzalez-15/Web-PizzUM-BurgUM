@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 function Ingredient({name, glutenFree, selected, toggleSelected}){
     return(
         <div className="m-2 min-w-24 min-h-24 md:min-w-48 md:min-h-48 flex items-center justify-center">

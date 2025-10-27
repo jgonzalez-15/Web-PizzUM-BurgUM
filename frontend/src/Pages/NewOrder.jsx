@@ -1,9 +1,10 @@
+import { useCart } from "../Components/context/CartItems"
+
 import MainHeader from "../Components/MainHeader"
 import Footer from "../Components/Footer"
 import OrderResumeItem from "../Components/OrderResumeItem"
 import SmallButton from "../Components/SmallButton"
 import OrderItem from "../Components/OrderItem"
-import { useCart } from "../Components/context/CartItems"
 import Button from "../Components/Button"
 
 function NewOrder({}){

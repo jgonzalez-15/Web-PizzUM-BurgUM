@@ -1,8 +1,8 @@
-import MainHeader from "../Components/MainHeader"
-import IngredientAdder from "../Components/IngredientAdder"
 import { useState } from "react";
 import { DesignContext } from "../Components/context/DesignContext";
-import Button from "../Components/Button";
+
+import MainHeader from "../Components/MainHeader"
+import IngredientAdder from "../Components/IngredientAdder"
 import Footer from "../Components/Footer";
 import AddToCartButton from "../Components/AddToCartButton";
 import SmallButton from "../Components/SmallButton";
