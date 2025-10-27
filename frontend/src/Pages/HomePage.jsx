@@ -4,14 +4,16 @@ import Favourite from "../Components/Favourite"
 import { useState } from "react"
 import MainHeader from "../Components/MainHeader";
 import Footer from "../Components/Footer";
+import GetFetch from "../Components/GetFetch";
 
 function HomePage(){
     if (window.pageYOffset > 0) {
         window.scrollTo(0, 0);
     }
 
-    const [favouriteList, setFavouriteList] = useState([])
-    
+    const [favouriteList, setFavouriteList] = useState([{id: 10, name:"La mejor pizza de la historia mundial", type:"Pizza", price:123}])
+
+
     return (
     <>
         <div className="min-h-screen flex flex-col justify-between">
