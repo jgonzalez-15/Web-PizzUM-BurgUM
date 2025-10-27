@@ -17,6 +17,16 @@ function Design({type}){
     let content
     if (type == "Pizza"){
         content = (<>
+                    <div className="ml-16 mb-8">
+                    <label style={{ display: "block"}} className="text-xl font-bold">
+                    Cantidad de carnes:{" "}
+                    <select>
+                        <option value="1">Chica</option>
+                        <option value="2">Mediana</option>
+                        <option value="3">Grande</option>
+                    </select>
+                    </label>
+                    </div>
                     <IngredientAdder text="Elegí tu masa" maxCount={1} ing={[
                         {id: 1, name:"Masa 1", selected:false, glutenFree:true},
                         {id: 2, name:"Masa 2", selected:false, glutenFree:false},
@@ -74,9 +84,13 @@ function Design({type}){
             <div className="h-full max-w-screen">
                 <MainHeader className="z-10"/>
                 <div className="flex mt-16 h-full justify-center flex-col max-w-full">
+
+                    {/* Titulo */}
                     <div className="flex justify-center m-2 md:m-4">
                         <h1 className="font-bold text-2xl">Armá tu nueva {type}</h1>
                     </div>
+
+                    {/* Filtro Gluten */}
                     <div className="flex w-full max-w-screen justify-end-safe items-center">
                         <h1 className="mr-2">
                             Solo sin gluten
@@ -88,8 +102,12 @@ function Design({type}){
                         >
                         </button>
                     </div>
+                    
+                    {/* Contenido */}
                     {content}
                 </div>
+
+                {/* Botones */}
                 <div className="flex flex-col md:flex-row justify-center items-center m-8 mb-16">
                     <SmallButton text="Agregar a favoritos" isPrimary={false}/>
                     <div className="w-4"></div>

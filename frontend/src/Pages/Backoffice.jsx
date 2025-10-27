@@ -33,6 +33,7 @@ function Backoffice() {
       <AdminHeader />
       <div className="min-h-screen flex flex-col justify-between overflow-x-hidden">
         <div className="mt-20 mb-8 flex flex-col items-center px-4 sm:px-6 md:px-8">
+          
           {/* Selector */}
           <div className="flex gap-3 mb-8 flex-wrap justify-center">
             {["productos", "pedidos", "administradores"].map((tab) => (

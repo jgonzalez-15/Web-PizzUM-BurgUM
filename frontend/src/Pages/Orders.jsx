@@ -10,15 +10,19 @@ function Orders(){
         window.scrollTo(0, 0);
     }
 
-    const [orders, setOrders] = useState([{id: 1, date:"aaaaa", status: 2}, {id: 2, date:"bbbb", status: 0}])
-    const [orderHistory, setOrdersHistory] = useState([])
+    const [orders, setOrders] = useState([{idPedido: 1, fecha:"aaaaa", estado: 2}, {idPedido: 2, fecha:"bbbb", estado: 0}])
+    const [orderHistory, setOrdersHistory] = useState([{idPedido: 1, fecha:"aaaaa", estado: 3}, {idPedido: 2, fecha:"bbbb", estado: 3}])
     const [viewHistory, setViewHistory] = useState(false)
     
     return(
         <>
             <MainHeader className="z-10"/>
             <div className="flex flex-col pt-16 w-screen max-w-full min-h-[calc(100vh)] overflow-hidden justify-between z-0 gap-4">
+
+                {/* Titulo */}
                 <h1 className=" ml-4 mt-4 md:ml-8 md:mt-8 w-full font-bold text-xl">Tus Pedidos:</h1>
+
+                {/* Listado de pedidos */}
                 <div className="flex flex-1 flex-col ml-4 mr-4 md:ml-8 md:mr-8 gap-6 items-center mb-8">
                     {orders.length > 0 ? 
                         (orders.map((order) =>
@@ -28,6 +32,8 @@ function Orders(){
                             status={order.estado}
                             />
                         )) : (<h1>No tienes pedidos actuales</h1>)}
+
+                    {/* Historial */}    
                     {viewHistory ? 
                     (<div className="w-full flex flex-col gap-6 items-center">
                         <h1 className=" ml-4 mr-4 md:ml-8 md:mt-8 w-full font-bold text-xl">Historial:</h1>
@@ -38,12 +44,16 @@ function Orders(){
                             status={order.estado}
                             />
                         )}
+                        
+                        {/* Boton ocultar historial */}
                         <button onClick={() => setViewHistory(false)} className={`z-0 transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base 2xl:text-xl text-center max-w-96 bg-gray-300 text-black`}>
                             <h2 className="m-2 2xl:m-3">
                                 Ocultar historial de pedidos
                             </h2>
                         </button>
                     </div>): 
+
+                    {/* Boton ver historial */}
                     (<button onClick={() => setViewHistory(true)} className={`z-0 transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base 2xl:text-xl text-center max-w-96 bg-orange-400 text-white`}>
                         <h2 className="m-2 2xl:m-3">
                             Ver historial de pedidos

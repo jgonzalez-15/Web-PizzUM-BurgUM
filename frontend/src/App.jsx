@@ -18,7 +18,24 @@ function App() {
 
   let routes
 
-  if (session === "Client" || session === "Guest"){
+  if (session === "Guest"){
+    routes = (
+      <>
+      <CartProvider>
+        <Routes>
+          <Route path='/' element={<Navigate to="/homepage" replace/>}/>
+          <Route path='/homepage' element={<HomePage/>}/>
+          <Route path='/design/pizza' element={<Navigate to="/login" replace/>}/>
+          <Route path='/design/burger' element={<Navigate to="/login" replace/>}/>
+          <Route path='/login' element={<Login/>}/>
+          <Route path='/register' element={<Register/>}/>
+          <Route path='/admin' element={<Navigate to="/login" replace/>}/>
+          <Route path='/favourites' element={<Navigate to="/login" replace/>}/>
+        </Routes>
+      </CartProvider>
+    </>
+    )
+  }else if (session === "Client"){
     routes = (
       <>
       <CartProvider>
@@ -31,7 +48,6 @@ function App() {
           <Route path='/order' element={<NewOrder/>}/>
           <Route path='/login' element={<Login/>}/>
           <Route path='/register' element={<Register/>}/>
-          <Route path='/admin' element={<Navigate to="/login" replace/>}/>
           <Route path='/favourites' element={<Favourites/>}/>
           <Route path='/viewCreation' element={<ViewCreation/>}/>
           <Route path='/config' element={<Options/>}/>
