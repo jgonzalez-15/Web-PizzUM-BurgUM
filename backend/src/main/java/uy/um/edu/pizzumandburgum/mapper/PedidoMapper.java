@@ -7,9 +7,11 @@ import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoBebidaResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoCreacionDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
+import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
 import uy.um.edu.pizzumandburgum.entities.PedidoBebida;
 import uy.um.edu.pizzumandburgum.entities.PedidoCreacion;
+import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +25,9 @@ public class PedidoMapper {
     @Autowired
     private ProductoMapper productoMapper;
 
+
     public Pedido toEntity(PedidoRequestDTO dto) {
         Pedido pedido = new Pedido();
-        pedido.setEstado(dto.getEstado());
-        pedido.setEstaPago(dto.isEstaPago());
         return pedido;
     }
 

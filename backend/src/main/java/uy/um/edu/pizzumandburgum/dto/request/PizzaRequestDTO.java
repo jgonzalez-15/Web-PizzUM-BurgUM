@@ -1,11 +1,9 @@
 package uy.um.edu.pizzumandburgum.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
 
 import java.util.List;
 
@@ -13,9 +11,10 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class HamburguesaRequestDTO {
+public class PizzaRequestDTO {
+    private String idCliente;
     private boolean esFavorita;
-    private List<HamburguesaProductoRequestDTO> ingredientes;
-    private String clienteId;
-
+    private long tamanio;
+    private List<PizzaProductoRequestDTO> ingredientes;
 }
+

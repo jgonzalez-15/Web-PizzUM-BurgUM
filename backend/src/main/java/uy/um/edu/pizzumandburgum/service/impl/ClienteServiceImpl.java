@@ -6,18 +6,23 @@ import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.CreacionResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.update.ClienteUpdateDTO;
 import uy.um.edu.pizzumandburgum.entities.*;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.HamburguesaNoEncontradaException;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.MedioDePago.MedioDePagoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.ContraseniaInvalidaException;
+import uy.um.edu.pizzumandburgum.exceptions.Usuario.EmailNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.EmailYaRegistradoException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.UsuarioNoEncontradoException;
 import uy.um.edu.pizzumandburgum.mapper.ClienteMapper;
+import uy.um.edu.pizzumandburgum.mapper.CreacionMapper;
 import uy.um.edu.pizzumandburgum.mapper.HamburguesaMapper;
+import uy.um.edu.pizzumandburgum.mapper.PedidoMapper;
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 import uy.um.edu.pizzumandburgum.repository.DomicilioRepository;
 import uy.um.edu.pizzumandburgum.repository.HamburguesaRepository;
@@ -51,6 +56,12 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
     private HamburguesaMapper hamburguesaMapper;
+
+    @Autowired
+    private CreacionMapper creacionMapper;
+
+    @Autowired
+    private PedidoMapper pedidoMapper;
     @Override
     public ClienteResponseDTO registrarCliente(ClienteRequestDTO dto) {
         if (clienteRepository.existsByEmail(dto.getEmail())) {
@@ -74,7 +85,10 @@ public class ClienteServiceImpl implements ClienteService {
 
         if (!Objects.equals(cliente.getContrasenia(), contrasenia)){
             throw new ContraseniaInvalidaException();
+        } else if (!Objects.equals(cliente.getEmail(),email)) {
+            throw new EmailNoExisteException();
         }
+
         return new ClienteResponseDTO(
                 cliente.getEmail(),
                 cliente.getNombre(),
@@ -82,6 +96,27 @@ public class ClienteServiceImpl implements ClienteService {
                 cliente.getTelefono(),
                 cliente.getFechaNac()
         );
+    }
+
+    @Override
+    public ClienteResponseDTO editarPerfil(String email, ClienteUpdateDTO dto) {
+        Cliente cliente = clienteRepository.findById(email).orElseThrow(() -> new ClienteNoExisteException());
+        if (dto.getNombre() != null) {
+            cliente.setNombre(dto.getNombre());
+        }
+        if (dto.getApellido() != null) {
+            cliente.setApellido(dto.getApellido());
+        }
+        if (dto.getContrasenia() != null) {
+            cliente.setContrasenia(dto.getContrasenia());
+        }
+        if (dto.getTelefono() != 0) {
+            cliente.setTelefono(dto.getTelefono());
+        }
+        if (dto.getFechaNac() != null) {
+            cliente.setFechaNac(dto.getFechaNac());
+        }
+        return clienteMapper.toResponseDTO(cliente);
     }
 
     @Override
@@ -114,4 +149,48 @@ public class ClienteServiceImpl implements ClienteService {
 
         return hamburguesaMapper.toResponseDTO(hamburguesa);
     }
+
+    @Override
+    public List<CreacionResponseDTO> mostrarCreaciones(String email) {
+        Cliente cliente = clienteRepository.findByEmail(email).orElseThrow(()-> new ClienteNoExisteException());
+        List<Creacion> creaciones = cliente.getCreaciones();
+        List<CreacionResponseDTO> retornarlista = new ArrayList<>();
+        for (Creacion creacion: creaciones){
+            CreacionResponseDTO retornar = creacionMapper.toResponseDTO(creacion);
+            retornarlista.add(retornar);
+        }
+        return retornarlista;
+    }
+
+    @Override
+    public List<CreacionResponseDTO> mostrarCreacionesFavoritas(String email) {
+        Cliente cliente = clienteRepository.findByEmail(email).orElseThrow(()-> new ClienteNoExisteException());
+        List<Creacion> creaciones = cliente.getCreaciones();
+        List<Creacion> favoritas = new ArrayList<>();
+        List<CreacionResponseDTO> retornarlista = new ArrayList<>();
+        for(Creacion creacion: creaciones){
+            if (creacion.isEsFavorita()){
+                favoritas.add(creacion);
+            }
+        }
+        for (Creacion creacion: favoritas){
+            CreacionResponseDTO retornar = creacionMapper.toResponseDTO(creacion);
+            retornarlista.add(retornar);
+        }
+        return retornarlista;
+    }
+
+    @Override
+    public List<PedidoResponseDTO> obtenerPedidosPorCliente(String email) {
+        Cliente cliente = clienteRepository.findByEmail(email).orElseThrow(()-> new ClienteNoExisteException());
+        List<Pedido> pedidos = cliente.getPedidos();
+        List<PedidoResponseDTO> retornar = new ArrayList<>();
+        for (Pedido pedido: pedidos){
+            PedidoResponseDTO r = pedidoMapper.toResponseDTO(pedido);
+            retornar.add(r);
+        }
+        return retornar;
+    }
 }
+
+

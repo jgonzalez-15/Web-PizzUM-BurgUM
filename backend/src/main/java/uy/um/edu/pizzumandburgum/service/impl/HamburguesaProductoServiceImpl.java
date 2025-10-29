@@ -33,8 +33,8 @@ public class HamburguesaProductoServiceImpl implements HamburguesaProductoServic
 
 
     @Override
-    public HamburguesaProductoResponseDTO agregarIngrediente(HamburguesaProductoRequestDTO dto) {
-        Hamburguesa hamburguesa = hamburguesaRepository.findById(dto.getIdHamburguesa()).orElseThrow(()-> new HamburguesaNoEncontradaException());
+    public HamburguesaProductoResponseDTO agregarIngrediente(Long idHamburguesa,HamburguesaProductoRequestDTO dto) {
+        Hamburguesa hamburguesa = hamburguesaRepository.findById(idHamburguesa).orElseThrow(()-> new HamburguesaNoEncontradaException());
         Producto producto = productoRepository.findById(dto.getIdProducto()).orElseThrow(()->new ProductoNoExisteException());
         HamburguesaProducto hp = new HamburguesaProducto();
         hp.setHamburguesa(hamburguesa);

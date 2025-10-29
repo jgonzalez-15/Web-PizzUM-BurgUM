@@ -1,5 +1,6 @@
 package uy.um.edu.pizzumandburgum.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,13 @@ public class DomicilioController {
    private DomicilioMapper domicilioMapper;
 
     @PostMapping("/crearDomicilio")
-    public ResponseEntity<DomicilioResponseDTO> crearDomicilio(
-            @RequestBody DomicilioRequestDTO request) {
+    public ResponseEntity<DomicilioResponseDTO> crearDomicilio(@RequestBody DomicilioRequestDTO request, HttpSession sesion) {
+        String rol = (String) sesion.getAttribute("rol");
+
+        if (rol == null || !rol.equals("CLIENTE")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(null);
+        }
 
         DomicilioResponseDTO response = domicilioService.crearDomicilio(request);
 

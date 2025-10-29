@@ -18,8 +18,7 @@ public class PizzaResponseDTO {
     private float precio;
     private boolean esFavorita;
     private long tamanio;
-    private List<PedidoCreacion> creacionesPedido;
-    private Cliente cliente;
-    private List<PizzaProducto> ingredientes;
+    private ClienteResponseDTO cliente;
+    private List<PizzaProductoResponseDTO> ingredientes;
 
 }

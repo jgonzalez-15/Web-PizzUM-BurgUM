@@ -8,4 +8,5 @@ public interface PedidoService {
     void eliminarPedido(Long id);
     String consultarEstado(Long id);
     void cambiarEstado(Long id);
+
 }

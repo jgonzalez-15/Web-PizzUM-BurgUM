@@ -9,12 +9,8 @@ import uy.um.edu.pizzumandburgum.entities.Cliente;
 public class ClienteMapper {
     public Cliente toEntity(ClienteRequestDTO dto) {
         Cliente cliente = new Cliente();
-        cliente.setNombre(dto.getNombre());
-        cliente.setApellido(dto.getApellido());
         cliente.setEmail(dto.getEmail());
         cliente.setContrasenia(dto.getContrasenia());
-        cliente.setFechaNac(dto.getFechaNacimiento());
-        cliente.setTelefono(dto.getTelefono());
         return cliente;
     }
 
