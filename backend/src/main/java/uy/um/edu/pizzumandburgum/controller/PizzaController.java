@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.PizzaRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.request.ProductoDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PizzaResponseDTO;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PizzaService;
 
@@ -22,10 +23,18 @@ public class PizzaController {
         return ResponseEntity.ok(nuevaPizza);
     }
 
+
+
     @GetMapping("/listar")
     public ResponseEntity<List<PizzaResponseDTO>> mostrarPizzas() {
         List<PizzaResponseDTO> pizzas = pizzaService.listarPizzas();
         return ResponseEntity.ok(pizzas);
+    }
+
+    @GetMapping("/{idCreacion}/ingredientes")
+    public ResponseEntity<List<ProductoDTO>> mostrarIngredientesPizza(@PathVariable Long idCreacion){
+        List<ProductoDTO> ingredientes = pizzaService.obtenerIngredientesPizza(idCreacion);
+        return ResponseEntity.ok(ingredientes);
     }
 
 }

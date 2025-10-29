@@ -7,10 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.CreacionResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.*;
 import uy.um.edu.pizzumandburgum.dto.update.ClienteUpdateDTO;
 import uy.um.edu.pizzumandburgum.entities.Creacion;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
@@ -99,12 +96,24 @@ public class ClienteController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/asociarPizza")
+    public ResponseEntity<PizzaResponseDTO> asociarPizza(
+            @RequestBody String email,
+            @RequestBody Long idPizza) {
+
+        PizzaResponseDTO response = clienteService.asociarPizza(email, idPizza);
+        return ResponseEntity.ok(response);
+    }
+
+
+
     // Obtener todos los pedidos de un cliente
     @GetMapping("/{clienteId}/pedidos")
     public ResponseEntity<List<PedidoResponseDTO>> obtenerPedidosPorCliente(@PathVariable String clienteId) {
         List<PedidoResponseDTO> pedidos = clienteService.obtenerPedidosPorCliente(clienteId);
         return ResponseEntity.ok(pedidos);
     }
+
 
     
 

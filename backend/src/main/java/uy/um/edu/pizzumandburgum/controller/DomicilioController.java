@@ -6,7 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.DomicilioRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.DomicilioResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.update.AdministradorUpdateDTO;
+import uy.um.edu.pizzumandburgum.dto.update.DomicilioUpdateDTO;
 import uy.um.edu.pizzumandburgum.entities.Domicilio;
 import uy.um.edu.pizzumandburgum.mapper.DomicilioMapper;
 import uy.um.edu.pizzumandburgum.service.Interfaces.DomicilioService;
@@ -33,5 +36,12 @@ public class DomicilioController {
         DomicilioResponseDTO response = domicilioService.crearDomicilio(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    @PutMapping("/{email}/domicilio")
+    public ResponseEntity<DomicilioResponseDTO> editarDomicilio(
+            @PathVariable Long idDomicilio,
+            @RequestBody DomicilioUpdateDTO dto) {
+        DomicilioResponseDTO response = domicilioService.editarPerfil(idDomicilio, dto);
+        return ResponseEntity.ok(response);
     }
 }
