@@ -2,6 +2,7 @@ package uy.um.edu.pizzumandburgum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uy.um.edu.pizzumandburgum.controller.NotificacionesController;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoBebidaResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoCreacionDTO;
@@ -58,6 +59,9 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Autowired
     private CreacionRepository creacionRepository;
+
+    @Autowired
+    private NotificacionesController notificacionesController;
     @Override
     public PedidoResponseDTO realizarPedido(PedidoRequestDTO dto) {
         Cliente cliente = clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(() -> new ClienteNoExisteException());
@@ -179,7 +183,7 @@ public class PedidoServiceImpl implements PedidoService {
             default:
                 throw new EstadoInvalidoException();
         }
-
+        notificacionesController.enviarNotificacion("Pedido " + id + " cambiado a " + nuevoEstado);
         pedido.setEstado(nuevoEstado);
         pedidoRepository.save(pedido);
     }
