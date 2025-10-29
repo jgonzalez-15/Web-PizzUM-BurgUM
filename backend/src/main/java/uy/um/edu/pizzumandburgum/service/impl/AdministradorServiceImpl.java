@@ -2,7 +2,8 @@ package uy.um.edu.pizzumandburgum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uy.um.edu.pizzumandburgum.dto.request.AdministradorDTO;
+import uy.um.edu.pizzumandburgum.dto.request.AdministradorRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Administrador;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Administrador.AdministradorYaExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
@@ -22,7 +23,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     private AdministradorMapper administradorMapper;
 
     @Override
-    public AdministradorDTO agregarAdmin(AdministradorDTO dto) {
+    public AdministradorResponseDTO agregarAdmin(AdministradorResponseDTO dto) {
         Administrador admin = administradorMapper.toEntity(dto);
         if (administradorRepository.findByEmail(admin.getEmail()).isPresent()) {
             throw new AdministradorYaExisteException();
@@ -32,13 +33,13 @@ public class AdministradorServiceImpl implements AdministradorService {
     }
 
     @Override
-    public AdministradorDTO login(String email, String contrasenia) {
-        Administrador administrador = administradorRepository.findById(email).orElseThrow(()->new ClienteNoExisteException());
+    public AdministradorResponseDTO login(AdministradorRequestDTO dto) {
+        Administrador administrador = administradorRepository.findById(dto.getEmail()).orElseThrow(()->new ClienteNoExisteException());
 
-        if (!Objects.equals(administrador.getContrasenia(), contrasenia)){
+        if (!Objects.equals(administrador.getContrasenia(), dto.getContrasenia())){
             throw new ContraseniaInvalidaException();
         }
-        return new AdministradorDTO(
+        return new AdministradorResponseDTO(
                 administrador.getEmail(),
                 administrador.getNombre(),
                 administrador.getApellido(),

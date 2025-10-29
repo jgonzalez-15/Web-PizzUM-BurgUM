@@ -25,7 +25,6 @@ public class HamburguesaProductoMapper {
     public HamburguesaProducto toEntity(HamburguesaProductoRequestDTO dto) {
         HamburguesaProducto hamburguesaProducto = new HamburguesaProducto();
         hamburguesaProducto.setProducto(productoRepository.findById(dto.getIdProducto()).orElseThrow(()->new ProductoNoExisteException()));
-        hamburguesaProducto.setHamburguesa(hamburguesaRepository.findById(dto.getIdHamburguesa()).orElseThrow(() -> new HamburguesaNoEncontradaException()));
         hamburguesaProducto.setCantidad(dto.getCantidad());
         return hamburguesaProducto;
     }

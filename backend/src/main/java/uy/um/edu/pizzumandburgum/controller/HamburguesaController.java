@@ -5,7 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.HamburguesaRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.request.ProductoDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 import uy.um.edu.pizzumandburgum.mapper.HamburguesaMapper;
 import uy.um.edu.pizzumandburgum.service.Interfaces.HamburguesaService;
@@ -32,5 +34,11 @@ public class HamburguesaController {
     public ResponseEntity<List<HamburguesaResponseDTO>> mostrarHamburguesas() {
         List<HamburguesaResponseDTO> hamburguesas = hamburguesaService.listarHamburguesas();
         return ResponseEntity.ok(hamburguesas);
+    }
+
+    @GetMapping("/{idCreacion}/ingredientes")
+    public ResponseEntity<List<ProductoDTO>> mostrarIngredientesHamburguesa(@PathVariable Long idCreacion){
+        List<ProductoDTO> ingredientes = hamburguesaService.obtenerIngredientesHamburguesa(idCreacion);
+        return ResponseEntity.ok(ingredientes);
     }
 }

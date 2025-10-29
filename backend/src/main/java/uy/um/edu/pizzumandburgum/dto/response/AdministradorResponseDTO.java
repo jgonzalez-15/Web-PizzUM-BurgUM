@@ -1,6 +1,5 @@
-package uy.um.edu.pizzumandburgum.dto.request;
+package uy.um.edu.pizzumandburgum.dto.response;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdministradorDTO {
+public class AdministradorResponseDTO {
     private String email;
     private String nombre;
     private String apellido;

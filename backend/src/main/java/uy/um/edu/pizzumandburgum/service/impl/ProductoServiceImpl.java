@@ -63,4 +63,21 @@ public class ProductoServiceImpl implements ProductoService {
 
         return resultado;
         }
+
+    @Override
+    public List<ProductoDTO> listarBebidas() {
+        List<Producto> productos = productoRepository.findAll();
+        List<Producto> bebidas = new ArrayList<>();
+        List<ProductoDTO> retornar = new ArrayList<>();
+        for (Producto producto : productos){
+            if (producto.getTipo().equals("Bebida")){
+                bebidas.add(producto);
+            }
+        }
+        for (Producto bebida : bebidas){
+            ProductoDTO b = productoMapper.toResponseDTO(bebida);
+            retornar.add(b);
+        }
+        return retornar;
     }
+}

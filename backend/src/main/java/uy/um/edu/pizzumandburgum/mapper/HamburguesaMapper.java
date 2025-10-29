@@ -7,9 +7,12 @@ import uy.um.edu.pizzumandburgum.dto.request.HamburguesaProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.HamburguesaRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaProductoResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
+import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
 import uy.um.edu.pizzumandburgum.entities.Producto;
+import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
+import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
 
 import java.util.ArrayList;
@@ -26,6 +29,9 @@ public class HamburguesaMapper {
 
     @Autowired
     private ClienteMapper clienteMapper;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     public HamburguesaResponseDTO toResponseDTO(Hamburguesa hamburguesa) {
         HamburguesaResponseDTO dto = new HamburguesaResponseDTO();
@@ -52,9 +58,9 @@ public class HamburguesaMapper {
 
     public Hamburguesa toEntity(HamburguesaRequestDTO dto) {
         Hamburguesa hamburguesa = new Hamburguesa();
-        hamburguesa.setCantCarnes(dto.getCantCarnes());
         hamburguesa.setEsFavorita(dto.isEsFavorita());
-
+        Cliente cliente = clienteRepository.findByEmail(dto.getClienteId()).orElseThrow(()-> new ClienteNoExisteException());
+        hamburguesa.setCliente(cliente);
         List<HamburguesaProducto> ingredientes = new ArrayList<>();
 
         for (HamburguesaProductoRequestDTO hp: dto.getIngredientes()) {

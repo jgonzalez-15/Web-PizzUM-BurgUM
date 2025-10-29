@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import uy.um.edu.pizzumandburgum.dto.request.AdministradorDTO;
+import uy.um.edu.pizzumandburgum.dto.request.AdministradorRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
 import uy.um.edu.pizzumandburgum.service.Interfaces.AdministradorService;
 
 @RestController
@@ -19,8 +20,8 @@ public class AdministradorController {
 
 
     @PostMapping("/agregarAdmin")
-    public ResponseEntity<AdministradorDTO> agregarAdmin(@Validated @RequestBody AdministradorDTO dto, HttpSession sesion) {
-        AdministradorDTO admin = administradorService.agregarAdmin(dto);
+    public ResponseEntity<AdministradorResponseDTO> agregarAdmin(@Validated @RequestBody AdministradorResponseDTO dto, HttpSession sesion) {
+        AdministradorResponseDTO admin = administradorService.agregarAdmin(dto);
 
         sesion.setAttribute("email", admin.getEmail());
         sesion.setAttribute("rol", "ADMIN");
@@ -31,11 +32,10 @@ public class AdministradorController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AdministradorDTO> login( @RequestParam String email,
-                                                  @RequestParam String contrasenia,
-                                                  HttpSession session) {
+    public ResponseEntity<AdministradorResponseDTO> login(@RequestBody AdministradorRequestDTO dto,
+                                                          HttpSession session) {
 
-        AdministradorDTO adminDTO = administradorService.login(email, contrasenia);
+        AdministradorResponseDTO adminDTO = administradorService.login(dto);
 
         // Guardar sesión (opcional)
         session.setAttribute("email", adminDTO.getEmail());

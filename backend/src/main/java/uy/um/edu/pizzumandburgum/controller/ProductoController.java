@@ -31,7 +31,14 @@ public class ProductoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
     @DeleteMapping("/eliminar")
-    public ResponseEntity<Void> eliminarProducto(@RequestBody ProductoDTO productoDTO) {
+    public ResponseEntity<Void> eliminarProducto(@RequestBody ProductoDTO productoDTO,HttpSession session ) {
+
+        String rol = (String) session.getAttribute("rol");
+
+        if (rol == null || !rol.equals("ADMIN")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(null);
+        }
         productoService.eliminarProducto(productoDTO);
         return ResponseEntity.noContent().build();
     }
@@ -39,7 +46,13 @@ public class ProductoController {
 
     @PutMapping("/modificar")
     public ResponseEntity<Void> modificarProducto(
-            @RequestBody ProductoDTO productoviejoDTO,@RequestBody ProductoDTO productonuevoDTO ) {
+            @RequestBody ProductoDTO productoviejoDTO,@RequestBody ProductoDTO productonuevoDTO, HttpSession session ) {
+        String rol = (String) session.getAttribute("rol");
+
+        if (rol == null || !rol.equals("ADMIN")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(null);
+        }
         productoService.modificarProducto(productoviejoDTO,productonuevoDTO);
         return ResponseEntity.ok().build();
     }
@@ -47,6 +60,12 @@ public class ProductoController {
     @GetMapping("/listar")
     public ResponseEntity<List<ProductoDTO>> listarProductos() {
         List<ProductoDTO> productos = productoService.listarProductos();
+        return ResponseEntity.ok(productos);
+    }
+
+    @GetMapping("/bebidas")
+    public ResponseEntity<List<ProductoDTO>> listarBebida(){
+        List<ProductoDTO> productos = productoService.listarBebidas();
         return ResponseEntity.ok(productos);
     }
 }

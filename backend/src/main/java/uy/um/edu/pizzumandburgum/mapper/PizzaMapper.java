@@ -1,25 +1,60 @@
 package uy.um.edu.pizzumandburgum.mapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.request.PizzaProductoRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.request.PizzaRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.PizzaProductoResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PizzaResponseDTO;
-import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
+import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.Pizza;
+import uy.um.edu.pizzumandburgum.entities.PizzaProducto;
+import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
+import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Component
 public class PizzaMapper {
-    public Pizza toEntity(PizzaResponseDTO dto) {
+
+    @Autowired
+    private PizzaProductoMapper pizzaProductoMapper;
+
+    @Autowired
+    private ClienteMapper clienteMapper;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    public Pizza toEntity(PizzaRequestDTO dto) {
         Pizza pizza = new Pizza();
-        pizza.setCliente(dto.getCliente());
+        Cliente cliente = clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(()->new ClienteNoExisteException());
+        pizza.setCliente(cliente);
         pizza.setTamanio(dto.getTamanio());
-        pizza.setPrecio(dto.getPrecio());
         pizza.setEsFavorita(dto.isEsFavorita());
-        pizza.setCreacionesPedido(dto.getCreacionesPedido());
-        pizza.setIngredientes(dto.getIngredientes());
+        List<PizzaProducto>pizzaProductoList = new ArrayList<>();
+        for (PizzaProductoRequestDTO pp: dto.getIngredientes()){
+            PizzaProducto pizzaProducto = pizzaProductoMapper.toEntity(pp);
+            pizzaProductoList.add(pizzaProducto);
+        }
+        pizza.setIngredientes(pizzaProductoList);
         return pizza;
     }
 
     public PizzaResponseDTO toResponseDTO(Pizza pizza) {
-        return new PizzaResponseDTO(pizza.getPrecio(),pizza.isEsFavorita(),pizza.getTamanio(),pizza.getCreacionesPedido(),pizza.getCliente(),pizza.getIngredientes());
+        ClienteResponseDTO clienteDTO = null;
+        if (pizza.getCliente() != null) {
+            clienteDTO = clienteMapper.toResponseDTO(pizza.getCliente());
+        }
+        List<PizzaProductoResponseDTO> ingredientesDTO = new ArrayList<>();
+        if (pizza.getIngredientes() != null) {
+            for (PizzaProducto pp : pizza.getIngredientes()) {
+                ingredientesDTO.add(pizzaProductoMapper.toResponseDTO(pp));
+            }
+        }
+        return new PizzaResponseDTO(pizza.getPrecio(),pizza.isEsFavorita(),pizza.getTamanio(),clienteDTO,ingredientesDTO);
     }
 }

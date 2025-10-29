@@ -75,30 +75,29 @@ public class PedidoServiceImpl implements PedidoService {
                 domicilioTemp.getDireccion()
         );
 
-        // 4. Crear el pedido base usando el mapper
         Pedido pedido = pedidoMapper.toEntity(dto);
-        pedido.setEstado("En cola");
+        pedido.setEstado("En Cola");
+        pedido.setEstaPago(false);
         pedido.setClienteAsignado(cliente);
         pedido.setDomicilio(domicilio);
         pedido.setMedioDePago(medioDePago);
         pedido.setFecha(LocalDate.now());
 
-        // 5. GUARDAR PRIMERO para obtener el ID
+
         pedido = pedidoRepository.save(pedido);
 
-        // 6. Procesar creaciones (hamburguesas/pizzas) y calcular precio
+
         float precioTotal = 0f;
 
         if (dto.getCreaciones() != null && !dto.getCreaciones().isEmpty()) {
             for (PedidoCreacionDTO creacionDto : dto.getCreaciones()) {
-                // Agregar la creación al pedido
+
                 pedidoCrecionService.agregarCreacion(
                         pedido.getId(),
                         creacionDto.getCreacion().getId(),
                         creacionDto.getCantidad()
                 );
 
-                // Buscar la creación para obtener su precio
                 Creacion creacion = creacionRepository.findById(creacionDto.getCreacion().getId())
                         .orElseThrow(() -> new CreacionNoEncontradaException());
 
@@ -106,7 +105,7 @@ public class PedidoServiceImpl implements PedidoService {
             }
         }
 
-        // 7. Procesar bebidas
+
         if (dto.getBebidas() != null && !dto.getBebidas().isEmpty()) {
             for (PedidoBebidaResponseDTO bebidaDto : dto.getBebidas()) {
                 // Agregar la bebida al pedido
@@ -116,7 +115,6 @@ public class PedidoServiceImpl implements PedidoService {
                         bebidaDto.getCantidad()
                 );
 
-                // Buscar el producto para obtener su precio
                 Producto bebida = productoRepository.findById(bebidaDto.getProducto().getIdProducto())
                         .orElseThrow(() -> new ProductoNoExisteException());
 
@@ -124,11 +122,10 @@ public class PedidoServiceImpl implements PedidoService {
             }
         }
 
-        // 8. Actualizar el precio y guardar
+
         pedido.setPrecio(precioTotal);
         pedido = pedidoRepository.save(pedido);
 
-        // 9. Convertir a DTO y retornar
         return pedidoMapper.toResponseDTO(pedido);}
 
     @Override
@@ -159,16 +156,31 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public void cambiarEstado(Long id) {
-        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new PedidoNoEncontradoException());
-        List<String> estados = List.of("En Cola", "En Preparacion", "En Camino", "Entregado");
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new PedidoNoEncontradoException());
 
-        int indiceActual = estados.indexOf(pedido.getEstado());
-        if (indiceActual != -1 && indiceActual < estados.size() - 1) {
-            pedido.setEstado(estados.get(indiceActual + 1));
+
+        String estadoActual = pedido.getEstado();
+        String nuevoEstado;
+
+
+        switch (estadoActual) {
+            case "En Cola":
+                nuevoEstado = "En Preparacion";
+                break;
+            case "En Preparacion":
+                nuevoEstado = "En Camino";
+                break;
+            case "En Camino":
+                nuevoEstado = "Entregado";
+                break;
+            case "Entregado":
+                throw new EstadoInvalidoException();
+            default:
+                throw new EstadoInvalidoException();
         }
-        else{
-            throw new EstadoInvalidoException();
-        }
+
+        pedido.setEstado(nuevoEstado);
         pedidoRepository.save(pedido);
     }
 }

@@ -1,5 +1,6 @@
 package uy.um.edu.pizzumandburgum.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +16,14 @@ public class MedidoDePagoController {
     @Autowired
     private MedioDePagoService medioDePagoService;
 
-    @PostMapping("añadir")
-    public ResponseEntity<MedioDePagoDTO> aniadirMedioDePago(@RequestBody MedioDePagoRequestDTO request) {
+    @PostMapping("/añadir")
+    public ResponseEntity<MedioDePagoDTO> aniadirMedioDePago(@RequestBody MedioDePagoRequestDTO request, HttpSession sesion) {
+        String rol = (String) sesion.getAttribute("rol");
+
+        if (rol == null || !rol.equals("CLIENTE")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(null);
+        }
         MedioDePagoDTO response = medioDePagoService.aniadirMedioDePago(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
