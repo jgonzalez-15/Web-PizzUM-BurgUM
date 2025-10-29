@@ -7,6 +7,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.AdministradorRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.update.AdministradorUpdateDTO;
+import uy.um.edu.pizzumandburgum.dto.update.ClienteUpdateDTO;
 import uy.um.edu.pizzumandburgum.service.Interfaces.AdministradorService;
 
 @RestController
@@ -48,5 +51,13 @@ public class AdministradorController {
     public ResponseEntity<String>cerrarSesion(HttpSession sesion){
         sesion.invalidate();
         return ResponseEntity.ok("Sesión cerrada correctamente");
+    }
+
+    @PutMapping("/{email}/perfil")
+    public ResponseEntity<AdministradorResponseDTO> editarPerfil(
+            @PathVariable String email,
+            @RequestBody AdministradorUpdateDTO dto) {
+        AdministradorResponseDTO response = administradorService.editarPerfil(email, dto);
+        return ResponseEntity.ok(response);
     }
 }

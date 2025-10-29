@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.MedioDePagoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
+import uy.um.edu.pizzumandburgum.dto.update.MedioDePagoUpdateDTO;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.MedioDePago;
 import uy.um.edu.pizzumandburgum.exceptions.MedioDePago.MedioDePagoNoExisteException;
@@ -46,5 +47,20 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
         medioDePagoRepository.save(medioDePago);
 
         return medioDePagoMapper.toResponseDTO(medioDePago);
+    }
+
+    @Override
+    public MedioDePagoDTO editarMDP(String email, MedioDePagoUpdateDTO dto) {
+        MedioDePago mdp = new MedioDePago();
+        if (dto.getDireccion() != null) {
+            mdp.setDireccion(dto.getDireccion());
+        }
+        if (dto.getVencimiento() != null) {
+            mdp.setVencimiento(dto.getVencimiento());
+        }
+        if (dto.getNumero() != null) {
+            mdp.setNumero(dto.getNumero());
+        }
+        return medioDePagoMapper.toResponseDTO(mdp);
     }
 }

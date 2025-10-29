@@ -2,10 +2,7 @@ package uy.um.edu.pizzumandburgum.service.Interfaces;
 
 import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.CreacionResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.*;
 import uy.um.edu.pizzumandburgum.dto.update.ClienteUpdateDTO;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
 
@@ -21,4 +18,7 @@ public interface ClienteService {
     List<CreacionResponseDTO> mostrarCreaciones(String email);
     List<CreacionResponseDTO> mostrarCreacionesFavoritas(String email);
     List<PedidoResponseDTO> obtenerPedidosPorCliente(String email);
+
+    PizzaResponseDTO asociarPizza(String email, Long idPizza);
+
 }

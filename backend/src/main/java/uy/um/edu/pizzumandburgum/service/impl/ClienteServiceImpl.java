@@ -5,13 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.CreacionResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.*;
 import uy.um.edu.pizzumandburgum.dto.update.ClienteUpdateDTO;
 import uy.um.edu.pizzumandburgum.entities.*;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.HamburguesaNoEncontradaException;
+import uy.um.edu.pizzumandburgum.exceptions.Creacion.Pizza.PizzaNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.MedioDePago.MedioDePagoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
@@ -19,14 +17,8 @@ import uy.um.edu.pizzumandburgum.exceptions.Usuario.ContraseniaInvalidaException
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.EmailNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.EmailYaRegistradoException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.UsuarioNoEncontradoException;
-import uy.um.edu.pizzumandburgum.mapper.ClienteMapper;
-import uy.um.edu.pizzumandburgum.mapper.CreacionMapper;
-import uy.um.edu.pizzumandburgum.mapper.HamburguesaMapper;
-import uy.um.edu.pizzumandburgum.mapper.PedidoMapper;
-import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
-import uy.um.edu.pizzumandburgum.repository.DomicilioRepository;
-import uy.um.edu.pizzumandburgum.repository.HamburguesaRepository;
-import uy.um.edu.pizzumandburgum.repository.MedioDePagoRepository;
+import uy.um.edu.pizzumandburgum.mapper.*;
+import uy.um.edu.pizzumandburgum.repository.*;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PedidoService;
 
@@ -61,7 +53,12 @@ public class ClienteServiceImpl implements ClienteService {
     private CreacionMapper creacionMapper;
 
     @Autowired
+    private PizzaRepository pizzaRepository;
+    @Autowired
     private PedidoMapper pedidoMapper;
+
+    @Autowired
+    private  PizzaMapper pizzaMapper;
     @Override
     public ClienteResponseDTO registrarCliente(ClienteRequestDTO dto) {
         if (clienteRepository.existsByEmail(dto.getEmail())) {
@@ -190,6 +187,16 @@ public class ClienteServiceImpl implements ClienteService {
             retornar.add(r);
         }
         return retornar;
+    }
+
+    @Override
+    public PizzaResponseDTO asociarPizza(String email, Long idPizza) {
+        Cliente cliente = clienteRepository.findByEmail(email).orElseThrow(()-> new ClienteNoExisteException());
+        Pizza pizza = pizzaRepository.findById(idPizza).orElseThrow(()-> new PizzaNoExisteException());
+        cliente.getCreaciones().add(pizza);
+        pizza.setCliente(cliente);
+        clienteRepository.save(cliente);
+        return pizzaMapper.toResponseDTO(pizza);
     }
 }
 

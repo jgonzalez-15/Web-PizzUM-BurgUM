@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.PizzaProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.PizzaRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.request.ProductoDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PizzaResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.*;
+import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.HamburguesaNoEncontradaException;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Pizza.PizzaNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Pizza.SinMasaException;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Pizza.SinSalsaException;
@@ -15,6 +17,7 @@ import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteExcep
 import uy.um.edu.pizzumandburgum.mapper.ClienteMapper;
 import uy.um.edu.pizzumandburgum.mapper.PizzaMapper;
 import uy.um.edu.pizzumandburgum.mapper.PizzaProductoMapper;
+import uy.um.edu.pizzumandburgum.mapper.ProductoMapper;
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 import uy.um.edu.pizzumandburgum.repository.PizzaProductoRepository;
 import uy.um.edu.pizzumandburgum.repository.PizzaRepository;
@@ -51,7 +54,8 @@ public class PizzaServiceImpl implements PizzaService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-
+    @Autowired
+    private ProductoMapper productoMapper;
     @Override
     public PizzaResponseDTO crearPizza(PizzaRequestDTO dto) {
         Pizza pizza = new Pizza();
@@ -123,5 +127,21 @@ public class PizzaServiceImpl implements PizzaService {
             retornar.add(pizzaMapper.toResponseDTO(pizza));
         }
         return retornar;
+    }
+
+    @Override
+    public List<ProductoDTO> obtenerIngredientesPizza(Long idCreacion) {
+        Pizza pizza = pizzaRepository.findById(idCreacion).orElseThrow(()->new HamburguesaNoEncontradaException());
+        List<PizzaProducto>ingredienteshp = pizza.getIngredientes();
+        List<Producto>ingredientes = new ArrayList<>();
+        List<ProductoDTO> listaRetornar = new ArrayList<>();
+        for (PizzaProducto pp: ingredienteshp){
+            ingredientes.add(pp.getProducto());
+        }
+        for (Producto producto: ingredientes){
+            ProductoDTO retornar = productoMapper.toResponseDTO(producto);
+            listaRetornar.add(retornar);
+        }
+        return listaRetornar;
     }
 }
