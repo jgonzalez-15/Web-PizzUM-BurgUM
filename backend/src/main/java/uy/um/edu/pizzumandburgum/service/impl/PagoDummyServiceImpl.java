@@ -2,6 +2,7 @@ package uy.um.edu.pizzumandburgum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uy.um.edu.pizzumandburgum.controller.NotificacionesController;
 import uy.um.edu.pizzumandburgum.dto.request.PagoDummyRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PagoDummyResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.MedioDePago;
@@ -30,6 +31,9 @@ public class PagoDummyServiceImpl implements PagoDummyService {
     @Autowired
     private MedioDePagoService medioDePagoService;
 
+    @Autowired
+    private NotificacionesController notificacionController;
+
     @Override
     public PagoDummyResponseDTO procesarPago(PagoDummyRequestDTO request) {
         Pedido pedido = pedidoRepository.findById(request.getIdPedido())
@@ -55,6 +59,10 @@ public class PagoDummyServiceImpl implements PagoDummyService {
 
         pedido.setEstaPago(true);
         pedidoRepository.save(pedido);
+
+        notificacionController.enviarNotificacion("💰 Pago confirmado para el pedido #" + pedido.getId() +
+                ". Monto: $" + pago.getMonto()
+        );
 
         PagoDummyResponseDTO dto = new PagoDummyResponseDTO();
         dto.setCodigoTransaccion(pago.getCodigoTransaccion());
