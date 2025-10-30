@@ -5,8 +5,12 @@ export default function Register(){
     return(
     <>
         <div className="h-screen w-screen flex flex-col items-center mx-auto justify-between">
+
+            {/* Titulo */}
             <h1 className="font-bold text-2xl mt-8 mb-8">Registrarse</h1>
             <div className="mb-8 overflow-auto items-center flex-1 w-full flex flex-col gap-8">
+
+                {/* SECCION: Datos del usuario */}
                 <div className="bg-gray-50 shadow-xl rounded-2xl w-[calc(100vw-4rem)] md:w-[calc(100vw-32rem)]">
                     <div className="m-8">
                         <h1 className="font-bold text-xl">Datos del usuario</h1>
@@ -20,6 +24,8 @@ export default function Register(){
                         </form>
                     </div>
                 </div>
+
+                {/* SECCION: Datos del domicilio */}
                 <div className="bg-gray-50 shadow-xl rounded-2xl w-[calc(100vw-4rem)] md:w-[calc(100vw-32rem)]">
                     <div className="m-8">
                         <h1 className="font-bold text-xl overflow-auto">Datos del domicilio</h1>
@@ -29,6 +35,8 @@ export default function Register(){
                         </form>
                     </div>
                 </div>
+
+                {/* SECCION: Datos del pago */}
                 <div className="bg-gray-50 shadow-xl rounded-2xl w-[calc(100vw-4rem)] md:w-[calc(100vw-32rem)]">
                     <div className="m-8">
                         <h1 className="font-bold text-xl overflow-auto">Datos del medio de pago</h1>
@@ -42,6 +50,8 @@ export default function Register(){
                         </form>
                     </div>
                 </div>
+
+                {/* Boton registrarse */}
                 <Button text="Registrarse" isPrimary={true}/>
             </div>
             <Footer/>

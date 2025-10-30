@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import Button from "./Button";
-import Sidebar from "./Sidebar"
 import { useState } from "react";
-import SmallButton from "./SmallButton";
 import { useCart } from "./context/CartItems";
+
+import Sidebar from "./Sidebar"
+import SmallButton from "./SmallButton";
+
 
 function MainHeader(){
     const [open, setOpen] = useState(false);

@@ -1,7 +1,8 @@
-import MainHeader from "../Components/MainHeader";
-import Footer from "../Components/Footer";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+
+import MainHeader from "../Components/MainHeader";
+import Footer from "../Components/Footer";
 import SmallButton from "../Components/SmallButton";
 import AddToCartButton from "../Components/AddToCartButton"
 
@@ -39,6 +40,8 @@ export default function ViewCreation(){
             </>
         )
     }
+
+
     else if (type=="Burger"){
         const [bread, setBread] = useState("Con sésamo")
         const [meat, setMeat] = useState("Res")
@@ -83,6 +86,8 @@ export default function ViewCreation(){
         <MainHeader/>
         <div className="w-full mt-16 flex flex-1 flex-col justify-between min-h-[calc(100vh-4rem)]">
             <div className="flex h-full ml-8 mr-8 md:ml-16 md:mr-16 mt-4 mb-4 flex-col gap-4">
+
+                {/* Datos del favorito */}
                 <h1 className="text-xl font-bold w-full text-center">{name}</h1>
                 <div>
                     <h1 className="font-bold">Detalles</h1>
@@ -94,6 +99,7 @@ export default function ViewCreation(){
                     <SmallButton text="Eliminar de favotiros" isPrimary={false}/>
                     <AddToCartButton isPrimary={true}/>
                 </div>
+
             </div>
             <Footer/>
         </div>

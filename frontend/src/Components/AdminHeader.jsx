@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
-import Button from "./Button";
-import AdminSidebar from "./AdminSidebar"
 import { useState } from "react";
-import SmallButton from "./SmallButton";
-import { useCart } from "./context/CartItems";
+
+import AdminSidebar from "./AdminSidebar"
+
 
 function AdminHeader(){
     const [open, setOpen] = useState(false);
