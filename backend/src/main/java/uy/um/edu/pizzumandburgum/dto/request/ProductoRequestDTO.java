@@ -10,7 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductoRequestDTO {
-    private Long idProducto;
     private String tipo;
     private String nombre;
     private boolean sinTacc;

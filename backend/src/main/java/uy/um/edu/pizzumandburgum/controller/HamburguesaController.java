@@ -36,7 +36,7 @@ public class HamburguesaController {
     }
 
     @GetMapping("/{idCreacion}/ingredientes")
-    public ResponseEntity<List<ProductoRequestDTO>> mostrarIngredientesHamburguesa(@PathVariable Long idCreacion){
+    public ResponseEntity<List<ProductoResponseDTO>> mostrarIngredientesHamburguesa(@PathVariable Long idCreacion){
         List<ProductoResponseDTO> ingredientes = hamburguesaService.obtenerIngredientesHamburguesa(idCreacion);
         return ResponseEntity.ok(ingredientes);
     }
