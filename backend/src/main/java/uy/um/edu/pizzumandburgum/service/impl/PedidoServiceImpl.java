@@ -2,6 +2,7 @@ package uy.um.edu.pizzumandburgum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uy.um.edu.pizzumandburgum.controller.NotificacionesController;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoBebidaResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoCreacionDTO;
@@ -9,6 +10,7 @@ import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.*;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.CreacionNoEncontradaException;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
+import uy.um.edu.pizzumandburgum.exceptions.Pedido.EstadoInvalidoException;
 import uy.um.edu.pizzumandburgum.exceptions.Pedido.PedidoNoEncontradoException;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
@@ -17,6 +19,8 @@ import uy.um.edu.pizzumandburgum.repository.*;
 import uy.um.edu.pizzumandburgum.service.Interfaces.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PedidoServiceImpl implements PedidoService {
@@ -55,9 +59,12 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Autowired
     private CreacionRepository creacionRepository;
+
+    @Autowired
+    private NotificacionesController notificacionesController;
     @Override
     public PedidoResponseDTO realizarPedido(PedidoRequestDTO dto) {
-        Cliente cliente = clienteRepository.findById(String.valueOf(dto.getIdCliente())).orElseThrow(() -> new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(() -> new ClienteNoExisteException());
 
         MedioDePago medioDePago = medioDePagoService.obtenerMedioDePago(
                 cliente.getEmail(),
@@ -72,30 +79,29 @@ public class PedidoServiceImpl implements PedidoService {
                 domicilioTemp.getDireccion()
         );
 
-        // 4. Crear el pedido base usando el mapper
         Pedido pedido = pedidoMapper.toEntity(dto);
-        pedido.setEstado("En cola");
+        pedido.setEstado("En Cola");
+        pedido.setEstaPago(false);
         pedido.setClienteAsignado(cliente);
         pedido.setDomicilio(domicilio);
         pedido.setMedioDePago(medioDePago);
         pedido.setFecha(LocalDate.now());
 
-        // 5. GUARDAR PRIMERO para obtener el ID
+
         pedido = pedidoRepository.save(pedido);
 
-        // 6. Procesar creaciones (hamburguesas/pizzas) y calcular precio
+
         float precioTotal = 0f;
 
         if (dto.getCreaciones() != null && !dto.getCreaciones().isEmpty()) {
             for (PedidoCreacionDTO creacionDto : dto.getCreaciones()) {
-                // Agregar la creación al pedido
+
                 pedidoCrecionService.agregarCreacion(
-                        pedido.getIdPedido(),
+                        pedido.getId(),
                         creacionDto.getCreacion().getId(),
                         creacionDto.getCantidad()
                 );
 
-                // Buscar la creación para obtener su precio
                 Creacion creacion = creacionRepository.findById(creacionDto.getCreacion().getId())
                         .orElseThrow(() -> new CreacionNoEncontradaException());
 
@@ -103,17 +109,16 @@ public class PedidoServiceImpl implements PedidoService {
             }
         }
 
-        // 7. Procesar bebidas
+
         if (dto.getBebidas() != null && !dto.getBebidas().isEmpty()) {
             for (PedidoBebidaResponseDTO bebidaDto : dto.getBebidas()) {
                 // Agregar la bebida al pedido
                 pedidoBebidaService.agregarBebida(
-                        pedido.getIdPedido(),
+                        pedido.getId(),
                         bebidaDto.getProducto().getIdProducto(),
                         bebidaDto.getCantidad()
                 );
 
-                // Buscar el producto para obtener su precio
                 Producto bebida = productoRepository.findById(bebidaDto.getProducto().getIdProducto())
                         .orElseThrow(() -> new ProductoNoExisteException());
 
@@ -121,19 +126,30 @@ public class PedidoServiceImpl implements PedidoService {
             }
         }
 
-        // 8. Actualizar el precio y guardar
+
         pedido.setPrecio(precioTotal);
         pedido = pedidoRepository.save(pedido);
 
-        // 9. Convertir a DTO y retornar
         return pedidoMapper.toResponseDTO(pedido);}
 
     @Override
-    public void eliminarPedido(Long id) {
-        if (!pedidoRepository.existsById(id)) {
-            throw new PedidoNoEncontradoException();
+    public void eliminarPedido(Long idPedido) {
+        Pedido pedido = pedidoRepository.findById(idPedido)
+                .orElseThrow(() -> new PedidoNoEncontradoException());
+
+        List<PedidoCreacion> creacionesDelPedido = new ArrayList<>(pedido.getCreacionesPedido());
+
+        for (PedidoCreacion pc : creacionesDelPedido) {
+            Creacion creacion = pc.getCreacion();
+            pedido.getCreacionesPedido().remove(pc);
+
+            if (!creacion.isEsFavorita()) {
+                creacionRepository.delete(creacion);
+            }
         }
-        pedidoRepository.deleteById(id);
+
+
+        pedidoRepository.delete(pedido);
     }
 
     @Override
@@ -143,8 +159,32 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public void cambiarEstado(Long id, String estado) {
-        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new PedidoNoEncontradoException());
-        pedido.setEstado(estado);
+    public void cambiarEstado(Long id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new PedidoNoEncontradoException());
+
+
+        String estadoActual = pedido.getEstado();
+        String nuevoEstado;
+
+
+        switch (estadoActual) {
+            case "En Cola":
+                nuevoEstado = "En Preparacion";
+                break;
+            case "En Preparacion":
+                nuevoEstado = "En Camino";
+                break;
+            case "En Camino":
+                nuevoEstado = "Entregado";
+                break;
+            case "Entregado":
+                throw new EstadoInvalidoException();
+            default:
+                throw new EstadoInvalidoException();
+        }
+        notificacionesController.enviarNotificacion("Pedido " + id + " cambiado a " + nuevoEstado);
+        pedido.setEstado(nuevoEstado);
+        pedidoRepository.save(pedido);
     }
 }

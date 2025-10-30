@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.HamburguesaProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.HamburguesaRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.request.ProductoDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
+import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
 import uy.um.edu.pizzumandburgum.entities.Producto;
@@ -13,8 +15,11 @@ import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.HamburguesaNoEn
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.SinCarneException;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.SinPanException;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
+import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.HamburguesaMapper;
 import uy.um.edu.pizzumandburgum.mapper.HamburguesaProductoMapper;
+import uy.um.edu.pizzumandburgum.mapper.ProductoMapper;
+import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 import uy.um.edu.pizzumandburgum.repository.HamburguesaProductoRepository;
 import uy.um.edu.pizzumandburgum.repository.HamburguesaRepository;
 import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
@@ -44,58 +49,48 @@ public class HamburguesaServiceImpl implements HamburguesaService {
     @Autowired
     private HamburguesaProductoRepository hamburguesaProductoRepository;
 
+    @Autowired
+    private ProductoMapper productoMapper;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
 
     @Override
     public HamburguesaResponseDTO crearHamburguesa(HamburguesaRequestDTO dto) {
-        // 1. Validaciones de negocio
-        if (dto.getCantCarnes() > 3) {
-            throw new CantidadDeCarnesException();
-        }
-        if (dto.getCantCarnes() == 0) {
-            throw new SinCarneException();
-        }
+        Cliente cliente = clienteRepository.findByEmail(dto.getClienteId()).orElseThrow(()->new ClienteNoExisteException());
+        Hamburguesa hamburguesa = hamburguesaMapper.toEntity(dto);
 
-        // 2. Crear hamburguesa base
-        Hamburguesa hamburguesa = new Hamburguesa();
-        hamburguesa.setCantCarnes(dto.getCantCarnes());
-        hamburguesa.setEsFavorita(dto.isEsFavorita());
-
-        // 3. Validar ingredientes, pan y calcular precio en UN solo loop
         boolean tienePan = false;
+        int totalCarnes = 0;
         float precioTotal = 0;
 
-        for (HamburguesaProductoRequestDTO ingredienteDto : dto.getIngredientes()) {
-            // Buscar producto UNA sola vez
-            Producto producto = productoRepository.findById(ingredienteDto.getIdProducto())
-                    .orElseThrow(() -> new ProductoNoExisteException());
+        for (HamburguesaProducto hp : hamburguesa.getIngredientes()) {
+            Producto producto = hp.getProducto();
 
-            // Validar si tiene pan
             if ("Pan".equalsIgnoreCase(producto.getTipo())) {
                 tienePan = true;
+            } else if ("Hamburguesa".equalsIgnoreCase(producto.getTipo())) {
+                totalCarnes += hp.getCantidad();
             }
 
-            // Calcular precio en memoria
-            precioTotal += producto.getPrecio() * ingredienteDto.getCantidad();
+            precioTotal += producto.getPrecio() * hp.getCantidad();
         }
 
-        // Validar que tenga pan
+        if (totalCarnes == 0) {
+            throw new SinCarneException();
+        }
+        if (totalCarnes > 3) {
+            throw new CantidadDeCarnesException();
+        }
         if (!tienePan) {
             throw new SinPanException();
         }
 
-        // 4. Setear precio y GUARDAR hamburguesa (para obtener el ID)
+        hamburguesa.setCantCarnes(totalCarnes);
         hamburguesa.setPrecio(precioTotal);
+        hamburguesa.setCliente(cliente);
         Hamburguesa guardado = hamburguesaRepository.save(hamburguesa);
-
-        // 5. AHORA agregar ingredientes (ya tenemos el ID de la hamburguesa)
-        for (HamburguesaProductoRequestDTO ingredienteDto : dto.getIngredientes()) {
-            hamburguesaProductoService.agregarIngrediente(
-                    guardado.getId(),
-                    ingredienteDto.getIdProducto(),
-                    ingredienteDto.getCantidad()
-            );
-        }
-
         return hamburguesaMapper.toResponseDTO(guardado);
     }
 
@@ -120,6 +115,22 @@ public class HamburguesaServiceImpl implements HamburguesaService {
             retornar.add(hamburguesaMapper.toResponseDTO(hamburguesa));
         }
         return retornar;
+    }
+
+    @Override
+    public List<ProductoDTO> obtenerIngredientesHamburguesa(Long idCreacion) {
+        Hamburguesa hamburguesa = hamburguesaRepository.findById(idCreacion).orElseThrow(()->new HamburguesaNoEncontradaException());
+        List<HamburguesaProducto>ingredienteshp = hamburguesa.getIngredientes();
+        List<Producto>ingredientes = new ArrayList<>();
+        List<ProductoDTO> listaRetornar = new ArrayList<>();
+        for (HamburguesaProducto hp: ingredienteshp){
+            ingredientes.add(hp.getProducto());
+        }
+        for (Producto producto: ingredientes){
+            ProductoDTO retornar = productoMapper.toResponseDTO(producto);
+            listaRetornar.add(retornar);
+        }
+        return listaRetornar;
     }
 
 

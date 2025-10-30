@@ -19,6 +19,7 @@ public class HamburguesaResponseDTO {
     private int cantCarnes;
     private float precio;
     private boolean esFavorita;
-    private List<HamburguesaProductoRequestDTO> ingredientes;
+    private List<HamburguesaProductoResponseDTO> ingredientes;
+    private ClienteResponseDTO cliente;
 
 }

@@ -18,7 +18,7 @@ import java.util.List;
 public class Hamburguesa extends Creacion {
     int cantCarnes;
 
-    @OneToMany(mappedBy = "hamburguesa", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "hamburguesa", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<HamburguesaProducto> ingredientes = new ArrayList<>();
 
 

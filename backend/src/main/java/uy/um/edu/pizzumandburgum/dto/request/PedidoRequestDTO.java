@@ -21,10 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PedidoRequestDTO {
 
-        private String estado;
-        private boolean estaPago;
-
-        private Long idCliente;
+        private String idCliente;
         private Long idDomicilio;
         private Long idMedioDePago;
 

@@ -1,5 +1,6 @@
 package uy.um.edu.pizzumandburgum.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public abstract class Creacion {
     private boolean esFavorita;
 
     @OneToMany(mappedBy = "creacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<PedidoCreacion> creacionesPedido = new ArrayList<>();
 
     @ManyToOne

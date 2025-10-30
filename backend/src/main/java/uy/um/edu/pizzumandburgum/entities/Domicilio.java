@@ -26,7 +26,7 @@ public class Domicilio {
     private List<ClienteDomicilio> clientes = new ArrayList<>();
 
     @OneToMany(mappedBy = "domicilio", cascade = CascadeType.ALL)
-    private List<Pedido> pedidos;
+    private List<Pedido> pedidos = new ArrayList<>();
 }
 
 
