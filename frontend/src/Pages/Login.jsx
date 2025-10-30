@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useState } from "react";
 
 import SmallButton from "../Components/SmallButton"
 import Footer from "../Components/Footer"
@@ -7,6 +8,46 @@ function Login(){
     if (window.pageYOffset > 0) {
         window.scrollTo(0, 0);
     }
+
+    const [email, setEmail] = useState("");
+    const [contrasenia, setContrasenia] = useState("");
+    const navigate = useNavigate();
+
+    const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:8080/api/cliente/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, contrasenia }),
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        navigate("/homepage");
+      } else {
+        try{
+          const response = await fetch("http://localhost:8080/api/administrador/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify( email , contrasenia ),
+          credentials: "include",
+        });
+          if (response.ok) {
+          const data = await response.json();
+          navigate("/homepage");
+          } else {
+          alert("Credenciales inválidas");
+          }
+        } catch (error) {
+          console.error("Error al iniciar sesión:", error);
+        }
+      }
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
+    }};
 
     return(
         <>
@@ -18,16 +59,30 @@ function Login(){
                     <h1 className="font-bold text-center md:text-2xl 2xl:text-5xl">Ingresar</h1>
 
                     {/* Formulario */}
-                    <form action="" className="flex flex-col justify-center m-8 mb-2">
+                    <form action="" className="flex flex-col justify-center m-8 mb-2" onSubmit={handleLogin}>
                         <h4 className="ml-2">Correo electrónico:</h4>
-                        <input type="text" className="bg-gray-200 rounded-2xl mt-1 mb-4 p-1"/>
+                        <input
+                        type="text"
+                        className="bg-gray-200 rounded-2xl mt-1 mb-4 p-1"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        />
                         <h4 className="ml-2">Contraseña:</h4>
-                        <input type="password" className="bg-gray-200 rounded-2xl mt-1 mb-4 p-1"/>
+                        <input
+                        type="password"
+                        className="bg-gray-200 rounded-2xl mt-1 mb-4 p-1"
+                        value={contrasenia}
+                        onChange={(e) => setContrasenia(e.target.value)}
+                        />
 
                         {/* Botones */}
                         <div className="flex flex-row justify-center mt-4">
                             <SmallButton text='Cancelar' isPrimary={false} route="/"/>
-                            <SmallButton text='Ingresar' isPrimary={true} route="/"/>
+                            <button type="submit" className={`transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base 2xl:text-xl text-center max-w-64 bg-orange-400 text-white`}>
+                                <h2 className="m-2 2xl:m-3">
+                                    Ingresar
+                                </h2>
+                            </button>
                         </div>
                     </form>
 

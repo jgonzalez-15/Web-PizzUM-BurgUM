@@ -19,7 +19,7 @@ function Design({type}){
         content = (<>
                     <div className="ml-16 mb-8">
                     <label style={{ display: "block"}} className="text-xl font-bold">
-                    Cantidad de carnes:{" "}
+                    Tamaño de Pizza:{" "}
                     <select>
                         <option value="1">Chica</option>
                         <option value="2">Mediana</option>

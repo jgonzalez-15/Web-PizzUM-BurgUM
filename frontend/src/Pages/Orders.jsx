@@ -50,14 +50,15 @@ function Orders(){
                                 Ocultar historial de pedidos
                             </h2>
                         </button>
-                    </div>): 
-
+                    </div>): (<>
+                    
                     {/* Boton ver historial */}
-                    (<button onClick={() => setViewHistory(true)} className={`z-0 transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base 2xl:text-xl text-center max-w-96 bg-orange-400 text-white`}>
+                    <button onClick={() => setViewHistory(true)} className={`z-0 transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base 2xl:text-xl text-center max-w-96 bg-orange-400 text-white`}>
                         <h2 className="m-2 2xl:m-3">
                             Ver historial de pedidos
                         </h2>
-                    </button>)}
+                    </button>
+                    </>)}
                 </div>
                 <Footer/>
             </div>
