@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useContext, useState, useEffect } from "react"
+import { SessionContext } from "../Components/context/SessionContext";
 
 import MainHeader from "../Components/MainHeader"
 import OrderStatus from "../Components/OrderStatus"
@@ -9,9 +10,37 @@ function Orders(){
         window.scrollTo(0, 0);
     }
 
-    const [orders, setOrders] = useState([{idPedido: 1, fecha:"aaaaa", estado: 2}, {idPedido: 2, fecha:"bbbb", estado: 0}])
-    const [orderHistory, setOrdersHistory] = useState([{idPedido: 1, fecha:"aaaaa", estado: 3}, {idPedido: 2, fecha:"bbbb", estado: 3}])
+    const [orders, setOrders] = useState([])
+    const [orderHistory, setOrdersHistory] = useState([])
     const [viewHistory, setViewHistory] = useState(false)
+    const { sessionInfo } = useContext(SessionContext)
+    const  email = sessionInfo.email
+
+    const handleGetOrders = async () => {
+        try{
+          const response = await fetch(`http://localhost:8080/api/cliente/${email}/historial-pedidos`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            setOrders(data.map((o) => o.estado != "Entregado"));
+            setOrdersHistory(data.map((o) => o.estado == "Entregado"))
+          } else {
+            alert("Ocurrió un error")
+          }
+            } catch (error){
+                console.error("Error al obtener ingredientes:", error);
+            }
+        }
+    
+        {/* Obtener los pedidos al cargar la pagina */}
+        useEffect(() => {
+        if (email) {
+            handleGetOrders();
+        }
+        }, [email]);
     
     return(
         <>
@@ -25,8 +54,8 @@ function Orders(){
                 <div className="flex flex-1 flex-col ml-4 mr-4 md:ml-8 md:mr-8 gap-6 items-center mb-8">
                     {orders.length > 0 ? 
                         (orders.map((order) =>
-                            <OrderStatus key={order.idPedido} 
-                            id={order.idPedido}
+                            <OrderStatus key={order.id} 
+                            id={order.id}
                             date={order.fecha}
                             status={order.estado}
                             />

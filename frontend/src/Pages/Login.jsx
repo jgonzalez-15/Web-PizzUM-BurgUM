@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { SessionContext } from "../Components/context/SessionContext";
 
 import SmallButton from "../Components/SmallButton"
 import Footer from "../Components/Footer"
@@ -12,11 +13,13 @@ function Login(){
     const [email, setEmail] = useState("");
     const [contrasenia, setContrasenia] = useState("");
     const navigate = useNavigate();
+    const { setSessionType, setSessionInfo } = useContext(SessionContext)
 
+    {/* Funcion de iniciar sesion */}
     const handleLogin = async (e) => {
     e.preventDefault();
-
     try {
+      {/* Intentar iniciar sesion como cliente */}
       const response = await fetch("http://localhost:8080/api/cliente/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -25,21 +28,32 @@ function Login(){
       });
 
       if (response.ok) {
+        {/* Si igresa actualizar info de la sesion y volver a la homepage */}
         const data = await response.json();
-        navigate("/homepage");
+        setSessionType("Client")
+        setSessionInfo(data)
+        navigate("/");
       } else {
         try{
+
+          {/* Si no ingresa como cliente intentar como admin */}
           const response = await fetch("http://localhost:8080/api/administrador/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify( email , contrasenia ),
+          body: JSON.stringify( { email , contrasenia } ),
           credentials: "include",
         });
+
           if (response.ok) {
+          {/* Si igresa alctualizar info de sesion y navegar a admin */}
           const data = await response.json();
-          navigate("/homepage");
+          setSessionType("Admin")
+          setSessionInfo(data)
+          navigate("/");
           } else {
-          alert("Credenciales inválidas");
+
+          {/* Si no ingresa alertar */}
+          alert("Usuario o contraseña incorrectos");
           }
         } catch (error) {
           console.error("Error al iniciar sesión:", error);

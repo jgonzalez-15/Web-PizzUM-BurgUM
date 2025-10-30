@@ -47,7 +47,7 @@ function MainHeader(){
                     )}
                     {items.map((item) => (
                     <div key={item.id} className="flex flex-row justify-between items-center py-1 border-b border-gray-100">
-                        <h1>● {item.name}</h1>
+                        <h1>● {item.nombre}</h1>
                         <button className="h-6 w-6 rounded-sm font-bold text-red-600" onClick={() => removeItem(item.id)}>
                         X
                         </button>

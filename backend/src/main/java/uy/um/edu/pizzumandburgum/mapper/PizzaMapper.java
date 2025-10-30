@@ -31,7 +31,7 @@ public class PizzaMapper {
 
     public Pizza toEntity(PizzaRequestDTO dto) {
         Pizza pizza = new Pizza();
-        Cliente cliente = clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(()->new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findByEmail(dto.getClienteId()).orElseThrow(()->new ClienteNoExisteException());
         pizza.setCliente(cliente);
         pizza.setTamanio(dto.getTamanio());
         pizza.setEsFavorita(dto.isEsFavorita());

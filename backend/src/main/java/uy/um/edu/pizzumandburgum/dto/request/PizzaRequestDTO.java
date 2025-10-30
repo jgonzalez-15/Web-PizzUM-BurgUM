@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PizzaRequestDTO {
-    private String idCliente;
+    private String clienteId;
     private boolean esFavorita;
     private long tamanio;
     private List<PizzaProductoRequestDTO> ingredientes;

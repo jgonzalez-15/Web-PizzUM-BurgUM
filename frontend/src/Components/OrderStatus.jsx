@@ -10,20 +10,20 @@ export default function OrderStatus({id, date, status}){
             <div className="m-4 flex flex-row gap-8 items-center">
                 <div className="gap-8 md:flex flex-row items-center hidden">
                     <div className="flex flex-col items-center">
-                        <div className={`h-12 w-12 rounded-full ${status >= 0 ? "bg-orange-500" : "bg-gray-300"}`}/>
-                        <h1 className="text-center">Pedido</h1>
+                        <div className={`h-12 w-12 rounded-full ${status in ["En Cola", "En Preparacion", "En camino", "Entregado"] ? "bg-orange-500" : "bg-gray-300"}`}/>
+                        <h1 className="text-center">En Cola</h1>
                     </div>
                     <div className="flex flex-col items-center">
-                        <div className={`h-12 w-12 rounded-full ${status >= 1 ? "bg-orange-500" : "bg-gray-300"}`}/>
-                        <h1 className="text-center">Preparando</h1>
+                        <div className={`h-12 w-12 rounded-full ${status in ["En Preparacion", "En camino", "Entregado"] ? "bg-orange-500" : "bg-gray-300"}`}/>
+                        <h1 className="text-center">En Preparacion</h1>
                     </div>
                     <div className="flex flex-col items-center">
-                        <div className={`h-12 w-12 rounded-full ${status >= 2 ? "bg-orange-500" : "bg-gray-300"}`}/>
-                        <h1 className="text-center">Enviando</h1>
+                        <div className={`h-12 w-12 rounded-full ${status in ["En camino", "Entregado"] ? "bg-orange-500" : "bg-gray-300"}`}/>
+                        <h1 className="text-center">En Camino</h1>
                     </div>
                     <div className="flex flex-col items-center">
-                        <div className={`h-12 w-12 rounded-full ${status >= 3 ? "bg-orange-500" : "bg-gray-300"}`}/>
-                        <h1 className="text-center">Recibido</h1>
+                        <div className={`h-12 w-12 rounded-full ${status in ["Entregado"] ? "bg-orange-500" : "bg-gray-300"}`}/>
+                        <h1 className="text-center">Entregado</h1>
                     </div>
                 </div>
                 <div className="md:hidden">

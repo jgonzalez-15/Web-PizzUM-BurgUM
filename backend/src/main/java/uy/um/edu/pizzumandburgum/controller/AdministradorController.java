@@ -14,7 +14,7 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.AdministradorService;
 
 @RestController
 @RequestMapping("/api/administrador")
-@CrossOrigin(origins = "http://localhost:5173") // para permitir peticiones desde React
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true") // para permitir peticiones desde React
 public class AdministradorController {
     @Autowired
     private AdministradorService administradorService;

@@ -61,7 +61,7 @@ public class PizzaServiceImpl implements PizzaService {
         Pizza pizza = new Pizza();
         boolean tieneMasa = false;
         boolean tieneSalsa = false;
-        Cliente cliente = clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(()-> new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findByEmail(dto.getClienteId()).orElseThrow(()-> new ClienteNoExisteException());
 
 
         for (PizzaProductoRequestDTO ppdto : dto.getIngredientes()) {

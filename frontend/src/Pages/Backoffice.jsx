@@ -12,6 +12,7 @@ function Backoffice() {
     { id: 1, name: "Pizza Margarita", price: 450, type: "Pizza" },
     { id: 2, name: "Hamburguesa Doble", price: 550, type: "Burger" },
   ]);
+  const [adminList, setAdminList] = useState("");
 
   const [newAdmin, setNewAdmin] = useState({ user: "", password: "" });
   const [showAdminModal, setShowAdminModal] = useState(false);
@@ -25,8 +26,27 @@ function Backoffice() {
     setShowModal(false);
   }
 
-  function handleAddAdmin() {
-    setShowAdminModal(false);
+  const handleAddAdmin = async (e) => {
+    e.preventDefault();
+    try{
+      {/* Intentar crear el administrador */}
+      const response = await fetch("http://localhost:8080/api/administrador/agregarAdmin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newAdmin),
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        {/* Si crea cerrar el modal */}
+        setShowAdminModal(false)
+      } else {
+        {/* Si no mostrar una alerta */}
+        alert("Los datos son incorrectos o el administrador ya existe")
+      }
+    } catch (error){
+      console.error("Error al crear admin:", error);
+    }
   }
 
   return (
@@ -166,15 +186,43 @@ function Backoffice() {
               type="text"
               placeholder="Usuario"
               className="bg-gray-200 rounded-2xl mt-1 mb-3 p-2 w-full"
-              value={newAdmin.user}
-              onChange={(e) => setNewAdmin({ ...newAdmin, user: e.target.value })}
+              value={newAdmin.email}
+              onChange={(e) => setNewAdmin({ ...newAdmin, email: e.target.value })}
             />
             <input
               type="password"
               placeholder="Contraseña"
               className="bg-gray-200 rounded-2xl mt-1 mb-4 p-2 w-full"
-              value={newAdmin.password}
-              onChange={(e) => setNewAdmin({ ...newAdmin, password: e.target.value })}
+              value={newAdmin.contrasenia}
+              onChange={(e) => setNewAdmin({ ...newAdmin, contrasenia: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="Nombre"
+              className="bg-gray-200 rounded-2xl mt-1 mb-4 p-2 w-full"
+              value={newAdmin.nombre}
+              onChange={(e) => setNewAdmin({ ...newAdmin, nombre: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="Teléfono"
+              className="bg-gray-200 rounded-2xl mt-1 mb-4 p-2 w-full"
+              value={newAdmin.apellido}
+              onChange={(e) => setNewAdmin({ ...newAdmin, apellido: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="Teléfono"
+              className="bg-gray-200 rounded-2xl mt-1 mb-4 p-2 w-full"
+              value={newAdmin.telefono}
+              onChange={(e) => setNewAdmin({ ...newAdmin, telefono: e.target.value })}
+            />
+            <input
+              type="date"
+              placeholder="Fecha de nacimiento"
+              className="bg-gray-200 rounded-2xl mt-1 mb-4 p-2 w-full"
+              value={newAdmin.fechaNac}
+              onChange={(e) => setNewAdmin({ ...newAdmin, fechaNac: e.target.value })}
             />
             <div className="flex gap-4">
               <button
