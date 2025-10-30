@@ -2,7 +2,8 @@ package uy.um.edu.pizzumandburgum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uy.um.edu.pizzumandburgum.dto.request.ProductoDTO;
+import uy.um.edu.pizzumandburgum.dto.request.ProductoRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.response.ProductoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Producto;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoYaExisteException;
@@ -23,7 +24,7 @@ public class ProductoServiceImpl implements ProductoService {
     private ProductoMapper productoMapper;
 
     @Override
-    public ProductoDTO agregarProducto(ProductoDTO productoDTO) {
+    public ProductoResponseDTO agregarProducto(ProductoRequestDTO productoDTO) {
         Producto producto = productoMapper.toEntity(productoDTO);
         if (productoRepository.findByNombre(producto.getNombre()).isPresent()) {
             throw new ProductoYaExisteException();
@@ -33,7 +34,7 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public void eliminarProducto(ProductoDTO productoDTO) {
+    public void eliminarProducto(ProductoRequestDTO productoDTO) {
         Producto producto = productoMapper.toEntity(productoDTO);
         if (!productoRepository.existsById(producto.getIdProducto())){
             throw new ProductoNoExisteException();
@@ -42,7 +43,7 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public void modificarProducto(ProductoDTO productoviejoDTO, ProductoDTO productonuevoDTO) {
+    public void modificarProducto(ProductoRequestDTO productoviejoDTO, ProductoRequestDTO productonuevoDTO) {
         Producto producto = productoMapper.toEntity(productoviejoDTO);
         producto.setTipo(productonuevoDTO.getTipo());
         producto.setPrecio(productonuevoDTO.getPrecio());
@@ -52,12 +53,12 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public List<ProductoDTO> listarProductos() {
+    public List<ProductoResponseDTO> listarProductos() {
         List<Producto> productos = productoRepository.findAll();
-        List<ProductoDTO> resultado = new ArrayList<>();
+        List<ProductoResponseDTO> resultado = new ArrayList<>();
 
         for (Producto producto : productos) {
-            ProductoDTO dto = productoMapper.toResponseDTO(producto);
+            ProductoResponseDTO dto = productoMapper.toResponseDTO(producto);
             resultado.add(dto);
         }
 
@@ -65,17 +66,17 @@ public class ProductoServiceImpl implements ProductoService {
         }
 
     @Override
-    public List<ProductoDTO> listarBebidas() {
+    public List<ProductoResponseDTO> listarBebidas() {
         List<Producto> productos = productoRepository.findAll();
         List<Producto> bebidas = new ArrayList<>();
-        List<ProductoDTO> retornar = new ArrayList<>();
+        List<ProductoResponseDTO> retornar = new ArrayList<>();
         for (Producto producto : productos){
             if (producto.getTipo().equals("Bebida")){
                 bebidas.add(producto);
             }
         }
         for (Producto bebida : bebidas){
-            ProductoDTO b = productoMapper.toResponseDTO(bebida);
+            ProductoResponseDTO b = productoMapper.toResponseDTO(bebida);
             retornar.add(b);
         }
         return retornar;

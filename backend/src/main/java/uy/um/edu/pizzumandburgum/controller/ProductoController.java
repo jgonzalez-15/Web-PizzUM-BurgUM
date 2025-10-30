@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uy.um.edu.pizzumandburgum.dto.request.ProductoDTO;
+import uy.um.edu.pizzumandburgum.dto.request.ProductoRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.response.ProductoResponseDTO;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ProductoService;
 
 import java.util.List;
@@ -18,8 +19,8 @@ public class ProductoController {
     private ProductoService productoService;
 
     @PostMapping("/crearProducto")
-    public ResponseEntity<ProductoDTO> crearProducto(@RequestBody ProductoDTO dto,
-                                                     HttpSession session) {
+    public ResponseEntity<ProductoResponseDTO> crearProducto(@RequestBody ProductoRequestDTO dto,
+                                                            HttpSession session) {
         String rol = (String) session.getAttribute("rol");
 
         if (rol == null || !rol.equals("ADMIN")) {
@@ -27,11 +28,11 @@ public class ProductoController {
                     .body(null);
         }
 
-        ProductoDTO nuevo = productoService.agregarProducto(dto);
+        ProductoResponseDTO nuevo = productoService.agregarProducto(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
     @DeleteMapping("/eliminar")
-    public ResponseEntity<Void> eliminarProducto(@RequestBody ProductoDTO productoDTO,HttpSession session ) {
+    public ResponseEntity<Void> eliminarProducto(@RequestBody ProductoRequestDTO productoDTO, HttpSession session ) {
 
         String rol = (String) session.getAttribute("rol");
 
@@ -46,7 +47,7 @@ public class ProductoController {
 
     @PutMapping("/modificar")
     public ResponseEntity<Void> modificarProducto(
-            @RequestBody ProductoDTO productoviejoDTO,@RequestBody ProductoDTO productonuevoDTO, HttpSession session ) {
+            @RequestBody ProductoRequestDTO productoviejoDTO, @RequestBody ProductoRequestDTO productonuevoDTO, HttpSession session ) {
         String rol = (String) session.getAttribute("rol");
 
         if (rol == null || !rol.equals("ADMIN")) {
@@ -58,14 +59,14 @@ public class ProductoController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<ProductoDTO>> listarProductos() {
-        List<ProductoDTO> productos = productoService.listarProductos();
+    public ResponseEntity<List<ProductoResponseDTO>> listarProductos() {
+        List<ProductoResponseDTO> productos = productoService.listarProductos();
         return ResponseEntity.ok(productos);
     }
 
     @GetMapping("/bebidas")
-    public ResponseEntity<List<ProductoDTO>> listarBebida(){
-        List<ProductoDTO> productos = productoService.listarBebidas();
+    public ResponseEntity<List<ProductoResponseDTO>> listarBebida(){
+        List<ProductoResponseDTO> productos = productoService.listarBebidas();
         return ResponseEntity.ok(productos);
     }
 }

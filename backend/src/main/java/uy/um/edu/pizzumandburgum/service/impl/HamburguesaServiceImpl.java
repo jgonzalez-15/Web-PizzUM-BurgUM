@@ -2,10 +2,10 @@ package uy.um.edu.pizzumandburgum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uy.um.edu.pizzumandburgum.dto.request.HamburguesaProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.HamburguesaRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.request.ProductoDTO;
+import uy.um.edu.pizzumandburgum.dto.request.ProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.ProductoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
@@ -14,7 +14,6 @@ import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.CantidadDeCarne
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.HamburguesaNoEncontradaException;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.SinCarneException;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.SinPanException;
-import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.HamburguesaMapper;
 import uy.um.edu.pizzumandburgum.mapper.HamburguesaProductoMapper;
@@ -118,16 +117,16 @@ public class HamburguesaServiceImpl implements HamburguesaService {
     }
 
     @Override
-    public List<ProductoDTO> obtenerIngredientesHamburguesa(Long idCreacion) {
+    public List<ProductoResponseDTO> obtenerIngredientesHamburguesa(Long idCreacion) {
         Hamburguesa hamburguesa = hamburguesaRepository.findById(idCreacion).orElseThrow(()->new HamburguesaNoEncontradaException());
         List<HamburguesaProducto>ingredienteshp = hamburguesa.getIngredientes();
         List<Producto>ingredientes = new ArrayList<>();
-        List<ProductoDTO> listaRetornar = new ArrayList<>();
+        List<ProductoResponseDTO> listaRetornar = new ArrayList<>();
         for (HamburguesaProducto hp: ingredienteshp){
             ingredientes.add(hp.getProducto());
         }
         for (Producto producto: ingredientes){
-            ProductoDTO retornar = productoMapper.toResponseDTO(producto);
+            ProductoResponseDTO retornar = productoMapper.toResponseDTO(producto);
             listaRetornar.add(retornar);
         }
         return listaRetornar;
