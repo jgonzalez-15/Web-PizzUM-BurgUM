@@ -9,7 +9,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreacionResponseDTO {
+public class FavoritoResponseDTO {
     private Long id;
-    private float precio;
+    private String nombre;
+    private String idCliente;
+    private Long idCreacion;
 }

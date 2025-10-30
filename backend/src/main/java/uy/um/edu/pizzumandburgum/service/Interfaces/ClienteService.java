@@ -16,9 +16,7 @@ public interface ClienteService {
     List<ClienteResponseDTO> listarClientes();
     HamburguesaResponseDTO asociarHamburguesa(String emailCliente, Long idHamburguesa);
     List<CreacionResponseDTO> mostrarCreaciones(String email);
-    List<CreacionResponseDTO> mostrarCreacionesFavoritas(String email);
     List<PedidoResponseDTO> obtenerPedidosPorCliente(String email);
-
     PizzaResponseDTO asociarPizza(String email, Long idPizza);
 
 }
