@@ -62,6 +62,11 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Autowired
     private NotificacionesController notificacionesController;
+
+    @Autowired
+    private FavoritoRepository favoritoRepository;
+
+
     @Override
     public PedidoResponseDTO realizarPedido(PedidoRequestDTO dto) {
         Cliente cliente = clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(() -> new ClienteNoExisteException());
@@ -143,7 +148,9 @@ public class PedidoServiceImpl implements PedidoService {
             Creacion creacion = pc.getCreacion();
             pedido.getCreacionesPedido().remove(pc);
 
-            if (!creacion.isEsFavorita()) {
+            boolean esFavorita = favoritoRepository.existsByCreacionId(creacion.getId());
+
+            if (!esFavorita) {
                 creacionRepository.delete(creacion);
             }
         }

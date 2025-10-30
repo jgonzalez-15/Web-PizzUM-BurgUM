@@ -39,7 +39,6 @@ public class HamburguesaMapper {
         dto.setIdCreacion(hamburguesa.getId());
         dto.setCantCarnes(hamburguesa.getCantCarnes());
         dto.setPrecio(hamburguesa.getPrecio());
-        dto.setEsFavorita(hamburguesa.isEsFavorita());
         if (hamburguesa.getCliente() != null) {
             dto.setCliente(clienteMapper.toResponseDTO(hamburguesa.getCliente()));
         }
@@ -58,7 +57,6 @@ public class HamburguesaMapper {
 
     public Hamburguesa toEntity(HamburguesaRequestDTO dto) {
         Hamburguesa hamburguesa = new Hamburguesa();
-        hamburguesa.setEsFavorita(dto.isEsFavorita());
         Cliente cliente = clienteRepository.findByEmail(dto.getClienteId()).orElseThrow(()-> new ClienteNoExisteException());
         hamburguesa.setCliente(cliente);
         List<HamburguesaProducto> ingredientes = new ArrayList<>();

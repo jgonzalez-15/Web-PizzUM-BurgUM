@@ -83,7 +83,6 @@ public class PizzaServiceImpl implements PizzaService {
             throw new SinSalsaException();
         }
 
-        pizza.setEsFavorita(dto.isEsFavorita());
         pizza.setTamanio(dto.getTamanio());
         pizza.setCliente(cliente);
         Pizza guardado = pizzaRepository.save(pizza);

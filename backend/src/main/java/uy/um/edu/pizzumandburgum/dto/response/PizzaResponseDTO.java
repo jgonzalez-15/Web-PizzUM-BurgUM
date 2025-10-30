@@ -16,7 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 public class PizzaResponseDTO {
     private float precio;
-    private boolean esFavorita;
     private long tamanio;
     private ClienteResponseDTO cliente;
     private List<PizzaProductoResponseDTO> ingredientes;

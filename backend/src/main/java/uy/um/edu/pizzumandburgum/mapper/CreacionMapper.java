@@ -13,8 +13,6 @@ public class CreacionMapper {
 
         return new CreacionResponseDTO(
                 creacion.getId(),
-                creacion.getPrecio(),
-                creacion.isEsFavorita()
-        );
+                creacion.getPrecio());
     }
 }

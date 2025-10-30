@@ -160,24 +160,6 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public List<CreacionResponseDTO> mostrarCreacionesFavoritas(String email) {
-        Cliente cliente = clienteRepository.findByEmail(email).orElseThrow(()-> new ClienteNoExisteException());
-        List<Creacion> creaciones = cliente.getCreaciones();
-        List<Creacion> favoritas = new ArrayList<>();
-        List<CreacionResponseDTO> retornarlista = new ArrayList<>();
-        for(Creacion creacion: creaciones){
-            if (creacion.isEsFavorita()){
-                favoritas.add(creacion);
-            }
-        }
-        for (Creacion creacion: favoritas){
-            CreacionResponseDTO retornar = creacionMapper.toResponseDTO(creacion);
-            retornarlista.add(retornar);
-        }
-        return retornarlista;
-    }
-
-    @Override
     public List<PedidoResponseDTO> obtenerPedidosPorCliente(String email) {
         Cliente cliente = clienteRepository.findByEmail(email).orElseThrow(()-> new ClienteNoExisteException());
         List<Pedido> pedidos = cliente.getPedidos();
