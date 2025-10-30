@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProductoService {
     ProductoResponseDTO agregarProducto (ProductoRequestDTO productoDTO);
-    void eliminarProducto (ProductoRequestDTO productoDTO);
+    void eliminarProducto (Long idProducto);
     void modificarProducto(ProductoRequestDTO productoviejoDTO, ProductoRequestDTO productonuevoDTO);
     List<ProductoResponseDTO> listarProductos();
     List<ProductoResponseDTO> listarBebidas();

@@ -34,12 +34,11 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public void eliminarProducto(ProductoRequestDTO productoDTO) {
-        Producto producto = productoMapper.toEntity(productoDTO);
-        if (!productoRepository.existsById(producto.getIdProducto())){
+    public void eliminarProducto(Long idProducto) {
+        if (!productoRepository.existsById(idProducto)){
             throw new ProductoNoExisteException();
         }
-        productoRepository.deleteById(producto.getIdProducto());
+        productoRepository.deleteById(idProducto);
     }
 
     @Override

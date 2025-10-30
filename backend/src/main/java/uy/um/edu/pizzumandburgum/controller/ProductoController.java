@@ -31,8 +31,8 @@ public class ProductoController {
         ProductoResponseDTO nuevo = productoService.agregarProducto(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
-    @DeleteMapping("/eliminar")
-    public ResponseEntity<Void> eliminarProducto(@RequestBody ProductoRequestDTO productoDTO, HttpSession session ) {
+    @DeleteMapping("/{idProducto}/eliminar")
+    public ResponseEntity<Void> eliminarProducto(@PathVariable Long idProducto, HttpSession session ) {
 
         String rol = (String) session.getAttribute("rol");
 
@@ -40,7 +40,7 @@ public class ProductoController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(null);
         }
-        productoService.eliminarProducto(productoDTO);
+        productoService.eliminarProducto(idProducto);
         return ResponseEntity.noContent().build();
     }
 
