@@ -16,11 +16,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClienteRequestDTO {
-
-    private String nombre;
-    private String apellido;
     private String email;
     private String contrasenia;
-    private Long telefono;
-    private LocalDate fechaNacimiento;
 }

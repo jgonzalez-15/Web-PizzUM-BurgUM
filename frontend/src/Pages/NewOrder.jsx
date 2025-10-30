@@ -1,9 +1,10 @@
+import { useCart } from "../Components/context/CartItems"
+
 import MainHeader from "../Components/MainHeader"
 import Footer from "../Components/Footer"
 import OrderResumeItem from "../Components/OrderResumeItem"
 import SmallButton from "../Components/SmallButton"
 import OrderItem from "../Components/OrderItem"
-import { useCart } from "../Components/context/CartItems"
 import Button from "../Components/Button"
 
 function NewOrder({}){
@@ -23,6 +24,8 @@ function NewOrder({}){
                 <div className="w-full flex flex-1 flex-col md:flex-row h-full items-center md:items-start justify-between gap-4">
                     <div className="w-full flex justify-center">
                         <div className="m-4 md:m-8 w-full">
+
+                            {/* Items del pedido */}
                             {   
                                 items.length === 0 ?
                                 (
@@ -39,6 +42,8 @@ function NewOrder({}){
                     </div>
                     <div className="w-full md:w-128 h-full bg-gray-100 md:shadow-2xl md:mr-16 md:mt-8 md:mb-8 md:rounded-2xl">
                         <div className="flex flex-col m-4 justify-between">
+
+                            {/* Resumen del pedido */}
                             <h1 className="font-bold text-xl">Resumen de pedido:</h1>
                             <div className="mt-4">
                                 {
@@ -49,6 +54,8 @@ function NewOrder({}){
                                     )))
                                 }
                             </div>
+
+                            {/* Total del pedido y botones */}
                             {items.length > 0 && (
                                 <>
                                     <div className="flex flex-row justify-between items-center pt-4 border-t m-4">
@@ -62,6 +69,7 @@ function NewOrder({}){
                                 </>
                                 )
                             }
+
                         </div>
                     </div>
                 </div>

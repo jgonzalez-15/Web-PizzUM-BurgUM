@@ -1,7 +1,7 @@
-import { useContext, useState } from "react";
-import Ingredient from "./Ingredient";
+import { useContext, useState, useEffect } from "react";
 import { DesignContext } from "./context/DesignContext";
-import { useEffect } from "react";
+
+import Ingredient from "./Ingredient";
 
 function IngredientAdder({ text, maxCount, ing}) {
   const [ingredients, setIngredients] = useState(ing);

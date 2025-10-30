@@ -20,19 +20,15 @@ public abstract class Usuario {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false)
     private String apellido;
 
     @Column(nullable = false)
     private String contrasenia;
 
-    @Column(nullable = false)
     private long telefono;
 
-    @Column(nullable = false)
     private LocalDate fechaNac;
 
 }

@@ -8,7 +8,9 @@ import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
 import uy.um.edu.pizzumandburgum.entities.Producto;
+import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.HamburguesaNoEncontradaException;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
+import uy.um.edu.pizzumandburgum.repository.HamburguesaRepository;
 import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
 
 @Component
@@ -16,10 +18,13 @@ public class HamburguesaProductoMapper {
 
     @Autowired
     private ProductoRepository productoRepository;
-    public HamburguesaProducto toEntity(HamburguesaProductoRequestDTO dto, Hamburguesa hamburguesa) {
+
+    @Autowired
+    private HamburguesaRepository hamburguesaRepository;
+
+    public HamburguesaProducto toEntity(HamburguesaProductoRequestDTO dto) {
         HamburguesaProducto hamburguesaProducto = new HamburguesaProducto();
         hamburguesaProducto.setProducto(productoRepository.findById(dto.getIdProducto()).orElseThrow(()->new ProductoNoExisteException()));
-        hamburguesaProducto.setHamburguesa(hamburguesa);
         hamburguesaProducto.setCantidad(dto.getCantidad());
         return hamburguesaProducto;
     }

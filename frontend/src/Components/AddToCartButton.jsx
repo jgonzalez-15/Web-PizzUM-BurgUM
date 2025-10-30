@@ -1,4 +1,3 @@
-import Button from "./Button";
 import { useCart } from "./context/CartItems";
 
 export default function AddToCartButton({item, isPrimary}){

@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.MedioDePagoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
+import uy.um.edu.pizzumandburgum.dto.update.MedioDePagoUpdateDTO;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.MedioDePago;
+import uy.um.edu.pizzumandburgum.exceptions.MedioDePago.MedioDePagoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.ClienteMapper;
 import uy.um.edu.pizzumandburgum.mapper.MedioDePagoMapper;
@@ -26,15 +28,9 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
 
 
     @Override
-    public MedioDePago obtenerMedioDePago(String email,Long numero) {
-        Cliente cliente = clienteRepository.findById(email).orElseThrow(() -> new ClienteNoExisteException());
-
-        for (MedioDePago medioDePago : cliente.getMediosDePago()){
-            if (medioDePago.getNumero().equals(numero)){
-                return medioDePago;
-            }
-        }
-        return null;
+    public MedioDePago obtenerMedioDePago(String email, Long id) {
+        return medioDePagoRepository.findByClienteEmailAndId(email,id )
+                .orElseThrow(() -> new MedioDePagoNoExisteException());
     }
 
     @Override
@@ -51,5 +47,20 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
         medioDePagoRepository.save(medioDePago);
 
         return medioDePagoMapper.toResponseDTO(medioDePago);
+    }
+
+    @Override
+    public MedioDePagoDTO editarMDP(String email, MedioDePagoUpdateDTO dto) {
+        MedioDePago mdp = new MedioDePago();
+        if (dto.getDireccion() != null) {
+            mdp.setDireccion(dto.getDireccion());
+        }
+        if (dto.getVencimiento() != null) {
+            mdp.setVencimiento(dto.getVencimiento());
+        }
+        if (dto.getNumero() != null) {
+            mdp.setNumero(dto.getNumero());
+        }
+        return medioDePagoMapper.toResponseDTO(mdp);
     }
 }

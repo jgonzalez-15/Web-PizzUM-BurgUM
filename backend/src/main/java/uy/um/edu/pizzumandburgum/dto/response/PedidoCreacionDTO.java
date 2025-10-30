@@ -12,8 +12,7 @@ import uy.um.edu.pizzumandburgum.entities.Pedido;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PedidoCreacionDTO {
-    private Creacion creacion;
-    private Pedido pedido;
+    private CreacionResponseDTO creacion;
+    private PedidoResponseDTO pedido;
     private int cantidad;
-
 }
