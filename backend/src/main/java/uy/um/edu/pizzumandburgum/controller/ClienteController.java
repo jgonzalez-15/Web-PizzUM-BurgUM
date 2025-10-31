@@ -53,8 +53,8 @@ public class ClienteController {
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
     @GetMapping("/{idCliente}/historial-pedidos")
-    public ResponseEntity<List<Pedido>> listarHistorialPedidos(@PathVariable("idCliente") String idCliente) {
-        List<Pedido> historial = clienteService.historialPedido(idCliente);
+    public ResponseEntity<List<PedidoResponseDTO>> listarHistorialPedidos(@PathVariable("idCliente") String idCliente) {
+        List<PedidoResponseDTO> historial = clienteService.historialPedido(idCliente);
         return ResponseEntity.ok(historial);
     }
     @PutMapping("/{email}/perfil")
