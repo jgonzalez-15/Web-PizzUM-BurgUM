@@ -2,6 +2,7 @@ package uy.um.edu.pizzumandburgum.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uy.um.edu.pizzumandburgum.dto.request.MedioDePagoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoBebidaResponseDTO;
@@ -28,13 +29,11 @@ public class MedioDePagoMapper {
     @Autowired
     private PedidoMapper pedidoMapper;
 
-    public MedioDePago toEntity(MedioDePagoDTO dto) {
+    public MedioDePago toEntity(MedioDePagoRequestDTO dto) {
         MedioDePago medioDePago = new MedioDePago();
         medioDePago.setDireccion(dto.getDireccion());
         medioDePago.setNumero(dto.getNumero());
         medioDePago.setVencimiento(dto.getVencimiento());
-        Cliente cliente = clienteRepository.findById(dto.getCliente().getEmail()).orElseThrow(()-> new ClienteNoExisteException());
-        medioDePago.setCliente(cliente);
         return medioDePago;
     }
 
@@ -47,5 +46,13 @@ public class MedioDePagoMapper {
             pedidos.add(pedidoResponseDTO);
         }
         return new MedioDePagoDTO(medioDePago.getNumero(), medioDePago.getVencimiento(), medioDePago.getDireccion(), clienteResponseDTO,pedidos);
+    }
+
+    public MedioDePago toEntityDTO(MedioDePagoDTO dto) {
+        MedioDePago medioDePago = new MedioDePago();
+        medioDePago.setDireccion(dto.getDireccion());
+        medioDePago.setNumero(dto.getNumero());
+        medioDePago.setVencimiento(dto.getVencimiento());
+        return medioDePago;
     }
 }

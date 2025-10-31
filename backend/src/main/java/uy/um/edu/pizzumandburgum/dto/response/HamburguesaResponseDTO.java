@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uy.um.edu.pizzumandburgum.dto.request.HamburguesaProductoRequestDTO;
-import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
-import uy.um.edu.pizzumandburgum.entities.Producto;
 
 import java.util.List;
 

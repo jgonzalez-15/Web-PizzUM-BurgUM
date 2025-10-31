@@ -13,19 +13,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/producto")
-@CrossOrigin(origins = "http://localhost:5173") // para permitir peticiones desde React
+@CrossOrigin(origins = "http://localhost:5173")
 public class ProductoController {
     @Autowired
     private ProductoService productoService;
 
     @PostMapping("/crearProducto")
-    public ResponseEntity<ProductoResponseDTO> crearProducto(@RequestBody ProductoRequestDTO dto,
-                                                            HttpSession session) {
+    public ResponseEntity<ProductoResponseDTO> crearProducto(@RequestBody ProductoRequestDTO dto, HttpSession session) {
         String rol = (String) session.getAttribute("rol");
 
         if (rol == null || !rol.equals("ADMIN")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
 
         ProductoResponseDTO nuevo = productoService.agregarProducto(dto);
@@ -37,8 +35,7 @@ public class ProductoController {
         String rol = (String) session.getAttribute("rol");
 
         if (rol == null || !rol.equals("ADMIN")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
         productoService.eliminarProducto(idProducto);
         return ResponseEntity.noContent().build();
@@ -46,13 +43,11 @@ public class ProductoController {
 
 
     @PutMapping("/modificar")
-    public ResponseEntity<Void> modificarProducto(
-            @RequestBody ProductoRequestDTO productoviejoDTO, @RequestBody ProductoRequestDTO productonuevoDTO, HttpSession session ) {
+    public ResponseEntity<Void> modificarProducto(@RequestBody ProductoRequestDTO productoviejoDTO, @RequestBody ProductoRequestDTO productonuevoDTO, HttpSession session ) {
         String rol = (String) session.getAttribute("rol");
 
         if (rol == null || !rol.equals("ADMIN")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
         productoService.modificarProducto(productoviejoDTO,productonuevoDTO);
         return ResponseEntity.ok().build();

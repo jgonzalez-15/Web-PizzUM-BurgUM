@@ -1,34 +1,24 @@
-package uy.um.edu.pizzumandburgum.entities;
+package uy.um.edu.pizzumandburgum.dto.request;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public abstract class Usuario {
-
-    @Id
-    @Column(nullable = false, unique = true)
+@NoArgsConstructor
+public class ClienteRegistrarRequestDTO {
     private String email;
-
     private String nombre;
-
     private String apellido;
-
-    @Column(nullable = false)
     private String contrasenia;
-
     private Long telefono;
-
     private LocalDate fechaNac;
-
+    private List<DomicilioRequestDTO> domicilios;
+    private List<MedioDePagoRequestDTO>  mediosDePagos;
 }

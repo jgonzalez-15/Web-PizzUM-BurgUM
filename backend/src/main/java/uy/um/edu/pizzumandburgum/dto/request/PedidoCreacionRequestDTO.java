@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uy.um.edu.pizzumandburgum.dto.response.CreacionResponseDTO;
-import uy.um.edu.pizzumandburgum.entities.Creacion;
 
 @Getter
 @Setter

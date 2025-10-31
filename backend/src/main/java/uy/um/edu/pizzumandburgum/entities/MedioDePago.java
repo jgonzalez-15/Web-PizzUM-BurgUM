@@ -24,7 +24,7 @@ public class MedioDePago {
     Long numero;
     LocalDate vencimiento;
     String direccion;
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn (name = "cliente_id")
     private Cliente cliente;
 
