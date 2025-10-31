@@ -1,6 +1,7 @@
 package uy.um.edu.pizzumandburgum.service.impl;
 
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.*;
@@ -71,6 +72,7 @@ public class ClienteServiceImpl implements ClienteService {
     private ClienteDomicilioRepository clienteDomicilioRepository;
 
     @Override
+    @Transactional
     public ClienteResponseDTO registrarCliente(ClienteRegistrarRequestDTO dto) {
         if (clienteRepository.existsByEmail(dto.getEmail())) {
             throw new EmailYaRegistradoException();
@@ -80,35 +82,31 @@ public class ClienteServiceImpl implements ClienteService {
             throw new ContraseniaInvalidaException();
         }
 
-        Cliente nuevo = clienteRegistrarMapper.toEntity(dto);
+        Cliente nuevo = new Cliente();
+        nuevo.setEmail(dto.getEmail());
         nuevo.setContrasenia(dto.getContrasenia());
         nuevo.setApellido(dto.getApellido());
         nuevo.setNombre(dto.getNombre());
         nuevo.setTelefono(dto.getTelefono());
-        nuevo.setEmail(dto.getEmail());
+        nuevo.setFechaNac(dto.getFechaNac());
         Cliente guardado = clienteRepository.save(nuevo);
-        clienteRepository.flush();
-
 
         for (MedioDePagoRequestDTO medioDePagoRequestDTO : dto.getMediosDePagos()) {
             MedioDePago medioDePago = medioDePagoMapper.toEntity(medioDePagoRequestDTO);
-            medioDePago.setDireccion(medioDePagoRequestDTO.getDireccion());
-            medioDePago.setVencimiento(medioDePagoRequestDTO.getVencimiento());
-            medioDePago.setNumero(medioDePagoRequestDTO.getNumero());
             medioDePago.setCliente(guardado);
             medioDePagoRepository.save(medioDePago);
         }
 
         for (DomicilioRequestDTO domicilioRequestDTO : dto.getDomicilios()) {
             Domicilio domicilio = domicilioMapper.toEntity(domicilioRequestDTO);
-            domicilio.setDireccion(domicilioRequestDTO.getDireccion());
-            Domicilio domicilioGuardado = domicilioRepository.save(domicilio);
+            Domicilio domicilioGuardado = domicilioRepository.saveAndFlush(domicilio);
 
             ClienteDomicilio clienteDomicilio = new ClienteDomicilio();
             clienteDomicilio.setCliente(guardado);
             clienteDomicilio.setDomicilio(domicilioGuardado);
             clienteDomicilioRepository.save(clienteDomicilio);
         }
+
         guardado = clienteRepository.findById(guardado.getEmail()).orElseThrow();
         return clienteMapper.toResponseDTO(guardado);
     }

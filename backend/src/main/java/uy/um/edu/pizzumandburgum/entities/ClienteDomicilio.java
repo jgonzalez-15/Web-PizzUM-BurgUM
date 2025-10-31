@@ -17,10 +17,10 @@ public class ClienteDomicilio {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "idCliente",referencedColumnName = "email")
+    @JoinColumn(name = "id_cliente",referencedColumnName = "email")
     private Cliente cliente;
 
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "idDomicilio")
+    @JoinColumn(name = "id_domicilio")
     private Domicilio domicilio;
 }
