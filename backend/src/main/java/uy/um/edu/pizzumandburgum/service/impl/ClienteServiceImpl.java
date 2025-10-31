@@ -117,9 +117,14 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public List<Pedido> historialPedido(String email) {
+    public List<PedidoResponseDTO> historialPedido(String email) {
         Cliente cliente = clienteRepository.findById(email).orElseThrow(() -> new ClienteNoExisteException());
-        return cliente.getPedidos();
+        List<Pedido> pedidos = cliente.getPedidos();
+        List<PedidoResponseDTO> historialPedidos = new ArrayList<>();
+        for (Pedido pedido : pedidos) {
+            historialPedidos.add(pedidoMapper.toResponseDTO(pedido));
+        }
+        return historialPedidos;
     }
 
     @Override
