@@ -15,7 +15,7 @@ function NewOrder({}){
     const {items} = useCart()
     const {removeItem} = useCart()
 
-    const total = items.reduce((sum, item) => sum + item.price, 0);
+    const total = items.reduce((sum, item) => sum + item.precio, 0);
 
     return(
         <>
@@ -35,7 +35,7 @@ function NewOrder({}){
                                     </div>
                                 ):
                                 (items.map((item) => (
-                                    <OrderItem key={item.id} name={item.name} desc={item.description} remove={() => removeItem(item.id)}/>
+                                    <OrderItem key={item.id} name={item.nombre} remove={() => removeItem(item.id)}/>
                                 )))
                             }
                         </div>
@@ -50,7 +50,7 @@ function NewOrder({}){
                                     items.length == 0  ?
                                     <h1 className="flex items-center justify-center">No hay articulos en el carrito</h1>:
                                     (items.map((item) => (
-                                        <OrderResumeItem name={item.name} price={item.price}/>
+                                        <OrderResumeItem name={item.nombre} price={item.precio}/>
                                     )))
                                 }
                             </div>

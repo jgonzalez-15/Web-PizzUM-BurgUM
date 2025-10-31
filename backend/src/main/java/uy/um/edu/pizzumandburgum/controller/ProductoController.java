@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/producto")
-@CrossOrigin(origins = "http://localhost:5173") // para permitir peticiones desde React
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true") // para permitir peticiones desde React
 public class ProductoController {
     @Autowired
     private ProductoService productoService;

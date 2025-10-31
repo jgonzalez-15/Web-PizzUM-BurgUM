@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { SessionContext } from "../Components/context/SessionContext";
 
 import SmallButton from "../Components/SmallButton"
 import Footer from "../Components/Footer"
@@ -12,11 +13,13 @@ function Login(){
     const [email, setEmail] = useState("");
     const [contrasenia, setContrasenia] = useState("");
     const navigate = useNavigate();
+    const { setSessionType, setSessionInfo } = useContext(SessionContext)
 
+    {/* Funcion de iniciar sesion */}
     const handleLogin = async (e) => {
     e.preventDefault();
-
     try {
+      {/* Intentar iniciar sesion como cliente */}
       const response = await fetch("http://localhost:8080/api/cliente/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -25,21 +28,32 @@ function Login(){
       });
 
       if (response.ok) {
+        {/* Si igresa actualizar info de la sesion y volver a la homepage */}
         const data = await response.json();
-        navigate("/homepage");
+        setSessionType("Client")
+        setSessionInfo(data)
+        navigate("/");
       } else {
         try{
+
+          {/* Si no ingresa como cliente intentar como admin */}
           const response = await fetch("http://localhost:8080/api/administrador/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify( email , contrasenia ),
+          body: JSON.stringify( { email , contrasenia } ),
           credentials: "include",
         });
+
           if (response.ok) {
+          {/* Si igresa alctualizar info de sesion y navegar a admin */}
           const data = await response.json();
-          navigate("/homepage");
+          setSessionType("Admin")
+          setSessionInfo(data)
+          navigate("/");
           } else {
-          alert("Credenciales inválidas");
+
+          {/* Si no ingresa alertar */}
+          alert("Usuario o contraseña incorrectos");
           }
         } catch (error) {
           console.error("Error al iniciar sesión:", error);
@@ -56,7 +70,7 @@ function Login(){
 
                 {/* Container */}
                 <div className="flex flex-col justify-center align-middle items-center bg-gray-100 w-64 h-96 shadow-2xl rounded-2xl">
-                    <h1 className="font-bold text-center md:text-2xl 2xl:text-5xl">Ingresar</h1>
+                    <h1 className="font-bold text-center md:text-2xl">Ingresar</h1>
 
                     {/* Formulario */}
                     <form action="" className="flex flex-col justify-center m-8 mb-2" onSubmit={handleLogin}>
@@ -78,8 +92,8 @@ function Login(){
                         {/* Botones */}
                         <div className="flex flex-row justify-center mt-4">
                             <SmallButton text='Cancelar' isPrimary={false} route="/"/>
-                            <button type="submit" className={`transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base 2xl:text-xl text-center max-w-64 bg-orange-400 text-white`}>
-                                <h2 className="m-2 2xl:m-3">
+                            <button type="submit" className={`transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base text-center max-w-64 bg-orange-400 text-white`}>
+                                <h2 className="m-2">
                                     Ingresar
                                 </h2>
                             </button>

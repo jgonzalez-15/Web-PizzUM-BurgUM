@@ -12,7 +12,7 @@ public interface ClienteService {
     ClienteResponseDTO registrarCliente(ClienteRequestDTO dto);
     ClienteResponseDTO login(String email, String password);
     ClienteResponseDTO editarPerfil (String email, ClienteUpdateDTO dto);
-    List<Pedido> historialPedido(String email);
+    List<PedidoResponseDTO> historialPedido(String email);
     List<ClienteResponseDTO> listarClientes();
     HamburguesaResponseDTO asociarHamburguesa(String emailCliente, Long idHamburguesa);
     List<CreacionResponseDTO> mostrarCreaciones(String email);

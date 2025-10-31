@@ -96,6 +96,7 @@ public class PedidoServiceImpl implements PedidoService {
         pedido = pedidoRepository.save(pedido);
 
 
+
         float precioTotal = 0f;
 
         if (dto.getCreaciones() != null && !dto.getCreaciones().isEmpty()) {
@@ -134,8 +135,10 @@ public class PedidoServiceImpl implements PedidoService {
 
         pedido.setPrecio(precioTotal);
         pedido = pedidoRepository.save(pedido);
+        cliente.getPedidos().add(pedido);
 
-        return pedidoMapper.toResponseDTO(pedido);}
+        return pedidoMapper.toResponseDTO(pedido);
+    }
 
     @Override
     public void eliminarPedido(Long idPedido) {
