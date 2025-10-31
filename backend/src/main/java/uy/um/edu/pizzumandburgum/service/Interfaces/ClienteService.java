@@ -1,5 +1,6 @@
 package uy.um.edu.pizzumandburgum.service.Interfaces;
 
+import uy.um.edu.pizzumandburgum.dto.request.ClienteRegistrarRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.*;
@@ -9,7 +10,7 @@ import uy.um.edu.pizzumandburgum.entities.Pedido;
 import java.util.List;
 
 public interface ClienteService {
-    ClienteResponseDTO registrarCliente(ClienteRequestDTO dto);
+    ClienteResponseDTO registrarCliente(ClienteRegistrarRequestDTO dto);
     ClienteResponseDTO login(String email, String password);
     ClienteResponseDTO editarPerfil (String email, ClienteUpdateDTO dto);
     List<PedidoResponseDTO> historialPedido(String email);
@@ -18,5 +19,5 @@ public interface ClienteService {
     List<CreacionResponseDTO> mostrarCreaciones(String email);
     List<PedidoResponseDTO> obtenerPedidosPorCliente(String email);
     PizzaResponseDTO asociarPizza(String email, Long idPizza);
-
+    List<DomicilioResponseDTO> mostrarDomicilios(String idCliente);
 }
