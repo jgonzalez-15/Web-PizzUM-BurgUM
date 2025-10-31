@@ -22,8 +22,7 @@ public class DomicilioController {
         String rol = (String) sesion.getAttribute("rol");
 
         if (rol == null || !rol.equals("CLIENTE")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
 
         DomicilioResponseDTO response = domicilioService.crearDomicilio(request);

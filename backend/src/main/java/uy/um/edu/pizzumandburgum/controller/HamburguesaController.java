@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.HamburguesaRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.request.ProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ProductoResponseDTO;
 import uy.um.edu.pizzumandburgum.mapper.HamburguesaMapper;
@@ -15,13 +14,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/hamburguesa")
-@CrossOrigin(origins = "http://localhost:5173") // para permitir peticiones desde React
+@CrossOrigin(origins = "http://localhost:5173")
 public class HamburguesaController {
     @Autowired
     private HamburguesaService hamburguesaService;
-
-    @Autowired
-    private HamburguesaMapper hamburguesaMapper;
 
     @PostMapping("/crearHamburguesa")
     public ResponseEntity<HamburguesaResponseDTO> crearHamburguesa(@RequestBody HamburguesaRequestDTO dto) {

@@ -24,17 +24,15 @@ public class FavoritoController {
         String rol = (String) sesion.getAttribute("rol");
 
         if (rol == null || !rol.equals("CLIENTE")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
+
         List<FavoritoResponseDTO> favoritos = favoritoService.mostrarCreacionesFavoritas(idCliente);
         return ResponseEntity.ok(favoritos);
     }
 
     @PostMapping("/agregar")
-    public ResponseEntity<FavoritoResponseDTO> agregarFavorito(
-            @RequestBody FavoritoRequestDTO dto,
-            HttpSession sesion) {
+    public ResponseEntity<FavoritoResponseDTO> agregarFavorito(@RequestBody FavoritoRequestDTO dto, HttpSession sesion) {
 
         String rol = (String) sesion.getAttribute("rol");
 
@@ -47,9 +45,7 @@ public class FavoritoController {
     }
 
     @DeleteMapping("/{id}/eliminar")
-    public ResponseEntity<Void> eliminarFavorito(
-            @PathVariable Long id,
-            HttpSession sesion) {
+    public ResponseEntity<Void> eliminarFavorito(@PathVariable Long id, HttpSession sesion) {
 
         String rol = (String) sesion.getAttribute("rol");
 
