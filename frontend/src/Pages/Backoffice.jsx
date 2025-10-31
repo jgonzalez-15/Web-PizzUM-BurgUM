@@ -9,7 +9,9 @@ function Backoffice() {
   const [showModal, setShowModal] = useState(false);
   const [newProduct, setNewProduct] = useState({ nombre: "", precio: "", tipo: "Masa", sinTacc: false });
   const [products, setProducts] = useState([]);
-  const [adminList, setAdminList] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState([])
+  const [adminList, setAdminList] = useState([]);
+  const [filterType, setFilterType] = useState("Todos")
 
   const [newAdmin, setNewAdmin] = useState({ user: "", password: "" });
   const [showAdminModal, setShowAdminModal] = useState(false);
@@ -76,6 +78,7 @@ function Backoffice() {
       if (response.ok) {
         {/* Si crea cerrar el modal */}
         setShowAdminModal(false)
+        getAdmins()
       } else {
         {/* Si no mostrar una alerta */}
         alert("Los datos son incorrectos o el administrador ya existe")
@@ -107,6 +110,40 @@ function Backoffice() {
   getProducts();
   }, []);
 
+  function filter() {
+    if (filterType !== "Todos") {
+      setFilteredProducts(products.filter(p => p.tipo === filterType));
+    } else {
+      setFilteredProducts(products);
+    }
+  }
+
+  useEffect(() => {
+  filter();
+  }, [filterType, products]);
+
+  const getAdmins = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/administrador/listar", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAdminList(data);
+      } else {
+        alert("Ocurrió un error al obtener los administradores");
+      }
+    } catch (error) {
+      console.error("Error al obtener administradores:", error);
+    }
+  };
+
+  useEffect(() => {
+  getAdmins();
+  }, []);
+
   return (
     <>
       <AdminHeader />
@@ -133,15 +170,25 @@ function Backoffice() {
           {/* TAB: Productos */}
           {activeTab === "productos" && (
             <div className="flex flex-col gap-6 w-full max-w-3xl">
-              {products.map((p) => (
-                <AdminProductCard key={p.id} product={p} onEdit={editProduct} onRemove={removeProduct} />
-              ))}
               <button
                 onClick={() => setShowModal(true)}
                 className="bg-orange-400 text-white font-bold py-2 px-4 rounded-2xl hover:scale-105 transition-transform self-center"
               >
                 Agregar producto
               </button>
+              <select className="m-2" value={filterType} onChange={(e) =>  setFilterType(e.target.value)}>
+                <option value="Todos">Todos</option>
+                <option value="Masa">Masa para Pizza</option>
+                <option value="Salsa">Salsa para Pizza</option>
+                <option value="Topping">Topping para Pizza</option>
+                <option value="Pan">Pan para Hamburguesa</option>
+                <option value="Hamburguesa">Carne para Hamburguesa</option>
+                <option value="Salsa_Hamburguesa">Salsa para Hamburguesa</option>
+                <option value="Ingrediente">Ingrediente para Hamburguesa</option>
+              </select>
+              {filteredProducts.map((p) => (
+                <AdminProductCard key={p.id} product={p} onEdit={editProduct} onRemove={removeProduct} />
+              ))}
             </div>
           )}
 
@@ -174,6 +221,11 @@ function Backoffice() {
               >
                 Crear nuevo administrador
               </button>
+              <div>
+                {adminList.map((admin) => (
+                 <h1 className="font-bold text-center" key={admin.email}>{admin.email}</h1>
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -274,7 +326,7 @@ function Backoffice() {
             />
             <input
               type="text"
-              placeholder="Teléfono"
+              placeholder="Apellido"
               className="bg-gray-200 rounded-2xl mt-1 mb-4 p-2 w-full"
               value={newAdmin.apellido}
               onChange={(e) => setNewAdmin({ ...newAdmin, apellido: e.target.value })}

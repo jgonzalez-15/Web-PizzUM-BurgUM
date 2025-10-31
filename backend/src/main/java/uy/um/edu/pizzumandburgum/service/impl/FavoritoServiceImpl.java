@@ -48,11 +48,11 @@ public class FavoritoServiceImpl implements FavoritoService {
 
     @Override
     public FavoritoResponseDTO agregarFavorito(FavoritoRequestDTO dto) {
-        Cliente cliente = clienteRepository.findById(dto.getIdCliente()).orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        Cliente cliente = clienteRepository.findById(dto.getClienteId()).orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
         Creacion creacion = creacionRepository.findById(dto.getIdCreacion()).orElseThrow(() -> new RuntimeException("Creación no encontrada"));
 
-        boolean yaExiste = favoritoRepository.existsByCliente_EmailAndCreacion_Id(dto.getIdCliente(), dto.getIdCreacion());
+        boolean yaExiste = favoritoRepository.existsByCliente_EmailAndCreacion_Id(dto.getClienteId(), dto.getIdCreacion());
         if (yaExiste) {
             throw new RuntimeException("Este favorito ya existe");
         }

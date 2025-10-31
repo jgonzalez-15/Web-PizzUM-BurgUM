@@ -54,6 +54,6 @@ public class PizzaMapper {
                 ingredientesDTO.add(pizzaProductoMapper.toResponseDTO(pp));
             }
         }
-        return new PizzaResponseDTO(pizza.getPrecio(),pizza.getTamanio(),clienteDTO,ingredientesDTO);
+        return new PizzaResponseDTO(pizza.getId(), pizza.getPrecio(),pizza.getTamanio(),clienteDTO,ingredientesDTO);
     }
 }

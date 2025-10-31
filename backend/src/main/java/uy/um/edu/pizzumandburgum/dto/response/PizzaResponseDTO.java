@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PizzaResponseDTO {
+    private long idCreacion;
     private float precio;
     private long tamanio;
     private ClienteResponseDTO cliente;

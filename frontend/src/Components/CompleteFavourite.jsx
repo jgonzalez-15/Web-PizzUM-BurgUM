@@ -10,13 +10,13 @@ export default function CompleteFavourite({favourite}){
                 <h1>${favourite.price}</h1> 
             </div>
             <div className="flex flex-col justify-center h-24 w-24 md:h-48 md:w-48">
-                <Link to="/viewCreation" state={{creationId: favourite.id}} className={`h-full flex justify-center items-center transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-sm font-bold m-1 text-sm md:text-base 2xl:text-xl text-center max-w-64 bg-gray-300 text-black`}>
-                    <h2 className="m-1 2xl:m-3">
+                <Link to="/viewCreation" state={{creationId: favourite.id}} className={`h-full flex justify-center items-center transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-sm font-bold m-1 text-sm md:text-base text-center max-w-64 bg-gray-300 text-black`}>
+                    <h2 className="m-1">
                         Detalles
                     </h2>
                 </Link>
-                <Link className={`h-full flex justify-center items-center transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-sm font-bold m-1 text-sm md:text-base 2xl:text-xl text-center max-w-64 bg-orange-400 text-white`}>
-                    <h2 className="m-1 2xl:m-3">
+                <Link className={`h-full flex justify-center items-center transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-sm font-bold m-1 text-sm md:text-base text-center max-w-64 bg-orange-400 text-white`}>
+                    <h2 className="m-1">
                         Agregar al carrito
                     </h2>
                 </Link>

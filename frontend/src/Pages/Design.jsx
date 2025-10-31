@@ -6,7 +6,6 @@ import MainHeader from "../Components/MainHeader";
 import IngredientAdder from "../Components/IngredientAdder";
 import Footer from "../Components/Footer";
 import AddToCartButton from "../Components/AddToCartButton";
-import SmallButton from "../Components/SmallButton";
 
 function Design({ type }) {
   useEffect(() => {
@@ -20,6 +19,7 @@ function Design({ type }) {
   const [cantCarnes, setCantCarnes] = useState(1);
   const [tamanio, setTamanio] = useState(1);
   const [creacion, setCreacion] = useState();
+  const [nombre, setNombre] = useState("Nueva Creacion")
   const { sessionInfo } = useContext(SessionContext);
   const clienteId = sessionInfo?.email;
 
@@ -70,7 +70,8 @@ function Design({ type }) {
     const payload = {
       clienteId,
       ingredientes: ingredientesFinales,
-      esFavorita: favorita
+      esFavorita: favorita,
+      nombre: nombre
     };
 
     if (type === "Pizza") {
@@ -92,7 +93,11 @@ function Design({ type }) {
 
       if (response.ok) {
         const data = await response.json();
+        data.nombre = nombre
         setCreacion(data);
+        if (favorita){
+          addFavourite(data.idCreacion)
+        }
         return data;
       } else {
         alert("Los datos son incorrectos");
@@ -101,6 +106,25 @@ function Design({ type }) {
       console.error("Error al crear la creación:", error);
     }
   };
+
+  const addFavourite = async (idCreacion) => {
+    try{
+      const response = await fetch("http://localhost:8080/api/favorito/agregar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({clienteId, nombre, idCreacion}),
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        alert("Creación agregada a favoritos")
+      } else {
+        alert("Debes seleccionar al menos un ingrediente de los tipos Masa/Pan y Salsa/Tipo de carne")
+      }
+    } catch (error){
+      console.error("Error al crear favorito:", error);
+    }
+  }
 
   let content;
   if (type === "Pizza") {
@@ -164,13 +188,22 @@ function Design({ type }) {
             {content}
           </div>
 
+          <div className="flex flex-col md:flex-row justify-center items-center m-8">
+            <h1>Nombra tu creación</h1>
+            <input type="text" className="bg-gray-100 rounded-sm p-2" value={nombre} placeholder="Nueva Creacion" 
+            onChange={(e) => {
+              setNombre(e.target.value);
+              setCreacion({ ...creacion, nombre: e.target.value });
+            }}
+            />
+          </div>
+
           <div className="flex flex-col md:flex-row justify-center items-center m-8 mb-16">
-            <button className={`transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base 2xl:text-xl text-center max-w-64 bg-gray-300 text-black`}
+            <button className={`transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base text-center max-w-64 bg-gray-300 text-black`}
             onClick={async () => {
-                const nueva = await handleNewCreation(true);
-                if (nueva) alert("Creación agregada a favoritos");
+                await handleNewCreation(true);
               }}>
-                <h2 className="m-2 2xl:m-3">
+                <h2 className="m-2">
                     Agregar a favoritos
                 </h2>
             </button>

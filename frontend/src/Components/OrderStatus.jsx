@@ -33,14 +33,14 @@ export default function OrderStatus({pedido}){
                     {pedido.estado in ["Entregado"] ? (<h1 className="font-bold text-orange-400">Recibido</h1>):(<></>)}
                 </div>
                 {pedido.estado == "En Cola" && (
-                <button className={`z-0 h-12 transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base 2xl:text-xl text-center bg-red-600 text-white`}>
-                    <h2 className="m-2 2xl:m-3">
+                <button className={`z-0 h-12 transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base text-center bg-red-600 text-white`}>
+                    <h2 className="m-2">
                         Cancelar
                     </h2>
                 </button>)}
                 {pedido.estado != "En Cola" && (
-                <button className={`z-0 h-12 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base 2xl:text-xl text-center bg-gray-300`}>
-                    <h2 className="m-2 2xl:m-3">
+                <button className={`z-0 h-12 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base text-center bg-gray-300`}>
+                    <h2 className="m-2">
                         Cancelar
                     </h2>
                 </button>)}

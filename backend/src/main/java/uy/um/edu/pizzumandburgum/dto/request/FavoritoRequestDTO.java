@@ -11,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FavoritoRequestDTO {
     private String nombre;
-    private String idCliente;
+    private String clienteId;
     private Long idCreacion;
 }
