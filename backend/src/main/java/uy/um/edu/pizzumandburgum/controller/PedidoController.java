@@ -12,6 +12,8 @@ import uy.um.edu.pizzumandburgum.exceptions.Pedido.PedidoNoEncontradoException;
 import uy.um.edu.pizzumandburgum.repository.PedidoRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PedidoService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/pedido")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -63,5 +65,16 @@ public class PedidoController {
         }
         pedidoService.cambiarEstado(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/enCurso")
+    public ResponseEntity<List<PedidoResponseDTO>> pedidosEnCurso(HttpSession sesion){
+        String rol = (String) sesion.getAttribute("rol");
+
+        if (rol == null || !rol.equals("ADMIN")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+        List<PedidoResponseDTO> pedidoResponseDTOS = pedidoService.pedidosEnCurso();
+        return ResponseEntity.ok(pedidoResponseDTOS);
     }
 }

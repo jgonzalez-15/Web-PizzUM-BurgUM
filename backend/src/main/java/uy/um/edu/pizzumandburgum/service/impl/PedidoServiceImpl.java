@@ -197,4 +197,20 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setEstado(nuevoEstado);
         pedidoRepository.save(pedido);
     }
+
+    @Override
+    public List<PedidoResponseDTO> pedidosEnCurso() {
+        List<Pedido> pedidos = pedidoRepository.findAll();
+        List<Pedido> convertir = new ArrayList<>();
+        List<PedidoResponseDTO> pedidoResponseDTOS = new ArrayList<>();
+        for (Pedido pedido: pedidos){
+            if (!pedido.getEstado().equals("Entregado")){
+                convertir.add(pedido);
+            }
+        }
+        for (Pedido pedido: convertir){
+            pedidoResponseDTOS.add(pedidoMapper.toResponseDTO(pedido));
+        }
+        return pedidoResponseDTOS;
+    }
 }

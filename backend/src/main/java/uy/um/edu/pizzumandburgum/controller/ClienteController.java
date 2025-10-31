@@ -70,6 +70,13 @@ public class ClienteController {
         return ResponseEntity.ok(creaciones);
     }
 
+    @GetMapping("/{idCliente}/domicilios")
+    public ResponseEntity<List<DomicilioResponseDTO>> mostrarDomicilios(@PathVariable("idCliente")String idCliente){
+        List<DomicilioResponseDTO> domicilioResponseDTOS = clienteService.mostrarDomicilios(idCliente);
+        return ResponseEntity.ok(domicilioResponseDTOS);
+    }
+
+
     @PostMapping("/asociarHamburguesa")
     public ResponseEntity<HamburguesaResponseDTO> asociarHamburguesa(@RequestBody String email, @RequestBody Long idHamburguesa) {
         HamburguesaResponseDTO response = clienteService.asociarHamburguesa(email, idHamburguesa);

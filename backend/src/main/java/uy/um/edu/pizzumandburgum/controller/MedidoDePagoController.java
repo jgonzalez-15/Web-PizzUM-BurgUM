@@ -17,14 +17,14 @@ public class MedidoDePagoController {
     @Autowired
     private MedioDePagoService medioDePagoService;
 
-    @PostMapping("/añadir")
-    public ResponseEntity<MedioDePagoDTO> aniadirMedioDePago(@RequestBody MedioDePagoRequestDTO request, @RequestBody String idCliente, HttpSession sesion) {
+    @PostMapping("/{idCliente}/añadir")
+    public ResponseEntity<MedioDePagoDTO> aniadirMedioDePago(@RequestBody MedioDePagoRequestDTO request,@PathVariable String idCliente, HttpSession sesion) {
         String rol = (String) sesion.getAttribute("rol");
 
         if (rol == null || !rol.equals("CLIENTE")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
-        MedioDePagoDTO response = medioDePagoService.aniadirMedioDePago(request, idCliente);
+        MedioDePagoDTO response = medioDePagoService.aniadirMedioDePago(request,idCliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

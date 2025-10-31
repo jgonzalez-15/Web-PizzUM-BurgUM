@@ -220,6 +220,18 @@ public class ClienteServiceImpl implements ClienteService {
         clienteRepository.save(cliente);
         return pizzaMapper.toResponseDTO(pizza);
     }
+
+    @Override
+    public List<DomicilioResponseDTO> mostrarDomicilios(String idCliente) {
+        Cliente cliente = clienteRepository.findByEmail(idCliente).orElseThrow(()-> new ClienteNoExisteException());
+        List<DomicilioResponseDTO>domicilios = new ArrayList<>();
+        for (ClienteDomicilio cd : cliente.getDomicilios()){
+            Domicilio domicilio = domicilioRepository.findById(cd.getDomicilio().getId()).orElseThrow(()-> new DomicilioNoExisteException());
+            DomicilioResponseDTO dto = domicilioMapper.toResponseDTO(domicilio);
+            domicilios.add(dto);
+        }
+        return domicilios;
+    }
 }
 
 
