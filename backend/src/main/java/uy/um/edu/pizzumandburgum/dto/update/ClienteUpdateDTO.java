@@ -1,6 +1,5 @@
 package uy.um.edu.pizzumandburgum.dto.update;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
