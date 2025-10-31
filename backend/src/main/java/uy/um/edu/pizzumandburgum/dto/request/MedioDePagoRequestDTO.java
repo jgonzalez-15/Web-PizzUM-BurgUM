@@ -16,5 +16,5 @@ public class MedioDePagoRequestDTO {
     Long numero;
     LocalDate vencimiento;
     String direccion;
-    ClienteResponseDTO Cliente;
+
 }

@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import uy.um.edu.pizzumandburgum.dto.request.ClienteRegistrarRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.*;
 import uy.um.edu.pizzumandburgum.dto.update.ClienteUpdateDTO;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
+import uy.um.edu.pizzumandburgum.mapper.ClienteRegistrarMapper;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping("/registrar")
-    public ResponseEntity<ClienteResponseDTO> registrar(@Validated @RequestBody ClienteRequestDTO dto,HttpSession session) {
+    public ResponseEntity<ClienteResponseDTO> registrar(@Validated @RequestBody ClienteRegistrarRequestDTO dto, HttpSession session) {
         ClienteResponseDTO cliente = clienteService.registrarCliente(dto);
 
         session.setAttribute("email", cliente.getEmail());

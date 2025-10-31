@@ -34,13 +34,13 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
     }
 
     @Override
-    public MedioDePagoDTO aniadirMedioDePago(MedioDePagoRequestDTO dto){
+    public MedioDePagoDTO aniadirMedioDePago(MedioDePagoRequestDTO dto, String idCliente){
         MedioDePago medioDePago = new MedioDePago();
         medioDePago.setNumero(dto.getNumero());
         medioDePago.setVencimiento(dto.getVencimiento());
         medioDePago.setDireccion(dto.getDireccion());
 
-        Cliente cliente = clienteRepository.findById(dto.getCliente().getEmail()).orElseThrow(()-> new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(()-> new ClienteNoExisteException());
         cliente.getMediosDePago().add(medioDePago);
         medioDePago.setCliente(cliente);
 

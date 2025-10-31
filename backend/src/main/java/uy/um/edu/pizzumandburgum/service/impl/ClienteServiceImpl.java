@@ -3,8 +3,7 @@ package uy.um.edu.pizzumandburgum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.request.*;
 import uy.um.edu.pizzumandburgum.dto.response.*;
 import uy.um.edu.pizzumandburgum.dto.update.ClienteUpdateDTO;
 import uy.um.edu.pizzumandburgum.entities.*;
@@ -20,6 +19,7 @@ import uy.um.edu.pizzumandburgum.exceptions.Usuario.UsuarioNoEncontradoException
 import uy.um.edu.pizzumandburgum.mapper.*;
 import uy.um.edu.pizzumandburgum.repository.*;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
+import uy.um.edu.pizzumandburgum.service.Interfaces.MedioDePagoService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PedidoService;
 
 import java.util.ArrayList;
@@ -59,8 +59,19 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
     private  PizzaMapper pizzaMapper;
+    @Autowired
+    private ClienteRegistrarMapper clienteRegistrarMapper;
+    @Autowired
+    private MedioDePagoService medioDePagoService;
+    @Autowired
+    private MedioDePagoMapper medioDePagoMapper;
+    @Autowired
+    private DomicilioMapper domicilioMapper;
+    @Autowired
+    private ClienteDomicilioRepository clienteDomicilioRepository;
+
     @Override
-    public ClienteResponseDTO registrarCliente(ClienteRequestDTO dto) {
+    public ClienteResponseDTO registrarCliente(ClienteRegistrarRequestDTO dto) {
         if (clienteRepository.existsByEmail(dto.getEmail())) {
             throw new EmailYaRegistradoException();
         }
@@ -69,10 +80,36 @@ public class ClienteServiceImpl implements ClienteService {
             throw new ContraseniaInvalidaException();
         }
 
-        Cliente nuevo = clienteMapper.toEntity(dto);
-
+        Cliente nuevo = clienteRegistrarMapper.toEntity(dto);
+        nuevo.setContrasenia(dto.getContrasenia());
+        nuevo.setApellido(dto.getApellido());
+        nuevo.setNombre(dto.getNombre());
+        nuevo.setTelefono(dto.getTelefono());
+        nuevo.setEmail(dto.getEmail());
         Cliente guardado = clienteRepository.save(nuevo);
+        clienteRepository.flush();
 
+
+        for (MedioDePagoRequestDTO medioDePagoRequestDTO : dto.getMediosDePagos()) {
+            MedioDePago medioDePago = medioDePagoMapper.toEntity(medioDePagoRequestDTO);
+            medioDePago.setDireccion(medioDePagoRequestDTO.getDireccion());
+            medioDePago.setVencimiento(medioDePagoRequestDTO.getVencimiento());
+            medioDePago.setNumero(medioDePagoRequestDTO.getNumero());
+            medioDePago.setCliente(guardado);
+            medioDePagoRepository.save(medioDePago);
+        }
+
+        for (DomicilioRequestDTO domicilioRequestDTO : dto.getDomicilios()) {
+            Domicilio domicilio = domicilioMapper.toEntity(domicilioRequestDTO);
+            domicilio.setDireccion(domicilioRequestDTO.getDireccion());
+            Domicilio domicilioGuardado = domicilioRepository.save(domicilio);
+
+            ClienteDomicilio clienteDomicilio = new ClienteDomicilio();
+            clienteDomicilio.setCliente(guardado);
+            clienteDomicilio.setDomicilio(domicilioGuardado);
+            clienteDomicilioRepository.save(clienteDomicilio);
+        }
+        guardado = clienteRepository.findById(guardado.getEmail()).orElseThrow();
         return clienteMapper.toResponseDTO(guardado);
     }
 

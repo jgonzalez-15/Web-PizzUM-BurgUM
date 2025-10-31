@@ -16,11 +16,11 @@ public class ClienteDomicilio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "idCliente")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "idCliente",referencedColumnName = "email")
     private Cliente cliente;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "idDomicilio")
     private Domicilio domicilio;
 }

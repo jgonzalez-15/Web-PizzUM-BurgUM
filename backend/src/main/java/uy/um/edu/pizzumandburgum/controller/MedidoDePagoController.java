@@ -18,15 +18,17 @@ public class MedidoDePagoController {
     private MedioDePagoService medioDePagoService;
 
     @PostMapping("/añadir")
-    public ResponseEntity<MedioDePagoDTO> aniadirMedioDePago(@RequestBody MedioDePagoRequestDTO request, HttpSession sesion) {
+    public ResponseEntity<MedioDePagoDTO> aniadirMedioDePago(@RequestBody MedioDePagoRequestDTO request, @RequestBody String idCliente, HttpSession sesion) {
         String rol = (String) sesion.getAttribute("rol");
 
         if (rol == null || !rol.equals("CLIENTE")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
-        MedioDePagoDTO response = medioDePagoService.aniadirMedioDePago(request);
+        MedioDePagoDTO response = medioDePagoService.aniadirMedioDePago(request, idCliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+
 
     @PutMapping("/{email}/mdp")
     public ResponseEntity<MedioDePagoDTO> editarMDP(@PathVariable String email, @RequestBody MedioDePagoUpdateDTO dto) {
