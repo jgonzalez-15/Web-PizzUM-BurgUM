@@ -2,32 +2,23 @@ package uy.um.edu.pizzumandburgum.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.*;
 import uy.um.edu.pizzumandburgum.dto.update.ClienteUpdateDTO;
-import uy.um.edu.pizzumandburgum.entities.Creacion;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
-import uy.um.edu.pizzumandburgum.repository.PedidoRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
-import uy.um.edu.pizzumandburgum.service.Interfaces.FavoritoService;
-import uy.um.edu.pizzumandburgum.service.Interfaces.PedidoService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/cliente")
-@CrossOrigin(origins = "http://localhost:5173") // para permitir peticiones desde React
+@CrossOrigin(origins = "http://localhost:5173")
 public class ClienteController {
     @Autowired
     private ClienteService clienteService;
-    @Autowired
-    private FavoritoService favoritoService;
-
-
 
     @PostMapping("/registrar")
     public ResponseEntity<ClienteResponseDTO> registrar(@Validated @RequestBody ClienteRequestDTO dto,HttpSession session) {
@@ -35,16 +26,18 @@ public class ClienteController {
 
         session.setAttribute("email", cliente.getEmail());
         session.setAttribute("rol", "CLIENTE");
+
         return ResponseEntity.ok(cliente);
     }
 
     @PostMapping("/login")
     public ResponseEntity<ClienteResponseDTO>login(@Validated @RequestBody ClienteRequestDTO dto, HttpSession sesion){
         ClienteResponseDTO cliente = clienteService.login(dto.getEmail(), dto.getContrasenia());
-        // Guardar datos en la sesión
+
         sesion.setAttribute("email", cliente.getEmail());
         sesion.setAttribute("rol", "CLIENTE");
         sesion.setAttribute("nombre", cliente.getNombre());
+
         return ResponseEntity.ok(cliente);
     }
     @PostMapping("/cerrarSesion")
@@ -58,9 +51,7 @@ public class ClienteController {
         return ResponseEntity.ok(historial);
     }
     @PutMapping("/{email}/perfil")
-    public ResponseEntity<ClienteResponseDTO> editarPerfil(
-            @PathVariable String email,
-            @RequestBody ClienteUpdateDTO dto) {
+    public ResponseEntity<ClienteResponseDTO> editarPerfil(@PathVariable String email, @RequestBody ClienteUpdateDTO dto) {
         ClienteResponseDTO response = clienteService.editarPerfil(email, dto);
         return ResponseEntity.ok(response);
     }
@@ -78,26 +69,17 @@ public class ClienteController {
     }
 
     @PostMapping("/asociarHamburguesa")
-    public ResponseEntity<HamburguesaResponseDTO> asociarHamburguesa(
-            @RequestBody String email,
-            @RequestBody Long idHamburguesa) {
-
+    public ResponseEntity<HamburguesaResponseDTO> asociarHamburguesa(@RequestBody String email, @RequestBody Long idHamburguesa) {
         HamburguesaResponseDTO response = clienteService.asociarHamburguesa(email, idHamburguesa);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/asociarPizza")
-    public ResponseEntity<PizzaResponseDTO> asociarPizza(
-            @RequestBody String email,
-            @RequestBody Long idPizza) {
-
+    public ResponseEntity<PizzaResponseDTO> asociarPizza(@RequestBody String email, @RequestBody Long idPizza) {
         PizzaResponseDTO response = clienteService.asociarPizza(email, idPizza);
         return ResponseEntity.ok(response);
     }
 
-
-
-    // Obtener todos los pedidos de un cliente
     @GetMapping("/{clienteId}/pedidos")
     public ResponseEntity<List<PedidoResponseDTO>> obtenerPedidosPorCliente(@PathVariable String clienteId) {
         List<PedidoResponseDTO> pedidos = clienteService.obtenerPedidosPorCliente(clienteId);
