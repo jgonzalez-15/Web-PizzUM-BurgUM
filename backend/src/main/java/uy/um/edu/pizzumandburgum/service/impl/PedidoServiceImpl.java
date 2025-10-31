@@ -19,6 +19,7 @@ import uy.um.edu.pizzumandburgum.repository.*;
 import uy.um.edu.pizzumandburgum.service.Interfaces.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,7 +92,7 @@ public class PedidoServiceImpl implements PedidoService {
         pedido = pedidoRepository.save(pedido);
 
 
-        float precioTotal = 0f;
+        float precioTotal = 0;
 
         if (dto.getCreaciones() != null && !dto.getCreaciones().isEmpty()) {
             for (PedidoCreacionDTO creacionDto : dto.getCreaciones()) {
@@ -112,7 +113,6 @@ public class PedidoServiceImpl implements PedidoService {
 
         if (dto.getBebidas() != null && !dto.getBebidas().isEmpty()) {
             for (PedidoBebidaResponseDTO bebidaDto : dto.getBebidas()) {
-                // Agregar la bebida al pedido
                 pedidoBebidaService.agregarBebida(
                         pedido.getId(),
                         bebidaDto.getProducto().getIdProducto(),
