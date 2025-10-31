@@ -19,7 +19,7 @@ public class FavoritoController {
     @Autowired
     private FavoritoService favoritoService;
 
-    @GetMapping("/{idCliente}/favoritas")
+    @GetMapping("/{idCliente}/listar")
     public ResponseEntity<List<FavoritoResponseDTO>> mostrarCreacionesFavoritas(@PathVariable("idCliente")String idCliente, HttpSession sesion){
         String rol = (String) sesion.getAttribute("rol");
 
@@ -46,7 +46,7 @@ public class FavoritoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoFavorito);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/eliminar")
     public ResponseEntity<Void> eliminarFavorito(
             @PathVariable Long id,
             HttpSession sesion) {
