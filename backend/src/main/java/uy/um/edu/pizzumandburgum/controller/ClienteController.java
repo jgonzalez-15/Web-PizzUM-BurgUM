@@ -13,6 +13,7 @@ import uy.um.edu.pizzumandburgum.entities.Creacion;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
 import uy.um.edu.pizzumandburgum.repository.PedidoRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
+import uy.um.edu.pizzumandburgum.service.Interfaces.FavoritoService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PedidoService;
 
 import java.util.List;
@@ -23,6 +24,8 @@ import java.util.List;
 public class ClienteController {
     @Autowired
     private ClienteService clienteService;
+    @Autowired
+    private FavoritoService favoritoService;
 
 
 
@@ -66,19 +69,6 @@ public class ClienteController {
     public ResponseEntity<List<ClienteResponseDTO>> mostrarCliente() {
         List<ClienteResponseDTO> clientes = clienteService.listarClientes();
         return ResponseEntity.ok(clientes);
-    }
-
-
-    @GetMapping("/{idCliente}/favoritas")
-    public ResponseEntity<List<CreacionResponseDTO>> mostrarCreacionesFavoritas(@PathVariable("idCliente")String idCliente,HttpSession sesion){
-        String rol = (String) sesion.getAttribute("rol");
-
-        if (rol == null || !rol.equals("CLIENTE")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(null);
-        }
-        List<CreacionResponseDTO> creaciones = clienteService.mostrarCreacionesFavoritas(idCliente);
-        return ResponseEntity.ok(creaciones);
     }
 
     @GetMapping("/{idCliente}/creaciones")

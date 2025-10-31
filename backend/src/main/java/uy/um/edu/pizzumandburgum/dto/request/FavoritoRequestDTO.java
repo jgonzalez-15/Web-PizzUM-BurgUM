@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uy.um.edu.pizzumandburgum.dto.response.CreacionResponseDTO;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PedidoBebidaRequestDTO {
-    private ProductoRequestDTO Producto;
-    private int cantidad;
+public class FavoritoRequestDTO {
+    private String nombre;
+    private String idCliente;
+    private Long idCreacion;
 }

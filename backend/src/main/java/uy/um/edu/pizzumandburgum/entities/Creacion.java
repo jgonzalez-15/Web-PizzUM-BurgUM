@@ -21,14 +21,17 @@ public abstract class Creacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private float precio;
-    private boolean esFavorita;
 
     @OneToMany(mappedBy = "creacion", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<PedidoCreacion> creacionesPedido = new ArrayList<>();
 
+    @OneToMany(mappedBy = "creacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Favorito> favoritos = new ArrayList<>();
+
     @ManyToOne
-    @JoinColumn(name = "cliente_id") // nombre de la columna FK en la BD
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
 }

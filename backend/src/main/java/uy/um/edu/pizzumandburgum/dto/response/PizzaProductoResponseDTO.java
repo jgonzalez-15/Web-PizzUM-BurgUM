@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uy.um.edu.pizzumandburgum.dto.request.ProductoDTO;
+import uy.um.edu.pizzumandburgum.dto.request.ProductoRequestDTO;
 
 
 @Getter
@@ -14,5 +14,5 @@ import uy.um.edu.pizzumandburgum.dto.request.ProductoDTO;
 public class PizzaProductoResponseDTO {
     private int cantidad; // número de unidades de ese producto
     private Long pizza;
-    private ProductoDTO producto;
+    private ProductoResponseDTO producto;
 }
