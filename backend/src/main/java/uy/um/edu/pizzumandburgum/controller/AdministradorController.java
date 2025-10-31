@@ -12,14 +12,14 @@ import uy.um.edu.pizzumandburgum.dto.update.AdministradorUpdateDTO;
 import uy.um.edu.pizzumandburgum.dto.update.ClienteUpdateDTO;
 import uy.um.edu.pizzumandburgum.service.Interfaces.AdministradorService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/administrador")
 @CrossOrigin(origins = "http://localhost:5173") // para permitir peticiones desde React
 public class AdministradorController {
     @Autowired
     private AdministradorService administradorService;
-
-
 
 
     @PostMapping("/agregarAdmin")
@@ -59,5 +59,11 @@ public class AdministradorController {
             @RequestBody AdministradorUpdateDTO dto) {
         AdministradorResponseDTO response = administradorService.editarPerfil(email, dto);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<AdministradorResponseDTO>> mostrarAdministradores() {
+        List<AdministradorResponseDTO> administradores = administradorService.listarAdministradores();
+        return ResponseEntity.ok(administradores);
     }
 }
