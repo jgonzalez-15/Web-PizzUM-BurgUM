@@ -54,10 +54,8 @@ function Orders(){
                 <div className="flex flex-1 flex-col ml-4 mr-4 md:ml-8 md:mr-8 gap-6 items-center mb-8">
                     {orders.length > 0 ? 
                         (orders.map((order) =>
-                            <OrderStatus key={order.id} 
-                            id={order.id}
-                            date={order.fecha}
-                            status={order.estado}
+                            <OrderStatus key={order.idPedido} 
+                            pedido={order}
                             />
                         )) : (<h1>No tienes pedidos actuales</h1>)}
 
@@ -67,9 +65,7 @@ function Orders(){
                         <h1 className=" ml-4 mr-4 md:ml-8 md:mt-8 w-full font-bold text-xl">Historial:</h1>
                         {orderHistory.map((order) =>
                             <OrderStatus key={order.idPedido} 
-                            id={order.idPedido}
-                            date={order.fecha}
-                            status={order.estado}
+                            pedido={order}
                             />
                         )}
                         
