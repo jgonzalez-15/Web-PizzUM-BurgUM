@@ -48,5 +48,9 @@ public class Pedido {
     @JoinColumn(name = "pedido")
     private PagoDummy dummy;
 
+    @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Calificacion calificacion;
+
 
 }
