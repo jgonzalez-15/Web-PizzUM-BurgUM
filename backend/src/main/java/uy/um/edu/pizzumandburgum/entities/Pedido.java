@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +37,11 @@ public class Pedido {
     private MedioDePago medioDePago;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JsonIgnore
     private List<PedidoCreacion> creacionesPedido = new ArrayList<>();
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<PedidoBebida>bebidas = new ArrayList<>();
 
     @OneToOne
@@ -48,6 +49,7 @@ public class Pedido {
     private PagoDummy dummy;
 
     @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Calificacion calificacion;
 
 

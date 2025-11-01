@@ -144,7 +144,7 @@ public class PedidoServiceImpl implements PedidoService {
             pedido.getCreacionesPedido().remove(pc);
 
         }
-
+        
 
         pedidoRepository.delete(pedido);
     }

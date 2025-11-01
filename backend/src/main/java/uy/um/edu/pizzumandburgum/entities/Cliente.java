@@ -38,5 +38,13 @@ public class Cliente extends Usuario {
     @JsonIgnore
     private  List<MedioDePago> mediosDePago = new ArrayList<>();
 
+    @OneToMany(mappedBy = "cliente",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private  List<Favorito> favoritos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Calificacion> calificaciones = new ArrayList<>();
+
 
 }

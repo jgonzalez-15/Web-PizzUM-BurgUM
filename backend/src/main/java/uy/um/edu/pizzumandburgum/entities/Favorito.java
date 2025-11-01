@@ -25,4 +25,6 @@ public class Favorito {
     @ManyToOne(optional = false)
     @JoinColumn (name = "creacion_id")
     private Creacion creacion;
+
+    private float precio;
 }

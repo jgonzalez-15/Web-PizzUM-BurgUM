@@ -22,7 +22,7 @@ public class Calificacion {
     private String comentario;
     private LocalDateTime fecha;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "id_pedido")
     private Pedido pedido;
 

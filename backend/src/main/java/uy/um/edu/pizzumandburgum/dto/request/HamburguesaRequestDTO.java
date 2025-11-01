@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HamburguesaRequestDTO {
-    private boolean esFavorita;
     private List<HamburguesaProductoRequestDTO> ingredientes;
     private String clienteId;
 

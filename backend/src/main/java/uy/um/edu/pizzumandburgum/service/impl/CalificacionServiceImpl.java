@@ -18,6 +18,7 @@ import uy.um.edu.pizzumandburgum.repository.CalificacionRepository;
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 import uy.um.edu.pizzumandburgum.repository.PedidoRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.CalificacionService;
+
 import java.time.LocalDateTime;
 
 @Service
@@ -50,13 +51,13 @@ public class CalificacionServiceImpl implements CalificacionService {
         if (pedido.getCalificacion() != null) {
             throw new CalificacionYaExisteException();
         }
-       Calificacion calificacion = calificacionMapper.toEntity(dto);
-       calificacion.setFecha(LocalDateTime.now());
-       calificacionRepository.save(calificacion);
-       cliente.getCalificaciones().add(calificacion);
-       pedido.setCalificacion(calificacion);
+        Calificacion calificacion = calificacionMapper.toEntity(dto);
+        calificacion.setFecha(LocalDateTime.now());
+        calificacionRepository.save(calificacion);
+        cliente.getCalificaciones().add(calificacion);
+        pedido.setCalificacion(calificacion);
 
-       return calificacionMapper.toResponseDTO(calificacion);
+        return calificacionMapper.toResponseDTO(calificacion);
     }
 
     @Override

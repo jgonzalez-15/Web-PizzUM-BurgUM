@@ -13,12 +13,12 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.MedioDePagoService;
 @RestController
 @RequestMapping("/api/mediodepago")
 @CrossOrigin(origins = "http://localhost:5173")
-public class MedidoDePagoController {
+public class MedioDePagoController {
     @Autowired
     private MedioDePagoService medioDePagoService;
 
-    @PostMapping("/{idCliente}/añadir")
-    public ResponseEntity<MedioDePagoDTO> aniadirMedioDePago(@RequestBody MedioDePagoRequestDTO request,@PathVariable String idCliente, HttpSession sesion) {
+    @PostMapping("/{idCliente}/agregar")
+    public ResponseEntity<MedioDePagoDTO> aniadirMedioDePago(@RequestBody MedioDePagoRequestDTO request, @PathVariable String idCliente, HttpSession sesion) {
         String rol = (String) sesion.getAttribute("rol");
 
         if (rol == null || !rol.equals("CLIENTE")) {
