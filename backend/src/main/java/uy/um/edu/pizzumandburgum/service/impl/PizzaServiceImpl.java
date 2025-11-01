@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.PizzaProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.PizzaRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.request.ProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PizzaResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ProductoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.*;
@@ -14,12 +13,9 @@ import uy.um.edu.pizzumandburgum.exceptions.Creacion.Pizza.SinMasaException;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Pizza.SinSalsaException;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
-import uy.um.edu.pizzumandburgum.mapper.ClienteMapper;
 import uy.um.edu.pizzumandburgum.mapper.PizzaMapper;
-import uy.um.edu.pizzumandburgum.mapper.PizzaProductoMapper;
 import uy.um.edu.pizzumandburgum.mapper.ProductoMapper;
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
-import uy.um.edu.pizzumandburgum.repository.PizzaProductoRepository;
 import uy.um.edu.pizzumandburgum.repository.PizzaRepository;
 import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PizzaProductoService;
@@ -43,35 +39,25 @@ public class PizzaServiceImpl implements PizzaService {
     private ProductoRepository productoRepository;
 
     @Autowired
-    private PizzaProductoRepository pizzaProductoRepository;
-
-    @Autowired
-    private PizzaProductoMapper pizzaProductoMapper;
-
-    @Autowired
-    private ClienteMapper clienteMapper;
-
-    @Autowired
     private ClienteRepository clienteRepository;
 
     @Autowired
     private ProductoMapper productoMapper;
+
     @Override
     public PizzaResponseDTO crearPizza(PizzaRequestDTO dto) {
+        Cliente cliente = clienteRepository.findByEmail(dto.getClienteId()).orElseThrow(ClienteNoExisteException::new);
+
         Pizza pizza = new Pizza();
         boolean tieneMasa = false;
         boolean tieneSalsa = false;
-        Cliente cliente = clienteRepository.findByEmail(dto.getClienteId()).orElseThrow(()-> new ClienteNoExisteException());
-
 
         for (PizzaProductoRequestDTO ppdto : dto.getIngredientes()) {
-            Producto producto = productoRepository.findById(ppdto.getIdProducto())
-                    .orElseThrow(ProductoNoExisteException::new);
+            Producto producto = productoRepository.findById(ppdto.getIdProducto()).orElseThrow(ProductoNoExisteException::new);
             if ("Masa".equalsIgnoreCase(producto.getTipo())) {
                 tieneMasa = true;
             } else if ("Salsa".equalsIgnoreCase(producto.getTipo())) {
                 tieneSalsa = true;
-
             }
         }
 
