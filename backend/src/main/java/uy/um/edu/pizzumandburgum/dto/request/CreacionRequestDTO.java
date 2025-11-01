@@ -11,5 +11,4 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CreacionRequestDTO {
     private float precio;
-    private boolean esFavorita;
 }
