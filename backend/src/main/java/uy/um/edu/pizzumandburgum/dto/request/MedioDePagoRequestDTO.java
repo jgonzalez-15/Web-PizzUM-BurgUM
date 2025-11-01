@@ -7,7 +7,6 @@ import lombok.Setter;
 import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -17,5 +16,5 @@ public class MedioDePagoRequestDTO {
     Long numero;
     LocalDate vencimiento;
     String direccion;
-    ClienteResponseDTO Cliente;
+
 }

@@ -1,17 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import AdminHeader from "../Components/AdminHeader";
 import Footer from "../Components/Footer";
-import AdminProductCard from "../Components/ProductCard";
+import AdminProductCard from "../Components/AdminProductCard";
 
 function Backoffice() {
   const [activeTab, setActiveTab] = useState("productos");
   const [showModal, setShowModal] = useState(false);
-  const [newProduct, setNewProduct] = useState({ name: "", price: "", type: "" });
-  const [products, setProducts] = useState([
-    { id: 1, name: "Pizza Margarita", price: 450, type: "Pizza" },
-    { id: 2, name: "Hamburguesa Doble", price: 550, type: "Burger" },
-  ]);
+  const [newProduct, setNewProduct] = useState({ nombre: "", precio: "", tipo: "Masa", sinTacc: false });
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([])
+  const [adminList, setAdminList] = useState([]);
+  const [filterType, setFilterType] = useState("Todos")
 
   const [newAdmin, setNewAdmin] = useState({ user: "", password: "" });
   const [showAdminModal, setShowAdminModal] = useState(false);
@@ -21,13 +21,128 @@ function Backoffice() {
     { id: 2, date: "2025-10-24", status: 3 },
   ]);
 
-  function handleAddProduct() {
-    setShowModal(false);
+  const handleAddProduct = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await fetch(`http://localhost:8080/api/producto/crearProducto`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newProduct),
+      credentials: "include"
+      });
+
+      if (response.ok) {
+        getProducts()
+        setShowModal(false)
+      } else {
+        alert("No se pudo crear el producto");
+      }
+    } catch (error) {
+      console.error("Error al crear producto:", error);
+    }
+  };
+
+  function editProduct(){
+
   }
 
-  function handleAddAdmin() {
-    setShowAdminModal(false);
+  const removeProduct = async (e, p) => {
+  e.preventDefault();
+  try {
+    const response = await fetch(`http://localhost:8080/api/producto/${p}/eliminar`, {
+      method: "DELETE",
+      credentials: "include"
+    });
+
+    if (response.ok) {
+      getProducts()
+    } else {
+      alert("No se pudo eliminar el producto");
+    }
+  } catch (error) {
+    console.error("Error al eliminar producto:", error);
   }
+};
+
+  const handleAddAdmin = async (e) => {
+    e.preventDefault();
+    try{
+      {/* Intentar crear el administrador */}
+      const response = await fetch("http://localhost:8080/api/administrador/agregarAdmin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newAdmin),
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        {/* Si crea cerrar el modal */}
+        setShowAdminModal(false)
+        getAdmins()
+      } else {
+        {/* Si no mostrar una alerta */}
+        alert("Los datos son incorrectos o el administrador ya existe")
+      }
+    } catch (error){
+      console.error("Error al crear admin:", error);
+    }
+  }
+
+  const getProducts = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/producto/listar", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setProducts(data);
+      } else {
+        alert("Ocurrió un error al obtener los productos");
+      }
+    } catch (error) {
+      console.error("Error al obtener productos:", error);
+    }
+  };
+
+  useEffect(() => {
+  getProducts();
+  }, []);
+
+  function filter() {
+    if (filterType !== "Todos") {
+      setFilteredProducts(products.filter(p => p.tipo === filterType));
+    } else {
+      setFilteredProducts(products);
+    }
+  }
+
+  useEffect(() => {
+  filter();
+  }, [filterType, products]);
+
+  const getAdmins = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/administrador/listar", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAdminList(data);
+      } else {
+        alert("Ocurrió un error al obtener los administradores");
+      }
+    } catch (error) {
+      console.error("Error al obtener administradores:", error);
+    }
+  };
+
+  useEffect(() => {
+  getAdmins();
+  }, []);
 
   return (
     <>
@@ -55,15 +170,25 @@ function Backoffice() {
           {/* TAB: Productos */}
           {activeTab === "productos" && (
             <div className="flex flex-col gap-6 w-full max-w-3xl">
-              {products.map((p) => (
-                <AdminProductCard key={p.id} product={p} setProducts={setProducts} />
-              ))}
               <button
                 onClick={() => setShowModal(true)}
                 className="bg-orange-400 text-white font-bold py-2 px-4 rounded-2xl hover:scale-105 transition-transform self-center"
               >
                 Agregar producto
               </button>
+              <select className="m-2" value={filterType} onChange={(e) =>  setFilterType(e.target.value)}>
+                <option value="Todos">Todos</option>
+                <option value="Masa">Masa para Pizza</option>
+                <option value="Salsa">Salsa para Pizza</option>
+                <option value="Topping">Topping para Pizza</option>
+                <option value="Pan">Pan para Hamburguesa</option>
+                <option value="Hamburguesa">Carne para Hamburguesa</option>
+                <option value="Salsa_Hamburguesa">Salsa para Hamburguesa</option>
+                <option value="Ingrediente">Ingrediente para Hamburguesa</option>
+              </select>
+              {filteredProducts.map((p) => (
+                <AdminProductCard key={p.id} product={p} onEdit={editProduct} onRemove={removeProduct} />
+              ))}
             </div>
           )}
 
@@ -77,7 +202,7 @@ function Backoffice() {
                 >
                   <div>
                     <h1 className="font-bold text-lg">Pedido #{o.id}</h1>
-                    <h2>Fecha: {o.date}</h2>
+                    <h2>Fecha: {o.fecha}</h2>
                   </div>
                   <button className="bg-orange-400 text-white rounded-xl px-4 py-2 font-bold hover:scale-105 transition-transform">
                     Avanzar estado
@@ -96,6 +221,11 @@ function Backoffice() {
               >
                 Crear nuevo administrador
               </button>
+              <div>
+                {adminList.map((admin) => (
+                 <h1 className="font-bold text-center" key={admin.email}>{admin.email}</h1>
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -118,22 +248,33 @@ function Backoffice() {
               placeholder="Nombre"
               className="bg-gray-200 rounded-2xl mt-1 mb-3 p-2 w-full"
               value={newProduct.name}
-              onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+              onChange={(e) => setNewProduct({ ...newProduct, nombre: e.target.value })}
             />
             <input
               type="number"
               placeholder="Precio"
               className="bg-gray-200 rounded-2xl mt-1 mb-3 p-2 w-full"
               value={newProduct.price}
-              onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+              onChange={(e) => setNewProduct({ ...newProduct, precio: e.target.value })}
             />
+            <select className="m-2" value={newProduct.tipo} onChange={(e) => setNewProduct({ ...newProduct, tipo: e.target.value })}>
+              <option value="Masa">Masa para Pizza</option>
+              <option value="Salsa">Salsa para Pizza</option>
+              <option value="Topping">Topping para Pizza</option>
+              <option value="Pan">Pan para Hamburguesa</option>
+              <option value="Hamburguesa">Carne para Hamburguesa</option>
+              <option value="Salsa_Hamburguesa">Salsa para Hamburguesa</option>
+              <option value="Ingrediente">Ingrediente para Hamburguesa</option>
+            </select>
+            <label className="m-2">
             <input
-              type="text"
-              placeholder="Tipo (Pizza, Burger...)"
-              className="bg-gray-200 rounded-2xl mt-1 mb-4 p-2 w-full"
-              value={newProduct.type}
-              onChange={(e) => setNewProduct({ ...newProduct, type: e.target.value })}
-            />
+                type="checkbox"
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, sinTacc: e.target.checked })
+                }
+              />
+              Sin TACC
+            </label>
             <div className="flex gap-4">
               <button
                 onClick={() => setShowModal(false)}
@@ -166,15 +307,43 @@ function Backoffice() {
               type="text"
               placeholder="Usuario"
               className="bg-gray-200 rounded-2xl mt-1 mb-3 p-2 w-full"
-              value={newAdmin.user}
-              onChange={(e) => setNewAdmin({ ...newAdmin, user: e.target.value })}
+              value={newAdmin.email}
+              onChange={(e) => setNewAdmin({ ...newAdmin, email: e.target.value })}
             />
             <input
               type="password"
               placeholder="Contraseña"
               className="bg-gray-200 rounded-2xl mt-1 mb-4 p-2 w-full"
-              value={newAdmin.password}
-              onChange={(e) => setNewAdmin({ ...newAdmin, password: e.target.value })}
+              value={newAdmin.contrasenia}
+              onChange={(e) => setNewAdmin({ ...newAdmin, contrasenia: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="Nombre"
+              className="bg-gray-200 rounded-2xl mt-1 mb-4 p-2 w-full"
+              value={newAdmin.nombre}
+              onChange={(e) => setNewAdmin({ ...newAdmin, nombre: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="Apellido"
+              className="bg-gray-200 rounded-2xl mt-1 mb-4 p-2 w-full"
+              value={newAdmin.apellido}
+              onChange={(e) => setNewAdmin({ ...newAdmin, apellido: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="Teléfono"
+              className="bg-gray-200 rounded-2xl mt-1 mb-4 p-2 w-full"
+              value={newAdmin.telefono}
+              onChange={(e) => setNewAdmin({ ...newAdmin, telefono: e.target.value })}
+            />
+            <input
+              type="date"
+              placeholder="Fecha de nacimiento"
+              className="bg-gray-200 rounded-2xl mt-1 mb-4 p-2 w-full"
+              value={newAdmin.fechaNac}
+              onChange={(e) => setNewAdmin({ ...newAdmin, fechaNac: e.target.value })}
             />
             <div className="flex gap-4">
               <button

@@ -1,20 +1,22 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { DesignContext } from "./context/DesignContext";
 
-import Ingredient from "./Ingredient";
+import Ingredient from "./Ingredient"
 
-function IngredientAdder({ text, maxCount, ing}) {
-  const [ingredients, setIngredients] = useState(ing);
-  const {glutenFreeOnly} = useContext(DesignContext)
-  const filterGluten = glutenFreeOnly ? ingredients.filter((i)=> i.glutenFree) : ingredients
+export default function IngredientAdder({ text, maxCount, allIngredients, setIngredients, tipo }) {
+  const { glutenFreeOnly } = useContext(DesignContext);
 
-  function toggleSelected(id) {
-    setIngredients((prev) =>
-      prev.map((ingred) => {
+  const filtered = allIngredients.filter(i => i.tipo === tipo);
+  const filterGluten = glutenFreeOnly ? filtered.filter(i => i.sinTacc) : filtered;
+
+  function toggleSelected(idProducto) {
+    setIngredients(prev =>
+      prev.map(ingred => {
+        if (ingred.tipo !== tipo) return ingred;
         if (maxCount === 1) {
-          return { ...ingred, selected: ingred.id === id };
+          return { ...ingred, selected: ingred.idProducto === idProducto };
         } else {
-          return ingred.id === id
+          return ingred.idProducto === idProducto
             ? { ...ingred, selected: !ingred.selected }
             : ingred;
         }
@@ -22,30 +24,22 @@ function IngredientAdder({ text, maxCount, ing}) {
     );
   }
 
-  useEffect(() => {
-    setIngredients((prev) =>
-      prev.map((ingred) => ({ ...ingred, selected: false }))
-    );
-  }, [glutenFreeOnly]);
-
   return (
     <div className="flex justify-center flex-col max-w-full mb-8">
       <div className="flex ml-16">
         <h2 className="font-bold text-xl">{text}</h2>
       </div>
       <div className="flex overflow-x-auto ml-16 mr-16">
-        {filterGluten.map((ingredient) => (
+        {filterGluten.map(ingredient => (
           <Ingredient
-            key={ingredient.id}
-            name={ingredient.name}
+            key={ingredient.idProducto}
+            nombre={ingredient.nombre}
             selected={ingredient.selected}
-            glutenFree={ingredient.glutenFree}
-            toggleSelected={() => toggleSelected(ingredient.id)}
+            precio={ingredient.precio}
+            toggleSelected={() => toggleSelected(ingredient.idProducto)}
           />
         ))}
       </div>
     </div>
   );
 }
-
-export default IngredientAdder;

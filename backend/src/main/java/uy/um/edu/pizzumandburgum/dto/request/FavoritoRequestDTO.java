@@ -9,6 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PagoDummyRequestDTO {
-    private Long idPedido;
+public class FavoritoRequestDTO {
+    private String nombre;
+    private String clienteId;
+    private Long idCreacion;
 }

@@ -5,10 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.HamburguesaRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.request.ProductoDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
-import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
+import uy.um.edu.pizzumandburgum.dto.response.ProductoResponseDTO;
 import uy.um.edu.pizzumandburgum.mapper.HamburguesaMapper;
 import uy.um.edu.pizzumandburgum.service.Interfaces.HamburguesaService;
 
@@ -16,13 +14,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/hamburguesa")
-@CrossOrigin(origins = "http://localhost:5173") // para permitir peticiones desde React
+@CrossOrigin(origins = "http://localhost:5173")
 public class HamburguesaController {
     @Autowired
     private HamburguesaService hamburguesaService;
-
-    @Autowired
-    private HamburguesaMapper hamburguesaMapper;
 
     @PostMapping("/crearHamburguesa")
     public ResponseEntity<HamburguesaResponseDTO> crearHamburguesa(@RequestBody HamburguesaRequestDTO dto) {
@@ -37,8 +32,8 @@ public class HamburguesaController {
     }
 
     @GetMapping("/{idCreacion}/ingredientes")
-    public ResponseEntity<List<ProductoDTO>> mostrarIngredientesHamburguesa(@PathVariable Long idCreacion){
-        List<ProductoDTO> ingredientes = hamburguesaService.obtenerIngredientesHamburguesa(idCreacion);
+    public ResponseEntity<List<ProductoResponseDTO>> mostrarIngredientesHamburguesa(@PathVariable Long idCreacion){
+        List<ProductoResponseDTO> ingredientes = hamburguesaService.obtenerIngredientesHamburguesa(idCreacion);
         return ResponseEntity.ok(ingredientes);
     }
 }

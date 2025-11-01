@@ -12,5 +12,4 @@ import lombok.Setter;
 public class CreacionResponseDTO {
     private Long id;
     private float precio;
-    private boolean esFavorita;
 }

@@ -1,4 +1,4 @@
-package uy.um.edu.pizzumandburgum.dto.request;
+package uy.um.edu.pizzumandburgum.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +9,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductoDTO {
-    private Long idProducto;
-    private String tipo;
+public class FavoritoResponseDTO {
+    private Long id;
     private String nombre;
-    private boolean sinTacc;
-    private float precio;
+    private String idCliente;
+    private Long idCreacion;
 }

@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useContext, useState, useEffect } from "react"
+import { SessionContext } from "../Components/context/SessionContext";
 
 import MainHeader from "../Components/MainHeader"
 import OrderStatus from "../Components/OrderStatus"
@@ -9,9 +10,37 @@ function Orders(){
         window.scrollTo(0, 0);
     }
 
-    const [orders, setOrders] = useState([{idPedido: 1, fecha:"aaaaa", estado: 2}, {idPedido: 2, fecha:"bbbb", estado: 0}])
-    const [orderHistory, setOrdersHistory] = useState([{idPedido: 1, fecha:"aaaaa", estado: 3}, {idPedido: 2, fecha:"bbbb", estado: 3}])
+    const [orders, setOrders] = useState([])
+    const [orderHistory, setOrdersHistory] = useState([])
     const [viewHistory, setViewHistory] = useState(false)
+    const { sessionInfo } = useContext(SessionContext)
+    const  email = sessionInfo.email
+
+    const handleGetOrders = async () => {
+        try{
+          const response = await fetch(`http://localhost:8080/api/cliente/${email}/historial-pedidos`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            setOrders(data.map((o) => o.estado != "Entregado"));
+            setOrdersHistory(data.map((o) => o.estado == "Entregado"))
+          } else {
+            alert("Ocurrió un error")
+          }
+            } catch (error){
+                console.error("Error al obtener ingredientes:", error);
+            }
+        }
+    
+        {/* Obtener los pedidos al cargar la pagina */}
+        useEffect(() => {
+        if (email) {
+            handleGetOrders();
+        }
+        }, [email]);
     
     return(
         <>
@@ -26,9 +55,7 @@ function Orders(){
                     {orders.length > 0 ? 
                         (orders.map((order) =>
                             <OrderStatus key={order.idPedido} 
-                            id={order.idPedido}
-                            date={order.fecha}
-                            status={order.estado}
+                            pedido={order}
                             />
                         )) : (<h1>No tienes pedidos actuales</h1>)}
 
@@ -38,23 +65,21 @@ function Orders(){
                         <h1 className=" ml-4 mr-4 md:ml-8 md:mt-8 w-full font-bold text-xl">Historial:</h1>
                         {orderHistory.map((order) =>
                             <OrderStatus key={order.idPedido} 
-                            id={order.idPedido}
-                            date={order.fecha}
-                            status={order.estado}
+                            pedido={order}
                             />
                         )}
                         
                         {/* Boton ocultar historial */}
-                        <button onClick={() => setViewHistory(false)} className={`z-0 transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base 2xl:text-xl text-center max-w-96 bg-gray-300 text-black`}>
-                            <h2 className="m-2 2xl:m-3">
+                        <button onClick={() => setViewHistory(false)} className={`z-0 transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base text-center max-w-96 bg-gray-300 text-black`}>
+                            <h2 className="m-2">
                                 Ocultar historial de pedidos
                             </h2>
                         </button>
                     </div>): (<>
                     
                     {/* Boton ver historial */}
-                    <button onClick={() => setViewHistory(true)} className={`z-0 transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base 2xl:text-xl text-center max-w-96 bg-orange-400 text-white`}>
-                        <h2 className="m-2 2xl:m-3">
+                    <button onClick={() => setViewHistory(true)} className={`z-0 transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base text-center max-w-96 bg-orange-400 text-white`}>
+                        <h2 className="m-2">
                             Ver historial de pedidos
                         </h2>
                     </button>

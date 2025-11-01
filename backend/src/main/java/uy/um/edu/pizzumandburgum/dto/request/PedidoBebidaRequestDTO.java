@@ -10,6 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PedidoBebidaRequestDTO {
-    private ProductoDTO Producto;
+    private ProductoRequestDTO Producto;
     private int cantidad;
 }

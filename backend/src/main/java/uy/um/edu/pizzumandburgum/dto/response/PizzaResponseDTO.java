@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uy.um.edu.pizzumandburgum.entities.Cliente;
-import uy.um.edu.pizzumandburgum.entities.PedidoCreacion;
-import uy.um.edu.pizzumandburgum.entities.PizzaProducto;
 
 import java.util.List;
 
@@ -15,8 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PizzaResponseDTO {
+    private long idCreacion;
     private float precio;
-    private boolean esFavorita;
     private long tamanio;
     private ClienteResponseDTO cliente;
     private List<PizzaProductoResponseDTO> ingredientes;

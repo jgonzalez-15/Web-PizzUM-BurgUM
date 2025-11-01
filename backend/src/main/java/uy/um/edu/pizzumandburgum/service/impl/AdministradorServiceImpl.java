@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.AdministradorRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.update.AdministradorUpdateDTO;
 import uy.um.edu.pizzumandburgum.entities.Administrador;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
@@ -15,6 +16,8 @@ import uy.um.edu.pizzumandburgum.mapper.AdministradorMapper;
 import uy.um.edu.pizzumandburgum.repository.AdministradorRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.AdministradorService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -72,6 +75,16 @@ public class AdministradorServiceImpl implements AdministradorService {
             administrador.setFechaNac(dto.getFechaNac());
         }
         return administradorMapper.toResponseDTO(administrador);
+    }
+
+    @Override
+    public List<AdministradorResponseDTO> listarAdministradores() {
+        List <Administrador> administradores = administradorRepository.findAll();
+        List <AdministradorResponseDTO>retornar = new ArrayList<>();
+        for (Administrador administrador: administradores) {
+            retornar.add(administradorMapper.toResponseDTO(administrador));
+        }
+        return retornar;
     }
 
 }

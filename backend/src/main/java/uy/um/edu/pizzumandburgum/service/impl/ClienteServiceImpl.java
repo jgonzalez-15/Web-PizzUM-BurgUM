@@ -1,10 +1,10 @@
 package uy.um.edu.pizzumandburgum.service.impl;
 
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.request.*;
 import uy.um.edu.pizzumandburgum.dto.response.*;
 import uy.um.edu.pizzumandburgum.dto.update.ClienteUpdateDTO;
 import uy.um.edu.pizzumandburgum.entities.*;
@@ -20,6 +20,7 @@ import uy.um.edu.pizzumandburgum.exceptions.Usuario.UsuarioNoEncontradoException
 import uy.um.edu.pizzumandburgum.mapper.*;
 import uy.um.edu.pizzumandburgum.repository.*;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
+import uy.um.edu.pizzumandburgum.service.Interfaces.MedioDePagoService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PedidoService;
 
 import java.util.ArrayList;
@@ -59,8 +60,20 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
     private  PizzaMapper pizzaMapper;
+    @Autowired
+    private ClienteRegistrarMapper clienteRegistrarMapper;
+    @Autowired
+    private MedioDePagoService medioDePagoService;
+    @Autowired
+    private MedioDePagoMapper medioDePagoMapper;
+    @Autowired
+    private DomicilioMapper domicilioMapper;
+    @Autowired
+    private ClienteDomicilioRepository clienteDomicilioRepository;
+
     @Override
-    public ClienteResponseDTO registrarCliente(ClienteRequestDTO dto) {
+    @Transactional
+    public ClienteResponseDTO registrarCliente(ClienteRegistrarRequestDTO dto) {
         if (clienteRepository.existsByEmail(dto.getEmail())) {
             throw new EmailYaRegistradoException();
         }
@@ -69,10 +82,32 @@ public class ClienteServiceImpl implements ClienteService {
             throw new ContraseniaInvalidaException();
         }
 
-        Cliente nuevo = clienteMapper.toEntity(dto);
-
+        Cliente nuevo = new Cliente();
+        nuevo.setEmail(dto.getEmail());
+        nuevo.setContrasenia(dto.getContrasenia());
+        nuevo.setApellido(dto.getApellido());
+        nuevo.setNombre(dto.getNombre());
+        nuevo.setTelefono(dto.getTelefono());
+        nuevo.setFechaNac(dto.getFechaNac());
         Cliente guardado = clienteRepository.save(nuevo);
 
+        for (MedioDePagoRequestDTO medioDePagoRequestDTO : dto.getMediosDePagos()) {
+            MedioDePago medioDePago = medioDePagoMapper.toEntity(medioDePagoRequestDTO);
+            medioDePago.setCliente(guardado);
+            medioDePagoRepository.save(medioDePago);
+        }
+
+        for (DomicilioRequestDTO domicilioRequestDTO : dto.getDomicilios()) {
+            Domicilio domicilio = domicilioMapper.toEntity(domicilioRequestDTO);
+            Domicilio domicilioGuardado = domicilioRepository.saveAndFlush(domicilio);
+
+            ClienteDomicilio clienteDomicilio = new ClienteDomicilio();
+            clienteDomicilio.setCliente(guardado);
+            clienteDomicilio.setDomicilio(domicilioGuardado);
+            clienteDomicilioRepository.save(clienteDomicilio);
+        }
+
+        guardado = clienteRepository.findById(guardado.getEmail()).orElseThrow();
         return clienteMapper.toResponseDTO(guardado);
     }
 
@@ -117,9 +152,14 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public List<Pedido> historialPedido(String email) {
+    public List<PedidoResponseDTO> historialPedido(String email) {
         Cliente cliente = clienteRepository.findById(email).orElseThrow(() -> new ClienteNoExisteException());
-        return cliente.getPedidos();
+        List<Pedido> pedidos = cliente.getPedidos();
+        List<PedidoResponseDTO> historialPedidos = new ArrayList<>();
+        for (Pedido pedido : pedidos) {
+            historialPedidos.add(pedidoMapper.toResponseDTO(pedido));
+        }
+        return historialPedidos;
     }
 
     @Override
@@ -160,24 +200,6 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public List<CreacionResponseDTO> mostrarCreacionesFavoritas(String email) {
-        Cliente cliente = clienteRepository.findByEmail(email).orElseThrow(()-> new ClienteNoExisteException());
-        List<Creacion> creaciones = cliente.getCreaciones();
-        List<Creacion> favoritas = new ArrayList<>();
-        List<CreacionResponseDTO> retornarlista = new ArrayList<>();
-        for(Creacion creacion: creaciones){
-            if (creacion.isEsFavorita()){
-                favoritas.add(creacion);
-            }
-        }
-        for (Creacion creacion: favoritas){
-            CreacionResponseDTO retornar = creacionMapper.toResponseDTO(creacion);
-            retornarlista.add(retornar);
-        }
-        return retornarlista;
-    }
-
-    @Override
     public List<PedidoResponseDTO> obtenerPedidosPorCliente(String email) {
         Cliente cliente = clienteRepository.findByEmail(email).orElseThrow(()-> new ClienteNoExisteException());
         List<Pedido> pedidos = cliente.getPedidos();
@@ -197,6 +219,18 @@ public class ClienteServiceImpl implements ClienteService {
         pizza.setCliente(cliente);
         clienteRepository.save(cliente);
         return pizzaMapper.toResponseDTO(pizza);
+    }
+
+    @Override
+    public List<DomicilioResponseDTO> mostrarDomicilios(String idCliente) {
+        Cliente cliente = clienteRepository.findByEmail(idCliente).orElseThrow(()-> new ClienteNoExisteException());
+        List<DomicilioResponseDTO>domicilios = new ArrayList<>();
+        for (ClienteDomicilio cd : cliente.getDomicilios()){
+            Domicilio domicilio = domicilioRepository.findById(cd.getDomicilio().getId()).orElseThrow(()-> new DomicilioNoExisteException());
+            DomicilioResponseDTO dto = domicilioMapper.toResponseDTO(domicilio);
+            domicilios.add(dto);
+        }
+        return domicilios;
     }
 }
 

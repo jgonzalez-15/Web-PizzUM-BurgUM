@@ -11,16 +11,18 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClienteDomicilio {
+public class Favorito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String nombre;
+
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id_cliente",referencedColumnName = "email")
+    @JoinColumn (name = "cliente_id")
     private Cliente cliente;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "id_domicilio")
-    private Domicilio domicilio;
+    @ManyToOne(optional = false)
+    @JoinColumn (name = "creacion_id")
+    private Creacion creacion;
 }

@@ -9,6 +9,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PagoDummyRequestDTO {
-    private Long idPedido;
+public class ProductoRequestDTO {
+    private String tipo;
+    private String nombre;
+    private boolean sinTacc;
+    private float precio;
 }
