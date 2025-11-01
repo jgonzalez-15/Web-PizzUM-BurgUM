@@ -61,6 +61,7 @@ public class FavoritoServiceImpl implements FavoritoService {
         favorito.setNombre(dto.getNombre());
         favorito.setCliente(cliente);
         favorito.setCreacion(creacion);
+        favorito.setPrecio(creacion.getPrecio());
 
         Favorito guardado = favoritoRepository.save(favorito);
 

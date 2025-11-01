@@ -14,4 +14,5 @@ public class FavoritoResponseDTO {
     private String nombre;
     private String idCliente;
     private Long idCreacion;
+    private float precio;
 }
