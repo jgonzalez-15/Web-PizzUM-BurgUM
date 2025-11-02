@@ -2,6 +2,7 @@ package uy.um.edu.pizzumandburgum.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import uy.um.edu.pizzumandburgum.exceptions.Pedido.PedidoNoEncontradoException;
 import uy.um.edu.pizzumandburgum.repository.PedidoRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PedidoService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -78,5 +80,14 @@ public class PedidoController {
         }
         List<PedidoResponseDTO> pedidoResponseDTOS = pedidoService.pedidosEnCurso();
         return ResponseEntity.ok(pedidoResponseDTOS);
+    }
+
+    @GetMapping("/rango/{fechaInicio}/{fechaFin}")
+    public ResponseEntity<List<PedidoResponseDTO>> listarPedidosPorRango(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin
+    ) {
+        List<PedidoResponseDTO> pedidos = pedidoService.listarPedidosPorRangoFechas(fechaInicio, fechaFin);
+        return ResponseEntity.ok(pedidos);
     }
 }

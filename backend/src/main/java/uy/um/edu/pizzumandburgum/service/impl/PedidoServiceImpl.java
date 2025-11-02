@@ -11,6 +11,7 @@ import uy.um.edu.pizzumandburgum.entities.*;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.CreacionNoEncontradaException;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Pedido.EstadoInvalidoException;
+import uy.um.edu.pizzumandburgum.exceptions.Pedido.FechaInvalidaException;
 import uy.um.edu.pizzumandburgum.exceptions.Pedido.PedidoNoEncontradoException;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
@@ -19,6 +20,8 @@ import uy.um.edu.pizzumandburgum.repository.*;
 import uy.um.edu.pizzumandburgum.service.Interfaces.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -179,5 +182,23 @@ public class PedidoServiceImpl implements PedidoService {
             pedidoResponseDTOS.add(pedidoMapper.toResponseDTO(pedido));
         }
         return pedidoResponseDTOS;
+    }
+
+    @Override
+    public List<PedidoResponseDTO> listarPedidosPorRangoFechas(LocalDate fechaInicio, LocalDate fechaFin) {
+        if (fechaInicio.isAfter(fechaFin)) {
+            throw new FechaInvalidaException();
+        }
+
+        LocalDateTime inicioDelDia = fechaInicio.atStartOfDay();
+        LocalDateTime finDelDia = fechaFin.atTime(LocalTime.MAX);
+
+        List<Pedido> pedidos = pedidoRepository.findByFechaBetween(inicioDelDia, finDelDia);
+
+        List<PedidoResponseDTO> pedidosDTO = new ArrayList<>();
+        for (Pedido pedido : pedidos) {
+            pedidosDTO.add(pedidoMapper.toResponseDTO(pedido));
+        }
+        return pedidosDTO;
     }
 }

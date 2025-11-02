@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.ProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ProductoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Producto;
+import uy.um.edu.pizzumandburgum.exceptions.Producto.CampoObligatorioException;
+import uy.um.edu.pizzumandburgum.exceptions.Producto.PrecioNegativoException;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoYaExisteException;
 import uy.um.edu.pizzumandburgum.mapper.ProductoMapper;
@@ -27,6 +29,18 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public ProductoResponseDTO agregarProducto(ProductoRequestDTO productoDTO) {
         Producto producto = productoMapper.toEntity(productoDTO);
+        if (producto.getNombre() == null){
+            throw new CampoObligatorioException("El nombre es un campo obligatorio");
+        }
+        if (producto.getTipo() == null){
+            throw new CampoObligatorioException("El tipo es un campo obligatorio");
+        }
+        if (producto.getPrecio() == 0){
+            throw new CampoObligatorioException("El precio es un campo obligatorio");
+        }
+        if (producto.getPrecio() < 0){
+            throw new PrecioNegativoException();
+        }
         if (productoRepository.findByNombre(producto.getNombre()).isPresent()) {
             throw new ProductoYaExisteException();
         }
