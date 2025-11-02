@@ -90,4 +90,12 @@ public class PedidoController {
         List<PedidoResponseDTO> pedidos = pedidoService.listarPedidosPorRangoFechas(fechaInicio, fechaFin);
         return ResponseEntity.ok(pedidos);
     }
+
+    @PostMapping("/repetir/{idPedido}")
+    public ResponseEntity<PedidoResponseDTO> repetirPedidoSimple(
+            @PathVariable Long idPedido
+    ) {
+        PedidoResponseDTO nuevoPedido = pedidoService.repetirPedido(idPedido);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPedido);
+    }
 }

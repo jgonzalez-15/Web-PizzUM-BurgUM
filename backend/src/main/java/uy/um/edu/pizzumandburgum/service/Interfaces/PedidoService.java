@@ -13,4 +13,6 @@ public interface PedidoService {
     void cambiarEstado(Long id);
     List<PedidoResponseDTO> pedidosEnCurso();
     List<PedidoResponseDTO> listarPedidosPorRangoFechas(LocalDate fechaInicio, LocalDate fechaFin);
+
+    PedidoResponseDTO repetirPedido(Long idPedido);
 }
