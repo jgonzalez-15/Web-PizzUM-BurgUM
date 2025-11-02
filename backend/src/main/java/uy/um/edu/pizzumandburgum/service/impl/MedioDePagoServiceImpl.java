@@ -9,7 +9,6 @@ import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.MedioDePago;
 import uy.um.edu.pizzumandburgum.exceptions.MedioDePago.MedioDePagoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
-import uy.um.edu.pizzumandburgum.mapper.ClienteMapper;
 import uy.um.edu.pizzumandburgum.mapper.MedioDePagoMapper;
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 import uy.um.edu.pizzumandburgum.repository.MedioDePagoRepository;
@@ -29,8 +28,7 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
 
     @Override
     public MedioDePago obtenerMedioDePago(String email, Long id) {
-        return medioDePagoRepository.findByClienteEmailAndId(email,id )
-                .orElseThrow(() -> new MedioDePagoNoExisteException());
+        return medioDePagoRepository.findByClienteEmailAndId(email,id ).orElseThrow(MedioDePagoNoExisteException::new);
     }
 
     @Override
@@ -40,7 +38,7 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
         medioDePago.setVencimiento(dto.getVencimiento());
         medioDePago.setDireccion(dto.getDireccion());
 
-        Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(()-> new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(ClienteNoExisteException::new);
         cliente.getMediosDePago().add(medioDePago);
         medioDePago.setCliente(cliente);
 

@@ -22,8 +22,8 @@ public class CalificacionMapper {
         Calificacion calificacion = new Calificacion();
         calificacion.setPuntuacion(dto.getPuntuacion());
         calificacion.setComentario(dto.getComentario());
-        calificacion.setCliente(clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(()->new ClienteNoExisteException()));
-        calificacion.setPedido(pedidoRepository.findById(dto.getIdPedido()).orElseThrow(()-> new PedidoNoEncontradoException()));
+        calificacion.setCliente(clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(ClienteNoExisteException::new));
+        calificacion.setPedido(pedidoRepository.findById(dto.getIdPedido()).orElseThrow(PedidoNoEncontradoException::new));
         return calificacion;
     }
 

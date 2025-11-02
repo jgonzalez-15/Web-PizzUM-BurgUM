@@ -5,12 +5,10 @@ import org.springframework.stereotype.Component;
 import uy.um.edu.pizzumandburgum.dto.request.MedioDePagoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
-import uy.um.edu.pizzumandburgum.dto.response.PedidoBebidaResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.MedioDePago;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
-import uy.um.edu.pizzumandburgum.entities.PedidoBebida;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 
@@ -38,7 +36,7 @@ public class MedioDePagoMapper {
     }
 
     public MedioDePagoDTO toResponseDTO(MedioDePago medioDePago) {
-        Cliente cliente = clienteRepository.findById(medioDePago.getCliente().getEmail()).orElseThrow(()-> new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findById(medioDePago.getCliente().getEmail()).orElseThrow(ClienteNoExisteException::new);
         ClienteResponseDTO clienteResponseDTO = clienteMapper.toResponseDTO(cliente);
         List<PedidoResponseDTO>pedidos = new ArrayList<>();
         for (Pedido pedido: medioDePago.getPedidos()){

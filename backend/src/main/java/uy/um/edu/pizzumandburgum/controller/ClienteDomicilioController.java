@@ -12,6 +12,7 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteDomicilioService;
 @RequestMapping("/api/clienteDomicilio")
 @CrossOrigin(origins = "http://localhost:5173")
 public class ClienteDomicilioController {
+
     @Autowired
     private ClienteDomicilioService clienteDomicilioService;
 

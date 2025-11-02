@@ -11,6 +11,7 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.CalificacionService;
 @RequestMapping("/api/calificacion")
 @CrossOrigin(origins = "http://localhost:5173")
 public class CalificacionController {
+
     @Autowired
     private CalificacionService calificacionService;
 

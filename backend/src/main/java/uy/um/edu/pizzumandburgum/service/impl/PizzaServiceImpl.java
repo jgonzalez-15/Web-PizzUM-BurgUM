@@ -116,8 +116,8 @@ public class PizzaServiceImpl implements PizzaService {
 
     @Override
     public List<ProductoResponseDTO> obtenerIngredientesPizza(Long idCreacion) {
-        Pizza pizza = pizzaRepository.findById(idCreacion).orElseThrow(()->new HamburguesaNoEncontradaException());
-        List<PizzaProducto>ingredienteshp = pizza.getIngredientes();
+        Pizza pizza = pizzaRepository.findById(idCreacion).orElseThrow(HamburguesaNoEncontradaException::new);
+        List<PizzaProducto> ingredienteshp = pizza.getIngredientes();
         List<Producto>ingredientes = new ArrayList<>();
         List<ProductoResponseDTO> listaRetornar = new ArrayList<>();
         for (PizzaProducto pp: ingredienteshp){

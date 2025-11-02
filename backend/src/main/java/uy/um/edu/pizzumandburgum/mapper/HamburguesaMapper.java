@@ -57,16 +57,14 @@ public class HamburguesaMapper {
 
     public Hamburguesa toEntity(HamburguesaRequestDTO dto) {
         Hamburguesa hamburguesa = new Hamburguesa();
-        Cliente cliente = clienteRepository.findByEmail(dto.getClienteId()).orElseThrow(()-> new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findByEmail(dto.getClienteId()).orElseThrow(ClienteNoExisteException::new);
         hamburguesa.setCliente(cliente);
         List<HamburguesaProducto> ingredientes = new ArrayList<>();
 
         for (HamburguesaProductoRequestDTO hp: dto.getIngredientes()) {
             HamburguesaProducto hi = new HamburguesaProducto();
 
-            // Buscar el producto en la BD
-            Producto producto = productoRepository.findById(hp.getIdProducto())
-                    .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + hp));
+            Producto producto = productoRepository.findById(hp.getIdProducto()).orElseThrow(() -> new RuntimeException("Producto no encontrado: " + hp));
 
             hi.setHamburguesa(hamburguesa);
             hi.setProducto(producto);

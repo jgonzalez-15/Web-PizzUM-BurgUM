@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.HamburguesaRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ProductoResponseDTO;
-import uy.um.edu.pizzumandburgum.mapper.HamburguesaMapper;
 import uy.um.edu.pizzumandburgum.service.Interfaces.HamburguesaService;
 
 import java.util.List;
@@ -16,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/hamburguesa")
 @CrossOrigin(origins = "http://localhost:5173")
 public class HamburguesaController {
+
     @Autowired
     private HamburguesaService hamburguesaService;
 

@@ -1,17 +1,14 @@
 package uy.um.edu.pizzumandburgum.mapper;
 
-import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoBebidaResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoCreacionDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
-import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
 import uy.um.edu.pizzumandburgum.entities.PedidoBebida;
 import uy.um.edu.pizzumandburgum.entities.PedidoCreacion;
-import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +37,6 @@ public class PedidoMapper {
         List<PedidoCreacionDTO> creacionesDTO = new ArrayList<>();
         if (pedido.getCreacionesPedido() != null) {
             for (PedidoCreacion pc : pedido.getCreacionesPedido()) {
-                // Mapear directamente sin usar pedidoCreacionMapper
                 PedidoCreacionDTO dto = new PedidoCreacionDTO();
                 dto.setCantidad(pc.getCantidad());
                 dto.setCreacion(creacionMapper.toResponseDTO(pc.getCreacion()));
@@ -51,7 +47,6 @@ public class PedidoMapper {
         List<PedidoBebidaResponseDTO> bebidasDTO = new ArrayList<>();
         if (pedido.getBebidas() != null) {
             for (PedidoBebida pb : pedido.getBebidas()) {
-                // Mapear directamente sin usar pedidoBebidaMapper
                 PedidoBebidaResponseDTO dto = new PedidoBebidaResponseDTO();
                 dto.setCantidad(pb.getCantidad());
                 dto.setProducto(productoMapper.toResponseDTO(pb.getProducto()));
@@ -59,15 +54,6 @@ public class PedidoMapper {
             }
         }
 
-        return new PedidoResponseDTO(
-                pedido.getPrecio(),
-                pedido.getFecha(),
-                pedido.getEstado(),
-                pedido.getClienteAsignado().getEmail(),
-                pedido.isEstaPago(),
-                creacionesDTO,
-                bebidasDTO,
-                numeroMedioDePago
-        );
+        return new PedidoResponseDTO(pedido.getPrecio(), pedido.getFecha(), pedido.getEstado(), pedido.getClienteAsignado().getEmail(), pedido.isEstaPago(), creacionesDTO, bebidasDTO, numeroMedioDePago);
     }
 }

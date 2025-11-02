@@ -18,6 +18,7 @@ import java.util.List;
 @RequestMapping("/api/pedido")
 @CrossOrigin(origins = "http://localhost:5173")
 public class PedidoController {
+
     @Autowired
     private PedidoService pedidoService;
 
@@ -50,6 +51,7 @@ public class PedidoController {
         }
         return ResponseEntity.noContent().build();
     }
+
     @GetMapping("/{id}/estado")
     public ResponseEntity<String> consultarEstado(@PathVariable ("id") Long id) {
         String estado = pedidoService.consultarEstado(id);

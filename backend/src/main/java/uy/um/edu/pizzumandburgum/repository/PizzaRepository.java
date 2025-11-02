@@ -8,7 +8,7 @@ import uy.um.edu.pizzumandburgum.entities.Pizza;
 import java.util.Optional;
 
 public interface PizzaRepository extends JpaRepository<Pizza, String> {
-    public Optional<Pizza> findById(Long id);
+    Optional<Pizza> findById(Long id);
     @Query("SELECT p FROM Pizza p LEFT JOIN FETCH p.ingredientes WHERE p.id = :idPizza")
     Optional<Pizza> findByIdConIngredientes(@Param("idPizza") Long idPizza);
 }

@@ -3,7 +3,6 @@ package uy.um.edu.pizzumandburgum.mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteRegistrarRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.DomicilioRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.MedioDePagoRequestDTO;
 import uy.um.edu.pizzumandburgum.entities.Cliente;

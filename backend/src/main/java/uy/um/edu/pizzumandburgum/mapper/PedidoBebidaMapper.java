@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoBebidaRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoBebidaResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.PedidoCreacionDTO;
 import uy.um.edu.pizzumandburgum.entities.PedidoBebida;
-import uy.um.edu.pizzumandburgum.entities.PedidoCreacion;
 
 @Component
 public class PedidoBebidaMapper {

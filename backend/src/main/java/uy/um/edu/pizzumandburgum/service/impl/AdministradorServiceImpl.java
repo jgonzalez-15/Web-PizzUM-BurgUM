@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.AdministradorRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.update.AdministradorUpdateDTO;
 import uy.um.edu.pizzumandburgum.entities.Administrador;
-import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Administrador.AdministradorNoExiste;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Administrador.AdministradorYaExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
@@ -40,25 +38,18 @@ public class AdministradorServiceImpl implements AdministradorService {
 
     @Override
     public AdministradorResponseDTO login(AdministradorRequestDTO dto) {
-        Administrador administrador = administradorRepository.findById(dto.getEmail()).orElseThrow(()->new ClienteNoExisteException());
+        Administrador administrador = administradorRepository.findById(dto.getEmail()).orElseThrow(ClienteNoExisteException::new);
 
         if (!Objects.equals(administrador.getContrasenia(), dto.getContrasenia())){
             throw new ContraseniaInvalidaException();
         }
-        return new AdministradorResponseDTO(
-                administrador.getEmail(),
-                administrador.getNombre(),
-                administrador.getApellido(),
-                administrador.getContrasenia(),
-                administrador.getTelefono(),
-                administrador.getFechaNac()
-        );
+        return new AdministradorResponseDTO(administrador.getEmail(), administrador.getNombre(), administrador.getApellido(), administrador.getContrasenia(), administrador.getTelefono(), administrador.getFechaNac());
 
     }
 
     @Override
     public AdministradorResponseDTO editarPerfil(String email, AdministradorUpdateDTO dto) {
-        Administrador administrador = administradorRepository.findById(email).orElseThrow(() -> new AdministradorNoExiste());
+        Administrador administrador = administradorRepository.findById(email).orElseThrow(AdministradorNoExiste::new);
         if (dto.getNombre() != null) {
             administrador.setNombre(dto.getNombre());
         }

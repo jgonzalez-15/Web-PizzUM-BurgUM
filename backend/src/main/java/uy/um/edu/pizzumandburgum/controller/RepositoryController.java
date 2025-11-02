@@ -15,6 +15,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 
 public class RepositoryController {
+
     @Autowired
     private ReporteService reporteService;
 
@@ -24,8 +25,7 @@ public class RepositoryController {
     }
 
     @GetMapping("/tickets")
-    public ResponseEntity<List<PedidoResponseDTO>> obtenerTickets(
-            @RequestParam LocalDate inicio, @RequestParam LocalDate fin) {
+    public ResponseEntity<List<PedidoResponseDTO>> obtenerTickets(@RequestParam LocalDate inicio, @RequestParam LocalDate fin) {
         return ResponseEntity.ok(reporteService.obtenerTicketsDeVenta(inicio, fin));
     }
 

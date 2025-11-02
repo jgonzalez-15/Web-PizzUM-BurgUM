@@ -13,15 +13,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/producto")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true") // para permitir peticiones desde React
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class ProductoController {
+
     @Autowired
     private ProductoService productoService;
 
     @PostMapping("/crearProducto")
-    public ResponseEntity<ProductoResponseDTO> crearProducto(@RequestBody ProductoRequestDTO dto,
-                                                            HttpSession session) {
-        String rol = (String) session.getAttribute("rol");
+    public ResponseEntity<ProductoResponseDTO> crearProducto(@RequestBody ProductoRequestDTO dto, HttpSession sesion) {
+        String rol = (String) sesion.getAttribute("rol");
 
         if (rol == null || !rol.equals("ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -31,29 +31,29 @@ public class ProductoController {
         ProductoResponseDTO nuevo = productoService.agregarProducto(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
-    @DeleteMapping("/{idProducto}/eliminar")
-    public ResponseEntity<Void> eliminarProducto(@PathVariable Long idProducto, HttpSession session ) {
 
-        String rol = (String) session.getAttribute("rol");
+    @DeleteMapping("/{idProducto}/eliminar")
+    public ResponseEntity<Void> eliminarProducto(@PathVariable Long idProducto, HttpSession sesion ) {
+
+        String rol = (String) sesion.getAttribute("rol");
 
         if (rol == null || !rol.equals("ADMIN")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
+
         productoService.eliminarProducto(idProducto);
         return ResponseEntity.noContent().build();
     }
 
 
     @PutMapping("/modificar")
-    public ResponseEntity<Void> modificarProducto(
-            @RequestBody ProductoRequestDTO productoviejoDTO, @RequestBody ProductoRequestDTO productonuevoDTO, HttpSession session ) {
-        String rol = (String) session.getAttribute("rol");
+    public ResponseEntity<Void> modificarProducto(@RequestBody ProductoRequestDTO productoviejoDTO, @RequestBody ProductoRequestDTO productonuevoDTO, HttpSession sesion ) {
+        String rol = (String) sesion.getAttribute("rol");
 
         if (rol == null || !rol.equals("ADMIN")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
+
         productoService.modificarProducto(productoviejoDTO,productonuevoDTO);
         return ResponseEntity.ok().build();
     }

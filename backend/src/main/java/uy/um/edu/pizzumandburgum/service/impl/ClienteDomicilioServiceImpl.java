@@ -17,7 +17,6 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteDomicilioService;
 
 @Service
 public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
-
     @Autowired
     private ClienteRepository clienteRepository;
 
@@ -29,10 +28,11 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
 
     @Autowired
     private ClienteDomicilioMapper clienteDomicilioMapper;
+
     @Override
     public ClienteDomicilioResponseDTO agregarDomicilio(ClienteDomicilioRequestDTO dto) {
-        Cliente cliente = clienteRepository.findById(dto.getEmail()).orElseThrow(() -> new ClienteNoExisteException());
-        Domicilio domicilio = domicilioRepository.findById(dto.getIdDomicilio()).orElseThrow(()-> new DomicilioNoExisteException());
+        Cliente cliente = clienteRepository.findById(dto.getEmail()).orElseThrow(ClienteNoExisteException::new);
+        Domicilio domicilio = domicilioRepository.findById(dto.getIdDomicilio()).orElseThrow(DomicilioNoExisteException::new);
 
         ClienteDomicilio clienteDomicilio = new ClienteDomicilio();
         clienteDomicilio.setCliente(cliente);
@@ -48,12 +48,12 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
 
     @Override
     public Domicilio obtenerDomicilio(String clienteId, String direccion) {
-        Cliente cliente = clienteRepository.findByEmail(clienteId).orElseThrow(() -> new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findByEmail(clienteId).orElseThrow(ClienteNoExisteException::new);
         Domicilio domicilio = new Domicilio();
         domicilio.setDireccion(direccion);
         for (ClienteDomicilio d : cliente.getDomicilios() ){
             if (d.getDomicilio().equals(domicilio.getDireccion())){
-               return domicilioRepository.findById(d.getDomicilio().getDireccion()).orElseThrow(() -> new DomicilioNoExisteException());
+               return domicilioRepository.findById(d.getDomicilio().getDireccion()).orElseThrow(DomicilioNoExisteException::new);
             }
         }
         return null;

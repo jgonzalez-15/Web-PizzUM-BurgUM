@@ -4,6 +4,6 @@ import uy.um.edu.pizzumandburgum.dto.request.HamburguesaProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaProductoResponseDTO;
 
 public interface HamburguesaProductoService {
-    public HamburguesaProductoResponseDTO agregarIngrediente(Long idHamburguesa,HamburguesaProductoRequestDTO dto);
-    public float calcularPrecio(Long idhamburguesa);
+    HamburguesaProductoResponseDTO agregarIngrediente(Long idHamburguesa,HamburguesaProductoRequestDTO dto);
+    float calcularPrecio(Long idhamburguesa);
 }

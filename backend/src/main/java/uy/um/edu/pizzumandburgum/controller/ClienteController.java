@@ -9,7 +9,6 @@ import uy.um.edu.pizzumandburgum.dto.request.ClienteRegistrarRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.*;
 import uy.um.edu.pizzumandburgum.dto.update.ClienteUpdateDTO;
-import uy.um.edu.pizzumandburgum.entities.Pedido;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
 
 import java.util.List;
@@ -18,21 +17,22 @@ import java.util.List;
 @RequestMapping("/api/cliente")
 @CrossOrigin(origins = "http://localhost:5173")
 public class ClienteController {
+
     @Autowired
     private ClienteService clienteService;
 
     @PostMapping("/registrar")
-    public ResponseEntity<ClienteResponseDTO> registrar(@Validated @RequestBody ClienteRegistrarRequestDTO dto, HttpSession session) {
+    public ResponseEntity<ClienteResponseDTO> registrar(@Validated @RequestBody ClienteRegistrarRequestDTO dto, HttpSession sesion) {
         ClienteResponseDTO cliente = clienteService.registrarCliente(dto);
 
-        session.setAttribute("email", cliente.getEmail());
-        session.setAttribute("rol", "CLIENTE");
+        sesion.setAttribute("email", cliente.getEmail());
+        sesion.setAttribute("rol", "CLIENTE");
 
         return ResponseEntity.ok(cliente);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ClienteResponseDTO>login(@Validated @RequestBody ClienteRequestDTO dto, HttpSession sesion){
+    public ResponseEntity<ClienteResponseDTO> login(@Validated @RequestBody ClienteRequestDTO dto, HttpSession sesion){
         ClienteResponseDTO cliente = clienteService.login(dto.getEmail(), dto.getContrasenia());
 
         sesion.setAttribute("email", cliente.getEmail());
@@ -41,6 +41,7 @@ public class ClienteController {
 
         return ResponseEntity.ok(cliente);
     }
+
     @PostMapping("/cerrarSesion")
     public ResponseEntity<String>cerrarSesion(HttpSession sesion){
         sesion.invalidate();

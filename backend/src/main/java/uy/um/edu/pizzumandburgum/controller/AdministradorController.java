@@ -16,6 +16,7 @@ import java.util.List;
 @RequestMapping("/api/administrador")
 @CrossOrigin(origins = "http://localhost:5173")
 public class AdministradorController {
+
     @Autowired
     private AdministradorService administradorService;
 
@@ -31,17 +32,17 @@ public class AdministradorController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AdministradorResponseDTO> login(@RequestBody AdministradorRequestDTO dto, HttpSession session) {
+    public ResponseEntity<AdministradorResponseDTO> login(@RequestBody AdministradorRequestDTO dto, HttpSession sesion) {
         AdministradorResponseDTO adminDTO = administradorService.login(dto);
 
-        session.setAttribute("email", adminDTO.getEmail());
-        session.setAttribute("rol", "ADMIN");
+        sesion.setAttribute("email", adminDTO.getEmail());
+        sesion.setAttribute("rol", "ADMIN");
 
         return ResponseEntity.ok(adminDTO);
     }
 
     @PostMapping("/cerrarSesion")
-    public ResponseEntity<String>cerrarSesion(HttpSession sesion){
+    public ResponseEntity<String> cerrarSesion(HttpSession sesion){
         sesion.invalidate();
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }

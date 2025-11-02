@@ -14,6 +14,7 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.PedidoCrecionService;
 
 @Service
 public class PedidoCreacionServiceImpl implements PedidoCrecionService {
+
     @Autowired
     private PedidoCreacionRepository pedidoCreacionRepository;
 
@@ -26,9 +27,9 @@ public class PedidoCreacionServiceImpl implements PedidoCrecionService {
 
     @Override
     public PedidoCreacion agregarCreacion(Long pedidoId, Long creacionId, int cantidad) {
-        Pedido pedido = (Pedido) pedidoRepository.findById(pedidoId).orElseThrow(() -> new PedidoNoEncontradoException());
+        Pedido pedido = (Pedido) pedidoRepository.findById(pedidoId).orElseThrow(PedidoNoEncontradoException::new);
 
-        Creacion creacion =(Creacion) creacionRepository.findById(creacionId).orElseThrow(() -> new CreacionNoEncontradaException());
+        Creacion creacion = (Creacion) creacionRepository.findById(creacionId).orElseThrow(CreacionNoEncontradaException::new);
 
         PedidoCreacion pedidoCreacion = new PedidoCreacion();
         pedidoCreacion.setCreacion(creacion);

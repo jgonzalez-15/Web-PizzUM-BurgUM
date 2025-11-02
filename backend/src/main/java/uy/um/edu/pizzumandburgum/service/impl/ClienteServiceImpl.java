@@ -1,6 +1,5 @@
 package uy.um.edu.pizzumandburgum.service.impl;
 
-
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,12 +10,10 @@ import uy.um.edu.pizzumandburgum.entities.*;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.HamburguesaNoEncontradaException;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Pizza.PizzaNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
-import uy.um.edu.pizzumandburgum.exceptions.MedioDePago.MedioDePagoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.ContraseniaInvalidaException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.EmailNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.EmailYaRegistradoException;
-import uy.um.edu.pizzumandburgum.exceptions.Usuario.UsuarioNoEncontradoException;
 import uy.um.edu.pizzumandburgum.mapper.*;
 import uy.um.edu.pizzumandburgum.repository.*;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
@@ -36,9 +33,6 @@ public class ClienteServiceImpl implements ClienteService {
     private ClienteMapper clienteMapper;
 
     @Autowired
-    private PedidoService pedidoService;
-
-    @Autowired
     private MedioDePagoRepository medioDePagoRepository;
 
     @Autowired
@@ -55,19 +49,19 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
     private PizzaRepository pizzaRepository;
+
     @Autowired
     private PedidoMapper pedidoMapper;
 
     @Autowired
     private  PizzaMapper pizzaMapper;
-    @Autowired
-    private ClienteRegistrarMapper clienteRegistrarMapper;
-    @Autowired
-    private MedioDePagoService medioDePagoService;
+
     @Autowired
     private MedioDePagoMapper medioDePagoMapper;
+
     @Autowired
     private DomicilioMapper domicilioMapper;
+
     @Autowired
     private ClienteDomicilioRepository clienteDomicilioRepository;
 
@@ -113,7 +107,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public ClienteResponseDTO login(String email, String contrasenia) {
-        Cliente cliente = clienteRepository.findById(email).orElseThrow(()->new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findById(email).orElseThrow(ClienteNoExisteException::new);
 
         if (!Objects.equals(cliente.getContrasenia(), contrasenia)){
             throw new ContraseniaInvalidaException();
@@ -121,18 +115,12 @@ public class ClienteServiceImpl implements ClienteService {
             throw new EmailNoExisteException();
         }
 
-        return new ClienteResponseDTO(
-                cliente.getEmail(),
-                cliente.getNombre(),
-                cliente.getApellido(),
-                cliente.getTelefono(),
-                cliente.getFechaNac()
-        );
+        return new ClienteResponseDTO(cliente.getEmail(), cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getFechaNac());
     }
 
     @Override
     public ClienteResponseDTO editarPerfil(String email, ClienteUpdateDTO dto) {
-        Cliente cliente = clienteRepository.findById(email).orElseThrow(() -> new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findById(email).orElseThrow(ClienteNoExisteException::new);
         if (dto.getNombre() != null) {
             cliente.setNombre(dto.getNombre());
         }
@@ -153,7 +141,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public List<PedidoResponseDTO> historialPedido(String email) {
-        Cliente cliente = clienteRepository.findById(email).orElseThrow(() -> new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findById(email).orElseThrow(ClienteNoExisteException::new);
         List<Pedido> pedidos = cliente.getPedidos();
         List<PedidoResponseDTO> historialPedidos = new ArrayList<>();
         for (Pedido pedido : pedidos) {
@@ -174,10 +162,8 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public HamburguesaResponseDTO asociarHamburguesa(String emailCliente, Long idHamburguesa) {
-        Cliente cliente = clienteRepository.findById(emailCliente)
-                .orElseThrow(ClienteNoExisteException::new);
-        Hamburguesa hamburguesa = hamburguesaRepository.findById(idHamburguesa)
-                .orElseThrow(()-> new HamburguesaNoEncontradaException());
+        Cliente cliente = clienteRepository.findById(emailCliente).orElseThrow(ClienteNoExisteException::new);
+        Hamburguesa hamburguesa = hamburguesaRepository.findById(idHamburguesa).orElseThrow(HamburguesaNoEncontradaException::new);
 
         cliente.getCreaciones().add(hamburguesa);
         hamburguesa.setCliente(cliente);
@@ -189,7 +175,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public List<CreacionResponseDTO> mostrarCreaciones(String email) {
-        Cliente cliente = clienteRepository.findByEmail(email).orElseThrow(()-> new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findByEmail(email).orElseThrow(ClienteNoExisteException::new);
         List<Creacion> creaciones = cliente.getCreaciones();
         List<CreacionResponseDTO> retornarlista = new ArrayList<>();
         for (Creacion creacion: creaciones){
@@ -201,7 +187,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public List<PedidoResponseDTO> obtenerPedidosPorCliente(String email) {
-        Cliente cliente = clienteRepository.findByEmail(email).orElseThrow(()-> new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findByEmail(email).orElseThrow(ClienteNoExisteException::new);
         List<Pedido> pedidos = cliente.getPedidos();
         List<PedidoResponseDTO> retornar = new ArrayList<>();
         for (Pedido pedido: pedidos){
@@ -213,8 +199,8 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public PizzaResponseDTO asociarPizza(String email, Long idPizza) {
-        Cliente cliente = clienteRepository.findByEmail(email).orElseThrow(()-> new ClienteNoExisteException());
-        Pizza pizza = pizzaRepository.findById(idPizza).orElseThrow(()-> new PizzaNoExisteException());
+        Cliente cliente = clienteRepository.findByEmail(email).orElseThrow(ClienteNoExisteException::new);
+        Pizza pizza = pizzaRepository.findById(idPizza).orElseThrow(PizzaNoExisteException::new);
         cliente.getCreaciones().add(pizza);
         pizza.setCliente(cliente);
         clienteRepository.save(cliente);
@@ -223,10 +209,10 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public List<DomicilioResponseDTO> mostrarDomicilios(String idCliente) {
-        Cliente cliente = clienteRepository.findByEmail(idCliente).orElseThrow(()-> new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findByEmail(idCliente).orElseThrow(ClienteNoExisteException::new);
         List<DomicilioResponseDTO>domicilios = new ArrayList<>();
         for (ClienteDomicilio cd : cliente.getDomicilios()){
-            Domicilio domicilio = domicilioRepository.findById(cd.getDomicilio().getId()).orElseThrow(()-> new DomicilioNoExisteException());
+            Domicilio domicilio = domicilioRepository.findById(cd.getDomicilio().getId()).orElseThrow(DomicilioNoExisteException::new);
             DomicilioResponseDTO dto = domicilioMapper.toResponseDTO(domicilio);
             domicilios.add(dto);
         }

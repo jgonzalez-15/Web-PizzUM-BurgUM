@@ -16,7 +16,7 @@ public class PizzaProducto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int cantidad; // número de unidades de ese producto
+    private int cantidad;
 
     @ManyToOne
     @JoinColumn(name = "pizzaId")

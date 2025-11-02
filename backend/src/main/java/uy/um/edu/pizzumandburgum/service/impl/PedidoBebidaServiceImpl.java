@@ -7,7 +7,6 @@ import uy.um.edu.pizzumandburgum.entities.PedidoBebida;
 import uy.um.edu.pizzumandburgum.entities.Producto;
 import uy.um.edu.pizzumandburgum.exceptions.Bebida.BebidaNoEncontradaException;
 import uy.um.edu.pizzumandburgum.exceptions.Pedido.PedidoNoEncontradoException;
-import uy.um.edu.pizzumandburgum.mapper.PedidoBebidaMapper;
 import uy.um.edu.pizzumandburgum.repository.PedidoBebidaRepository;
 import uy.um.edu.pizzumandburgum.repository.PedidoRepository;
 import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
@@ -20,9 +19,6 @@ public class PedidoBebidaServiceImpl implements PedidoBebidaService {
     private PedidoBebidaRepository pedidoBebidaRepository;
 
     @Autowired
-    private PedidoBebidaMapper pedidoBebidaMapper;
-
-    @Autowired
     private PedidoRepository pedidoRepository;
 
     @Autowired
@@ -31,9 +27,9 @@ public class PedidoBebidaServiceImpl implements PedidoBebidaService {
 
     @Override
     public PedidoBebida agregarBebida(Long pedidoId, Long bebidaId, int cantidad) {
-        Pedido pedido = (Pedido) pedidoRepository.findById(pedidoId).orElseThrow(() -> new PedidoNoEncontradoException());
+        Pedido pedido = (Pedido) pedidoRepository.findById(pedidoId).orElseThrow(PedidoNoEncontradoException::new);
 
-        Producto bebida = productoRepository.findById(bebidaId).orElseThrow(() -> new BebidaNoEncontradaException());
+        Producto bebida = productoRepository.findById(bebidaId).orElseThrow(BebidaNoEncontradaException::new);
 
         if (bebida.getTipo() != "Bebida"){
             throw new BebidaNoEncontradaException();

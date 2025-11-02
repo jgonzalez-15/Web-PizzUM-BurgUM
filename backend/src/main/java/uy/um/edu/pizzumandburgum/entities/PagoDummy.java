@@ -24,7 +24,7 @@ public class PagoDummy {
 
     private LocalDateTime fechaPago;
 
-    private String estadoPago; // APROBADO o RECHAZADO
+    private String estadoPago;
 
     @OneToOne
     @JoinColumn(name = "pedido_id")

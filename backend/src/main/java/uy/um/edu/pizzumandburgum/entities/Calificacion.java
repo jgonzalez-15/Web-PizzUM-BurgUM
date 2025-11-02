@@ -18,7 +18,7 @@ public class Calificacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer puntuacion;  // 0–5
+    private Integer puntuacion;
     private String comentario;
     private LocalDateTime fecha;
 

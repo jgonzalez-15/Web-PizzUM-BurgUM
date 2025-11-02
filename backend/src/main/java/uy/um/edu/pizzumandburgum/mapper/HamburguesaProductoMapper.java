@@ -4,11 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uy.um.edu.pizzumandburgum.dto.request.HamburguesaProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaProductoResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
-import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
-import uy.um.edu.pizzumandburgum.entities.Producto;
-import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.HamburguesaNoEncontradaException;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.repository.HamburguesaRepository;
 import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
@@ -24,7 +20,7 @@ public class HamburguesaProductoMapper {
 
     public HamburguesaProducto toEntity(HamburguesaProductoRequestDTO dto) {
         HamburguesaProducto hamburguesaProducto = new HamburguesaProducto();
-        hamburguesaProducto.setProducto(productoRepository.findById(dto.getIdProducto()).orElseThrow(()->new ProductoNoExisteException()));
+        hamburguesaProducto.setProducto(productoRepository.findById(dto.getIdProducto()).orElseThrow(ProductoNoExisteException::new));
         hamburguesaProducto.setCantidad(dto.getCantidad());
         return hamburguesaProducto;
     }

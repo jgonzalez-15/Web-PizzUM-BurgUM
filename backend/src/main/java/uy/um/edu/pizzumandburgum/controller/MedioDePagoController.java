@@ -14,6 +14,7 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.MedioDePagoService;
 @RequestMapping("/api/mediodepago")
 @CrossOrigin(origins = "http://localhost:5173")
 public class MedioDePagoController {
+
     @Autowired
     private MedioDePagoService medioDePagoService;
 
@@ -27,8 +28,6 @@ public class MedioDePagoController {
         MedioDePagoDTO response = medioDePagoService.aniadirMedioDePago(request,idCliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
-
 
     @PutMapping("/{email}/mdp")
     public ResponseEntity<MedioDePagoDTO> editarMDP(@PathVariable String email, @RequestBody MedioDePagoUpdateDTO dto) {

@@ -22,9 +22,9 @@ public class ClienteDomicilioMapper {
     private ClienteRepository clienteRepository;
     public ClienteDomicilio toEntity(ClienteDomicilioRequestDTO dto){
         ClienteDomicilio clienteDomicilio = new ClienteDomicilio();
-        Domicilio domicilio = domicilioRepository.findById(dto.getIdDomicilio()).orElseThrow(()-> new DomicilioNoExisteException());
+        Domicilio domicilio = domicilioRepository.findById(dto.getIdDomicilio()).orElseThrow(DomicilioNoExisteException::new);
         clienteDomicilio.setDomicilio(domicilio);
-        Cliente cliente = clienteRepository.findByEmail(dto.getEmail()).orElseThrow(()-> new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findByEmail(dto.getEmail()).orElseThrow(ClienteNoExisteException::new);
         clienteDomicilio.setCliente(cliente);
         return clienteDomicilio;
     }

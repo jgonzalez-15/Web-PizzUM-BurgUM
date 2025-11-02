@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class NotificacionesController {
+
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 

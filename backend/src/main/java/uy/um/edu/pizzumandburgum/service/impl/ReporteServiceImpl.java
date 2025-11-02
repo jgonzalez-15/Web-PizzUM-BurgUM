@@ -62,10 +62,9 @@ public class ReporteServiceImpl implements ReporteService {
         List<PedidoResponseDTO> resultado = new ArrayList<>();
         for (Pedido pedido : pedidos) {
             PedidoResponseDTO dto = pedidoMapper.toResponseDTO(pedido);
-            if ((dto.getFecha().isEqual(inicio) || dto.getFecha().isAfter(inicio) &&
-                    (dto.getFecha().isEqual(fin)|| dto.getFecha().isBefore(fin)))){
+            if ((dto.getFecha().isEqual(inicio) || dto.getFecha().isAfter(inicio) && (dto.getFecha().isEqual(fin)|| dto.getFecha().isBefore(fin)))) {
                 resultado.add(dto);
-                resultado.sort(Comparator.comparing(PedidoResponseDTO::getFecha)); //Ordeno por fecha
+                resultado.sort(Comparator.comparing(PedidoResponseDTO::getFecha));
             }
 
         }

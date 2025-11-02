@@ -3,7 +3,6 @@ package uy.um.edu.pizzumandburgum.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.HamburguesaRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.request.ProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ProductoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
@@ -16,12 +15,9 @@ import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.SinCarneExcepti
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.SinPanException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.HamburguesaMapper;
-import uy.um.edu.pizzumandburgum.mapper.HamburguesaProductoMapper;
 import uy.um.edu.pizzumandburgum.mapper.ProductoMapper;
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
-import uy.um.edu.pizzumandburgum.repository.HamburguesaProductoRepository;
 import uy.um.edu.pizzumandburgum.repository.HamburguesaRepository;
-import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.HamburguesaProductoService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.HamburguesaService;
 
@@ -40,15 +36,6 @@ public class HamburguesaServiceImpl implements HamburguesaService {
     private HamburguesaProductoService hamburguesaProductoService;
 
     @Autowired
-    private ProductoRepository productoRepository;
-
-    @Autowired
-    private HamburguesaProductoMapper hamburguesaProductoMapper;
-
-    @Autowired
-    private HamburguesaProductoRepository hamburguesaProductoRepository;
-
-    @Autowired
     private ProductoMapper productoMapper;
 
     @Autowired
@@ -57,7 +44,7 @@ public class HamburguesaServiceImpl implements HamburguesaService {
 
     @Override
     public HamburguesaResponseDTO crearHamburguesa(HamburguesaRequestDTO dto) {
-        Cliente cliente = clienteRepository.findByEmail(dto.getClienteId()).orElseThrow(()->new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findByEmail(dto.getClienteId()).orElseThrow(ClienteNoExisteException::new);
         Hamburguesa hamburguesa = hamburguesaMapper.toEntity(dto);
 
         boolean tienePan = false;
@@ -95,8 +82,7 @@ public class HamburguesaServiceImpl implements HamburguesaService {
 
     @Override
     public float fijarPrecio(Long idHamburguesa) {
-        Hamburguesa hamburguesa = hamburguesaRepository.findById(idHamburguesa)
-                .orElseThrow(() -> new HamburguesaNoEncontradaException());
+        Hamburguesa hamburguesa = hamburguesaRepository.findById(idHamburguesa).orElseThrow(HamburguesaNoEncontradaException::new);
 
         float precioTotal = hamburguesaProductoService.calcularPrecio(idHamburguesa);
         hamburguesa.setPrecio(precioTotal);
@@ -118,7 +104,7 @@ public class HamburguesaServiceImpl implements HamburguesaService {
 
     @Override
     public List<ProductoResponseDTO> obtenerIngredientesHamburguesa(Long idCreacion) {
-        Hamburguesa hamburguesa = hamburguesaRepository.findById(idCreacion).orElseThrow(()->new HamburguesaNoEncontradaException());
+        Hamburguesa hamburguesa = hamburguesaRepository.findById(idCreacion).orElseThrow(HamburguesaNoEncontradaException::new);
         List<HamburguesaProducto>ingredienteshp = hamburguesa.getIngredientes();
         List<Producto>ingredientes = new ArrayList<>();
         List<ProductoResponseDTO> listaRetornar = new ArrayList<>();

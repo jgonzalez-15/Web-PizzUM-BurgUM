@@ -21,8 +21,8 @@ public class FavoritoMapper {
 
     public Favorito toEntity(FavoritoRequestDTO dto) {
         Favorito favorito = new Favorito();
-        favorito.setCreacion(creacionRepository.findById(dto.getIdCreacion()).orElseThrow(()->new CreacionNoEncontradaException()));
-        favorito.setCliente(clienteRepository.findByEmail(dto.getClienteId()).orElseThrow(()->new ClienteNoExisteException()));
+        favorito.setCreacion(creacionRepository.findById(dto.getIdCreacion()).orElseThrow(CreacionNoEncontradaException::new));
+        favorito.setCliente(clienteRepository.findByEmail(dto.getClienteId()).orElseThrow(ClienteNoExisteException::new));
         favorito.setNombre(dto.getNombre());
         return favorito;
     }

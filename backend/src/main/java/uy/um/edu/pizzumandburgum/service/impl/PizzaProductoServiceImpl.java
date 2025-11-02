@@ -6,7 +6,6 @@ import uy.um.edu.pizzumandburgum.dto.request.PizzaProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PizzaProductoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Pizza;
 import uy.um.edu.pizzumandburgum.entities.PizzaProducto;
-import uy.um.edu.pizzumandburgum.entities.Producto;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Pizza.PizzaNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.PizzaProductoMapper;
@@ -33,9 +32,9 @@ public class PizzaProductoServiceImpl implements PizzaProductoService {
     @Override
     public PizzaProductoResponseDTO agregarIngrediente(Long idPizza, PizzaProductoRequestDTO dto) {
         PizzaProducto pp = new PizzaProducto();
-        Pizza pizza = pizzaRepository.findById(idPizza).orElseThrow(()-> new PizzaNoExisteException());
+        Pizza pizza = pizzaRepository.findById(idPizza).orElseThrow(PizzaNoExisteException::new);
         pp.setPizza(pizza);
-        pp.setProducto(productoRepository.findById(dto.getIdProducto()).orElseThrow(()-> new ProductoNoExisteException()));
+        pp.setProducto(productoRepository.findById(dto.getIdProducto()).orElseThrow(ProductoNoExisteException::new));
         pp.setCantidad(dto.getCantidad());
         pizzaProductoRepository.save(pp);
         pizza.getIngredientes().add(pp);
@@ -46,7 +45,7 @@ public class PizzaProductoServiceImpl implements PizzaProductoService {
     @Override
     public float calcularPrecio(Long idPizza) {
         float precio = 0;
-        Pizza pizza = pizzaRepository.findById(idPizza).orElseThrow(() -> new PizzaNoExisteException());
+        Pizza pizza = pizzaRepository.findById(idPizza).orElseThrow(PizzaNoExisteException::new);
 
         for (PizzaProducto pp : pizza.getIngredientes()){
             precio += pp.getProducto().getPrecio() * pp.getCantidad();

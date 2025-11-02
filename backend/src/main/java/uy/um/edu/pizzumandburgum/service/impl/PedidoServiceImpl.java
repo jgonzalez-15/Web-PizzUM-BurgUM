@@ -43,13 +43,7 @@ public class PedidoServiceImpl implements PedidoService {
     private ClienteDomicilioService clienteDomicilioService;
 
     @Autowired
-    private PedidoCreacionRepository pedidoCreacionRepository;
-
-    @Autowired
     private MedioDePagoService medioDePagoService;
-
-    @Autowired
-    private PedidoBebidaRepository pedidoBebidaRepository;
 
     @Autowired
     private ProductoRepository productoRepository;
@@ -69,20 +63,13 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public PedidoResponseDTO realizarPedido(PedidoRequestDTO dto) {
-        Cliente cliente = clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(() -> new ClienteNoExisteException());
+        Cliente cliente = clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(ClienteNoExisteException::new);
 
-        MedioDePago medioDePago = medioDePagoService.obtenerMedioDePago(
-                cliente.getEmail(),
-                dto.getIdMedioDePago()
-        );
+        MedioDePago medioDePago = medioDePagoService.obtenerMedioDePago(cliente.getEmail(), dto.getIdMedioDePago());
 
-        Domicilio domicilioTemp = domicilioRepository.findById(dto.getIdDomicilio())
-                .orElseThrow(() -> new DomicilioNoExisteException());
+        Domicilio domicilioTemp = domicilioRepository.findById(dto.getIdDomicilio()).orElseThrow(DomicilioNoExisteException::new);
 
-        Domicilio domicilio = clienteDomicilioService.obtenerDomicilio(
-                cliente.getEmail(),
-                domicilioTemp.getDireccion()
-        );
+        Domicilio domicilio = clienteDomicilioService.obtenerDomicilio(cliente.getEmail(), domicilioTemp.getDireccion());
 
         Pedido pedido = pedidoMapper.toEntity(dto);
         pedido.setEstado("En Cola");
@@ -92,24 +79,16 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setMedioDePago(medioDePago);
         pedido.setFecha(LocalDate.now());
 
-
         pedido = pedidoRepository.save(pedido);
-
-
 
         float precioTotal = 0f;
 
         if (dto.getCreaciones() != null && !dto.getCreaciones().isEmpty()) {
             for (PedidoCreacionDTO creacionDto : dto.getCreaciones()) {
 
-                pedidoCrecionService.agregarCreacion(
-                        pedido.getId(),
-                        creacionDto.getCreacion().getId(),
-                        creacionDto.getCantidad()
-                );
+                pedidoCrecionService.agregarCreacion(pedido.getId(), creacionDto.getCreacion().getId(), creacionDto.getCantidad());
 
-                Creacion creacion = creacionRepository.findById(creacionDto.getCreacion().getId())
-                        .orElseThrow(() -> new CreacionNoEncontradaException());
+                Creacion creacion = creacionRepository.findById(creacionDto.getCreacion().getId()).orElseThrow(CreacionNoEncontradaException::new);
 
                 precioTotal += creacion.getPrecio() * creacionDto.getCantidad();
             }
@@ -118,20 +97,13 @@ public class PedidoServiceImpl implements PedidoService {
 
         if (dto.getBebidas() != null && !dto.getBebidas().isEmpty()) {
             for (PedidoBebidaResponseDTO bebidaDto : dto.getBebidas()) {
-                // Agregar la bebida al pedido
-                pedidoBebidaService.agregarBebida(
-                        pedido.getId(),
-                        bebidaDto.getProducto().getIdProducto(),
-                        bebidaDto.getCantidad()
-                );
+                pedidoBebidaService.agregarBebida(pedido.getId(), bebidaDto.getProducto().getIdProducto(), bebidaDto.getCantidad());
 
-                Producto bebida = productoRepository.findById(bebidaDto.getProducto().getIdProducto())
-                        .orElseThrow(() -> new ProductoNoExisteException());
+                Producto bebida = productoRepository.findById(bebidaDto.getProducto().getIdProducto()).orElseThrow(ProductoNoExisteException::new);
 
                 precioTotal += bebida.getPrecio() * bebidaDto.getCantidad();
             }
         }
-
 
         pedido.setPrecio(precioTotal);
         pedido = pedidoRepository.save(pedido);
@@ -142,8 +114,7 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public void eliminarPedido(Long idPedido) {
-        Pedido pedido = pedidoRepository.findById(idPedido)
-                .orElseThrow(() -> new PedidoNoEncontradoException());
+        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow(PedidoNoEncontradoException::new);
 
         List<PedidoCreacion> creacionesDelPedido = new ArrayList<>(pedido.getCreacionesPedido());
 
@@ -158,25 +129,21 @@ public class PedidoServiceImpl implements PedidoService {
             }
         }
 
-
         pedidoRepository.delete(pedido);
     }
 
     @Override
     public String consultarEstado(Long id) {
-        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new PedidoNoEncontradoException());
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(PedidoNoEncontradoException::new);
         return pedido.getEstado();
     }
 
     @Override
     public void cambiarEstado(Long id) {
-        Pedido pedido = pedidoRepository.findById(id)
-                .orElseThrow(() -> new PedidoNoEncontradoException());
-
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(PedidoNoEncontradoException::new);
 
         String estadoActual = pedido.getEstado();
         String nuevoEstado;
-
 
         switch (estadoActual) {
             case "En Cola":

@@ -3,7 +3,6 @@ package uy.um.edu.pizzumandburgum.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.HamburguesaProductoRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.request.HamburguesaRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.HamburguesaProductoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Hamburguesa;
 import uy.um.edu.pizzumandburgum.entities.HamburguesaProducto;
@@ -34,8 +33,8 @@ public class HamburguesaProductoServiceImpl implements HamburguesaProductoServic
 
     @Override
     public HamburguesaProductoResponseDTO agregarIngrediente(Long idHamburguesa,HamburguesaProductoRequestDTO dto) {
-        Hamburguesa hamburguesa = hamburguesaRepository.findById(idHamburguesa).orElseThrow(()-> new HamburguesaNoEncontradaException());
-        Producto producto = productoRepository.findById(dto.getIdProducto()).orElseThrow(()->new ProductoNoExisteException());
+        Hamburguesa hamburguesa = hamburguesaRepository.findById(idHamburguesa).orElseThrow(HamburguesaNoEncontradaException::new);
+        Producto producto = productoRepository.findById(dto.getIdProducto()).orElseThrow(ProductoNoExisteException::new);
         HamburguesaProducto hp = new HamburguesaProducto();
         hp.setHamburguesa(hamburguesa);
         hp.setProducto(producto);
@@ -47,10 +46,10 @@ public class HamburguesaProductoServiceImpl implements HamburguesaProductoServic
     @Override
     public float calcularPrecio(Long idhamburguesa) {
         float precio = 0;
-        Hamburguesa hamburguesa = hamburguesaRepository.findById(idhamburguesa).orElseThrow(() -> new HamburguesaNoEncontradaException());
+        Hamburguesa hamburguesa = hamburguesaRepository.findById(idhamburguesa).orElseThrow(HamburguesaNoEncontradaException::new);
 
         for (HamburguesaProducto hp : hamburguesa.getIngredientes()){
-            Producto producto = productoRepository.findById(hp.getProducto().getIdProducto()).orElseThrow(()->new  ProductoNoExisteException());
+            Producto producto = productoRepository.findById(hp.getProducto().getIdProducto()).orElseThrow(ProductoNoExisteException::new);
             precio += producto.getPrecio() * hp.getCantidad();
         }
 

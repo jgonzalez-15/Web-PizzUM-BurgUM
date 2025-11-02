@@ -17,5 +17,4 @@ public class ClienteResponseDTO {
     private String apellido;
     private long telefono;
     private LocalDate fechaNac;
-
 }

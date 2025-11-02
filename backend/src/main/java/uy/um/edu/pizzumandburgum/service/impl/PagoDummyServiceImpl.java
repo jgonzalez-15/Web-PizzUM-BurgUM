@@ -36,8 +36,7 @@ public class PagoDummyServiceImpl implements PagoDummyService {
 
     @Override
     public PagoDummyResponseDTO procesarPago(PagoDummyRequestDTO request) {
-        Pedido pedido = pedidoRepository.findById(request.getIdPedido())
-                .orElseThrow(() -> new PedidoNoEncontradoException());
+        Pedido pedido = pedidoRepository.findById(request.getIdPedido()).orElseThrow(PedidoNoEncontradoException::new);
 
         if (pedido.isEstaPago()){
             throw new PedidoPagoException();
@@ -60,9 +59,7 @@ public class PagoDummyServiceImpl implements PagoDummyService {
         pedido.setEstaPago(true);
         pedidoRepository.save(pedido);
 
-        notificacionController.enviarNotificacion("💰 Pago confirmado para el pedido #" + pedido.getId() +
-                ". Monto: $" + pago.getMonto()
-        );
+        notificacionController.enviarNotificacion("Pago confirmado para el pedido #" + pedido.getId() + ". Monto: $" + pago.getMonto());
 
         PagoDummyResponseDTO dto = new PagoDummyResponseDTO();
         dto.setCodigoTransaccion(pago.getCodigoTransaccion());

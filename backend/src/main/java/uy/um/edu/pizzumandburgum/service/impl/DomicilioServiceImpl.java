@@ -31,18 +31,10 @@ public class DomicilioServiceImpl implements DomicilioService {
 
     @Override
     public DomicilioResponseDTO editarPerfil(Long idDomicilio, DomicilioUpdateDTO dto) {
-        Domicilio domicilio = domicilioRepository.findById(idDomicilio).orElseThrow(()->new DomicilioNoExisteException());
+        Domicilio domicilio = domicilioRepository.findById(idDomicilio).orElseThrow(DomicilioNoExisteException::new);
         if (dto.getDireccion() != null){
             domicilio.setDireccion(dto.getDireccion());
         }
         return domicilioMapper.toResponseDTO(domicilio);
     }
-
-    /*@Override
-    public void modificarDomicilio(DomicilioResponseDTO dto){
-        Domicilio domicilio = domicilioRepository.findById(dto.getDireccion()).orElseThrow(()->new DomicilioNoExisteException());
-        domicilio.setDireccion(dto.getDireccion());
-        domicilio.setPedidos(dto.getPedidos());
-        domicilioRepository.save(domicilio);
-    }*/
 }

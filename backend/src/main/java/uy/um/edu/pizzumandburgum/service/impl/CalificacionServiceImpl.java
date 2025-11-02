@@ -39,8 +39,8 @@ public class CalificacionServiceImpl implements CalificacionService {
     @Override
     public CalificacionResponseDTO crearCalificacion(CalificacionRequestDTO dto) {
 
-        Cliente cliente = clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(()-> new ClienteNoExisteException());
-        Pedido pedido = pedidoRepository.findById(dto.getIdPedido()).orElseThrow(()-> new PedidoNoEncontradoException());
+        Cliente cliente = clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(ClienteNoExisteException::new);
+        Pedido pedido = pedidoRepository.findById(dto.getIdPedido()).orElseThrow(PedidoNoEncontradoException::new);
         if (dto.getPuntuacion()<0 || dto.getPuntuacion()>5){
             throw new PuntuacionFueraDeRangoException();
         }
@@ -62,7 +62,7 @@ public class CalificacionServiceImpl implements CalificacionService {
 
     @Override
     public CalificacionResponseDTO calificacionPorPedido(Long idPedido) {
-        return calificacionMapper.toResponseDTO(calificacionRepository.findByPedidoId(idPedido).orElseThrow(()-> new CalificacionNoExisteException()));
+        return calificacionMapper.toResponseDTO(calificacionRepository.findByPedidoId(idPedido).orElseThrow(CalificacionNoExisteException::new));
     }
 
 
