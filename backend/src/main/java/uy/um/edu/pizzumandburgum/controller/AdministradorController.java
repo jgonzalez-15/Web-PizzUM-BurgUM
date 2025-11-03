@@ -2,6 +2,7 @@ package uy.um.edu.pizzumandburgum.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,12 @@ public class AdministradorController {
 
     @PostMapping("/agregarAdmin")
     public ResponseEntity<AdministradorResponseDTO> agregarAdmin(@Validated @RequestBody AdministradorResponseDTO dto, HttpSession sesion) {
+        //        TODAVIA ESTO NO
+//        String rol = (String) sesion.getAttribute("rol");
+//        if (rol == null || !rol.equals("ADMIN")) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+//        }
+
         AdministradorResponseDTO admin = administradorService.agregarAdmin(dto);
 
         sesion.setAttribute("email", admin.getEmail());
@@ -48,13 +55,24 @@ public class AdministradorController {
     }
 
     @PutMapping("/{email}/perfil")
-    public ResponseEntity<AdministradorResponseDTO> editarPerfil(@PathVariable String email, @RequestBody AdministradorUpdateDTO dto) {
+    public ResponseEntity<AdministradorResponseDTO> editarPerfil(@PathVariable String email, @RequestBody AdministradorUpdateDTO dto, HttpSession sesion) {
+        String rol = (String) sesion.getAttribute("rol");
+
+        if (rol == null || !rol.equals("ADMIN")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
         AdministradorResponseDTO response = administradorService.editarPerfil(email, dto);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<AdministradorResponseDTO>> mostrarAdministradores() {
+    public ResponseEntity<List<AdministradorResponseDTO>> mostrarAdministradores(HttpSession sesion) {
+        String rol = (String) sesion.getAttribute("rol");
+
+        if (rol == null || !rol.equals("ADMIN")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+
         List<AdministradorResponseDTO> administradores = administradorService.listarAdministradores();
         return ResponseEntity.ok(administradores);
     }

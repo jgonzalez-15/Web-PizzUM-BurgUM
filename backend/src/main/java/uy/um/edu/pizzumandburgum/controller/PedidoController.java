@@ -83,18 +83,17 @@ public class PedidoController {
     }
 
     @GetMapping("/rango/{fechaInicio}/{fechaFin}")
-    public ResponseEntity<List<PedidoResponseDTO>> listarPedidosPorRango(
-            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
-            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin
-    ) {
+    public ResponseEntity<List<PedidoResponseDTO>> listarPedidosPorRango(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin, HttpSession sesion) {
+        String rol = (String) sesion.getAttribute("rol");
+        if (rol == null || !rol.equals("ADMIN")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
         List<PedidoResponseDTO> pedidos = pedidoService.listarPedidosPorRangoFechas(fechaInicio, fechaFin);
         return ResponseEntity.ok(pedidos);
     }
 
     @PostMapping("/repetir/{idPedido}")
-    public ResponseEntity<PedidoResponseDTO> repetirPedidoSimple(
-            @PathVariable Long idPedido
-    ) {
+    public ResponseEntity<PedidoResponseDTO> repetirPedidoSimple(@PathVariable Long idPedido) {
         PedidoResponseDTO nuevoPedido = pedidoService.repetirPedido(idPedido);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPedido);
     }

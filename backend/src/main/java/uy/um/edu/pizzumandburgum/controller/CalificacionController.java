@@ -1,6 +1,8 @@
 package uy.um.edu.pizzumandburgum.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.CalificacionRequestDTO;
@@ -16,7 +18,13 @@ public class CalificacionController {
     private CalificacionService calificacionService;
 
     @PostMapping("/agregar")
-    public ResponseEntity<CalificacionResponseDTO> crear(@RequestBody CalificacionRequestDTO dto) {
+    public ResponseEntity<CalificacionResponseDTO> crear(@RequestBody CalificacionRequestDTO dto, HttpSession sesion) {
+        String rol = (String) sesion.getAttribute("rol");
+
+        if (rol == null || !rol.equals("CLIENTE")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+
         CalificacionResponseDTO calificacion = calificacionService.crearCalificacion(dto);
         return ResponseEntity.ok(calificacion);
     }
