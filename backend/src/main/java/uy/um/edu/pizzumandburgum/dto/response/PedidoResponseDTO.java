@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PedidoResponseDTO {
+    Long id;
     float precio;
     LocalDate fecha;
     String estado;
