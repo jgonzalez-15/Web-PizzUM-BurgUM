@@ -7,5 +7,4 @@ import uy.um.edu.pizzumandburgum.dto.update.DomicilioUpdateDTO;
 public interface DomicilioService {
     DomicilioResponseDTO crearDomicilio(DomicilioRequestDTO dto);
     DomicilioResponseDTO editarPerfil(Long idDomicilio, DomicilioUpdateDTO dto);
-
 }

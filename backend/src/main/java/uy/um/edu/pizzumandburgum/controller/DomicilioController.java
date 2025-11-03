@@ -31,7 +31,11 @@ public class DomicilioController {
     }
 
     @PutMapping("/{email}/domicilio")
-    public ResponseEntity<DomicilioResponseDTO> editarDomicilio(@PathVariable Long idDomicilio, @RequestBody DomicilioUpdateDTO dto) {
+    public ResponseEntity<DomicilioResponseDTO> editarDomicilio(@PathVariable Long idDomicilio, @RequestBody DomicilioUpdateDTO dto, HttpSession sesion) {
+        String rol = (String) sesion.getAttribute("rol");
+        if (rol == null || !rol.equals("CLIENTE")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
         DomicilioResponseDTO response = domicilioService.editarPerfil(idDomicilio, dto);
         return ResponseEntity.ok(response);
     }

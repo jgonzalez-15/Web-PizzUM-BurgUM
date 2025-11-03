@@ -24,8 +24,7 @@ public class ProductoController {
         String rol = (String) sesion.getAttribute("rol");
 
         if (rol == null || !rol.equals("ADMIN")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
 
         ProductoResponseDTO nuevo = productoService.agregarProducto(dto);

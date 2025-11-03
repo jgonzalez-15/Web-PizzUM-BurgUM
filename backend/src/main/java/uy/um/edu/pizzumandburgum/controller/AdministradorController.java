@@ -2,6 +2,7 @@ package uy.um.edu.pizzumandburgum.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +24,12 @@ public class AdministradorController {
 
     @PostMapping("/agregarAdmin")
     public ResponseEntity<AdministradorResponseDTO> agregarAdmin(@Validated @RequestBody AdministradorResponseDTO dto, HttpSession sesion) {
-        AdministradorResponseDTO admin = administradorService.agregarAdmin(dto);
+//        String rol = (String) sesion.getAttribute("rol");
+//        if (rol == null || !rol.equals("ADMIN")) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+//        }
 
-        sesion.setAttribute("email", admin.getEmail());
-        sesion.setAttribute("rol", "ADMIN");
+        AdministradorResponseDTO admin = administradorService.agregarAdmin(dto);
 
         return ResponseEntity.ok(admin);
     }
@@ -43,18 +46,41 @@ public class AdministradorController {
 
     @PostMapping("/cerrarSesion")
     public ResponseEntity<String> cerrarSesion(HttpSession sesion){
+        String email = (String) sesion.getAttribute("email");
+
+        if (email == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No hay sesión activa");
+        }
+
         sesion.invalidate();
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
 
     @PutMapping("/{email}/perfil")
-    public ResponseEntity<AdministradorResponseDTO> editarPerfil(@PathVariable String email, @RequestBody AdministradorUpdateDTO dto) {
+    public ResponseEntity<AdministradorResponseDTO> editarPerfil(@PathVariable String email, @RequestBody AdministradorUpdateDTO dto, HttpSession sesion) {
+        String emailSesion = (String) sesion.getAttribute("email");
+        String rol = (String) sesion.getAttribute("rol");
+
+        if (rol == null || !rol.equals("ADMIN")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+
+        if (emailSesion == null || !email.equals(emailSesion)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+
         AdministradorResponseDTO response = administradorService.editarPerfil(email, dto);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<AdministradorResponseDTO>> mostrarAdministradores() {
+    public ResponseEntity<List<AdministradorResponseDTO>> mostrarAdministradores(HttpSession sesion) {
+        String rol = (String) sesion.getAttribute("rol");
+
+        if (rol == null || !rol.equals("ADMIN")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+
         List<AdministradorResponseDTO> administradores = administradorService.listarAdministradores();
         return ResponseEntity.ok(administradores);
     }

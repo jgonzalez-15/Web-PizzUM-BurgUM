@@ -1,6 +1,8 @@
 package uy.um.edu.pizzumandburgum.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
@@ -25,12 +27,12 @@ public class RepositoryController {
     }
 
     @GetMapping("/tickets")
-    public ResponseEntity<List<PedidoResponseDTO>> obtenerTickets(@RequestParam LocalDate inicio, @RequestParam LocalDate fin) {
+    public ResponseEntity<List<PedidoResponseDTO>> obtenerTickets(@RequestParam LocalDate inicio, @RequestParam LocalDate fin, HttpSession sesion) {
         return ResponseEntity.ok(reporteService.obtenerTicketsDeVenta(inicio, fin));
     }
 
     @GetMapping("/usuarios/cantidad")
-    public ResponseEntity<Long> obtenerCantidadUsuarios() {
+    public ResponseEntity<Long> obtenerCantidadUsuarios(HttpSession sesion) {
         return ResponseEntity.ok(reporteService.obtenerCantidadUsuarios());
     }
 }
