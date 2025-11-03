@@ -9,7 +9,7 @@ function AdminSidebar(){
     const handleSignOut = async (e) => {
     e.preventDefault();
     try {
-        const response = await fetch(`http://localhost:8080/api/cliente/cerrarSesion`, {
+        const response = await fetch(`http://localhost:8080/api/administrador/cerrarSesion`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include"

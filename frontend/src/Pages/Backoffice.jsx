@@ -16,10 +16,7 @@ function Backoffice() {
   const [newAdmin, setNewAdmin] = useState({ user: "", password: "" });
   const [showAdminModal, setShowAdminModal] = useState(false);
 
-  const [orders, setOrders] = useState([
-    { id: 1, date: "2025-10-25", status: 1 },
-    { id: 2, date: "2025-10-24", status: 3 },
-  ]);
+  const [orders, setOrders] = useState([]);
 
   const handleAddProduct = async (e) => {
   e.preventDefault();
@@ -122,6 +119,29 @@ function Backoffice() {
   filter();
   }, [filterType, products]);
 
+  const getOrders = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/pedido/enCurso", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include"
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setOrders(data);
+      } else {
+        alert("Ocurrió un error al obtener los pedidos");
+      }
+    } catch (error) {
+      console.error("Error al obtener pedidos:", error);
+    }
+  };
+
+  useEffect(() => {
+  getOrders();
+  }, []);
+
   const getAdmins = async () => {
     try {
       const response = await fetch("http://localhost:8080/api/administrador/listar", {
@@ -143,6 +163,25 @@ function Backoffice() {
   useEffect(() => {
   getAdmins();
   }, []);
+
+  const handleAdvanceState = async (e, id) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`http://localhost:8080/api/pedido/${id}/cambiarEstado`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include"
+      });
+
+      if (response.ok) {
+        getOrders()
+      } else {
+        alert("Ocurrió un error al actualizar el estado del pedido");
+      }
+    } catch (error) {
+      console.error("Error al actualizar pedido:", error);
+    }
+  };
 
   return (
     <>
@@ -204,7 +243,8 @@ function Backoffice() {
                     <h1 className="font-bold text-lg">Pedido #{o.id}</h1>
                     <h2>Fecha: {o.fecha}</h2>
                   </div>
-                  <button className="bg-orange-400 text-white rounded-xl px-4 py-2 font-bold hover:scale-105 transition-transform">
+                  <button className="bg-orange-400 text-white rounded-xl px-4 py-2 font-bold hover:scale-105 transition-transform"
+                  onClick={(e) => handleAdvanceState(e, o.id)}>
                     Avanzar estado
                   </button>
                 </div>

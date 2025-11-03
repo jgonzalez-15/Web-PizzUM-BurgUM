@@ -21,7 +21,7 @@ export default function AddToCartButton({item, isPrimary, handle}){
 
   return(
     <button className={`z-0 transition-transform duration-100 ease-in-out hover:scale-102 
-    rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base text-center 
+    rounded-2xl shadow-sm font-bold m-1 text-sm md:text-base text-center 
     ${isPrimary ? "bg-orange-400 text-white" : "bg-gray-300 text-black"}`} 
     onClick={() => {use(), addItem(newItem)}}>
       <h2 className="m-2">
