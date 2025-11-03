@@ -23,7 +23,7 @@ public class Producto {
     String tipo;
     boolean sinTacc;
     float precio;
-    LocalDate fechaBorrado;
+    boolean estaActivo;
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HamburguesaProducto> ingredientesHamburguesa = new ArrayList<>();

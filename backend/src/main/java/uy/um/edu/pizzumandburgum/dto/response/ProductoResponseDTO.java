@@ -17,5 +17,5 @@ public class ProductoResponseDTO {
     private String nombre;
     private boolean sinTacc;
     private float precio;
-    private LocalDate fechaBorrado;
+    private boolean estaActivo;
 }
