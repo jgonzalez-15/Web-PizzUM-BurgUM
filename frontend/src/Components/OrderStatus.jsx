@@ -10,27 +10,27 @@ export default function OrderStatus({pedido}){
             <div className="m-4 flex flex-row gap-8 items-center">
                 <div className="gap-8 md:flex flex-row items-center hidden">
                     <div className="flex flex-col items-center">
-                        <div className={`h-12 w-12 rounded-full ${pedido.estado in ["En Cola", "En Preparacion", "En camino", "Entregado"] ? "bg-orange-500" : "bg-gray-300"}`}/>
+                        <div className={`h-12 w-12 rounded-full ${["En Cola", "En Preparacion", "En Camino", "Entregado"].includes(pedido.estado) ? "bg-orange-500" : "bg-gray-300"}`}/>
                         <h1 className="text-center">En Cola</h1>
                     </div>
                     <div className="flex flex-col items-center">
-                        <div className={`h-12 w-12 rounded-full ${pedido.estado in ["En Preparacion", "En camino", "Entregado"] ? "bg-orange-500" : "bg-gray-300"}`}/>
+                        <div className={`h-12 w-12 rounded-full ${["En Preparacion", "En Camino", "Entregado"].includes(pedido.estado) ? "bg-orange-500" : "bg-gray-300"}`}/>
                         <h1 className="text-center">En Preparacion</h1>
                     </div>
                     <div className="flex flex-col items-center">
-                        <div className={`h-12 w-12 rounded-full ${pedido.estado in ["En camino", "Entregado"] ? "bg-orange-500" : "bg-gray-300"}`}/>
+                        <div className={`h-12 w-12 rounded-full ${["En Camino", "Entregado"].includes(pedido.estado) ? "bg-orange-500" : "bg-gray-300"}`}/>
                         <h1 className="text-center">En Camino</h1>
                     </div>
                     <div className="flex flex-col items-center">
-                        <div className={`h-12 w-12 rounded-full ${pedido.estado in ["Entregado"] ? "bg-orange-500" : "bg-gray-300"}`}/>
+                        <div className={`h-12 w-12 rounded-full ${["Entregado"].includes(pedido.estado) ? "bg-orange-500" : "bg-gray-300"}`}/>
                         <h1 className="text-center">Entregado</h1>
                     </div>
                 </div>
                 <div className="md:hidden">
-                    {pedido.estado in ["En Cola", "En Preparacion", "En camino", "Entregado"] ? (<h1 className="font-bold text-orange-400">Pedido</h1>):(<></>)}
-                    {pedido.estado in ["En Preparacion", "En camino", "Entregado"] ? (<h1 className="font-bold text-orange-400">Preparando</h1>):(<></>)}
-                    {pedido.estado in ["En camino", "Entregado"] ? (<h1 className="font-bold text-orange-400">Enviando</h1>):(<></>)}
-                    {pedido.estado in ["Entregado"] ? (<h1 className="font-bold text-orange-400">Recibido</h1>):(<></>)}
+                    {["En Cola"].includes(pedido.estado) ? (<h1 className="font-bold text-orange-400">En Cola</h1>):(<></>)}
+                    {["En Preparacion"].includes(pedido.estado) ? (<h1 className="font-bold text-orange-400">En Preaparación</h1>):(<></>)}
+                    {["En Camino"].includes(pedido.estado) ? (<h1 className="font-bold text-orange-400">En Camino</h1>):(<></>)}
+                    {["Entregado"].includes(pedido.estado) ? (<h1 className="font-bold text-orange-400">Entregado</h1>):(<></>)}
                 </div>
                 {pedido.estado == "En Cola" && (
                 <button className={`z-0 h-12 transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 text-sm md:text-base text-center bg-red-600 text-white`}>

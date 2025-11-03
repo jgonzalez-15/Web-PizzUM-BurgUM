@@ -188,7 +188,7 @@ function Design({ type }) {
             {content}
           </div>
 
-          <div className="flex flex-col md:flex-row justify-center items-center m-8">
+          <div className="flex flex-col justify-center items-center m-8">
             <h1>Nombra tu creación</h1>
             <input type="text" className="bg-gray-100 rounded-sm p-2" value={nombre} placeholder="Nueva Creacion" 
             onChange={(e) => {

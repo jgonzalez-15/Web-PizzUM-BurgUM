@@ -77,14 +77,14 @@ function Login(){
                         <h4 className="ml-2">Correo electrónico:</h4>
                         <input
                         type="text"
-                        className="bg-gray-200 rounded-2xl mt-1 mb-4 p-1"
+                        className="bg-gray-200 rounded-2xl mt-1 mb-4 p-2"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         />
                         <h4 className="ml-2">Contraseña:</h4>
                         <input
                         type="password"
-                        className="bg-gray-200 rounded-2xl mt-1 mb-4 p-1"
+                        className="bg-gray-200 rounded-2xl mt-1 mb-4 p-2"
                         value={contrasenia}
                         onChange={(e) => setContrasenia(e.target.value)}
                         />

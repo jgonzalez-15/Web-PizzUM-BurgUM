@@ -242,6 +242,7 @@ function Backoffice() {
                   <div>
                     <h1 className="font-bold text-lg">Pedido #{o.id}</h1>
                     <h2>Fecha: {o.fecha}</h2>
+                    <h2 className="text-orange-400">Estado: {o.estado}</h2>
                   </div>
                   <button className="bg-orange-400 text-white rounded-xl px-4 py-2 font-bold hover:scale-105 transition-transform"
                   onClick={(e) => handleAdvanceState(e, o.id)}>
