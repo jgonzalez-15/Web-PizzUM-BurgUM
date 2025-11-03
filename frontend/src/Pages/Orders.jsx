@@ -25,8 +25,8 @@ function Orders(){
     
           if (response.ok) {
             const data = await response.json();
-            setOrders(data.map((o) => o.estado != "Entregado"));
-            setOrdersHistory(data.map((o) => o.estado == "Entregado"))
+            setOrders(data.filter((o) => o.estado != "Entregado"));
+            setOrdersHistory(data.filter((o) => o.estado == "Entregado"))
           } else {
             alert("Ocurrió un error")
           }
@@ -54,7 +54,7 @@ function Orders(){
                 <div className="flex flex-1 flex-col ml-4 mr-4 md:ml-8 md:mr-8 gap-6 items-center mb-8">
                     {orders.length > 0 ? 
                         (orders.map((order) =>
-                            <OrderStatus key={order.idPedido} 
+                            <OrderStatus key={order.id} 
                             pedido={order}
                             />
                         )) : (<h1>No tienes pedidos actuales</h1>)}
@@ -64,7 +64,7 @@ function Orders(){
                     (<div className="w-full flex flex-col gap-6 items-center">
                         <h1 className=" ml-4 mr-4 md:ml-8 md:mt-8 w-full font-bold text-xl">Historial:</h1>
                         {orderHistory.map((order) =>
-                            <OrderStatus key={order.idPedido} 
+                            <OrderStatus key={order.id} 
                             pedido={order}
                             />
                         )}
