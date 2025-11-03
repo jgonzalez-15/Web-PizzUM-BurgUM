@@ -22,32 +22,17 @@ public class RepositoryController {
     private ReporteService reporteService;
 
     @GetMapping("/tarjetas")
-    public ResponseEntity<List<MedioDePagoDTO>> obtenerTarjetas(HttpSession sesion) {
-        String rol = (String) sesion.getAttribute("rol");
-
-        if (rol == null || !rol.equals("ADMIN")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+    public ResponseEntity<List<MedioDePagoDTO>> obtenerTarjetas() {
         return ResponseEntity.ok(reporteService.obtenerDatosTarjetas());
     }
 
     @GetMapping("/tickets")
     public ResponseEntity<List<PedidoResponseDTO>> obtenerTickets(@RequestParam LocalDate inicio, @RequestParam LocalDate fin, HttpSession sesion) {
-        String rol = (String) sesion.getAttribute("rol");
-
-        if (rol == null || !rol.equals("ADMIN")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
         return ResponseEntity.ok(reporteService.obtenerTicketsDeVenta(inicio, fin));
     }
 
     @GetMapping("/usuarios/cantidad")
     public ResponseEntity<Long> obtenerCantidadUsuarios(HttpSession sesion) {
-        String rol = (String) sesion.getAttribute("rol");
-
-        if (rol == null || !rol.equals("ADMIN")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
         return ResponseEntity.ok(reporteService.obtenerCantidadUsuarios());
     }
 }

@@ -33,7 +33,7 @@ public class ClienteController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ClienteResponseDTO> login(@Validated @RequestBody ClienteRequestDTO dto, HttpSession sesion){
+    public ResponseEntity<ClienteResponseDTO> login(@Validated @RequestBody ClienteRequestDTO dto, HttpSession sesion) {
         ClienteResponseDTO cliente = clienteService.login(dto.getEmail(), dto.getContrasenia());
 
         sesion.setAttribute("email", cliente.getEmail());
@@ -44,7 +44,12 @@ public class ClienteController {
     }
 
     @PostMapping("/cerrarSesion")
-    public ResponseEntity<String>cerrarSesion(HttpSession sesion){
+    public ResponseEntity<String> cerrarSesion(HttpSession sesion) {
+        String email = (String) sesion.getAttribute("email");
+
+        if (email == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No hay sesión activa");
+        }
         sesion.invalidate();
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }

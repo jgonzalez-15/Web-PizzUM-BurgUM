@@ -24,16 +24,12 @@ public class AdministradorController {
 
     @PostMapping("/agregarAdmin")
     public ResponseEntity<AdministradorResponseDTO> agregarAdmin(@Validated @RequestBody AdministradorResponseDTO dto, HttpSession sesion) {
-        //        TODAVIA ESTO NO
-//        String rol = (String) sesion.getAttribute("rol");
-//        if (rol == null || !rol.equals("ADMIN")) {
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-//        }
+        String rol = (String) sesion.getAttribute("rol");
+        if (rol == null || !rol.equals("ADMIN")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
 
         AdministradorResponseDTO admin = administradorService.agregarAdmin(dto);
-
-        sesion.setAttribute("email", admin.getEmail());
-        sesion.setAttribute("rol", "ADMIN");
 
         return ResponseEntity.ok(admin);
     }
@@ -50,17 +46,29 @@ public class AdministradorController {
 
     @PostMapping("/cerrarSesion")
     public ResponseEntity<String> cerrarSesion(HttpSession sesion){
+        String email = (String) sesion.getAttribute("email");
+
+        if (email == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No hay sesión activa");
+        }
+
         sesion.invalidate();
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
 
     @PutMapping("/{email}/perfil")
     public ResponseEntity<AdministradorResponseDTO> editarPerfil(@PathVariable String email, @RequestBody AdministradorUpdateDTO dto, HttpSession sesion) {
+        String emailSesion = (String) sesion.getAttribute("email");
         String rol = (String) sesion.getAttribute("rol");
 
         if (rol == null || !rol.equals("ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
+
+        if (emailSesion == null || !email.equals(emailSesion)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+
         AdministradorResponseDTO response = administradorService.editarPerfil(email, dto);
         return ResponseEntity.ok(response);
     }
