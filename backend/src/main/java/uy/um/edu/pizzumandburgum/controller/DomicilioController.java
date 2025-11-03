@@ -18,13 +18,7 @@ public class DomicilioController {
     private DomicilioService domicilioService;
 
     @PostMapping("/crearDomicilio")
-    public ResponseEntity<DomicilioResponseDTO> crearDomicilio(@RequestBody DomicilioRequestDTO request, HttpSession sesion) {
-        String rol = (String) sesion.getAttribute("rol");
-
-        if (rol == null || !rol.equals("CLIENTE")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
-
+    public ResponseEntity<DomicilioResponseDTO> crearDomicilio(@RequestBody DomicilioRequestDTO request) {
         DomicilioResponseDTO response = domicilioService.crearDomicilio(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

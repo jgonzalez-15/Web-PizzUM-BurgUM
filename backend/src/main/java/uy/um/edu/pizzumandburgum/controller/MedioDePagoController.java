@@ -19,12 +19,7 @@ public class MedioDePagoController {
     private MedioDePagoService medioDePagoService;
 
     @PostMapping("/{idCliente}/agregar")
-    public ResponseEntity<MedioDePagoDTO> aniadirMedioDePago(@RequestBody MedioDePagoRequestDTO request, @PathVariable String idCliente, HttpSession sesion) {
-        String rol = (String) sesion.getAttribute("rol");
-
-        if (rol == null || !rol.equals("CLIENTE")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+    public ResponseEntity<MedioDePagoDTO> aniadirMedioDePago(@RequestBody MedioDePagoRequestDTO request, @PathVariable String idCliente) {
         MedioDePagoDTO response = medioDePagoService.aniadirMedioDePago(request,idCliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

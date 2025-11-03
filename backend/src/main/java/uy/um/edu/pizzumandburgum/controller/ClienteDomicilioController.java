@@ -22,12 +22,8 @@ public class ClienteDomicilioController {
     private ClienteDomicilioService clienteDomicilioService;
 
     @PostMapping("/asociarDomicilio")
-    public ResponseEntity<ClienteDomicilioResponseDTO> agregarDomicilioACliente(@RequestBody ClienteDomicilioRequestDTO dto, HttpSession sesion) {
-        String rol = (String) sesion.getAttribute("rol");
+    public ResponseEntity<ClienteDomicilioResponseDTO> agregarDomicilioACliente(@RequestBody ClienteDomicilioRequestDTO dto) {
 
-        if (rol == null || !rol.equals("CLIENTE")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
         ClienteDomicilioResponseDTO response = clienteDomicilioService.agregarDomicilio(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
