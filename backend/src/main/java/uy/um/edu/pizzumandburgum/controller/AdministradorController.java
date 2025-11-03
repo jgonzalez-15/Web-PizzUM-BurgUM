@@ -24,10 +24,10 @@ public class AdministradorController {
 
     @PostMapping("/agregarAdmin")
     public ResponseEntity<AdministradorResponseDTO> agregarAdmin(@Validated @RequestBody AdministradorResponseDTO dto, HttpSession sesion) {
-        String rol = (String) sesion.getAttribute("rol");
-        if (rol == null || !rol.equals("ADMIN")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+//        String rol = (String) sesion.getAttribute("rol");
+//        if (rol == null || !rol.equals("ADMIN")) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+//        }
 
         AdministradorResponseDTO admin = administradorService.agregarAdmin(dto);
 

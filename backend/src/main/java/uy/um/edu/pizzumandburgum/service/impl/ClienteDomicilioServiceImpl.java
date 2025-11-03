@@ -4,16 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteDomicilioRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ClienteDomicilioResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.DomicilioResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.ClienteDomicilio;
 import uy.um.edu.pizzumandburgum.entities.Domicilio;
+import uy.um.edu.pizzumandburgum.entities.Pedido;
+import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioConPedidoEnCursoException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.ClienteDomicilioMapper;
+import uy.um.edu.pizzumandburgum.mapper.DomicilioMapper;
 import uy.um.edu.pizzumandburgum.repository.ClienteDomicilioRepository;
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 import uy.um.edu.pizzumandburgum.repository.DomicilioRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteDomicilioService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
@@ -28,6 +35,9 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
 
     @Autowired
     private ClienteDomicilioMapper clienteDomicilioMapper;
+
+    @Autowired
+    private DomicilioMapper domicilioMapper;
 
     @Override
     public ClienteDomicilioResponseDTO agregarDomicilio(ClienteDomicilioRequestDTO dto) {
@@ -57,5 +67,52 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<DomicilioResponseDTO> listarDomiciliosDeCliente(String emailCliente) {
+        Cliente cliente = clienteRepository.findById(emailCliente).orElseThrow(ClienteNoExisteException::new);
+
+        List<DomicilioResponseDTO> domicilios = new ArrayList<>();
+        for (ClienteDomicilio cd : cliente.getDomicilios()) {
+            DomicilioResponseDTO dto = domicilioMapper.toResponseDTO(cd.getDomicilio());
+            domicilios.add(dto);
+        }
+        return domicilios;
+    }
+
+    @Override
+    public void eliminarDomicilioDeCliente(String emailCliente, Long idDomicilio) {
+        Cliente cliente = clienteRepository.findById(emailCliente).orElseThrow(ClienteNoExisteException::new);
+
+        Domicilio domicilio = domicilioRepository.findById(idDomicilio).orElseThrow(DomicilioNoExisteException::new);
+
+        ClienteDomicilio clienteDomicilio = null;
+        for (ClienteDomicilio cd : cliente.getDomicilios()) {
+            if (cd.getDomicilio().getId().equals(idDomicilio)) {
+                clienteDomicilio = cd;
+                break;
+            }
+        }
+
+        if (clienteDomicilio == null) {
+            throw new DomicilioNoExisteException();
+        }
+
+        for (Pedido pedido : domicilio.getPedidos()) {
+            if (pedido.getEstado() != null && !pedido.getEstado().equalsIgnoreCase("Entregado")) {
+                throw new DomicilioConPedidoEnCursoException();
+            }
+        }
+
+        cliente.getDomicilios().remove(clienteDomicilio);
+        domicilio.getClientes().remove(clienteDomicilio);
+        clienteDomicilioRepository.delete(clienteDomicilio);
+
+        if (domicilio.getClientes().isEmpty()) {
+            domicilioRepository.delete(domicilio);
+        }
+
+        clienteRepository.save(cliente);
     }
 }

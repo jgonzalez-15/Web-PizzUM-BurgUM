@@ -19,7 +19,6 @@ public class DomicilioServiceImpl implements DomicilioService {
     @Autowired
     private DomicilioMapper domicilioMapper;
 
-
     @Override
     public DomicilioResponseDTO crearDomicilio(DomicilioRequestDTO dto) {
         Domicilio domicilio = new Domicilio();
