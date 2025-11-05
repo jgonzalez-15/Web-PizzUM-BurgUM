@@ -20,5 +20,5 @@ public class ClienteRegistrarRequestDTO {
     private Long telefono;
     private LocalDate fechaNac;
     private List<DomicilioRequestDTO> domicilios;
-    private List<MedioDePagoRequestDTO>  mediosDePagos;
+    private List<MedioDePagoRequestDTO>  mediosDePago;
 }

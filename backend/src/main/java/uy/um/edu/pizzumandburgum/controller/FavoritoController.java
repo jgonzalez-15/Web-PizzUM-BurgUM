@@ -21,11 +21,11 @@ public class FavoritoController {
 
     @GetMapping("/{idCliente}/listar")
     public ResponseEntity<List<FavoritoResponseDTO>> mostrarCreacionesFavoritas(@PathVariable("idCliente")String idCliente, HttpSession sesion){
-        String rol = (String) sesion.getAttribute("rol");
-
-        if (rol == null || !rol.equals("CLIENTE")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+//        String rol = (String) sesion.getAttribute("rol");
+//
+//        if (rol == null || !rol.equals("CLIENTE")) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+//        }
 
         List<FavoritoResponseDTO> favoritos = favoritoService.mostrarCreacionesFavoritas(idCliente);
         return ResponseEntity.ok(favoritos);

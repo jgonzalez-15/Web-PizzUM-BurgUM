@@ -29,9 +29,9 @@ public class MedioDePagoMapper {
 
     public MedioDePago toEntity(MedioDePagoRequestDTO dto) {
         MedioDePago medioDePago = new MedioDePago();
-        medioDePago.setDireccion(dto.getDireccion());
-        medioDePago.setNumero(dto.getNumero());
-        medioDePago.setVencimiento(dto.getVencimiento());
+        medioDePago.setNombreTitular(dto.getNombreTitular());
+        medioDePago.setNumeroTarjeta(dto.getNumeroTarjeta());
+        medioDePago.setFechaVencimiento(dto.getFechaVencimiento());
         return medioDePago;
     }
 
@@ -43,14 +43,14 @@ public class MedioDePagoMapper {
             PedidoResponseDTO pedidoResponseDTO = pedidoMapper.toResponseDTO(pedido);
             pedidos.add(pedidoResponseDTO);
         }
-        return new MedioDePagoDTO(medioDePago.getNumero(), medioDePago.getVencimiento(), medioDePago.getDireccion(), clienteResponseDTO,pedidos);
+        return new MedioDePagoDTO(medioDePago.getId(), medioDePago.getNumeroTarjeta(), medioDePago.getFechaVencimiento(), medioDePago.getNombreTitular(), clienteResponseDTO,pedidos);
     }
 
     public MedioDePago toEntityDTO(MedioDePagoDTO dto) {
         MedioDePago medioDePago = new MedioDePago();
-        medioDePago.setDireccion(dto.getDireccion());
-        medioDePago.setNumero(dto.getNumero());
-        medioDePago.setVencimiento(dto.getVencimiento());
+        medioDePago.setNombreTitular(dto.getNombreTitular());
+        medioDePago.setNumeroTarjeta(dto.getNumeroTarjeta());
+        medioDePago.setFechaVencimiento(dto.getFechaVencimiento());
         return medioDePago;
     }
 }

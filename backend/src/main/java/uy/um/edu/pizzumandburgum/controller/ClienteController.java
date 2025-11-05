@@ -23,13 +23,9 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping("/registrar")
-    public ResponseEntity<ClienteResponseDTO> registrar(@Validated @RequestBody ClienteRegistrarRequestDTO dto, HttpSession sesion) {
+    public ResponseEntity<ClienteResponseDTO> registrar(@Validated @RequestBody ClienteRegistrarRequestDTO dto) {
         ClienteResponseDTO cliente = clienteService.registrarCliente(dto);
-
-        sesion.setAttribute("email", cliente.getEmail());
-        sesion.setAttribute("rol", "CLIENTE");
-
-        return ResponseEntity.ok(cliente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cliente);
     }
 
     @PostMapping("/login")
@@ -45,55 +41,24 @@ public class ClienteController {
 
     @PostMapping("/cerrarSesion")
     public ResponseEntity<String> cerrarSesion(HttpSession sesion) {
-        String email = (String) sesion.getAttribute("email");
-
-        if (email == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No hay sesión activa");
-        }
         sesion.invalidate();
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
 
     @GetMapping("/{idCliente}/historial-pedidos")
-    public ResponseEntity<List<PedidoResponseDTO>> listarHistorialPedidos(@PathVariable("idCliente") String idCliente, HttpSession sesion) {
-        String emailSesion = (String) sesion.getAttribute("email");
-        String rol = (String) sesion.getAttribute("rol");
-
-        if (emailSesion == null || rol == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
-
-        if (!rol.equals("ADMIN") && !idCliente.equals(emailSesion)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
-
+    public ResponseEntity<List<PedidoResponseDTO>> listarHistorialPedidos(@PathVariable("idCliente") String idCliente) {
         List<PedidoResponseDTO> historial = clienteService.historialPedido(idCliente);
         return ResponseEntity.ok(historial);
     }
 
     @PutMapping("/{email}/perfil")
-    public ResponseEntity<ClienteResponseDTO> editarPerfil(@PathVariable String email, @RequestBody ClienteUpdateDTO dto, HttpSession sesion) {
-        String emailSesion = (String) sesion.getAttribute("email");
-
-        if (emailSesion == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        if (!email.equals(emailSesion)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
+    public ResponseEntity<ClienteResponseDTO> editarPerfil(@PathVariable String email, @RequestBody ClienteUpdateDTO dto) {
         ClienteResponseDTO response = clienteService.editarPerfil(email, dto);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/listar")
     public ResponseEntity<List<ClienteResponseDTO>> mostrarCliente(HttpSession sesion) {
-        String rol = (String) sesion.getAttribute("rol");
-
-        if (rol == null || !rol.equals("ADMIN")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
         List<ClienteResponseDTO> clientes = clienteService.listarClientes();
         return ResponseEntity.ok(clientes);
     }
@@ -120,6 +85,12 @@ public class ClienteController {
     public ResponseEntity<List<PedidoResponseDTO>> obtenerPedidosPorCliente(@PathVariable String clienteId) {
         List<PedidoResponseDTO> pedidos = clienteService.obtenerPedidosPorCliente(clienteId);
         return ResponseEntity.ok(pedidos);
+    }
+
+    @GetMapping("/{clienteId}/obtenerPerfil")
+    public ResponseEntity<ClienteResponseDTO> obtenerPerfil(@PathVariable String clienteId) {
+        ClienteResponseDTO cliente = clienteService.obtenerCliente(clienteId);
+        return ResponseEntity.ok(cliente);
     }
 
 

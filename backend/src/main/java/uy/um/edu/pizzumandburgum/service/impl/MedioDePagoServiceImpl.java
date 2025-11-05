@@ -14,6 +14,10 @@ import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 import uy.um.edu.pizzumandburgum.repository.MedioDePagoRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.MedioDePagoService;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class MedioDePagoServiceImpl implements MedioDePagoService {
     @Autowired
@@ -34,11 +38,11 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
     @Override
     public MedioDePagoDTO aniadirMedioDePago(MedioDePagoRequestDTO dto, String idCliente){
         MedioDePago medioDePago = new MedioDePago();
-        medioDePago.setNumero(dto.getNumero());
-        medioDePago.setVencimiento(dto.getVencimiento());
-        medioDePago.setDireccion(dto.getDireccion());
+        medioDePago.setNumeroTarjeta(dto.getNumeroTarjeta());
+        medioDePago.setFechaVencimiento(dto.getFechaVencimiento());
+        medioDePago.setNombreTitular(dto.getNombreTitular());
 
-        Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(ClienteNoExisteException::new);
+        Cliente cliente = clienteRepository.findByEmail(idCliente).orElseThrow(ClienteNoExisteException::new);
         cliente.getMediosDePago().add(medioDePago);
         medioDePago.setCliente(cliente);
 
@@ -50,15 +54,37 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
     @Override
     public MedioDePagoDTO editarMDP(String email, MedioDePagoUpdateDTO dto) {
         MedioDePago mdp = new MedioDePago();
-        if (dto.getDireccion() != null) {
-            mdp.setDireccion(dto.getDireccion());
+        if (dto.getNombreTitular() != null) {
+            mdp.setNombreTitular(dto.getNombreTitular());
         }
-        if (dto.getVencimiento() != null) {
-            mdp.setVencimiento(dto.getVencimiento());
+        if (dto.getFechaVencimiento() != null) {
+            mdp.setFechaVencimiento(dto.getFechaVencimiento());
         }
-        if (dto.getNumero() != null) {
-            mdp.setNumero(dto.getNumero());
+        if (dto.getNumeroTarjeta() != null) {
+            mdp.setNumeroTarjeta(dto.getNumeroTarjeta());
         }
         return medioDePagoMapper.toResponseDTO(mdp);
     }
+
+    @Override
+    public List<MedioDePagoDTO> listarPorCliente(String email) {
+        List<MedioDePago> medios = medioDePagoRepository.findByClienteEmail(email);
+        List<MedioDePagoDTO> listaDTO = new ArrayList<>();
+
+        for (MedioDePago medio : medios) {
+            MedioDePagoDTO dto = medioDePagoMapper.toResponseDTO(medio);
+            listaDTO.add(dto);
+        }
+
+        return listaDTO;
+    }
+
+    @Override
+    public void eliminarMedioDePago(String email, Long id) {
+        MedioDePago medio = medioDePagoRepository.findByClienteEmailAndId(email, id)
+                .orElseThrow(MedioDePagoNoExisteException::new);
+
+        medioDePagoRepository.delete(medio);
+    }
+
 }

@@ -35,7 +35,7 @@ function HomePage(){
     };
 
     useEffect(() => {
-    if (sessionType === "Client") {
+    if (sessionType === "CLIENTE") {
         getFavourites();
     }
     }, [sessionType, sessionInfo]);

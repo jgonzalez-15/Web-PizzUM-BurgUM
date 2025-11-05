@@ -28,6 +28,7 @@ public class ClienteDomicilioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+
     @GetMapping("/{emailCliente}/listar")
     public ResponseEntity<List<DomicilioResponseDTO>> listarDomiciliosDeCliente(@PathVariable String emailCliente) {
         List<DomicilioResponseDTO> domicilios = clienteDomicilioService.listarDomiciliosDeCliente(emailCliente);

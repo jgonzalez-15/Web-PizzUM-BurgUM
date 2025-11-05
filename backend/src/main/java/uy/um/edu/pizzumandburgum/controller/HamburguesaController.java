@@ -21,11 +21,7 @@ public class HamburguesaController {
     private HamburguesaService hamburguesaService;
 
     @PostMapping("/crearHamburguesa")
-    public ResponseEntity<HamburguesaResponseDTO> crearHamburguesa(@RequestBody HamburguesaRequestDTO dto, HttpSession sesion) {
-        String rol = (String) sesion.getAttribute("rol");
-        if (rol == null || !rol.equals("CLIENTE")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+    public ResponseEntity<HamburguesaResponseDTO> crearHamburguesa(@RequestBody HamburguesaRequestDTO dto) {
         HamburguesaResponseDTO nueva = hamburguesaService.crearHamburguesa(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(nueva);
     }

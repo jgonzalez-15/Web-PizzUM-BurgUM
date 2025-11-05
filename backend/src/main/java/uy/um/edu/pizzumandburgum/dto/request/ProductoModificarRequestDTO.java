@@ -4,17 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MedioDePagoRequestDTO {
-    Long numeroTarjeta;
-    LocalDate fechaVencimiento;
-    String nombreTitular;
+public class ProductoModificarRequestDTO {
+    private ProductoRequestDTO viejo;
+    private ProductoRequestDTO nuevo;
 
 }

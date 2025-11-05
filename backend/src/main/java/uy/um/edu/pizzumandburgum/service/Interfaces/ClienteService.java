@@ -17,4 +17,5 @@ public interface ClienteService {
     List<PedidoResponseDTO> obtenerPedidosPorCliente(String email);
     PizzaResponseDTO asociarPizza(String email, Long idPizza);
     List<DomicilioResponseDTO> mostrarDomicilios(String idCliente);
+    ClienteResponseDTO obtenerCliente(String email);
 }

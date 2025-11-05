@@ -4,7 +4,7 @@ import { createContext, useState } from 'react';
 export const SessionContext = createContext();
 
 export const SessionProvider = ({ children }) => {
-  const [sessionType, setSessionType] = useState("Guest");
+  const [sessionType, setSessionType] = useState("INVITADO");
   const [sessionInfo, setSessionInfo] = useState({});
 
   return (

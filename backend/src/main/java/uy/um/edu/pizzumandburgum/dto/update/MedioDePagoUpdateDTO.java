@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MedioDePagoUpdateDTO {
-    Long numero;
-    LocalDate vencimiento;
-    String direccion;
+    Long numeroTarjeta;
+    LocalDate fechaVencimiento;
+    String nombreTitular;
 }

@@ -19,9 +19,9 @@ public class MedioDePago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    Long numero;
-    LocalDate vencimiento;
-    String direccion;
+    Long numeroTarjeta;
+    LocalDate fechaVencimiento;
+    String nombreTitular;
     @ManyToOne
     @JoinColumn (name = "cliente_id")
     private Cliente cliente;

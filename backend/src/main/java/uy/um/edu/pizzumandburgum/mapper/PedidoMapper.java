@@ -31,7 +31,7 @@ public class PedidoMapper {
     public PedidoResponseDTO toResponseDTO(Pedido pedido) {
         Long numeroMedioDePago = null;
         if (pedido.getMedioDePago() != null) {
-            numeroMedioDePago = pedido.getMedioDePago().getNumero();
+            numeroMedioDePago = pedido.getMedioDePago().getNumeroTarjeta();
         }
 
         List<PedidoCreacionDTO> creacionesDTO = new ArrayList<>();

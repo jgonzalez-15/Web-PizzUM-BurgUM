@@ -21,12 +21,7 @@ public class PizzaController {
     private PizzaService pizzaService;
 
     @PostMapping("/crear")
-    public ResponseEntity<PizzaResponseDTO> crearPizza(@RequestBody PizzaRequestDTO dto, HttpSession sesion) {
-        String rol = (String) sesion.getAttribute("rol");
-
-        if (rol == null || !rol.equals("CLIENTE")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+    public ResponseEntity<PizzaResponseDTO> crearPizza(@RequestBody PizzaRequestDTO dto) {
         PizzaResponseDTO nuevaPizza = pizzaService.crearPizza(dto);
         return ResponseEntity.ok(nuevaPizza);
     }

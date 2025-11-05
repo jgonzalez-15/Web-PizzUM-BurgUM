@@ -10,6 +10,7 @@ import uy.um.edu.pizzumandburgum.entities.*;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.HamburguesaNoEncontradaException;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Pizza.PizzaNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
+import uy.um.edu.pizzumandburgum.exceptions.Producto.CampoObligatorioException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.ContraseniaInvalidaException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.EmailNoExisteException;
@@ -76,6 +77,14 @@ public class ClienteServiceImpl implements ClienteService {
             throw new ContraseniaInvalidaException();
         }
 
+        if (dto.getDomicilios() == null || dto.getDomicilios().isEmpty()) {
+            throw new CampoObligatorioException("Debe ingresar al menos un domicilio");
+        }
+
+        if (dto.getMediosDePago() == null || dto.getMediosDePago().isEmpty()) {
+            throw new CampoObligatorioException("Debe ingresar al menos un medio de pago");
+        }
+
         Cliente nuevo = new Cliente();
         nuevo.setEmail(dto.getEmail());
         nuevo.setContrasenia(dto.getContrasenia());
@@ -85,7 +94,7 @@ public class ClienteServiceImpl implements ClienteService {
         nuevo.setFechaNac(dto.getFechaNac());
         Cliente guardado = clienteRepository.save(nuevo);
 
-        for (MedioDePagoRequestDTO medioDePagoRequestDTO : dto.getMediosDePagos()) {
+        for (MedioDePagoRequestDTO medioDePagoRequestDTO : dto.getMediosDePago()) {
             MedioDePago medioDePago = medioDePagoMapper.toEntity(medioDePagoRequestDTO);
             medioDePago.setCliente(guardado);
             medioDePagoRepository.save(medioDePago);
@@ -101,7 +110,6 @@ public class ClienteServiceImpl implements ClienteService {
             clienteDomicilioRepository.save(clienteDomicilio);
         }
 
-        guardado = clienteRepository.findById(guardado.getEmail()).orElseThrow();
         return clienteMapper.toResponseDTO(guardado);
     }
 
@@ -136,6 +144,7 @@ public class ClienteServiceImpl implements ClienteService {
         if (dto.getFechaNac() != null) {
             cliente.setFechaNac(dto.getFechaNac());
         }
+        clienteRepository.save(cliente);
         return clienteMapper.toResponseDTO(cliente);
     }
 
@@ -218,6 +227,13 @@ public class ClienteServiceImpl implements ClienteService {
         }
         return domicilios;
     }
+
+    @Override
+    public ClienteResponseDTO obtenerCliente(String email) {
+        Cliente cliente = clienteRepository.findById(email).orElseThrow(ClienteNoExisteException::new);
+        return new ClienteResponseDTO(cliente.getEmail(), cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getFechaNac());
+    }
+
 }
 
 

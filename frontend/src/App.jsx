@@ -14,6 +14,8 @@ import Favourites from './Pages/Favourites'
 import ViewCreation from './Pages/ViewCreation'
 import Register from './Pages/Register'
 import Options from './Pages/Options'
+import Perfil from "./Pages/Perfil";
+
 
 
 function App() {
@@ -21,7 +23,7 @@ function App() {
 
   let routes
 
-  if (sessionType == "Guest"){
+  if (sessionType == "INVITADO"){
     routes = (
       <>
       <CartProvider>
@@ -38,7 +40,7 @@ function App() {
       </CartProvider>
     </>
     )
-  }else if (sessionType == "Client"){
+  }else if (sessionType == "CLIENTE"){
     routes = (
       <>
       <CartProvider>
@@ -54,12 +56,14 @@ function App() {
           <Route path='/favourites' element={<Favourites/>}/>
           <Route path='/viewCreation' element={<ViewCreation/>}/>
           <Route path='/config' element={<Options/>}/>
+          <Route path="/perfil" element={<Perfil/>} />
+
         </Routes>
       </CartProvider>
     </>
     )
   }
-  else if (sessionType == "Admin"){
+  else if (sessionType == "ADMIN"){
     routes = (
       <>
       <Routes>

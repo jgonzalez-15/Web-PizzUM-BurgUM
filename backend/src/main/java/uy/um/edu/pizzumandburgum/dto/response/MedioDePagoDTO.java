@@ -13,9 +13,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MedioDePagoDTO {
-    Long numero;
-    LocalDate vencimiento;
-    String direccion;
+    Long id;
+    Long numeroTarjeta;
+    LocalDate fechaVencimiento;
+    String nombreTitular;
     ClienteResponseDTO Cliente;
     List<PedidoResponseDTO> pedidos;
 

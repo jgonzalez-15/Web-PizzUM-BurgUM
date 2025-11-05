@@ -17,7 +17,7 @@ function AdminSidebar(){
 
         if (response.ok) {
             setSessionInfo({})
-            setSessionType("Guest")
+            setSessionType("INVITADO")
             useNavigate("/login")
         } else {
             alert("No se pudo cerrar la sesion");

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../Components/Footer";
 
 export default function Register() {
-    const [correo, setCorreo] = useState("");
+    const [email, setEmail] = useState("");
     const [nombre, setNombre] = useState("");
     const [apellido, setApellido] = useState("");
     const [contrasenia, setContrasenia] = useState("");
@@ -12,8 +12,8 @@ export default function Register() {
     const [fechaNacimiento, setFechaNacimiento] = useState("");
     const [direccion, setDireccion] = useState("");
     const [numeroTarjeta, setNumeroTarjeta] = useState("");
-    const [titular, setTitular] = useState("");
-    const [vencimiento, setVencimiento] = useState("");
+    const [nombreTitular, setNombreTitular] = useState("");
+    const [fechaVencimiento, setFechaVencimiento] = useState("");
 
     const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ export default function Register() {
         e.preventDefault();
 
         // Validaciones
-        if (!correo || !nombre || !apellido || !contrasenia || !confirmarContrasenia || !telefono || !fechaNacimiento || !direccion || !numeroTarjeta || !titular || !vencimiento) {
+        if (!email || !nombre || !apellido || !contrasenia || !confirmarContrasenia || !telefono || !fechaNacimiento || !direccion || !numeroTarjeta || !nombreTitular || !fechaVencimiento) {
             alert("Debes completar todos los campos.");
             return;
         }
@@ -31,12 +31,17 @@ export default function Register() {
             return;
         }
 
+        if (contrasenia.length < 8) {
+            alert("La contraseña debe tener al menos 8 caracteres.");
+            return;
+        }
+
         try {
             const response = await fetch("http://localhost:8080/api/cliente/registrar", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    email: correo,
+                    email,
                     nombre,
                     apellido,
                     contrasenia,
@@ -44,7 +49,7 @@ export default function Register() {
                     fechaNac: fechaNacimiento,
                     domicilios: [{ direccion }],
                     mediosDePago: [
-                        { numeroTarjeta: parseInt(numeroTarjeta), titular, vencimiento },
+                        { numeroTarjeta: parseInt(numeroTarjeta), nombreTitular, fechaVencimiento: fechaVencimiento + "-01", },
                     ],
                 }),
                 credentials: "include",
@@ -90,8 +95,8 @@ export default function Register() {
                                 type="email"
                                 placeholder="Correo electrónico"
                                 className="bg-gray-100 rounded-2xl p-2"
-                                value={correo}
-                                onChange={(e) => setCorreo(e.target.value)}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                             <input
                                 type="text"
@@ -172,14 +177,14 @@ export default function Register() {
                                 type="text"
                                 placeholder="Titular de la tarjeta"
                                 className="bg-gray-100 rounded-2xl p-2"
-                                value={titular}
-                                onChange={(e) => setTitular(e.target.value)}
+                                value={nombreTitular}
+                                onChange={(e) => setNombreTitular(e.target.value)}
                             />
                             <input
                                 type="month"
                                 className="bg-gray-100 rounded-2xl p-2"
-                                value={vencimiento}
-                                onChange={(e) => setVencimiento(e.target.value)}
+                                value={fechaVencimiento}
+                                onChange={(e) => setFechaVencimiento(e.target.value)}
                             />
                         </div>
                     </div>

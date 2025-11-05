@@ -36,7 +36,7 @@ public class ClienteRegistrarMapper {
             cliente.getDomicilios().add(clienteDomicilio);
         }
 
-        for (MedioDePagoRequestDTO medioDePago : dto.getMediosDePagos()) {
+        for (MedioDePagoRequestDTO medioDePago : dto.getMediosDePago()) {
             MedioDePago m = medioDePagoMapper.toEntity(medioDePago);
             cliente.getMediosDePago().add(m);
         }

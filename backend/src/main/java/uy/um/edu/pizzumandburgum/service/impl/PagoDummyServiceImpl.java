@@ -43,7 +43,7 @@ public class PagoDummyServiceImpl implements PagoDummyService {
         }
         MedioDePago medioDePago = medioDePagoService.obtenerMedioDePago(pedido.getClienteAsignado().getEmail(),pedido.getMedioDePago().getId());
 
-        if (medioDePago.getNumero() == null){
+        if (medioDePago.getNumeroTarjeta() == null){
             throw new MedioDePagoNoExisteException();
         }
 

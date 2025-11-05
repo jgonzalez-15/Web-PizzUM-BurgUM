@@ -28,24 +28,13 @@ public class PedidoController {
     private PedidoRepository pedidoRepository;
 
     @PostMapping("/realizar")
-    public ResponseEntity<PedidoResponseDTO> realizarPedido(@RequestBody PedidoRequestDTO dto,HttpSession sesion) {
-        String rol = (String) sesion.getAttribute("rol");
-
-        if (rol == null || !rol.equals("CLIENTE")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+    public ResponseEntity<PedidoResponseDTO> realizarPedido(@RequestBody PedidoRequestDTO dto) {
         PedidoResponseDTO pedido = pedidoService.realizarPedido(dto);
         return ResponseEntity.ok(pedido);
     }
 
     @DeleteMapping("/{id}/cancelarPedido")
-    public ResponseEntity<Void> cancelarPedido(@PathVariable ("id") Long id,HttpSession sesion){
-        String rol = (String) sesion.getAttribute("rol");
-
-        if (rol == null || !rol.equals("CLIENTE")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
-
+    public ResponseEntity<Void> cancelarPedido(@PathVariable ("id") Long id){
         Pedido pedido = pedidoRepository.findById(id).orElseThrow(PedidoNoEncontradoException::new);
 
         if (pedido.getEstado().equals("En Cola")) {
@@ -61,33 +50,19 @@ public class PedidoController {
     }
 
     @PutMapping("/{id}/cambiarEstado")
-    public ResponseEntity<Void> cambiarEstado(@PathVariable ("id") Long id, HttpSession sesion) {
-        String rol = (String) sesion.getAttribute("rol");
-
-        if (rol == null || !rol.equals("ADMIN")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+    public ResponseEntity<Void> cambiarEstado(@PathVariable ("id") Long id) {
         pedidoService.cambiarEstado(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/enCurso")
-    public ResponseEntity<List<PedidoResponseDTO>> pedidosEnCurso(HttpSession sesion){
-        String rol = (String) sesion.getAttribute("rol");
-
-        if (rol == null || !rol.equals("ADMIN")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+    public ResponseEntity<List<PedidoResponseDTO>> pedidosEnCurso(){
         List<PedidoResponseDTO> pedidoResponseDTOS = pedidoService.pedidosEnCurso();
         return ResponseEntity.ok(pedidoResponseDTOS);
     }
 
     @GetMapping("/rango/{fechaInicio}/{fechaFin}")
-    public ResponseEntity<List<PedidoResponseDTO>> listarPedidosPorRango(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin, HttpSession sesion) {
-        String rol = (String) sesion.getAttribute("rol");
-        if (rol == null || !rol.equals("ADMIN")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+    public ResponseEntity<List<PedidoResponseDTO>> listarPedidosPorRango(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin) {
         List<PedidoResponseDTO> pedidos = pedidoService.listarPedidosPorRangoFechas(fechaInicio, fechaFin);
         return ResponseEntity.ok(pedidos);
     }

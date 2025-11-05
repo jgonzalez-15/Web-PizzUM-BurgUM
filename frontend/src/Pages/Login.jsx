@@ -29,10 +29,11 @@ function Login(){
 
       if (response.ok) {
         {/* Si igresa actualizar info de la sesion y volver a la homepage */}
-        const data = await response.json();
-        setSessionType("Client")
-        setSessionInfo(data)
-        navigate("/");
+          const data = await response.json();
+          localStorage.setItem("sessionInfo", JSON.stringify(data));
+          setSessionType("CLIENTE")
+          setSessionInfo(data)
+          navigate("/");
       } else {
         try{
 
@@ -46,10 +47,11 @@ function Login(){
 
           if (response.ok) {
           {/* Si igresa alctualizar info de sesion y navegar a admin */}
-          const data = await response.json();
-          setSessionType("Admin")
-          setSessionInfo(data)
-          navigate("/");
+              const data = await response.json();
+              localStorage.setItem("sessionInfo", JSON.stringify(data));
+              setSessionType("ADMIN")
+              setSessionInfo(data)
+              navigate("/");
           } else {
 
           {/* Si no ingresa alertar */}

@@ -6,6 +6,7 @@ import SidebarItem from "./SidebarItem"
 
 function Sidebar(){
     const { sessionType, setSessionType, setSessionInfo } = useContext(SessionContext)
+    const navigate = useNavigate();
 
     const handleSignOut = async (e) => {
     e.preventDefault();
@@ -19,12 +20,13 @@ function Sidebar(){
         if (response.ok) {
             setSessionInfo({})
             setSessionType("Guest")
-            useNavigate("/login")
+            navigate("/login")
         } else {
             alert("No se pudo cerrar la sesion");
         }
         } catch (error) {
         console.error("Error al cerrar la sesion:", error);
+        alert("Error al cerrar sesión.");
         }
     };
 
@@ -33,17 +35,19 @@ function Sidebar(){
         <div className="h-[calc(100vh-4rem)] w-64 justify-between bg-gray-100 flex flex-col">
             <div className="flex flex-col">
             <SidebarItem text='Inicio' route='/homepage'/>
-            {sessionType == "Client" && (
+            {sessionType == "CLIENTE" && (
                 <>
                     <SidebarItem text='Comprar' route='/order'/>
                     <SidebarItem text='Tus Pedidos' route='/viewOrders'/>
                     <SidebarItem text='Tus Favoritos' route='/favourites'/>
+                    <SidebarItem text="Mi Perfil" route="/perfil" />
+
                 </>
             )}
             </div>
             <div className="w-full border-t">
                 <div className="w-full m-4">
-                    {sessionType == "Guest" ? (
+                    {sessionType == "INVITADO" ? (
                             <Link to='/login' className="font-bold">Ingresar</Link>
                         ):(
                             <button className="font-bold" onClick={handleSignOut}>Cerrar Sesión</button>
