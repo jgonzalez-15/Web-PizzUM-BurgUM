@@ -19,10 +19,11 @@ import java.util.List;
 public class MedioDePago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    Long numeroTarjeta;
-    LocalDate fechaVencimiento;
-    String nombreTitular;
+    private Long id;
+    private Long numeroTarjeta;
+    private LocalDate fechaVencimiento;
+    private String nombreTitular;
+
     @ManyToOne
     @JoinColumn (name = "cliente_id")
     private Cliente cliente;

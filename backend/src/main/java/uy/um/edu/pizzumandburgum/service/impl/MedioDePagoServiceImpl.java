@@ -93,7 +93,6 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
     public void eliminarMedioDePago(String email, Long id) {
         MedioDePago medio = medioDePagoRepository.findByClienteEmailAndId(email, id)
                 .orElseThrow(MedioDePagoNoExisteException::new);
-
         medioDePagoRepository.delete(medio);
     }
 

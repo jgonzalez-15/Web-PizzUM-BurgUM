@@ -239,6 +239,8 @@ public class ClienteServiceImpl implements ClienteService {
         return new ClienteResponseDTO(cliente.getEmail(), cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getFechaNac());
     }
 
+
+
 }
 
 

@@ -107,12 +107,8 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
 
         cliente.getDomicilios().remove(clienteDomicilio);
         domicilio.getClientes().remove(clienteDomicilio);
-        clienteDomicilioRepository.delete(clienteDomicilio);
-
-        if (domicilio.getClientes().isEmpty()) {
-            domicilioRepository.delete(domicilio);
-        }
 
         clienteRepository.save(cliente);
+        domicilioRepository.save(domicilio);
     }
 }
