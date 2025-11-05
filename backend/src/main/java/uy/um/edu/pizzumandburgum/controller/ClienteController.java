@@ -1,5 +1,9 @@
 package uy.um.edu.pizzumandburgum.controller;
 
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,8 +44,17 @@ public class ClienteController {
     }
 
     @PostMapping("/cerrarSesion")
-    public ResponseEntity<String> cerrarSesion(HttpSession sesion) {
-        sesion.invalidate();
+    public ResponseEntity<String> cerrarSesion(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        Cookie cookie = new Cookie("JSESSIONID", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        cookie.setSecure(false);
+        response.addCookie(cookie);
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
 

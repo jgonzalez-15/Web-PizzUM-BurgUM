@@ -10,6 +10,7 @@ import uy.um.edu.pizzumandburgum.entities.ClienteDomicilio;
 import uy.um.edu.pizzumandburgum.entities.Domicilio;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioConPedidoEnCursoException;
+import uy.um.edu.pizzumandburgum.exceptions.Domicilio.PorLoMenosUnDomicilioException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.ClienteDomicilioMapper;
@@ -86,6 +87,10 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
         Cliente cliente = clienteRepository.findById(emailCliente).orElseThrow(ClienteNoExisteException::new);
 
         Domicilio domicilio = domicilioRepository.findById(idDomicilio).orElseThrow(DomicilioNoExisteException::new);
+
+        if (cliente.getDomicilios().size() <= 1) {
+            throw new PorLoMenosUnDomicilioException();
+        }
 
         ClienteDomicilio clienteDomicilio = null;
         for (ClienteDomicilio cd : cliente.getDomicilios()) {
