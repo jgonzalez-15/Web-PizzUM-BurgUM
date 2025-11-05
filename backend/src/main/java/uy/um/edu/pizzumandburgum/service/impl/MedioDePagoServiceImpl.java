@@ -9,6 +9,7 @@ import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.Historicos.HistoricoMDPModificaciones;
 import uy.um.edu.pizzumandburgum.entities.MedioDePago;
 import uy.um.edu.pizzumandburgum.exceptions.MedioDePago.MedioDePagoNoExisteException;
+import uy.um.edu.pizzumandburgum.exceptions.MedioDePago.PorLoMenosUnMedioDePagoException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.MedioDePagoMapper;
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
@@ -91,8 +92,12 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
 
     @Override
     public void eliminarMedioDePago(String email, Long id) {
-        MedioDePago medio = medioDePagoRepository.findByClienteEmailAndId(email, id)
-                .orElseThrow(MedioDePagoNoExisteException::new);
+        MedioDePago medio = medioDePagoRepository.findByClienteEmailAndId(email, id).orElseThrow(MedioDePagoNoExisteException::new);
+        Cliente cliente = clienteRepository.findById(email).orElseThrow(ClienteNoExisteException::new);
+
+        if (cliente.getMediosDePago().size() <= 1) {
+            throw new PorLoMenosUnMedioDePagoException();
+        }
         medioDePagoRepository.delete(medio);
     }
 

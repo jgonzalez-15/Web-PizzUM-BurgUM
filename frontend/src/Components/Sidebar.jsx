@@ -19,7 +19,7 @@ function Sidebar(){
 
         if (response.ok) {
             setSessionInfo({})
-            setSessionType("Guest")
+            setSessionType("INVITADO")
             navigate("/login")
         } else {
             alert("No se pudo cerrar la sesion");

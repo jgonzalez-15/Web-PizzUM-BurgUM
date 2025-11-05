@@ -13,7 +13,7 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.MedioDePagoService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/mediodepago")
+@RequestMapping("/api/medioDePago")
 @CrossOrigin(origins = "http://localhost:5173")
 public class MedioDePagoController {
 
