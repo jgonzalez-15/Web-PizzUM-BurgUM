@@ -19,6 +19,6 @@ public class MedioDePagoDTO {
     String nombreTitular;
     ClienteResponseDTO Cliente;
     List<PedidoResponseDTO> pedidos;
-
+    boolean estaActivo;
 
 }

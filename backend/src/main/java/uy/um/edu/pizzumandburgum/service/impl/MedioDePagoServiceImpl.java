@@ -52,6 +52,7 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
         cliente.getMediosDePago().add(medioDePago);
         medioDePago.setCliente(cliente);
 
+        medioDePago.setEstaActivo(true);
         medioDePagoRepository.save(medioDePago);
 
         return medioDePagoMapper.toResponseDTO(medioDePago);
@@ -98,7 +99,9 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
         if (cliente.getMediosDePago().size() <= 1) {
             throw new PorLoMenosUnMedioDePagoException();
         }
-        medioDePagoRepository.delete(medio);
+        medio.setEstaActivo(false);
+        medioDePagoRepository.save(medio);
+        historicoService.RegistrarEliminar(medio);
     }
 
 }

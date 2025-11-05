@@ -23,6 +23,7 @@ public class MedioDePago {
     private Long numeroTarjeta;
     private LocalDate fechaVencimiento;
     private String nombreTitular;
+    private boolean estaActivo;
 
     @ManyToOne
     @JoinColumn (name = "cliente_id")

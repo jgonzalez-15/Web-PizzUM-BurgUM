@@ -43,7 +43,7 @@ public class MedioDePagoMapper {
             PedidoResponseDTO pedidoResponseDTO = pedidoMapper.toResponseDTO(pedido);
             pedidos.add(pedidoResponseDTO);
         }
-        return new MedioDePagoDTO(medioDePago.getId(), medioDePago.getNumeroTarjeta(), medioDePago.getFechaVencimiento(), medioDePago.getNombreTitular(), clienteResponseDTO,pedidos);
+        return new MedioDePagoDTO(medioDePago.getId(), medioDePago.getNumeroTarjeta(), medioDePago.getFechaVencimiento(), medioDePago.getNombreTitular(), clienteResponseDTO,pedidos, medioDePago.isEstaActivo());
     }
 
     public MedioDePago toEntityDTO(MedioDePagoDTO dto) {

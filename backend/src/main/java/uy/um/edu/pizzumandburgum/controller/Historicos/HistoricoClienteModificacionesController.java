@@ -2,15 +2,16 @@ package uy.um.edu.pizzumandburgum.controller.Historicos;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.response.Historicos.HistoricoClienteResponseDTO;
 import uy.um.edu.pizzumandburgum.service.Interfaces.Historicos.HistoricoClienteModificacionesService;
 
 import java.util.List;
 
+
+@RestController
+@RequestMapping("/api/hCliente")
+@CrossOrigin(origins = "http://localhost:5173")
 public class HistoricoClienteModificacionesController {
 
     @Autowired
