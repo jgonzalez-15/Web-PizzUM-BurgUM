@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uy.um.edu.pizzumandburgum.entities.Historicos.HistoricoMDPModificaciones;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,6 +29,9 @@ public class MedioDePago {
 
     @OneToMany(mappedBy = "medioDePago", cascade = CascadeType.ALL)
     private List<Pedido> pedidos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "medioDePago", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HistoricoMDPModificaciones> historico = new ArrayList<>();
 
 
 

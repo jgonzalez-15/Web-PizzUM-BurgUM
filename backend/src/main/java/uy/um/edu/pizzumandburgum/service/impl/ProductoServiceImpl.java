@@ -11,7 +11,7 @@ import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoYaExisteException;
 import uy.um.edu.pizzumandburgum.mapper.ProductoMapper;
 import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
-import uy.um.edu.pizzumandburgum.service.Interfaces.HistoricoProductoModificacionesService;
+import uy.um.edu.pizzumandburgum.service.Interfaces.Historicos.HistoricoProductoModificacionService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ProductoService;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class ProductoServiceImpl implements ProductoService {
     private ProductoMapper productoMapper;
 
     @Autowired
-    private HistoricoProductoModificacionesService historicoService;
+    private HistoricoProductoModificacionService historicoService;
 
     @Override
     public ProductoResponseDTO agregarProducto(ProductoRequestDTO productoDTO) {
@@ -71,6 +71,7 @@ public class ProductoServiceImpl implements ProductoService {
         productoNuevo.setPrecio(productonuevoDTO.getPrecio());
         productoNuevo.setSinTacc(productonuevoDTO.isSinTacc());
         productoNuevo.setNombre(productonuevoDTO.getNombre());
+        productoNuevo.setHistorico(productoViejo.getHistorico());
         productoRepository.save(productoViejo);
         historicoService.registrarActualizacion(productoViejo,productoNuevo);
 

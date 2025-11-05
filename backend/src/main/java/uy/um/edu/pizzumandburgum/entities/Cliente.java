@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uy.um.edu.pizzumandburgum.entities.Historicos.HistoricoClienteModificaciones;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,9 @@ public class Cliente extends Usuario {
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Calificacion> calificaciones = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HistoricoClienteModificaciones> historico = new ArrayList<>();
 
 
 }

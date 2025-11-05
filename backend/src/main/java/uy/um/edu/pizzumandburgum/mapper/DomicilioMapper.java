@@ -31,6 +31,6 @@ public class DomicilioMapper {
             PedidoResponseDTO pedidoDTO = pedidoMapper.toResponseDTO(pedido);
             pedidosResponse.add(pedidoDTO);
         }
-        return new DomicilioResponseDTO(domicilio.getId(), domicilio.getDireccion(),pedidosResponse);
+        return new DomicilioResponseDTO(domicilio.getId(), domicilio.getDireccion(),pedidosResponse, domicilio.isEstaActivo());
     }
 }
