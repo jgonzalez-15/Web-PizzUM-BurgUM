@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface MedioDePagoRepository extends JpaRepository<MedioDePago, Long> {
     Optional<MedioDePago> findByClienteEmailAndId(String email, Long id);
+    Optional<MedioDePago> findById(Long id);
 }

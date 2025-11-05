@@ -15,4 +15,5 @@ public class DomicilioResponseDTO {
     private Long id;
     private String direccion;
     private List<PedidoResponseDTO> pedidos;
+    private boolean estaActivo;
 }

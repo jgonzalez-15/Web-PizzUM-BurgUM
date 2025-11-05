@@ -17,6 +17,7 @@ import uy.um.edu.pizzumandburgum.exceptions.Usuario.EmailYaRegistradoException;
 import uy.um.edu.pizzumandburgum.mapper.*;
 import uy.um.edu.pizzumandburgum.repository.*;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
+import uy.um.edu.pizzumandburgum.service.Interfaces.Historicos.HistoricoClienteModificacionesService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.MedioDePagoService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PedidoService;
 
@@ -65,6 +66,9 @@ public class ClienteServiceImpl implements ClienteService {
     @Autowired
     private ClienteDomicilioRepository clienteDomicilioRepository;
 
+    @Autowired
+    private HistoricoClienteModificacionesService historicoService;
+
     @Override
     @Transactional
     public ClienteResponseDTO registrarCliente(ClienteRegistrarRequestDTO dto) {
@@ -85,6 +89,8 @@ public class ClienteServiceImpl implements ClienteService {
         nuevo.setFechaNac(dto.getFechaNac());
         Cliente guardado = clienteRepository.save(nuevo);
 
+
+
         for (MedioDePagoRequestDTO medioDePagoRequestDTO : dto.getMediosDePagos()) {
             MedioDePago medioDePago = medioDePagoMapper.toEntity(medioDePagoRequestDTO);
             medioDePago.setCliente(guardado);
@@ -102,6 +108,9 @@ public class ClienteServiceImpl implements ClienteService {
         }
 
         guardado = clienteRepository.findById(guardado.getEmail()).orElseThrow();
+
+        historicoService.RegistrarAgregar(guardado);
+
         return clienteMapper.toResponseDTO(guardado);
     }
 
@@ -121,22 +130,28 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public ClienteResponseDTO editarPerfil(String email, ClienteUpdateDTO dto) {
         Cliente cliente = clienteRepository.findById(email).orElseThrow(ClienteNoExisteException::new);
+        Cliente nuevo = new Cliente();
         if (dto.getNombre() != null) {
-            cliente.setNombre(dto.getNombre());
+            nuevo.setNombre(dto.getNombre());
         }
         if (dto.getApellido() != null) {
-            cliente.setApellido(dto.getApellido());
+            nuevo.setApellido(dto.getApellido());
         }
         if (dto.getContrasenia() != null) {
-            cliente.setContrasenia(dto.getContrasenia());
+            nuevo.setContrasenia(dto.getContrasenia());
         }
         if (dto.getTelefono() != 0) {
-            cliente.setTelefono(dto.getTelefono());
+            nuevo.setTelefono(dto.getTelefono());
         }
         if (dto.getFechaNac() != null) {
-            cliente.setFechaNac(dto.getFechaNac());
+            nuevo.setFechaNac(dto.getFechaNac());
         }
-        return clienteMapper.toResponseDTO(cliente);
+        nuevo.setHistorico(cliente.getHistorico());
+        clienteRepository.save(nuevo);
+
+        historicoService.registrarActualizacion(cliente,nuevo);
+        return clienteMapper.toResponseDTO(nuevo);
+
     }
 
     @Override

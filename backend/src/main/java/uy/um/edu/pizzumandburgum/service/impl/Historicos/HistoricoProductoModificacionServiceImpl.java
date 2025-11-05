@@ -1,31 +1,30 @@
-package uy.um.edu.pizzumandburgum.service.impl;
+package uy.um.edu.pizzumandburgum.service.impl.Historicos;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uy.um.edu.pizzumandburgum.dto.request.ProductoRequestDTO;
-import uy.um.edu.pizzumandburgum.entities.HistoricoProductoModificaciones;
+import uy.um.edu.pizzumandburgum.entities.Historicos.HistoricoProductoModificacion;
 import uy.um.edu.pizzumandburgum.entities.Producto;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
-import uy.um.edu.pizzumandburgum.repository.HistoricoProductoModificacionesRepository;
+import uy.um.edu.pizzumandburgum.repository.Historicos.HistoricoProductoModificacionRepository;
 import uy.um.edu.pizzumandburgum.repository.ProductoRepository;
-import uy.um.edu.pizzumandburgum.service.Interfaces.HistoricoProductoModificacionesService;
+import uy.um.edu.pizzumandburgum.service.Interfaces.Historicos.HistoricoProductoModificacionService;
 
 import java.time.LocalDateTime;
 
 @Service
-public class HistoricoProductoModificacionesServiceImpl implements HistoricoProductoModificacionesService {
+public class HistoricoProductoModificacionServiceImpl implements HistoricoProductoModificacionService {
 
     @Autowired
     private ProductoRepository productoRepository;
 
     @Autowired
-    private HistoricoProductoModificacionesRepository historicoProductoModificacionesRepository;
+    private HistoricoProductoModificacionRepository historicoProductoModificacionesRepository;
     @Override
     public void registrarActualizacion(Producto pAnterior, Producto pNuevo) {
         Producto nuevo = productoRepository.findById(pNuevo.getIdProducto()).orElseThrow(ProductoNoExisteException::new);
         Producto anterior = productoRepository.findById(pAnterior.getIdProducto()).orElseThrow(ProductoNoExisteException::new);
 
-        HistoricoProductoModificaciones historico = new HistoricoProductoModificaciones();
+        HistoricoProductoModificacion historico = new HistoricoProductoModificacion();
 
         historico.setProducto(nuevo);
         historico.setPrecioAnterior(anterior.getPrecio());
@@ -40,12 +39,13 @@ public class HistoricoProductoModificacionesServiceImpl implements HistoricoProd
         historico.setTipoModificiacion("Actualizacion");
 
         historicoProductoModificacionesRepository.save(historico);
+        nuevo.getHistorico().add(historico);
     }
 
     @Override
     public void RegistrarAgregar(Producto pNuevo) {
         Producto nuevo = productoRepository.findById(pNuevo.getIdProducto()).orElseThrow(ProductoNoExisteException::new);
-        HistoricoProductoModificaciones historico = new HistoricoProductoModificaciones();
+        HistoricoProductoModificacion historico = new HistoricoProductoModificacion();
         historico.setNombreNuevo(nuevo.getNombre());
         historico.setPrecioNuevo(nuevo.getPrecio());
         historico.setTipoNuevo(nuevo.getTipo());
@@ -54,13 +54,14 @@ public class HistoricoProductoModificacionesServiceImpl implements HistoricoProd
         historico.setTipoModificiacion("Agrego");
 
         historicoProductoModificacionesRepository.save(historico);
+        nuevo.getHistorico().add(historico);
     }
 
     @Override
     public void RegistrarEliminar(Producto pAnterior) {
         Producto anterior = productoRepository.findById(pAnterior.getIdProducto()).orElseThrow(ProductoNoExisteException::new);
 
-        HistoricoProductoModificaciones historico = new HistoricoProductoModificaciones();
+        HistoricoProductoModificacion historico = new HistoricoProductoModificacion();
 
         historico.setProducto(anterior);
         historico.setPrecioAnterior(anterior.getPrecio());
@@ -71,6 +72,6 @@ public class HistoricoProductoModificacionesServiceImpl implements HistoricoProd
         historico.setTipoModificiacion("Eliminado");
 
         historicoProductoModificacionesRepository.save(historico);
-
+        anterior.getHistorico().add(historico);
     }
 }
