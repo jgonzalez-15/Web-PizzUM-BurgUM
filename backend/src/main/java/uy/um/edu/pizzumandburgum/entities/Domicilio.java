@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uy.um.edu.pizzumandburgum.entities.Historicos.HistoricoDomicilioModificaciones;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +20,17 @@ public class Domicilio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String direccion;
+    private boolean estaActivo;
 
     @OneToMany(mappedBy = "domicilio", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClienteDomicilio> clientes = new ArrayList<>();
 
     @OneToMany(mappedBy = "domicilio", cascade = CascadeType.ALL)
     private List<Pedido> pedidos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "domicilio", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HistoricoDomicilioModificaciones> historico = new ArrayList<>();
+
 }
 
 

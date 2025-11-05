@@ -11,4 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DomicilioRequestDTO {
     private String direccion;
+
 }

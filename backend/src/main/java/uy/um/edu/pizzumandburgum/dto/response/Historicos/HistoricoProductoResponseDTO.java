@@ -1,31 +1,27 @@
-package uy.um.edu.pizzumandburgum.entities;
+package uy.um.edu.pizzumandburgum.dto.response.Historicos;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uy.um.edu.pizzumandburgum.entities.Producto;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class HistoricoProductoModificaciones {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class HistoricoProductoResponseDTO {
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "producto_id", nullable = false)
-    private Producto producto;
+    private Long idProducto;
 
-    @Column(nullable = false)
     private LocalDateTime fechaModificacion;
 
-    @Column(nullable = false)
     private String tipoModificiacion;
 
     private String nombreAnterior;

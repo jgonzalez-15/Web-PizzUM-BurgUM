@@ -11,8 +11,7 @@ import java.util.List;
 public interface MedioDePagoService {
     MedioDePago obtenerMedioDePago (String email,Long id);
     MedioDePagoDTO aniadirMedioDePago(MedioDePagoRequestDTO dto, String idCliente);
-    MedioDePagoDTO editarMDP(String email, MedioDePagoUpdateDTO dto);
     List<MedioDePagoDTO> listarPorCliente(String email);
     void eliminarMedioDePago(String email, Long id);
-
-    }
+    MedioDePagoDTO editarMDP(Long id, MedioDePagoUpdateDTO dto);
+}
