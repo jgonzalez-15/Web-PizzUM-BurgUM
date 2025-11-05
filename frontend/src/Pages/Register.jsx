@@ -1,116 +1,201 @@
-import { useState } from "react"
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Footer from "../Components/Footer";
 
-import Footer from "../Components/Footer"
-import Button from "../Components/Button"
+export default function Register() {
+    const [correo, setCorreo] = useState("");
+    const [nombre, setNombre] = useState("");
+    const [apellido, setApellido] = useState("");
+    const [contrasenia, setContrasenia] = useState("");
+    const [confirmarContrasenia, setConfirmarContrasenia] = useState("");
+    const [telefono, setTelefono] = useState("");
+    const [fechaNacimiento, setFechaNacimiento] = useState("");
+    const [direccion, setDireccion] = useState("");
+    const [numeroTarjeta, setNumeroTarjeta] = useState("");
+    const [titular, setTitular] = useState("");
+    const [vencimiento, setVencimiento] = useState("");
 
-export default function Register(){
-    const [email, setEmail] = useState("")
-    const [nombre, setNombre] = useState("")
-    const [apellido, setApellido] = useState("")
-    const [contrasenia, setContrasenia] = useState("")
-    const [confContrasenia, setConfContrasenia] = useState("")
-    const [direccion, setDireccion] = useState("")
-    const [numeroTarjeta, setNumeroTarjeta] = useState("")
-    const [titular, setTitular] = useState("")
-    const [vencimiento, setVencimiento] = useState("")
-    const [domicilios, setDomicilios] = useState([])
-    const [mediosDePagos, setMediosDePago] = useState([])
+    const navigate = useNavigate();
 
-    const handleRegister = async () => {
-    if (contrasenia == confContrasenia){
-        try{
-        const response = await fetch("http://localhost:8080/api/domicilio/crearDomicilio", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ direccion }),
-            credentials: "include",
-        });
+    const handleRegister = async (e) => {
+        e.preventDefault();
 
-        if (response.ok) {
-            alert("Creación agregada a favoritos")
-        } else {
-            alert("Debes seleccionar al menos un ingrediente de los tipos Masa/Pan y Salsa/Tipo de carne")
+        // Validaciones
+        if (!correo || !nombre || !apellido || !contrasenia || !confirmarContrasenia || !telefono || !fechaNacimiento || !direccion || !numeroTarjeta || !titular || !vencimiento) {
+            alert("Debes completar todos los campos.");
+            return;
         }
-        } catch (error){
-        console.error("Error al crear favorito:", error);
+
+        if (contrasenia !== confirmarContrasenia) {
+            alert("Las contraseñas no coinciden.");
+            return;
         }
-    } else{
-        alert("Las contraseñas no coinciden")
-    }
-    }
-      
-    return(
-    <>
-        <div className="h-screen w-screen flex flex-col items-center mx-auto justify-between">
 
-            {/* Titulo */}
-            <h1 className="font-bold text-2xl mt-8 mb-8">Registrarse</h1>
-            <div className="mb-8 overflow-auto items-center flex-1 w-full flex flex-col gap-8">
+        try {
+            const response = await fetch("http://localhost:8080/api/cliente/registrar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: correo,
+                    nombre,
+                    apellido,
+                    contrasenia,
+                    telefono: parseInt(telefono),
+                    fechaNac: fechaNacimiento,
+                    domicilios: [{ direccion }],
+                    mediosDePago: [
+                        { numeroTarjeta: parseInt(numeroTarjeta), titular, vencimiento },
+                    ],
+                }),
+                credentials: "include",
+            });
 
-                {/* SECCION: Datos del usuario */}
-                <div className="bg-gray-50 shadow-xl rounded-2xl w-[calc(100vw-4rem)] md:w-[calc(100vw-32rem)]">
-                    <div className="m-8">
-                        <h1 className="font-bold text-xl">Datos del usuario</h1>
-                        <form action="" className="p-4">
-                            <h1>Correo electrónico</h1>
-                            <input type="text" className="bg-gray-100 rounded-2xl w-full"
-                            value={email} onChange={(e) => setEmail(e.target.value)}/>
-                            <h1>Nombre</h1>
-                            <input type="text" className="bg-gray-100 rounded-2xl w-full"
-                            value={nombre} onChange={(e) => setNombre(e.target.value)}/>
-                            <h1>Apellido</h1>
-                            <input type="text" className="bg-gray-100 rounded-2xl w-full"
-                            value={apellido} onChange={(e) => setApellido(e.target.value)}/>
-                            <h1>Contraseña</h1>
-                            <input type="password" className="bg-gray-100 rounded-2xl w-full"
-                            value={contrasenia} onChange={(e) => setContrasenia(e.target.value)}/>
-                            <h1>Repetir contraseña</h1>
-                            <input type="password" className="bg-gray-100 rounded-2xl w-full"
-                            value={confContrasenia} onChange={(e) => setConfContrasenia(e.target.value)}/>
-                        </form>
-                    </div>
-                </div>
+            if (response.ok) {
+                alert("Registro exitoso.");
+                navigate("/login");
+            } else {
+                const data = await response.json().catch(() => ({}));
+                alert(data.message || "No se pudo completar el registro. Verificá los datos e intentá nuevamente.");
+            }
+        } catch (error) {
+            console.error("Error al registrar usuario:", error);
+            alert("Ocurrió un error al intentar registrarte. Intentá nuevamente.");
+        }
+    };
 
-                {/* SECCION: Datos del domicilio */}
-                <div className="bg-gray-50 shadow-xl rounded-2xl w-[calc(100vw-4rem)] md:w-[calc(100vw-32rem)]">
-                    <div className="m-8">
-                        <h1 className="font-bold text-xl overflow-auto">Datos del domicilio</h1>
-                        <form action="" className="p-4">
-                            <h1>Dirección</h1>
-                            <input type="text" className="bg-gray-100 rounded-2xl w-full"
-                            value={direccion} onChange={(e) => setDireccion(e.target.value)}/>
-                        </form>
-                    </div>
-                </div>
-
-                {/* SECCION: Datos del pago */}
-                <div className="bg-gray-50 shadow-xl rounded-2xl w-[calc(100vw-4rem)] md:w-[calc(100vw-32rem)]">
-                    <div className="m-8">
-                        <h1 className="font-bold text-xl overflow-auto">Datos del medio de pago</h1>
-                        <form action="" className="p-4">
-                            <h1>Número de tarjeta</h1>
-                            <input type="text" className="bg-gray-100 rounded-2xl w-full"
-                            value={numeroTarjeta} onChange={(e) => setNumeroTarjeta(e.target.value)}/>
-                            <h1>Titular</h1>
-                            <input type="text" className="bg-gray-100 rounded-2xl w-full"
-                            value={titular} onChange={(e) => setTitular(e.target.value)}/>
-                            <h1>Vencimiento</h1>
-                            <input type="month" className="bg-gray-100 rounded-2xl"
-                            value={vencimiento} onChange={(e) => setVencimiento(e.target.value)}/>
-                        </form>
-                    </div>
-                </div>
-
-                {/* Boton registrarse */}
-                <button className={`z-0 transition-transform duration-100 ease-in-out hover:scale-102 rounded-2xl shadow-2xl font-bold m-1 md:text-xl text-center bg-orange-400 text-white`}
-                onClick={handleRegister}>
-                    <h2 className="m-2">
-                        Registrarse
-                    </h2>
+    return (
+        <>
+            <div className="min-h-screen w-full flex flex-col justify-between items-center bg-white">
+                {/* Botón Volver */}
+                <button
+                    onClick={() => navigate("/")}
+                    className="fixed top-4 left-4 z-20 bg-orange-400 text-white font-bold rounded-2xl px-4 py-2 shadow-xl hover:scale-105 transition-transform">
+                    Volver al inicio
                 </button>
+
+                {/* Título */}
+                <h1 className="font-bold text-3xl mt-20 mb-6 text-center text-gray-800">
+                    Crear cuenta
+                </h1>
+
+                {/* Formulario */}
+                <form onSubmit={handleRegister} className="flex flex-col gap-8 w-[calc(100vw-4rem)] md:w-[calc(100vw-28rem)] max-w-3xl mb-8">
+                    {/* Datos del usuario */}
+                    <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
+                        <h2 className="font-bold text-xl mb-4 text-gray-800">
+                            Datos personales
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input
+                                type="email"
+                                placeholder="Correo electrónico"
+                                className="bg-gray-100 rounded-2xl p-2"
+                                value={correo}
+                                onChange={(e) => setCorreo(e.target.value)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Nombre"
+                                className="bg-gray-100 rounded-2xl p-2"
+                                value={nombre}
+                                onChange={(e) => setNombre(e.target.value)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Apellido"
+                                className="bg-gray-100 rounded-2xl p-2"
+                                value={apellido}
+                                onChange={(e) => setApellido(e.target.value)}
+                            />
+                            <input
+                                type="tel"
+                                placeholder="Teléfono"
+                                className="bg-gray-100 rounded-2xl p-2"
+                                value={telefono}
+                                onChange={(e) => setTelefono(e.target.value)}
+                            />
+                            <input
+                                type="date"
+                                placeholder="Fecha de nacimiento"
+                                className="bg-gray-100 rounded-2xl p-2"
+                                value={fechaNacimiento}
+                                onChange={(e) => setFechaNacimiento(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <input
+                                type="password"
+                                placeholder="Contraseña"
+                                className="bg-gray-100 rounded-2xl p-2"
+                                value={contrasenia}
+                                onChange={(e) => setContrasenia(e.target.value)}
+                            />
+                            <input
+                                type="password"
+                                placeholder="Confirmar contraseña"
+                                className="bg-gray-100 rounded-2xl p-2"
+                                value={confirmarContrasenia}
+                                onChange={(e) => setConfirmarContrasenia(e.target.value)}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Domicilio */}
+                    <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
+                        <h2 className="font-bold text-xl mb-4 text-gray-800">
+                            Domicilio
+                        </h2>
+                        <input
+                            type="text"
+                            placeholder="Dirección completa"
+                            className="bg-gray-100 rounded-2xl w-full p-2"
+                            value={direccion}
+                            onChange={(e) => setDireccion(e.target.value)}
+                        />
+                    </div>
+
+                    {/* Medio de pago */}
+                    <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
+                        <h2 className="font-bold text-xl mb-4 text-gray-800">
+                            Medio de pago
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input
+                                type="text"
+                                placeholder="Número de tarjeta"
+                                className="bg-gray-100 rounded-2xl p-2"
+                                value={numeroTarjeta}
+                                onChange={(e) => setNumeroTarjeta(e.target.value)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Titular de la tarjeta"
+                                className="bg-gray-100 rounded-2xl p-2"
+                                value={titular}
+                                onChange={(e) => setTitular(e.target.value)}
+                            />
+                            <input
+                                type="month"
+                                className="bg-gray-100 rounded-2xl p-2"
+                                value={vencimiento}
+                                onChange={(e) => setVencimiento(e.target.value)}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Botón final */}
+                    <button
+                        type="submit"
+                        className="w-full bg-orange-400 text-white font-bold py-3 rounded-2xl shadow-2xl hover:scale-105 transition-transform text-lg mt-4"
+                    >
+                        Registrarse
+                    </button>
+                </form>
+
+                {/* Footer */}
+                <Footer />
             </div>
-            <Footer/>
-        </div>
-    </>    
-    )
+        </>
+    );
 }
