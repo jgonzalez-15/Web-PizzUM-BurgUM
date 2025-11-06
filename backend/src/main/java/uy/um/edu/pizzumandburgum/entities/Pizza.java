@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Pizza extends Creacion {
-    long tamanio;
+    String tamanio;
 
     @OneToMany(mappedBy = "pizza", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PizzaProducto> ingredientes = new ArrayList<>();

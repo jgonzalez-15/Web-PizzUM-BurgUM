@@ -75,7 +75,22 @@ function Design({ type }) {
     };
 
     if (type === "Pizza") {
-      payload.tamanio = tamanio;
+      let tamanioTexto;
+      switch (tamanio) {
+        case "1":
+          tamanioTexto = "Chica";
+          break;
+        case "2":
+          tamanioTexto = "Mediana";
+          break;
+        case "3":
+          tamanioTexto = "Grande";
+          break;
+        default:
+          tamanioTexto = "Desconocido";
+      }
+
+      payload.tamanio = tamanioTexto;
     }
 
     const endpoint =
@@ -135,7 +150,7 @@ function Design({ type }) {
             Tamaño de Pizza:{" "}
             <select value={tamanio} onChange={(e) => setTamanio(e.target.value)}>
               <option value="1">Chica</option>
-              <option value="2">Mediana</option>
+              <option value="2">Mediana</option>m
               <option value="3">Grande</option>
             </select>
           </label>

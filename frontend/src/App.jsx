@@ -10,7 +10,7 @@ import Orders from './Pages/Orders'
 import NewOrder from './Pages/NewOrder'
 import Login from './Pages/Login'
 import Backoffice from './Pages/Backoffice'
-import Favourites from './Pages/Favourites'
+import Favoritos from './Pages/Favoritos'
 import ViewCreation from './Pages/ViewCreation'
 import Register from './Pages/Register'
 import Options from './Pages/Options'
@@ -35,7 +35,7 @@ function App() {
           <Route path='/login' element={<Login/>}/>
           <Route path='/register' element={<Register/>}/>
           <Route path='/admin' element={<Navigate to="/login" replace/>}/>
-          <Route path='/favourites' element={<Navigate to="/login" replace/>}/>
+          <Route path='/favoritos' element={<Navigate to="/login" replace/>}/>
         </Routes>
       </CartProvider>
     </>
@@ -53,7 +53,9 @@ function App() {
           <Route path='/order' element={<NewOrder/>}/>
           <Route path='/login' element={<Login/>}/>
           <Route path='/register' element={<Register/>}/>
-          <Route path='/favourites' element={<Favourites/>}/>
+          <Route path='/favoritos' element={<Favoritos/>}/>
+
+
           <Route path='/viewCreation' element={<ViewCreation/>}/>
           <Route path='/config' element={<Options/>}/>
           <Route path="/perfil" element={<Perfil/>} />

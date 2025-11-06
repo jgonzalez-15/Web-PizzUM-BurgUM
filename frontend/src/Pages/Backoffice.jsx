@@ -232,6 +232,8 @@ function Backoffice() {
                     <option value="Hamburguesa">Carne para Hamburguesa</option>
                     <option value="Salsa_Hamburguesa">Salsa para Hamburguesa</option>
                     <option value="Ingrediente">Ingrediente para Hamburguesa</option>
+                    <option value="Bebida">Bebida</option>
+
                   </select>
                   {filteredProducts.map((p) => (
                       <AdminProductCard key={p.idProducto} product={p} onEdit={() => openEditModal(p)} onRemove={removeProduct} />
@@ -312,6 +314,8 @@ function Backoffice() {
                   <option value="Hamburguesa">Carne para Hamburguesa</option>
                   <option value="Salsa_Hamburguesa">Salsa para Hamburguesa</option>
                   <option value="Ingrediente">Ingrediente para Hamburguesa</option>
+                  <option value="Bebida">Bebida</option>
+
                 </select>
                 <label className="m-2">
                   <input type="checkbox" onChange={(e) => setNewProduct({ ...newProduct, sinTacc: e.target.checked })} />

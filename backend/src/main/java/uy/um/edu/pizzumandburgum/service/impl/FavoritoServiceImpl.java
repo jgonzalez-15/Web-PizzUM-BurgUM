@@ -4,10 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.FavoritoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.FavoritoResponseDTO;
-import uy.um.edu.pizzumandburgum.entities.Cliente;
-import uy.um.edu.pizzumandburgum.entities.Creacion;
-import uy.um.edu.pizzumandburgum.entities.Favorito;
+import uy.um.edu.pizzumandburgum.entities.*;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.CreacionNoEncontradaException;
+import uy.um.edu.pizzumandburgum.exceptions.Favorito.FavoritoNoEncontradoException;
 import uy.um.edu.pizzumandburgum.exceptions.Favorito.FavoritoYaExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.FavoritoMapper;
@@ -17,7 +16,9 @@ import uy.um.edu.pizzumandburgum.repository.FavoritoRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.FavoritoService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FavoritoServiceImpl implements FavoritoService {
@@ -73,4 +74,50 @@ public class FavoritoServiceImpl implements FavoritoService {
     public void eliminarFavorito(Long id) {
         favoritoRepository.deleteById(id);
     }
+
+    @Override
+    public FavoritoResponseDTO obtenerFavoritoPorId(Long id) {
+        Favorito favorito = favoritoRepository.findById(id).orElseThrow(FavoritoNoEncontradoException::new);
+
+        FavoritoResponseDTO dto = favoritoMapper.toResponseDTO(favorito);
+
+        List<Map<String, Object>> ingredientes = new ArrayList<>();
+
+        if (favorito.getCreacion() instanceof Pizza pizza) {
+            dto.setTipo("Pizza");
+            dto.setTamanio(pizza.getTamanio());
+
+            for (PizzaProducto pp : pizza.getIngredientes()) {
+                Map<String, Object> ingrediente = new HashMap<>();
+                ingrediente.put("idProducto", pp.getProducto().getIdProducto());
+                ingrediente.put("nombre", pp.getProducto().getNombre());
+                ingrediente.put("tipo", pp.getProducto().getTipo());
+                ingredientes.add(ingrediente);
+            }
+
+        } else if (favorito.getCreacion() instanceof Hamburguesa burger) {
+            dto.setTipo("Hamburguesa");
+            dto.setCantidadCarnes(burger.getCantCarnes());
+
+            for (HamburguesaProducto hp : burger.getIngredientes()) {
+                Map<String, Object> ingrediente = new HashMap<>();
+                ingrediente.put("idProducto", hp.getProducto().getIdProducto());
+                ingrediente.put("nombre", hp.getProducto().getNombre());
+                ingrediente.put("tipo", hp.getProducto().getTipo());
+                ingredientes.add(ingrediente);
+            }
+        }
+
+        dto.setIngredientes(ingredientes);
+        return dto;
+    }
+
+
+
+
+
+
+
+
+
 }

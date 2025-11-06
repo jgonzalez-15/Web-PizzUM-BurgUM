@@ -39,7 +39,7 @@ function Sidebar(){
                 <>
                     <SidebarItem text='Comprar' route='/order'/>
                     <SidebarItem text='Tus Pedidos' route='/viewOrders'/>
-                    <SidebarItem text='Tus Favoritos' route='/favourites'/>
+                    <SidebarItem text='Tus Favoritos' route='/favoritos'/>
                     <SidebarItem text="Mi Perfil" route="/perfil" />
 
                 </>

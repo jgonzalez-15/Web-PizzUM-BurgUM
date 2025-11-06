@@ -28,7 +28,17 @@ public class FavoritoMapper {
     }
 
     public FavoritoResponseDTO toResponseDTO(Favorito favorito) {
-        return new FavoritoResponseDTO(favorito.getId(), favorito.getNombre(),favorito.getCliente().getEmail(), favorito.getCreacion().getId(), favorito.getPrecio());
+        FavoritoResponseDTO dto = new FavoritoResponseDTO();
+        dto.setId(favorito.getId());
+        dto.setNombre(favorito.getNombre());
+        dto.setIdCliente(favorito.getCliente().getEmail());
+        dto.setIdCreacion(favorito.getCreacion().getId());
+        dto.setPrecio(favorito.getPrecio());
+        dto.setTipo(favorito.getCreacion().getClass().getSimpleName());
+        return dto;
     }
+
+
+
 
 }

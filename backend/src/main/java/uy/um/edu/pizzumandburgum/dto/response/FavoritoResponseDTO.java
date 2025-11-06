@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.Map;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,4 +18,12 @@ public class FavoritoResponseDTO {
     private String idCliente;
     private Long idCreacion;
     private float precio;
+    private String tipo;
+    private List<Map<String, Object>> ingredientes;
+
+    private Integer cantidadCarnes;
+    private String tamanio;
+
 }
+
+
