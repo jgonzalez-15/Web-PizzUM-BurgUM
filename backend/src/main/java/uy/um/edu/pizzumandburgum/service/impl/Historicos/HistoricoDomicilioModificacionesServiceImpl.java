@@ -24,8 +24,8 @@ public class HistoricoDomicilioModificacionesServiceImpl implements HistoricoDom
     public void registrarActualizacion(Domicilio dAnterior, Domicilio dNuevo) {
         Domicilio nuevo = domicilioRepository.findById(dNuevo.getId()).orElseThrow(DomicilioNoExisteException::new);
         Domicilio viejo =  domicilioRepository.findById(dAnterior.getId()).orElseThrow(DomicilioNoExisteException::new);
-        HistoricoDomicilioModificaciones historicoDomicilioModificaciones = new HistoricoDomicilioModificaciones();
 
+        HistoricoDomicilioModificaciones historicoDomicilioModificaciones = new HistoricoDomicilioModificaciones();
         historicoDomicilioModificaciones.setDomicilio(nuevo);
         historicoDomicilioModificaciones.setFechaModificacion(LocalDate.now());
         historicoDomicilioModificaciones.setDireccionNueva(nuevo.getDireccion());

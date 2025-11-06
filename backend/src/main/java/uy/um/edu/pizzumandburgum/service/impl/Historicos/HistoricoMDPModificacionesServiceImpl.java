@@ -60,10 +60,12 @@ public class HistoricoMDPModificacionesServiceImpl implements HistoricoMDPModifi
     public void RegistrarEliminar(MedioDePago mdpViejo) {
         MedioDePago viejo = mdpRepository.findById(mdpViejo.getId()).orElseThrow(MedioDePagoNoExisteException::new);
         HistoricoMDPModificaciones historico = new HistoricoMDPModificaciones();
+        historico.setFechaModificacion(LocalDate.now());
         historico.setVencimientoViejo(viejo.getFechaVencimiento());
         historico.setNombreTitularViejo(viejo.getNombreTitular());
         historico.setNumeroViejo(viejo.getNumeroTarjeta());
         historico.setTipoModificiacion("Elimino");
+        historico.setMedioDePago(viejo);
         historicoRepository.save(historico);
         viejo.getHistorico().add(historico);
 

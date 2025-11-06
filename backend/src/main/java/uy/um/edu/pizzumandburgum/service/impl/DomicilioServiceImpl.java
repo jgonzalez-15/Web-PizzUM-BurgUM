@@ -1,5 +1,6 @@
 package uy.um.edu.pizzumandburgum.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,10 +63,10 @@ public class DomicilioServiceImpl implements DomicilioService {
         return domicilioMapper.toResponseDTO(domicilio);
     }
 
+    @Transactional
     @Override
     public void eliminarDomicilio(Long domicilioId, String clienteId) {
-        Domicilio domicilio = domicilioRepository.findById(domicilioId)
-                .orElseThrow(DomicilioNoExisteException::new);
+        Domicilio domicilio = domicilioRepository.findById(domicilioId).orElseThrow(DomicilioNoExisteException::new);
 
         Cliente cliente = clienteRepository.findById(clienteId).orElseThrow(ClienteNoExisteException::new);
 
@@ -77,7 +78,8 @@ public class DomicilioServiceImpl implements DomicilioService {
         if (cantidadDomicilios <= 1) {
             throw new UnicoDomicilioException();
         }
-        clienteDomicilioService.eliminarDomicilioDeCliente(clienteId,domicilioId);
         historicoService.RegistrarEliminar(domicilio);
+
+        clienteDomicilioService.eliminarDomicilioDeCliente(clienteId,domicilioId);
     }
 }

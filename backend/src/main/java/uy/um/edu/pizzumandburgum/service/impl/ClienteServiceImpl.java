@@ -134,22 +134,24 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public ClienteResponseDTO editarPerfil(String email, ClienteUpdateDTO dto) {
         Cliente cliente = clienteRepository.findById(email).orElseThrow(ClienteNoExisteException::new);
-        Cliente nuevo = new Cliente();
-        if (dto.getNombre() != null) {
-            nuevo.setNombre(dto.getNombre());
+        if (dto.getNombre() != null && !dto.getNombre().isBlank()) {
+            cliente.setNombre(dto.getNombre());
         }
-        if (dto.getApellido() != null) {
-            nuevo.setApellido(dto.getApellido());
+        if (dto.getApellido() != null && !dto.getApellido().isBlank()) {
+            cliente.setApellido(dto.getApellido());
         }
-        if (dto.getContrasenia() != null) {
-            nuevo.setContrasenia(dto.getContrasenia());
+        if (dto.getContrasenia() != null && dto.getContrasenia().isBlank()) {
+            cliente.setContrasenia(dto.getContrasenia());
         }
         if (dto.getTelefono() != 0) {
-            nuevo.setTelefono(dto.getTelefono());
+            cliente.setTelefono(dto.getTelefono());
         }
         if (dto.getFechaNac() != null) {
-            nuevo.setFechaNac(dto.getFechaNac());
+            cliente.setFechaNac(dto.getFechaNac());
         }
+
+        clienteRepository.save(cliente);
+
         return clienteMapper.toResponseDTO(cliente);
     }
 

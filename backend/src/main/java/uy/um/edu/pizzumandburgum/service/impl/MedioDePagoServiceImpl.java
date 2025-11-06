@@ -94,11 +94,12 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
     @Override
     public void eliminarMedioDePago(String email, Long id) {
         MedioDePago medio = medioDePagoRepository.findByClienteEmailAndId(email, id).orElseThrow(MedioDePagoNoExisteException::new);
-        Cliente cliente = clienteRepository.findById(email).orElseThrow(ClienteNoExisteException::new);
 
-        if (cliente.getMediosDePago().size() <= 1) {
+        long mediosActivos = medioDePagoRepository.findByClienteEmailAndEstaActivoTrue(email).size();
+        if (mediosActivos <= 1) {
             throw new PorLoMenosUnMedioDePagoException();
         }
+
         medio.setEstaActivo(false);
         medioDePagoRepository.save(medio);
         historicoService.RegistrarEliminar(medio);
