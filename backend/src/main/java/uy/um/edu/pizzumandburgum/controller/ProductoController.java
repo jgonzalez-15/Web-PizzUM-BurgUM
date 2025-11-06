@@ -50,4 +50,31 @@ public class ProductoController {
         List<ProductoResponseDTO> productos = productoService.listarBebidas();
         return ResponseEntity.ok(productos);
     }
+
+    @PutMapping("/{id}/ocultar")
+    public ResponseEntity<Void> ocultarProducto(@PathVariable Long id) {
+        productoService.ocultarProducto(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/mostrar")
+    public ResponseEntity<Void> mostrarProducto(@PathVariable Long id) {
+        productoService.mostrarProducto(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/listarAdmin")
+    public ResponseEntity<List<ProductoResponseDTO>> listarAdmin() {
+        return ResponseEntity.ok(productoService.listarProductosAdmin());
+    }
+
+    @PutMapping("/{id}/editar")
+    public ResponseEntity<ProductoResponseDTO> editarProducto(
+            @PathVariable Long id,
+            @RequestBody ProductoRequestDTO dto) {
+
+        ProductoResponseDTO actualizado = productoService.editarProducto(id, dto);
+        return ResponseEntity.ok(actualizado);
+    }
+
 }

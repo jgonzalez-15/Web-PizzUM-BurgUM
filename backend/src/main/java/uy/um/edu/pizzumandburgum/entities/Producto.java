@@ -22,8 +22,10 @@ public class Producto {
     String nombre;
     String tipo;
     boolean sinTacc;
-    float precio;
-    boolean estaActivo;
+    Float precio;
+    boolean estaActivo = true;
+    boolean visible = true;
+
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HamburguesaProducto> ingredientesHamburguesa = new ArrayList<>();

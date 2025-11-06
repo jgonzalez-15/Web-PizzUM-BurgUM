@@ -33,6 +33,7 @@ public class HistoricoProductoModificacionServiceImpl implements HistoricoProduc
 
         HistoricoProductoModificacion historico = new HistoricoProductoModificacion();
 
+
         historico.setProducto(nuevo);
         historico.setPrecioAnterior(anterior.getPrecio());
         historico.setNombreAnterior(anterior.getNombre());

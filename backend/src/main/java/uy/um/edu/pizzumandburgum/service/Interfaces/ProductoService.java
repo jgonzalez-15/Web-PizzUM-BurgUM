@@ -10,7 +10,10 @@ public interface ProductoService {
     void eliminarProducto (Long idProducto);
     void modificarProducto(ProductoRequestDTO productoviejoDTO, ProductoRequestDTO productonuevoDTO);
     void ocultarProducto(Long idProducto);
+    void mostrarProducto(Long idProducto);
     List<ProductoResponseDTO> listarProductos();
+    List<ProductoResponseDTO> listarProductosAdmin();
     List<ProductoResponseDTO> listarBebidas();
+    ProductoResponseDTO editarProducto(Long idProducto, ProductoRequestDTO dto);
 
 }

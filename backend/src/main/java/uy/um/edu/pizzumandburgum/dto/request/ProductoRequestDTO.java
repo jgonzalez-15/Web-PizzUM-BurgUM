@@ -13,5 +13,7 @@ public class ProductoRequestDTO {
     private String tipo;
     private String nombre;
     private boolean sinTacc;
-    private float precio;
+    private Float precio;
+    private boolean visible;
+
 }

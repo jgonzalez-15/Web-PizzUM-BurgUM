@@ -13,10 +13,11 @@ public class ProductoMapper {
         producto.setTipo(dto.getTipo());
         producto.setNombre(dto.getNombre());
         producto.setSinTacc(dto.isSinTacc());
+        producto.setVisible(dto.isVisible());
         return producto;
     }
 
     public ProductoResponseDTO toResponseDTO(Producto producto) {
-        return new ProductoResponseDTO(producto.getIdProducto(),producto.getTipo(),producto.getNombre(),producto.isSinTacc(),producto.getPrecio(),producto.isEstaActivo());
+        return new ProductoResponseDTO(producto.getIdProducto(),producto.getTipo(),producto.getNombre(),producto.isSinTacc(),producto.getPrecio(),producto.isEstaActivo(),producto.isVisible());
     }
 }

@@ -32,10 +32,10 @@ public class HistoricoProductoModificacion {
     private String nombreAnterior;
     private String tipoAnterior;
     private boolean sinTaccAnterior;
-    private float precioAnterior;
+    private Float precioAnterior;
 
     private String nombreNuevo;
     private String tipoNuevo;
     private boolean sinTaccNuevo;
-    private float precioNuevo;
+    private Float precioNuevo;
 }

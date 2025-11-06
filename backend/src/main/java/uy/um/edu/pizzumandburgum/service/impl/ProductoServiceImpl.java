@@ -32,7 +32,7 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public ProductoResponseDTO agregarProducto(ProductoRequestDTO productoDTO) {
-        
+
         Producto producto = productoMapper.toEntity(productoDTO);
         if (producto.getNombre() == null){
             throw new CampoObligatorioException("El nombre es un campo obligatorio");
@@ -40,16 +40,20 @@ public class ProductoServiceImpl implements ProductoService {
         if (producto.getTipo() == null){
             throw new CampoObligatorioException("El tipo es un campo obligatorio");
         }
-        if (producto.getPrecio() == 0){
-            throw new CampoObligatorioException("El precio es un campo obligatorio");
+        if (producto.isVisible() && (producto.getPrecio() == null || producto.getPrecio() <= 0)) {
+            throw new CampoObligatorioException("El precio es un campo obligatorio para productos visibles");
         }
         if (producto.getPrecio() < 0){
             throw new PrecioNegativoException();
         }
-        if (productoRepository.findByNombre(producto.getNombre()).isPresent()) {
+        if (productoRepository.findByNombre(producto.getNombre())
+                .filter(p -> p.isEstaActivo())
+                .isPresent()) {
             throw new ProductoYaExisteException();
         }
+
         producto.setEstaActivo(true);
+        producto.setVisible(productoDTO.isVisible());
         productoRepository.save(producto);
         historicoService.RegistrarAgregar(producto);
         return productoMapper.toResponseDTO(producto);
@@ -66,11 +70,17 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public void ocultarProducto(Long idProducto) {
         Producto producto = productoRepository.findById(idProducto).orElseThrow(ProductoNoExisteException::new);
-        producto.setEstaActivo(false);
+        producto.setVisible(false);
         productoRepository.save(producto);
         historicoService.RegistrarOculto(producto);
     }
 
+    @Override
+    public void mostrarProducto(Long idProducto) {
+        Producto producto = productoRepository.findById(idProducto).orElseThrow(ProductoNoExisteException::new);
+        producto.setVisible(true);
+        productoRepository.save(producto);
+    }
 
 
     @Override
@@ -89,40 +99,55 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public List<ProductoResponseDTO> listarProductos() {
-        List<Producto> productos = productoRepository.findAll();
         List<ProductoResponseDTO> resultado = new ArrayList<>();
-
-        for (Producto producto : productos) {
-            if (producto.isEstaActivo()){
-            ProductoResponseDTO dto = productoMapper.toResponseDTO(producto);
-            resultado.add(dto);}
-            else {
-                throw new ProductoNoExisteException();
+        for (Producto producto : productoRepository.findAll()) {
+            if (producto.isEstaActivo() && producto.isVisible()) {
+                resultado.add(productoMapper.toResponseDTO(producto));
             }
         }
-
         return resultado;
+    }
+
+    @Override
+    public List<ProductoResponseDTO> listarProductosAdmin() {
+        List<ProductoResponseDTO> resultado = new ArrayList<>();
+        for (Producto producto : productoRepository.findAll()) {
+            if (producto.isEstaActivo()) {
+                resultado.add(productoMapper.toResponseDTO(producto));
+            }
         }
+        return resultado;
+    }
+
+    @Override
+    public ProductoResponseDTO editarProducto(Long idProducto, ProductoRequestDTO dto) {
+        Producto producto = productoRepository.findById(idProducto).orElseThrow(ProductoNoExisteException::new);
+
+        producto.setNombre(dto.getNombre());
+        producto.setPrecio(dto.getPrecio());
+        producto.setSinTacc(dto.isSinTacc());
+        producto.setVisible(dto.isVisible());
+        producto.setTipo(dto.getTipo());
+
+        productoRepository.save(producto);
+        historicoService.registrarActualizacion(producto, producto);
+
+        return productoMapper.toResponseDTO(producto);
+    }
+
 
     @Override
     public List<ProductoResponseDTO> listarBebidas() {
         List<Producto> productos = productoRepository.findAll();
-        List<Producto> bebidas = new ArrayList<>();
         List<ProductoResponseDTO> retornar = new ArrayList<>();
-        for (Producto producto : productos){
-            if (producto.isEstaActivo()){
-            if (producto.getTipo().equals("Bebida")){
-                bebidas.add(producto);
-            }
-            }
-            else{
-                throw new ProductoNoExisteException();
+
+        for (Producto producto : productos) {
+            if (producto.isEstaActivo() && producto.isVisible() && "Bebida".equalsIgnoreCase(producto.getTipo())) {
+                ProductoResponseDTO dto = productoMapper.toResponseDTO(producto);
+                retornar.add(dto);
             }
         }
-        for (Producto bebida : bebidas){
-            ProductoResponseDTO b = productoMapper.toResponseDTO(bebida);
-            retornar.add(b);
-        }
+
         return retornar;
     }
 }

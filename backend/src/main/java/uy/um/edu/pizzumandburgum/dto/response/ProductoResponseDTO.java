@@ -16,6 +16,8 @@ public class ProductoResponseDTO {
     private String tipo;
     private String nombre;
     private boolean sinTacc;
-    private float precio;
+    private Float precio;
     private boolean estaActivo;
+    private boolean visible;
+
 }
