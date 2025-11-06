@@ -9,6 +9,7 @@ public interface HistoricoProductoModificacionService {
     void registrarActualizacion(Producto anterior, Producto nuevo);
     void RegistrarAgregar(Producto nuevo);
     void RegistrarEliminar(Producto viejo);
+    void RegistrarOculto(Producto pAnterior);
     List<HistoricoProductoResponseDTO> listarHistoricosPorProducto(Long productoId);
     List<HistoricoProductoResponseDTO> listarTodosLosHistoricos();
     List<HistoricoProductoResponseDTO> listarHistoricosPorTipo(String tipoModificacion);

@@ -59,9 +59,19 @@ public class ProductoServiceImpl implements ProductoService {
     public void eliminarProducto(Long idProducto) {
         Producto producto = productoRepository.findById(idProducto).orElseThrow(ProductoNoExisteException::new);
         producto.setEstaActivo(false);
+        productoRepository.save(producto);
         historicoService.RegistrarEliminar(producto);
-
     }
+
+    @Override
+    public void ocultarProducto(Long idProducto) {
+        Producto producto = productoRepository.findById(idProducto).orElseThrow(ProductoNoExisteException::new);
+        producto.setEstaActivo(false);
+        productoRepository.save(producto);
+        historicoService.RegistrarOculto(producto);
+    }
+
+
 
     @Override
     public void modificarProducto(ProductoRequestDTO productoviejoDTO, ProductoRequestDTO productonuevoDTO) {

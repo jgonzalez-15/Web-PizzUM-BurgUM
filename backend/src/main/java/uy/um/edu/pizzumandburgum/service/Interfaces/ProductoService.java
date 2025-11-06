@@ -9,6 +9,7 @@ public interface ProductoService {
     ProductoResponseDTO agregarProducto (ProductoRequestDTO productoDTO);
     void eliminarProducto (Long idProducto);
     void modificarProducto(ProductoRequestDTO productoviejoDTO, ProductoRequestDTO productonuevoDTO);
+    void ocultarProducto(Long idProducto);
     List<ProductoResponseDTO> listarProductos();
     List<ProductoResponseDTO> listarBebidas();
 

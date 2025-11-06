@@ -81,6 +81,25 @@ public class HistoricoProductoModificacionServiceImpl implements HistoricoProduc
         historicoProductoModificacionesRepository.save(historico);
         anterior.getHistorico().add(historico);
     }
+
+    @Override
+    public void RegistrarOculto(Producto pAnterior) {
+        Producto anterior = productoRepository.findById(pAnterior.getIdProducto()).orElseThrow(ProductoNoExisteException::new);
+
+        HistoricoProductoModificacion historico = new HistoricoProductoModificacion();
+
+        historico.setProducto(anterior);
+        historico.setPrecioAnterior(anterior.getPrecio());
+        historico.setNombreAnterior(anterior.getNombre());
+        historico.setSinTaccAnterior(anterior.isSinTacc());
+        historico.setTipoAnterior(anterior.getTipo());
+        historico.setFechaModificacion(LocalDateTime.now());
+        historico.setTipoModificiacion("Oculto");
+
+        historicoProductoModificacionesRepository.save(historico);
+        anterior.getHistorico().add(historico);
+    }
+
     @Override
     public List<HistoricoProductoResponseDTO> listarHistoricosPorProducto(Long productoId) {
         Producto producto = productoRepository.findById(productoId).orElseThrow(ProductoNoExisteException::new);
