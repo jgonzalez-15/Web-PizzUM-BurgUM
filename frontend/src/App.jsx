@@ -15,6 +15,8 @@ import ViewCreation from './Pages/ViewCreation'
 import Register from './Pages/Register'
 import Options from './Pages/Options'
 import Perfil from "./Pages/Perfil";
+import CheckoutPage from './Pages/CheckoutPage';
+
 
 
 
@@ -51,11 +53,10 @@ function App() {
           <Route path='/design/burger' element={<Design type='Burger'/>}/>
           <Route path='/viewOrders' element={<Orders/>}/>
           <Route path='/order' element={<NewOrder/>}/>
+          <Route path='/checkout' element={<CheckoutPage/>}/>
           <Route path='/login' element={<Login/>}/>
           <Route path='/register' element={<Register/>}/>
           <Route path='/favoritos' element={<Favoritos/>}/>
-
-
           <Route path='/viewCreation' element={<ViewCreation/>}/>
           <Route path='/config' element={<Options/>}/>
           <Route path="/perfil" element={<Perfil/>} />
