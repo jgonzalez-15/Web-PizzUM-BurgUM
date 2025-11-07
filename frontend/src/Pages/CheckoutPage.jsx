@@ -8,22 +8,22 @@ import Footer from "../Components/Footer";
 export default function CheckoutPage() {
   const { sessionInfo } = useContext(SessionContext);
   const { items, clearCart } = useCart();
+
   const [domicilios, setDomicilios] = useState([]);
   const [pagos, setPagos] = useState([]);
   const [direccion, setDireccion] = useState("");
-  const [nuevoPago, setNuevoPago] = useState({
-    numeroTarjeta: "",
-    nombreTitular: "",
-    fechaVencimiento: "",
-  });
+  const [nuevoPago, setNuevoPago] = useState({ numeroTarjeta: "", nombreTitular: "", fechaVencimiento: "" });
   const [cvv, setCvv] = useState("");
   const [selectedDomicilio, setSelectedDomicilio] = useState(null);
   const [selectedPago, setSelectedPago] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [pedidoId, setPedidoId] = useState(null);
-  const [errorPago, setErrorPago] = useState("");
-  const navigate = useNavigate();
 
+  const [creando, setCreando] = useState(false);
+  const [pagando, setPagando] = useState(false);
+  const [mensaje, setMensaje] = useState(null); // {type:'error'|'ok', text:string}
+
+  const [pedidoId, setPedidoId] = useState(null);
+  const navigate = useNavigate();
   const email = sessionInfo?.email;
 
   useEffect(() => {
@@ -35,6 +35,8 @@ export default function CheckoutPage() {
         ]);
         if (domRes.ok) setDomicilios(await domRes.json());
         if (pagoRes.ok) setPagos(await pagoRes.json());
+      } catch (e) {
+        console.error(e);
       } finally {
         setLoading(false);
       }
@@ -51,26 +53,26 @@ export default function CheckoutPage() {
         body: JSON.stringify({ direccion }),
         credentials: "include",
       });
+      if (!crear.ok) return;
       const nuevo = await crear.json();
-
       const asociar = await fetch("http://localhost:8080/api/clienteDomicilio/asociarDomicilio", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, idDomicilio: nuevo.id }),
         credentials: "include",
       });
-
       if (asociar.ok) {
-        setDomicilios([...domicilios, nuevo]);
+        setDomicilios((prev) => [...prev, nuevo]);
         setDireccion("");
       }
-    } catch {}
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const agregarPago = async () => {
     const { nombreTitular, numeroTarjeta, fechaVencimiento } = nuevoPago;
     if (!nombreTitular || !numeroTarjeta || !fechaVencimiento) return;
-
     try {
       const respuesta = await fetch(`http://localhost:8080/api/medioDePago/${email}/agregar`, {
         method: "POST",
@@ -82,17 +84,23 @@ export default function CheckoutPage() {
         }),
         credentials: "include",
       });
-
       if (respuesta.ok) {
         const data = await respuesta.json();
-        setPagos([...pagos, data]);
+        setPagos((prev) => [...prev, data]);
         setNuevoPago({ numeroTarjeta: "", nombreTitular: "", fechaVencimiento: "" });
       }
-    } catch {}
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const crearPedido = async () => {
-    if (!selectedDomicilio || !selectedPago) return null;
+    if (!selectedDomicilio || !selectedPago) {
+      setMensaje({ type: "error", text: "Seleccioná un domicilio y un método de pago." });
+      return null;
+    }
+    setMensaje(null);
+    setCreando(true);
 
     const creaciones = items
         .filter((i) => i.tipo !== "Bebida")
@@ -101,16 +109,19 @@ export default function CheckoutPage() {
           cantidad: i.cantidad || 1,
         }));
 
-    // IMPORTANTE: el backend espera producto.idProducto
     const bebidas = items
+
+
         .filter((i) => i.tipo === "Bebida")
         .map((i) => ({
-          producto: { idProducto: i.idProducto ?? i.id },
+          producto: { idProducto: i.idProducto ?? i.id},
           cantidad: i.cantidad || 1,
         }));
 
+
+
     try {
-      const response = await fetch("http://localhost:8080/api/pedido/realizar", {
+      const res = await fetch("http://localhost:8080/api/pedido/realizar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -123,46 +134,70 @@ export default function CheckoutPage() {
         credentials: "include",
       });
 
-      if (!response.ok) return null;
+      if (!res.ok) {
+        let msg = "No se pudo crear el pedido. Inténtelo nuevamente.";
+        try {
+          const err = await res.json();
+          if (err?.message) msg = err.message;
+        } catch {}
+        setMensaje({ type: "error", text: msg });
+        return null;
+      }
 
-      const data = await response.json();
+      const data = await res.json();
       setPedidoId(data.id);
       return data.id;
-    } catch {
+    } catch (e) {
+      console.error(e);
+      setMensaje({ type: "error", text: "Error de red al crear el pedido." });
       return null;
+    } finally {
+      setCreando(false);
     }
   };
 
   const confirmarPago = async () => {
-    setErrorPago("");
-    if (!cvv.trim()) return;
+    if (!cvv.trim()) {
+      setMensaje({ type: "error", text: "Ingresá el CVV." });
+      return;
+    }
+
+    setMensaje(null);
+    setPagando(true);
 
     const idPedido = pedidoId || (await crearPedido());
     if (!idPedido) {
-      setErrorPago("No se pudo crear el pedido. Inténtelo nuevamente.");
+      setPagando(false);
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/dummy/procesarPago", {
+      const res = await fetch("http://localhost:8080/api/dummy/procesarPago", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          idPedido,
-          idMedioPago: selectedPago,
-          cvv,
-        }),
+        body: JSON.stringify({ idPedido, idMedioPago: selectedPago, cvv }),
         credentials: "include",
       });
 
-      if (response.ok) {
-        clearCart();
-        navigate("/viewOrders");
-      } else {
-        setErrorPago("El pago fue rechazado. Por favor pruebe con otro método de pago.");
+      if (!res.ok) {
+        let msg = "Pago rechazado. Probá con otro método de pago.";
+        try {
+          const err = await res.json();
+          if (err?.message) msg = err.message;
+        } catch {}
+        setMensaje({ type: "error", text: msg });
+        return;
       }
-    } catch {
-      setErrorPago("Ocurrió un error al procesar el pago. Intente nuevamente.");
+
+      const data = await res.json();
+      setMensaje({ type: "ok", text: `Pago aprobado: ${data.codigoTransaccion}` });
+      clearCart();
+      navigate("/viewOrders");
+    } catch (e) {
+      console.error(e);
+      setMensaje({ type: "error", text: "No se pudo procesar el pago. Intentá nuevamente." });
+    } finally {
+      setPagando(false);
     }
   };
 
@@ -183,19 +218,18 @@ export default function CheckoutPage() {
           <div className="flex flex-col gap-8 w-[calc(100vw-4rem)] md:w-[calc(100vw-28rem)] max-w-3xl mb-10">
             <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
               <h2 className="font-bold text-xl mb-4 text-gray-800">Seleccionar domicilio</h2>
-              {domicilios.length > 0 &&
-                  domicilios.map((d) => (
-                      <div key={d.id} className="flex items-center mb-2">
-                        <input
-                            type="radio"
-                            name="domicilio"
-                            checked={selectedDomicilio === d.id}
-                            onChange={() => setSelectedDomicilio(d.id)}
-                            className="mr-3"
-                        />
-                        <span>{d.direccion}</span>
-                      </div>
-                  ))}
+              {domicilios.map((d) => (
+                  <div key={d.id} className="flex items-center mb-2">
+                    <input
+                        type="radio"
+                        name="domicilio"
+                        checked={selectedDomicilio === d.id}
+                        onChange={() => setSelectedDomicilio(d.id)}
+                        className="mr-3"
+                    />
+                    <span>{d.direccion}</span>
+                  </div>
+              ))}
               <div className="flex gap-2 mt-3">
                 <input
                     className="bg-gray-100 rounded-2xl p-2 flex-1"
@@ -214,19 +248,18 @@ export default function CheckoutPage() {
 
             <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
               <h2 className="font-bold text-xl mb-4 text-gray-800">Seleccionar método de pago</h2>
-              {pagos.length > 0 &&
-                  pagos.map((m) => (
-                      <div key={m.id} className="flex items-center mb-2">
-                        <input
-                            type="radio"
-                            name="pago"
-                            checked={selectedPago === m.id}
-                            onChange={() => setSelectedPago(m.id)}
-                            className="mr-3"
-                        />
-                        <span>{`${m.numeroTarjeta} - ${m.nombreTitular}`}</span>
-                      </div>
-                  ))}
+              {pagos.map((m) => (
+                  <div key={m.id} className="flex items-center mb-2">
+                    <input
+                        type="radio"
+                        name="pago"
+                        checked={selectedPago === m.id}
+                        onChange={() => setSelectedPago(m.id)}
+                        className="mr-3"
+                    />
+                    <span>{`${m.numeroTarjeta} - ${m.nombreTitular}`}</span>
+                  </div>
+              ))}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
                 <input
                     className="bg-gray-100 rounded-2xl p-2"
@@ -259,6 +292,19 @@ export default function CheckoutPage() {
 
             <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
               <h2 className="font-bold text-xl mb-4 text-gray-800">Confirmar pago</h2>
+
+              {mensaje && (
+                  <div
+                      className={`mb-4 rounded-xl px-4 py-3 text-sm ${
+                          mensaje.type === "error"
+                              ? "bg-red-50 text-red-700 border border-red-200"
+                              : "bg-green-50 text-green-700 border border-green-200"
+                      }`}
+                  >
+                    {mensaje.text}
+                  </div>
+              )}
+
               <input
                   type="password"
                   maxLength={3}
@@ -267,12 +313,14 @@ export default function CheckoutPage() {
                   value={cvv}
                   onChange={(e) => setCvv(e.target.value)}
               />
-              {errorPago && <p className="text-red-600 font-semibold mt-4">{errorPago}</p>}
               <button
                   onClick={confirmarPago}
-                  className="w-full mt-6 bg-orange-500 text-white font-bold py-3 rounded-2xl hover:scale-105 transition-transform text-lg shadow-xl"
+                  disabled={creando || pagando}
+                  className={`w-full mt-6 text-white font-bold py-3 rounded-2xl transition-transform text-lg shadow-xl ${
+                      creando || pagando ? "bg-orange-300 cursor-not-allowed" : "bg-orange-500 hover:scale-105"
+                  }`}
               >
-                Pagar ahora
+                {pagando ? "Procesando..." : "Pagar ahora"}
               </button>
             </div>
           </div>

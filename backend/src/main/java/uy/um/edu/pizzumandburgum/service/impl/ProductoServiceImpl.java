@@ -61,7 +61,7 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public void eliminarProducto(Long idProducto) {
-        Producto producto = productoRepository.findById(idProducto).orElseThrow(ProductoNoExisteException::new);
+        Producto producto = productoRepository.findByIdProducto(idProducto).orElseThrow(ProductoNoExisteException::new);
         producto.setEstaActivo(false);
         productoRepository.save(producto);
         historicoService.RegistrarEliminar(producto);
@@ -69,7 +69,7 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public void ocultarProducto(Long idProducto) {
-        Producto producto = productoRepository.findById(idProducto).orElseThrow(ProductoNoExisteException::new);
+        Producto producto = productoRepository.findByIdProducto(idProducto).orElseThrow(ProductoNoExisteException::new);
         producto.setVisible(false);
         productoRepository.save(producto);
         historicoService.RegistrarOculto(producto);
@@ -77,7 +77,7 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public void mostrarProducto(Long idProducto) {
-        Producto producto = productoRepository.findById(idProducto).orElseThrow(ProductoNoExisteException::new);
+        Producto producto = productoRepository.findByIdProducto(idProducto).orElseThrow(ProductoNoExisteException::new);
         producto.setVisible(true);
         productoRepository.save(producto);
     }
@@ -121,7 +121,7 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public ProductoResponseDTO editarProducto(Long idProducto, ProductoRequestDTO dto) {
-        Producto producto = productoRepository.findById(idProducto).orElseThrow(ProductoNoExisteException::new);
+        Producto producto = productoRepository.findByIdProducto(idProducto).orElseThrow(ProductoNoExisteException::new);
 
         producto.setNombre(dto.getNombre());
         producto.setPrecio(dto.getPrecio());

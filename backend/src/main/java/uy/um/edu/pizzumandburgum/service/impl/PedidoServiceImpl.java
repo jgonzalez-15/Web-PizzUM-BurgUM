@@ -3,6 +3,7 @@ package uy.um.edu.pizzumandburgum.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.controller.NotificacionesController;
+import uy.um.edu.pizzumandburgum.dto.request.PedidoBebidaRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoBebidaResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoCreacionDTO;
@@ -16,6 +17,7 @@ import uy.um.edu.pizzumandburgum.exceptions.Pedido.PedidoNoEncontradoException;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.PedidoMapper;
+import uy.um.edu.pizzumandburgum.mapper.ProductoMapper;
 import uy.um.edu.pizzumandburgum.repository.*;
 import uy.um.edu.pizzumandburgum.service.Interfaces.*;
 
@@ -99,10 +101,12 @@ public class PedidoServiceImpl implements PedidoService {
 
 
         if (dto.getBebidas() != null && !dto.getBebidas().isEmpty()) {
-            for (PedidoBebidaResponseDTO bebidaDto : dto.getBebidas()) {
+            for (PedidoBebidaRequestDTO bebidaDto : dto.getBebidas()) {
                 pedidoBebidaService.agregarBebida(pedido.getId(), bebidaDto.getProducto().getIdProducto(), bebidaDto.getCantidad());
 
-                Producto bebida = productoRepository.findById(bebidaDto.getProducto().getIdProducto()).orElseThrow(ProductoNoExisteException::new);
+                Producto bebida = productoRepository.findByIdProducto(bebidaDto.getProducto().getIdProducto()).orElseThrow(ProductoNoExisteException::new);
+
+
 
                 precioTotal += bebida.getPrecio() * bebidaDto.getCantidad();
             }
@@ -220,6 +224,7 @@ public class PedidoServiceImpl implements PedidoService {
 
         return pedidoMapper.toResponseDTO(guardado);
     }
+
 
 
 }
