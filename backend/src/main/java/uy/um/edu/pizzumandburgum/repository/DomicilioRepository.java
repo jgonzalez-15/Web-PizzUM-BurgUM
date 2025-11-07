@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface DomicilioRepository extends JpaRepository<Domicilio,String> {
     Optional<Domicilio>findById(Long Domicilio);
-    @Query("SELECT COUNT(d) FROM Domicilio d JOIN d.clientes c WHERE c.id = :clienteId")
+    @Query("SELECT COUNT(cd) FROM ClienteDomicilio cd WHERE cd.cliente.email = :clienteId")
     long countByClienteId(@Param("clienteId") String clienteId);
 
 }

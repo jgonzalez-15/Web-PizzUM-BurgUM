@@ -8,6 +8,7 @@ import uy.um.edu.pizzumandburgum.dto.request.DomicilioRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.DomicilioResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.update.DomicilioUpdateDTO;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
+import uy.um.edu.pizzumandburgum.entities.ClienteDomicilio;
 import uy.um.edu.pizzumandburgum.entities.Domicilio;
 import uy.um.edu.pizzumandburgum.entities.Historicos.HistoricoDomicilioModificaciones;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
@@ -70,7 +71,8 @@ public class DomicilioServiceImpl implements DomicilioService {
 
         Cliente cliente = clienteRepository.findById(clienteId).orElseThrow(ClienteNoExisteException::new);
 
-        if (!domicilio.getClientes().contains(cliente)) {
+
+        if (!clienteDomicilioService.clienteTieneDomicilio(clienteId, domicilioId)) {
             throw new SinAccesoAlDomicilioException();
         }
 

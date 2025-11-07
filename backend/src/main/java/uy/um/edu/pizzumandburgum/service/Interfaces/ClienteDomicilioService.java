@@ -9,8 +9,9 @@ import uy.um.edu.pizzumandburgum.entities.Domicilio;
 import java.util.List;
 
 public interface ClienteDomicilioService {
-    ClienteDomicilioResponseDTO agregarDomicilio(ClienteDomicilioRequestDTO dto);
+    void agregarDomicilio(ClienteDomicilioRequestDTO dto);
     Domicilio obtenerDomicilio(String clienteId, String direccion);
     List<DomicilioResponseDTO> listarDomiciliosDeCliente(String emailCliente);
     void eliminarDomicilioDeCliente(String emailCliente, Long idDomicilio);
+    boolean clienteTieneDomicilio(String clienteId, Long domicilioId);
 }

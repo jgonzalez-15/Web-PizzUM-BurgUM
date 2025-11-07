@@ -17,10 +17,9 @@ import uy.um.edu.pizzumandburgum.exceptions.Usuario.EmailNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.EmailYaRegistradoException;
 import uy.um.edu.pizzumandburgum.mapper.*;
 import uy.um.edu.pizzumandburgum.repository.*;
+import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteDomicilioService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.Historicos.HistoricoClienteModificacionesService;
-import uy.um.edu.pizzumandburgum.service.Interfaces.MedioDePagoService;
-import uy.um.edu.pizzumandburgum.service.Interfaces.PedidoService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +69,9 @@ public class ClienteServiceImpl implements ClienteService {
     @Autowired
     private HistoricoClienteModificacionesService historicoService;
 
+    @Autowired
+    private ClienteDomicilioService clienteDomicilioService;
+
     @Override
     @Transactional
     public ClienteResponseDTO registrarCliente(ClienteRegistrarRequestDTO dto) {
@@ -102,16 +104,17 @@ public class ClienteServiceImpl implements ClienteService {
             MedioDePago medioDePago = medioDePagoMapper.toEntity(medioDePagoRequestDTO);
             medioDePago.setCliente(guardado);
             medioDePagoRepository.save(medioDePago);
+            guardado.getMediosDePago().add(medioDePago);
         }
 
         for (DomicilioRequestDTO domicilioRequestDTO : dto.getDomicilios()) {
             Domicilio domicilio = domicilioMapper.toEntity(domicilioRequestDTO);
             Domicilio domicilioGuardado = domicilioRepository.saveAndFlush(domicilio);
 
-            ClienteDomicilio clienteDomicilio = new ClienteDomicilio();
-            clienteDomicilio.setCliente(guardado);
-            clienteDomicilio.setDomicilio(domicilioGuardado);
-            clienteDomicilioRepository.save(clienteDomicilio);
+            ClienteDomicilioRequestDTO clienteDomicilioRequestDTO = new ClienteDomicilioRequestDTO();
+            clienteDomicilioRequestDTO.setEmail(guardado.getEmail());
+            clienteDomicilioRequestDTO.setIdDomicilio(domicilioGuardado.getId());
+            clienteDomicilioService.agregarDomicilio(clienteDomicilioRequestDTO);
         }
 
         guardado = clienteRepository.findById(guardado.getEmail()).orElseThrow();
@@ -240,6 +243,8 @@ public class ClienteServiceImpl implements ClienteService {
         Cliente cliente = clienteRepository.findById(email).orElseThrow(ClienteNoExisteException::new);
         return new ClienteResponseDTO(cliente.getEmail(), cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getFechaNac());
     }
+
+    
 
 
 

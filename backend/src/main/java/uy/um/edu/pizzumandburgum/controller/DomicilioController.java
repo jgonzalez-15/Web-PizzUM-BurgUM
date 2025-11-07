@@ -29,4 +29,13 @@ public class DomicilioController {
         DomicilioResponseDTO response = domicilioService.editarPerfil(idDomicilio, dto);
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/{domicilioId}/cliente/{clienteId}")
+    public ResponseEntity<Void> eliminarDomicilio(
+            @PathVariable Long domicilioId,
+            @PathVariable String clienteId) {
+
+        domicilioService.eliminarDomicilio(domicilioId, clienteId);
+        return ResponseEntity.noContent().build();
+    }
 }

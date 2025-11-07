@@ -22,10 +22,9 @@ public class ClienteDomicilioController {
     private ClienteDomicilioService clienteDomicilioService;
 
     @PostMapping("/asociarDomicilio")
-    public ResponseEntity<ClienteDomicilioResponseDTO> agregarDomicilioACliente(@RequestBody ClienteDomicilioRequestDTO dto) {
-
-        ClienteDomicilioResponseDTO response = clienteDomicilioService.agregarDomicilio(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<Void> agregarDomicilioACliente(@RequestBody ClienteDomicilioRequestDTO dto) {
+        clienteDomicilioService.agregarDomicilio(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 

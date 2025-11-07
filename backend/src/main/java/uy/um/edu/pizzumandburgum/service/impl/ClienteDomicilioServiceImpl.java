@@ -1,5 +1,6 @@
 package uy.um.edu.pizzumandburgum.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteDomicilioRequestDTO;
@@ -41,7 +42,7 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
     private DomicilioMapper domicilioMapper;
 
     @Override
-    public ClienteDomicilioResponseDTO agregarDomicilio(ClienteDomicilioRequestDTO dto) {
+    public void agregarDomicilio(ClienteDomicilioRequestDTO dto) {
         Cliente cliente = clienteRepository.findById(dto.getEmail()).orElseThrow(ClienteNoExisteException::new);
         Domicilio domicilio = domicilioRepository.findById(dto.getIdDomicilio()).orElseThrow(DomicilioNoExisteException::new);
 
@@ -53,8 +54,6 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
         domicilio.getClientes().add(clienteDomicilio);
 
         clienteDomicilioRepository.save(clienteDomicilio);
-
-        return clienteDomicilioMapper.toResponseDTO(clienteDomicilio);
     }
 
     @Override
@@ -83,37 +82,30 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
     }
 
     @Override
+    @Transactional
     public void eliminarDomicilioDeCliente(String emailCliente, Long idDomicilio) {
-        Cliente cliente = clienteRepository.findById(emailCliente).orElseThrow(ClienteNoExisteException::new);
+        ClienteDomicilio clienteDomicilio = clienteDomicilioRepository
+                .findByCliente_EmailAndDomicilio_Id(emailCliente, idDomicilio)
+                .orElseThrow(DomicilioNoExisteException::new);
 
-        Domicilio domicilio = domicilioRepository.findById(idDomicilio).orElseThrow(DomicilioNoExisteException::new);
 
-        if (cliente.getDomicilios().size() <= 1) {
+        long cantidadDomicilios = clienteDomicilioRepository.countByCliente_Email(emailCliente);
+        if (cantidadDomicilios <= 1) {
             throw new PorLoMenosUnDomicilioException();
         }
 
-        ClienteDomicilio clienteDomicilio = null;
-        for (ClienteDomicilio cd : cliente.getDomicilios()) {
-            if (cd.getDomicilio().getId().equals(idDomicilio)) {
-                clienteDomicilio = cd;
-                break;
-            }
-        }
-
-        if (clienteDomicilio == null) {
-            throw new DomicilioNoExisteException();
-        }
-
+        Domicilio domicilio = clienteDomicilio.getDomicilio();
         for (Pedido pedido : domicilio.getPedidos()) {
             if (pedido.getEstado() != null && !pedido.getEstado().equalsIgnoreCase("Entregado")) {
                 throw new DomicilioConPedidoEnCursoException();
             }
         }
 
-        cliente.getDomicilios().remove(clienteDomicilio);
-        domicilio.getClientes().remove(clienteDomicilio);
+        clienteDomicilioRepository.delete(clienteDomicilio);
+    }
 
-        clienteRepository.save(cliente);
-        domicilioRepository.save(domicilio);
+    @Override
+    public boolean clienteTieneDomicilio(String clienteId, Long domicilioId) {
+        return clienteDomicilioRepository.existsByCliente_EmailAndDomicilio_Id(clienteId, domicilioId);
     }
 }

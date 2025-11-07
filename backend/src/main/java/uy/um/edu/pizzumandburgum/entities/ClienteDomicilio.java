@@ -20,7 +20,7 @@ public class ClienteDomicilio {
     @JoinColumn(name = "id_cliente",referencedColumnName = "email")
     private Cliente cliente;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_domicilio")
     private Domicilio domicilio;
 }
