@@ -20,7 +20,7 @@ function Orders(){
         try{
           const response = await fetch(`http://localhost:8080/api/cliente/${email}/historial-pedidos`, {
             method: "GET",
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`}
           });
     
           if (response.ok) {

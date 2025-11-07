@@ -28,8 +28,7 @@ function Design({ type }) {
       try {
         const response = await fetch("http://localhost:8080/api/producto/listar", {
           method: "GET",
-          headers: { "Content-Type": "application/json",
-            'Authorization': `Bearer ${localStorage.getItem("token")}`
+          headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`
            }
         });
 
@@ -103,7 +102,7 @@ function Design({ type }) {
     try {
       const response = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
         body: JSON.stringify(payload),
         credentials: "include"
       });
@@ -128,7 +127,7 @@ function Design({ type }) {
     try{
       const response = await fetch("http://localhost:8080/api/favorito/agregar", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
         body: JSON.stringify({clienteId, nombre, idCreacion}),
         credentials: "include",
       });

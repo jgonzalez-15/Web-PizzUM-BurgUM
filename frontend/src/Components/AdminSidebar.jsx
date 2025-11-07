@@ -11,7 +11,7 @@ function AdminSidebar(){
     try {
         const response = await fetch(`http://localhost:8080/api/administrador/cerrarSesion`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
         credentials: "include"
         });
 

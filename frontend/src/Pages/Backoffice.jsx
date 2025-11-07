@@ -22,7 +22,7 @@ function Backoffice() {
     try {
       const response = await fetch(`http://localhost:8080/api/producto/crearProducto`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
         body: JSON.stringify(newProduct),
         credentials: "include",
       });
@@ -48,7 +48,7 @@ function Backoffice() {
     try {
       const response = await fetch(`http://localhost:8080/api/producto/${editProduct.idProducto}/editar`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
         body: JSON.stringify(editProduct),
         credentials: "include",
       });
@@ -69,6 +69,7 @@ function Backoffice() {
     try {
       const response = await fetch(`http://localhost:8080/api/producto/${p}/eliminar`, {
         method: "DELETE",
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
         credentials: "include",
       });
       if (response.ok) {
@@ -86,7 +87,7 @@ function Backoffice() {
     try {
       const response = await fetch("http://localhost:8080/api/administrador/agregarAdmin", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
         body: JSON.stringify(newAdmin),
         credentials: "include",
       });
@@ -105,7 +106,7 @@ function Backoffice() {
     try {
       const response = await fetch("http://localhost:8080/api/producto/listarAdmin", {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
       });
       if (response.ok) {
         const data = await response.json();
@@ -138,7 +139,7 @@ function Backoffice() {
     try {
       const response = await fetch("http://localhost:8080/api/pedido/enCurso", {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
         credentials: "include",
       });
       if (response.ok) {
@@ -160,7 +161,7 @@ function Backoffice() {
     try {
       const response = await fetch("http://localhost:8080/api/administrador/listar", {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
       });
       if (response.ok) {
         const data = await response.json();
@@ -182,7 +183,7 @@ function Backoffice() {
     try {
       const response = await fetch(`http://localhost:8080/api/pedido/${id}/cambiarEstado`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
         credentials: "include",
       });
       if (response.ok) {

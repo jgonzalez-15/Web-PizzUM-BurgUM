@@ -20,10 +20,11 @@ function Favoritos() {
     const obtenerFavoritos = async () => {
         try {
             const respuesta = await fetch(
-                `http://localhost:8080/api/favorito/${sessionInfo.email}/listar`,
+                `http://localhost:8080/api/favorito/listar`,
                 {
                     method: "GET",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { "Content-Type": "application/json",
+                        'Authorization': `Bearer ${localStorage.getItem("token")}`},
                     credentials: "include",
                 }
             );

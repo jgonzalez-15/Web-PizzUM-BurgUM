@@ -30,8 +30,10 @@ export default function CheckoutPage() {
     const fetchData = async () => {
       try {
         const [domRes, pagoRes] = await Promise.all([
-          fetch(`http://localhost:8080/api/clienteDomicilio/${email}/listar`, { credentials: "include" }),
-          fetch(`http://localhost:8080/api/medioDePago/${email}/listar`, { credentials: "include" }),
+          fetch(`http://localhost:8080/api/clienteDomicilio/listar`, {headers: { "Content-Type": "application/json",
+              'Authorization': `Bearer ${localStorage.getItem("token")}`}, credentials: "include" }),
+          fetch(`http://localhost:8080/api/medioDePago/listar`,{headers: { "Content-Type": "application/json",
+              'Authorization': `Bearer ${localStorage.getItem("token")}`}, credentials: "include" }),
         ]);
         if (domRes.ok) setDomicilios(await domRes.json());
         if (pagoRes.ok) setPagos(await pagoRes.json());
@@ -49,7 +51,7 @@ export default function CheckoutPage() {
     try {
       const crear = await fetch("http://localhost:8080/api/domicilio/crearDomicilio", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
         body: JSON.stringify({ direccion }),
         credentials: "include",
       });
@@ -57,7 +59,7 @@ export default function CheckoutPage() {
       const nuevo = await crear.json();
       const asociar = await fetch("http://localhost:8080/api/clienteDomicilio/asociarDomicilio", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
         body: JSON.stringify({ email, idDomicilio: nuevo.id }),
         credentials: "include",
       });
@@ -76,7 +78,7 @@ export default function CheckoutPage() {
     try {
       const respuesta = await fetch(`http://localhost:8080/api/medioDePago/${email}/agregar`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
         body: JSON.stringify({
           nombreTitular,
           numeroTarjeta: Number(numeroTarjeta),
@@ -123,7 +125,7 @@ export default function CheckoutPage() {
     try {
       const res = await fetch("http://localhost:8080/api/pedido/realizar", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
         body: JSON.stringify({
           idCliente: email,
           idDomicilio: selectedDomicilio,
@@ -174,7 +176,7 @@ export default function CheckoutPage() {
     try {
       const res = await fetch("http://localhost:8080/api/dummy/procesarPago", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
         body: JSON.stringify({ idPedido, idMedioPago: selectedPago, cvv }),
         credentials: "include",
       });

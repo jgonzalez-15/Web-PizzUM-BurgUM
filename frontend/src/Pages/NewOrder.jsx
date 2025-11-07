@@ -19,6 +19,7 @@ export default function NewOrder() {
         const fetchBebidas = async () => {
             try {
                 const res = await fetch("http://localhost:8080/api/producto/bebidas", {
+                    headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
                     credentials: "include",
                 });
                 if (!res.ok) throw new Error("Error al listar bebidas");

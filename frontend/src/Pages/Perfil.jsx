@@ -30,7 +30,8 @@ export default function Perfil() {
     useEffect(() => {
         const cargarDatos = async () => {
             try {
-                const respuestaPerfil = await fetch(`http://localhost:8080/api/cliente/${usuario.email}/obtenerPerfil`);
+                const respuestaPerfil = await fetch(`http://localhost:8080/api/cliente/obtenerPerfil`, {
+                    headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`}});
                 if (respuestaPerfil.ok) {
                     const data = await respuestaPerfil.json();
                     setDatos({
@@ -43,10 +44,12 @@ export default function Perfil() {
                     });
                 }
 
-                const respuestaDomicilio = await fetch(`http://localhost:8080/api/clienteDomicilio/${usuario.email}/listar`);
+                const respuestaDomicilio = await fetch(`http://localhost:8080/api/clienteDomicilio/${usuario.email}/listar`, {
+                    headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`}});
                 if (respuestaDomicilio.ok) setDomicilios(await respuestaDomicilio.json());
 
-                const respuestaMedioDePago = await fetch(`http://localhost:8080/api/medioDePago/${usuario.email}/listar`);
+                const respuestaMedioDePago = await fetch(`http://localhost:8080/api/medioDePago/${usuario.email}/listar`, {
+                    headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`}});
                 if (respuestaMedioDePago.ok) setPagos(await respuestaMedioDePago.json());
             } catch (error) {
                 console.error("Error al cargar el perfil:", error);
@@ -71,9 +74,9 @@ export default function Perfil() {
                 contrasenia: datos.contrasenia || null,
             };
 
-            const respuesta = await fetch(`http://localhost:8080/api/cliente/${usuario.email}/perfil`, {
+            const respuesta = await fetch(`http://localhost:8080/api/cliente/perfil`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
                 body: JSON.stringify(body),
                 credentials: "include",
             });
@@ -92,7 +95,7 @@ export default function Perfil() {
         try {
             const crear = await fetch("http://localhost:8080/api/domicilio/crearDomicilio", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
                 body: JSON.stringify({ direccion }),
                 credentials: "include"
             });
@@ -103,7 +106,7 @@ export default function Perfil() {
 
             const asociar = await fetch("http://localhost:8080/api/clienteDomicilio/asociarDomicilio", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
                 body: JSON.stringify({
                     email: usuario.email,
                     idDomicilio: nuevo.id,
@@ -123,8 +126,9 @@ export default function Perfil() {
     const eliminarDomicilio = async (id) => {
         if (!window.confirm("¿Eliminar este domicilio?")) return;
         try {
-            const respuesta = await fetch(`http://localhost:8080/api/clienteDomicilio/eliminar/${usuario.email}/${id}`, {
+            const respuesta = await fetch(`http://localhost:8080/api/clienteDomicilio/eliminar/${id}`, {
                 method: "DELETE",
+                headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
                 credentials: "include"
             });
             if (respuesta.ok) {
@@ -152,9 +156,9 @@ export default function Perfil() {
             return alert("Completá todos los campos del método de pago");
 
         try {
-            const respuesta = await fetch(`http://localhost:8080/api/medioDePago/${usuario.email}/agregar`, {
+            const respuesta = await fetch(`http://localhost:8080/api/medioDePago/agregar`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
                 body: JSON.stringify({
                     nombreTitular,
                     numeroTarjeta: Number(numeroTarjeta),
@@ -176,8 +180,9 @@ export default function Perfil() {
     const eliminarPago = async (id) => {
         if (!window.confirm("¿Eliminar este método de pago?")) return;
         try {
-            const respuesta = await fetch(`http://localhost:8080/api/medioDePago/eliminar/${usuario.email}/${id}`, {
+            const respuesta = await fetch(`http://localhost:8080/api/medioDePago/eliminar/${id}`, {
                 method: "DELETE",
+                headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
                 credentials: "include"
             });
             if (respuesta.ok) {
