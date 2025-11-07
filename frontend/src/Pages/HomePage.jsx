@@ -13,13 +13,14 @@ function HomePage(){
     }
 
     const [favouriteList, setFavouriteList] = useState([])
-    const { sessionType, sessionInfo } = useContext(SessionContext)
+    const { sessionType } = useContext(SessionContext)
 
     const getFavourites = async () => {
     try {
-        const response = await fetch(`http://localhost:8080/api/favorito/${sessionInfo.email}/listar`, {
+        const response = await fetch(`http://localhost:8080/api/favorito/listar`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {  "Content-Type": "application/json" ,
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`},
         credentials: "include"
         });
 
@@ -38,7 +39,7 @@ function HomePage(){
     if (sessionType === "CLIENTE") {
         getFavourites();
     }
-    }, [sessionType, sessionInfo]);
+    }, [sessionType]);
 
 
     return (
@@ -72,7 +73,6 @@ function HomePage(){
                             )}
                         </div>
                     </div>
-
                 </div>
             </div>
             <Footer/>

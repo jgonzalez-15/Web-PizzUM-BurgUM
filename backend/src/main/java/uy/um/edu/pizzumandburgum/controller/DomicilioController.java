@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.DomicilioRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.DomicilioResponseDTO;
@@ -24,7 +25,8 @@ public class DomicilioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/{email}/domicilio")
+    @PreAuthorize("hasAuthority('CLIENTE')")
+    @PutMapping("/domicilio")
     public ResponseEntity<DomicilioResponseDTO> editarDomicilio(@PathVariable Long idDomicilio, @RequestBody DomicilioUpdateDTO dto) {
         DomicilioResponseDTO response = domicilioService.editarPerfil(idDomicilio, dto);
         return ResponseEntity.ok(response);

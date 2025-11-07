@@ -8,10 +8,11 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteRegistrarRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.request.ClienteRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.*;
 import uy.um.edu.pizzumandburgum.dto.update.ClienteUpdateDTO;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
@@ -32,17 +33,6 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cliente);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<ClienteResponseDTO> login(@Validated @RequestBody ClienteRequestDTO dto, HttpSession sesion) {
-        ClienteResponseDTO cliente = clienteService.login(dto.getEmail(), dto.getContrasenia());
-
-        sesion.setAttribute("email", cliente.getEmail());
-        sesion.setAttribute("rol", "CLIENTE");
-        sesion.setAttribute("nombre", cliente.getNombre());
-
-        return ResponseEntity.ok(cliente);
-    }
-
     @PostMapping("/cerrarSesion")
     public ResponseEntity<String> cerrarSesion(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
@@ -58,56 +48,67 @@ public class ClienteController {
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
 
-    @GetMapping("/{idCliente}/historial-pedidos")
-    public ResponseEntity<List<PedidoResponseDTO>> listarHistorialPedidos(@PathVariable("idCliente") String idCliente) {
-        List<PedidoResponseDTO> historial = clienteService.historialPedido(idCliente);
+    @GetMapping("/historial-pedidos")
+    @PreAuthorize("hasAuthority('CLIENTE')")
+    public ResponseEntity<List<PedidoResponseDTO>> listarHistorialPedidos(Authentication authentication) {
+        String email = authentication.getName(); // Extracted from JWT subject
+        List<PedidoResponseDTO> historial = clienteService.historialPedido(email);
         return ResponseEntity.ok(historial);
     }
 
-    @PutMapping("/{email}/perfil")
-    public ResponseEntity<ClienteResponseDTO> editarPerfil(@PathVariable String email, @RequestBody ClienteUpdateDTO dto) {
+
+    @PutMapping("/perfil")
+    @PreAuthorize("hasAuthority('CLIENTE')")
+    public ResponseEntity<ClienteResponseDTO> editarPerfil(Authentication authentication, @RequestBody ClienteUpdateDTO dto) {
+        String email = authentication.getName();
         ClienteResponseDTO response = clienteService.editarPerfil(email, dto);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/listar")
+    @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<List<ClienteResponseDTO>> mostrarCliente(HttpSession sesion) {
         List<ClienteResponseDTO> clientes = clienteService.listarClientes();
         return ResponseEntity.ok(clientes);
     }
 
-    @GetMapping("/{idCliente}/creaciones")
-    public ResponseEntity<List<CreacionResponseDTO>> mostrarCreaciones(@PathVariable("idCliente")String idCliente){
+    @GetMapping("/creaciones")
+    @PreAuthorize("hasAuthority('CLIENTE')")
+    public ResponseEntity<List<CreacionResponseDTO>> mostrarCreaciones(Authentication authentication) {
+        String idCliente = authentication.getName();
         List<CreacionResponseDTO> creaciones = clienteService.mostrarCreaciones(idCliente);
         return ResponseEntity.ok(creaciones);
     }
 
     @PostMapping("/asociarHamburguesa")
-    public ResponseEntity<HamburguesaResponseDTO> asociarHamburguesa(@RequestBody String email, @RequestBody Long idHamburguesa) {
+    @PreAuthorize("hasAuthority('CLIENTE')")
+    public ResponseEntity<HamburguesaResponseDTO> asociarHamburguesa(Authentication authentication, @RequestBody Long idHamburguesa) {
+        String email = authentication.getName();
         HamburguesaResponseDTO response = clienteService.asociarHamburguesa(email, idHamburguesa);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/asociarPizza")
-    public ResponseEntity<PizzaResponseDTO> asociarPizza(@RequestBody String email, @RequestBody Long idPizza) {
+    @PreAuthorize("hasAuthority('CLIENTE')")
+    public ResponseEntity<PizzaResponseDTO> asociarPizza(Authentication authentication, @RequestBody Long idPizza) {
+        String email = authentication.getName();
         PizzaResponseDTO response = clienteService.asociarPizza(email, idPizza);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{clienteId}/pedidos")
-    public ResponseEntity<List<PedidoResponseDTO>> obtenerPedidosPorCliente(@PathVariable String clienteId) {
+    @GetMapping("/pedidos")
+    @PreAuthorize("hasAuthority('CLIENTE')")
+    public ResponseEntity<List<PedidoResponseDTO>> obtenerPedidosPorCliente(Authentication authentication) {
+        String clienteId = authentication.getName();
         List<PedidoResponseDTO> pedidos = clienteService.obtenerPedidosPorCliente(clienteId);
         return ResponseEntity.ok(pedidos);
     }
 
-    @GetMapping("/{clienteId}/obtenerPerfil")
-    public ResponseEntity<ClienteResponseDTO> obtenerPerfil(@PathVariable String clienteId) {
+    @GetMapping("/obtenerPerfil")
+    @PreAuthorize("hasAuthority('CLIENTE')")
+    public ResponseEntity<ClienteResponseDTO> obtenerPerfil(Authentication authentication) {
+        String clienteId = authentication.getName();
         ClienteResponseDTO cliente = clienteService.obtenerCliente(clienteId);
         return ResponseEntity.ok(cliente);
     }
-
-
-    
-
-
 }

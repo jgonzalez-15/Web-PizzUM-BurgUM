@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.MedioDePagoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
@@ -14,37 +16,36 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/medioDePago")
+@PreAuthorize("hasAuthority('CLIENTE')")
 @CrossOrigin(origins = "http://localhost:5173")
 public class MedioDePagoController {
 
     @Autowired
     private MedioDePagoService medioDePagoService;
 
-
-    @PostMapping("/{idCliente}/agregar")
-    public ResponseEntity<MedioDePagoDTO> aniadirMedioDePago(@RequestBody MedioDePagoRequestDTO request, @PathVariable String idCliente) {
+    @PostMapping("/agregar")
+    public ResponseEntity<MedioDePagoDTO> aniadirMedioDePago(@RequestBody MedioDePagoRequestDTO request, Authentication authentication) {
+        String idCliente = authentication.getName();
         MedioDePagoDTO response = medioDePagoService.aniadirMedioDePago(request,idCliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}/mdp")
-    public ResponseEntity<MedioDePagoDTO> editarMDP(@PathVariable  Long id, @RequestBody MedioDePagoUpdateDTO dto, HttpSession sesion) {
-        String rol = (String) sesion.getAttribute("rol");
-        if (rol == null || !rol.equals("CLIENTE")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+    public ResponseEntity<MedioDePagoDTO> editarMDP(@PathVariable  Long id, @RequestBody MedioDePagoUpdateDTO dto) {
         MedioDePagoDTO response = medioDePagoService.editarMDP(id, dto);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{email}/listar")
-    public ResponseEntity<List<MedioDePagoDTO>> listarMediosPorCliente(@PathVariable String email) {
+    @GetMapping("/listar")
+    public ResponseEntity<List<MedioDePagoDTO>> listarMediosPorCliente(Authentication authentication) {
+        String email = authentication.getName();
         List<MedioDePagoDTO> medios = medioDePagoService.listarPorCliente(email);
         return ResponseEntity.ok(medios);
     }
 
-    @DeleteMapping("/eliminar/{email}/{id}")
-    public ResponseEntity<Void> eliminarMedioDePago(@PathVariable String email, @PathVariable Long id) {
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<Void> eliminarMedioDePago(Authentication authentication, @PathVariable Long id) {
+        String email = authentication.getName();
         medioDePagoService.eliminarMedioDePago(email, id);
         return ResponseEntity.noContent().build();
     }

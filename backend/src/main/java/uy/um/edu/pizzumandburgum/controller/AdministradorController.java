@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.AdministradorRequestDTO;
@@ -14,6 +16,7 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.AdministradorService;
 import java.util.List;
 
 @RestController
+@PreAuthorize("hasAuthority('ADMIN')")
 @RequestMapping("/api/administrador")
 @CrossOrigin(origins = "http://localhost:5173")
 public class AdministradorController {
@@ -29,24 +32,15 @@ public class AdministradorController {
         return ResponseEntity.ok(admin);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<AdministradorResponseDTO> login(@RequestBody AdministradorRequestDTO dto, HttpSession sesion) {
-        AdministradorResponseDTO adminDTO = administradorService.login(dto);
-
-        sesion.setAttribute("email", adminDTO.getEmail());
-        sesion.setAttribute("rol", "ADMIN");
-
-        return ResponseEntity.ok(adminDTO);
-    }
-
     @PostMapping("/cerrarSesion")
     public ResponseEntity<String> cerrarSesion(HttpSession sesion){
         sesion.invalidate();
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
 
-    @PutMapping("/{email}/perfil")
-    public ResponseEntity<AdministradorResponseDTO> editarPerfil(@PathVariable String email, @RequestBody AdministradorUpdateDTO dto) {
+    @PutMapping("/perfil")
+    public ResponseEntity<AdministradorResponseDTO> editarPerfil(Authentication authentication, @RequestBody AdministradorUpdateDTO dto) {
+        String email = authentication.getName();
         AdministradorResponseDTO response = administradorService.editarPerfil(email, dto);
         return ResponseEntity.ok(response);
     }
