@@ -9,5 +9,6 @@ public interface FavoritoService {
     List<FavoritoResponseDTO> mostrarCreacionesFavoritas(String email);
     FavoritoResponseDTO agregarFavorito(FavoritoRequestDTO dto);
     void eliminarFavorito(Long id);
+    FavoritoResponseDTO obtenerFavoritoPorId(Long id);
 
 }

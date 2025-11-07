@@ -29,9 +29,9 @@ public class PedidoBebidaServiceImpl implements PedidoBebidaService {
     public PedidoBebida agregarBebida(Long pedidoId, Long bebidaId, int cantidad) {
         Pedido pedido = (Pedido) pedidoRepository.findById(pedidoId).orElseThrow(PedidoNoEncontradoException::new);
 
-        Producto bebida = productoRepository.findById(bebidaId).orElseThrow(BebidaNoEncontradaException::new);
+        Producto bebida = productoRepository.findByIdProducto(bebidaId).orElseThrow(BebidaNoEncontradaException::new);
 
-        if (bebida.getTipo() != "Bebida"){
+        if (!"Bebida".equals(bebida.getTipo())){
             throw new BebidaNoEncontradaException();
         }
 

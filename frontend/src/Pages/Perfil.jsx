@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import MainHeader from "../Components/MainHeader";
+import Footer from "../Components/Footer";
+
 export default function Perfil() {
     const [datos, setDatos] = useState({
         nombre: "",
@@ -140,7 +143,6 @@ export default function Perfil() {
         } catch (error) {
             console.error("Error eliminando domicilio:", error);
             alert("Ocurrió un error al intentar eliminar el domicilio.");
-
         }
     };
 
@@ -190,7 +192,6 @@ export default function Perfil() {
                     if (texto) mensajeError = texto;
                 }
                 alert(mensajeError);
-
             }
         } catch (error) {
             console.error("Error eliminando método de pago:", error);
@@ -198,88 +199,88 @@ export default function Perfil() {
     };
 
     return (
-        <div className="min-h-screen w-full flex flex-col justify-between items-center bg-white">
-            {/* Botón volver */}
-            <button
-                onClick={() => navigate("/")}
-                className="fixed top-4 left-4 z-20 bg-orange-400 text-white font-bold rounded-2xl px-4 py-2 shadow-xl hover:scale-105 transition-transform">
-                Volver al inicio
-            </button>
+        <>
+            <MainHeader />
 
-            {/* Título */}
-            <h1 className="font-bold text-3xl mt-20 mb-6 text-center text-gray-800">
-                Mi perfil
-            </h1>
+            <div className="pt-24 min-h-screen w-full flex flex-col justify-between items-center bg-white">
+                {/* Título */}
+                <h1 className="font-bold text-3xl mb-6 text-center text-gray-800">
+                    Mi perfil
+                </h1>
 
-            {/* Sección datos personales */}
-            <div className="flex flex-col gap-8 w-[calc(100vw-4rem)] md:w-[calc(100vw-28rem)] max-w-3xl mb-8">
-                <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
-                    <h2 className="font-bold text-xl mb-4 text-gray-800">
-                        Datos personales
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input className="bg-gray-100 rounded-2xl p-2" placeholder="Nombre" value={datos.nombre} onChange={(e) => setDatos({ ...datos, nombre: e.target.value })} />
-                        <input className="bg-gray-100 rounded-2xl p-2" placeholder="Apellido" value={datos.apellido} onChange={(e) => setDatos({ ...datos, apellido: e.target.value })} />
-                        <input className="bg-gray-100 rounded-2xl p-2" placeholder="Teléfono" value={datos.telefono} onChange={(e) => setDatos({ ...datos, telefono: e.target.value })} />
-                        <input type="date" className="bg-gray-100 rounded-2xl p-2" value={datos.fechaNac || ""} onChange={(e) => setDatos({ ...datos, fechaNac: e.target.value })} />
-                        <input type="password" className="bg-gray-100 rounded-2xl p-2" placeholder="Nueva contraseña" value={datos.contrasenia} onChange={(e) => setDatos({ ...datos, contrasenia: e.target.value })} />
-                        <input type="password" className="bg-gray-100 rounded-2xl p-2" placeholder="Confirmar contraseña" value={datos.confirmarContrasenia} onChange={(e) => setDatos({ ...datos, confirmarContrasenia: e.target.value })} />
+                {/* Contenido */}
+                <div className="flex flex-col gap-8 w-[calc(100vw-4rem)] md:w-[calc(100vw-28rem)] max-w-3xl mb-8">
+                    {/* Datos personales */}
+                    <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
+                        <h2 className="font-bold text-xl mb-4 text-gray-800">
+                            Datos personales
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input className="bg-gray-100 rounded-2xl p-2" placeholder="Nombre" value={datos.nombre} onChange={(e) => setDatos({ ...datos, nombre: e.target.value })} />
+                            <input className="bg-gray-100 rounded-2xl p-2" placeholder="Apellido" value={datos.apellido} onChange={(e) => setDatos({ ...datos, apellido: e.target.value })} />
+                            <input className="bg-gray-100 rounded-2xl p-2" placeholder="Teléfono" value={datos.telefono} onChange={(e) => setDatos({ ...datos, telefono: e.target.value })} />
+                            <input type="date" className="bg-gray-100 rounded-2xl p-2" value={datos.fechaNac || ""} onChange={(e) => setDatos({ ...datos, fechaNac: e.target.value })} />
+                            <input type="password" className="bg-gray-100 rounded-2xl p-2" placeholder="Nueva contraseña" value={datos.contrasenia} onChange={(e) => setDatos({ ...datos, contrasenia: e.target.value })} />
+                            <input type="password" className="bg-gray-100 rounded-2xl p-2" placeholder="Confirmar contraseña" value={datos.confirmarContrasenia} onChange={(e) => setDatos({ ...datos, confirmarContrasenia: e.target.value })} />
+                        </div>
                     </div>
+
+                    {/* Domicilios */}
+                    <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
+                        <h2 className="font-bold text-xl mb-4 text-gray-800">Domicilios</h2>
+                        {domicilios.length === 0 ? (
+                            <p className="text-gray-500">No tenés domicilios registrados.</p>
+                        ) : (
+                            domicilios.map((d) => (
+                                <div key={d.id} className="flex justify-between items-center border rounded-xl p-2 mb-2">
+                                    <span>{d.direccion}</span>
+                                    <button onClick={() => eliminarDomicilio(d.id)} className="bg-red-500 text-white px-3 py-1 rounded-lg">
+                                        Eliminar
+                                    </button>
+                                </div>
+                            ))
+                        )}
+                        <div className="flex gap-2 mt-3">
+                            <input className="bg-gray-100 rounded-2xl p-2 flex-1" placeholder="Nueva dirección" value={direccion} onChange={(e) => setDireccion(e.target.value)} />
+                            <button onClick={agregarDomicilio} className="bg-orange-400 text-white font-bold px-3 py-2 rounded-2xl">+ Agregar domicilio</button>
+                        </div>
+                    </div>
+
+                    {/* Métodos de pago */}
+                    <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
+                        <h2 className="font-bold text-xl mb-4 text-gray-800">Métodos de pago</h2>
+                        {pagos.length === 0 ? (
+                            <p className="text-gray-500">No tenés métodos de pago registrados.</p>
+                        ) : (
+                            pagos.map((m) => (
+                                <div key={m.id} className="flex justify-between items-center border rounded-xl p-2 mb-2">
+                                    <span>{`${m.numeroTarjeta} - ${m.nombreTitular}`}</span>
+                                    <button onClick={() => eliminarPago(m.id)} className="bg-red-500 text-white px-3 py-1 rounded-lg">
+                                        Eliminar
+                                    </button>
+                                </div>
+                            ))
+                        )}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <input className="bg-gray-100 rounded-2xl p-2" placeholder="Número de tarjeta" value={nuevoPago.numeroTarjeta} onChange={(e) => setNuevoPago({ ...nuevoPago, numeroTarjeta: e.target.value })} />
+                            <input className="bg-gray-100 rounded-2xl p-2" placeholder="Nombre del titular" value={nuevoPago.nombreTitular} onChange={(e) => setNuevoPago({ ...nuevoPago, nombreTitular: e.target.value })} />
+                            <input type="month" className="bg-gray-100 rounded-2xl p-2" value={nuevoPago.fechaVencimiento} onChange={(e) => setNuevoPago({ ...nuevoPago, fechaVencimiento: e.target.value })} />
+                        </div>
+                        <div className="flex justify-end mt-3">
+                            <button onClick={agregarPago} className="bg-orange-400 text-white font-bold px-3 py-2 rounded-2xl">
+                                + Agregar método de pago
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Guardar cambios */}
+                    <button onClick={guardarCambios} className="w-full bg-orange-400 text-white font-bold py-3 rounded-2xl shadow-2xl hover:scale-105 transition-transform text-lg mt-4">
+                        Guardar cambios
+                    </button>
                 </div>
-
-                {/* Sección domicilios */}
-                <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
-                    <h2 className="font-bold text-xl mb-4 text-gray-800">Domicilios</h2>
-                    {domicilios.length === 0 ? (
-                        <p className="text-gray-500">No tenés domicilios registrados.</p>
-                    ) : (
-                        domicilios.map((d) => (
-                            <div key={d.id} className="flex justify-between items-center border rounded-xl p-2 mb-2">
-                                <span>{d.direccion}</span>
-                                <button onClick={() => eliminarDomicilio(d.id)} className="bg-red-500 text-white px-3 py-1 rounded-lg">
-                                    Eliminar
-                                </button>
-                            </div>
-                        ))
-                    )}
-                    <div className="flex gap-2 mt-3">
-                        <input className="bg-gray-100 rounded-2xl p-2 flex-1" placeholder="Nueva dirección" value={direccion} onChange={(e) => setDireccion(e.target.value)} />
-                        <button onClick={agregarDomicilio} className="bg-orange-400 text-white font-bold px-3 py-2 rounded-2xl">+ Agregar domicilio</button>
-                    </div>
-                </div>
-
-                {/* Sección métodos de pago */}
-                <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
-                    <h2 className="font-bold text-xl mb-4 text-gray-800">Métodos de pago</h2>
-                    {pagos.length === 0 ? (
-                        <p className="text-gray-500">No tenés métodos de pago registrados.</p>
-                    ) : (
-                        pagos.map((m) => (
-                            <div key={m.id} className="flex justify-between items-center border rounded-xl p-2 mb-2">
-                                <span>{`${m.numeroTarjeta} - ${m.nombreTitular}`}</span>
-                                <button onClick={() => eliminarPago(m.id)} className="bg-red-500 text-white px-3 py-1 rounded-lg">
-                                    Eliminar
-                                </button>
-                            </div>
-                        ))
-                    )}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                        <input className="bg-gray-100 rounded-2xl p-2" placeholder="Número de tarjeta" value={nuevoPago.numeroTarjeta} onChange={(e) => setNuevoPago({ ...nuevoPago, numeroTarjeta: e.target.value })} />
-                        <input className="bg-gray-100 rounded-2xl p-2" placeholder="Nombre del titular" value={nuevoPago.nombreTitular} onChange={(e) => setNuevoPago({ ...nuevoPago, nombreTitular: e.target.value })} />
-                        <input type="month" className="bg-gray-100 rounded-2xl p-2" value={nuevoPago.fechaVencimiento} onChange={(e) => setNuevoPago({ ...nuevoPago, fechaVencimiento: e.target.value })} />
-                    </div>
-                    <div className="flex justify-end mt-3">
-                        <button onClick={agregarPago} className="bg-orange-400 text-white font-bold px-3 py-2 rounded-2xl">
-                            + Agregar método de pago
-                        </button>
-                    </div>
-                </div>
-
-                {/* Botón guardar */}
-                <button onClick={guardarCambios} className="w-full bg-orange-400 text-white font-bold py-3 rounded-2xl shadow-2xl hover:scale-105 transition-transform text-lg mt-4">
-                    Guardar cambios
-                </button>
             </div>
-        </div>
+
+            <Footer />
+        </>
     );
 }

@@ -35,6 +35,7 @@ function HomePage(){
     }
     };
 
+
     useEffect(() => {
     if (sessionType === "CLIENTE") {
         getFavourites();
@@ -66,7 +67,11 @@ function HomePage(){
                         <div className="flex flex-1 flex-row overflow-auto">
                             {favouriteList.length > 0 ? (
                                 favouriteList.map((favourite)=>(
-                                <Favourite title={favourite.nombre} key={favourite.id}/>
+                                    <Favourite
+                                        key={favourite.id || favourite.idCreacion || favourite.nombre}
+                                        title={favourite.nombre}
+                                        favorito={favourite}
+                                    />
                             ))
                             ): (
                                 <h1 className="m-4">No tienes favoritos agregados</h1>

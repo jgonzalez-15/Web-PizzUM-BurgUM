@@ -10,8 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PedidoBebidaResponseDTO {
-    private Long id;
-    private ProductoResponseDTO Producto;
+    private Long idProducto;
+    private ProductoResponseDTO producto;
     private int cantidad;
 
 }

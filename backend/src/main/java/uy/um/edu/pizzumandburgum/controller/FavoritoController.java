@@ -41,5 +41,11 @@ public class FavoritoController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<FavoritoResponseDTO> obtenerFavoritoPorId(@PathVariable Long id) {
+        FavoritoResponseDTO favorito = favoritoService.obtenerFavoritoPorId(id);
+        return ResponseEntity.ok(favorito);
+    }
+
 
 }

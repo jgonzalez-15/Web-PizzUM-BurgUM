@@ -18,5 +18,5 @@ public class PedidoRequestDTO {
         private Long idDomicilio;
         private Long idMedioDePago;
         private List<PedidoCreacionDTO> creaciones;
-        private List<PedidoBebidaResponseDTO> bebidas;
+        private List<PedidoBebidaRequestDTO> bebidas;
 }
