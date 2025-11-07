@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
@@ -27,12 +28,14 @@ public class PedidoController {
     @Autowired
     private PedidoRepository pedidoRepository;
 
+    @PreAuthorize("hasAuthority('CLIENTE')")
     @PostMapping("/realizar")
     public ResponseEntity<PedidoResponseDTO> realizarPedido(@RequestBody PedidoRequestDTO dto) {
         PedidoResponseDTO pedido = pedidoService.realizarPedido(dto);
         return ResponseEntity.ok(pedido);
     }
 
+    @PreAuthorize("hasAuthority('CLIENTE') or hasAuthority('ADMIN')")
     @DeleteMapping("/{id}/cancelarPedido")
     public ResponseEntity<Void> cancelarPedido(@PathVariable ("id") Long id){
         Pedido pedido = pedidoRepository.findById(id).orElseThrow(PedidoNoEncontradoException::new);
@@ -43,18 +46,21 @@ public class PedidoController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAuthority('CLIENTE') or hasAuthority('ADMIN')")
     @GetMapping("/{id}/estado")
     public ResponseEntity<String> consultarEstado(@PathVariable ("id") Long id) {
         String estado = pedidoService.consultarEstado(id);
         return ResponseEntity.ok(estado);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}/cambiarEstado")
     public ResponseEntity<Void> cambiarEstado(@PathVariable ("id") Long id) {
         pedidoService.cambiarEstado(id);
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/enCurso")
     public ResponseEntity<List<PedidoResponseDTO>> pedidosEnCurso(){
         List<PedidoResponseDTO> pedidoResponseDTOS = pedidoService.pedidosEnCurso();
@@ -67,6 +73,7 @@ public class PedidoController {
         return ResponseEntity.ok(pedidos);
     }
 
+    @PreAuthorize("hasAuthority('CLIENTE')")
     @PostMapping("/repetir/{idPedido}")
     public ResponseEntity<PedidoResponseDTO> repetirPedidoSimple(@PathVariable Long idPedido) {
         PedidoResponseDTO nuevoPedido = pedidoService.repetirPedido(idPedido);

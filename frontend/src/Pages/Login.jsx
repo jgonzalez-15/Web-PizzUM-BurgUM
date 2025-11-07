@@ -20,7 +20,7 @@ function Login(){
     e.preventDefault();
     try {
       {/* Intentar iniciar sesion como cliente */}
-      const response = await fetch("http://localhost:8080/api/cliente/login", {
+      const response = await fetch("http://localhost:8080/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, contrasenia }),
@@ -30,36 +30,12 @@ function Login(){
       if (response.ok) {
         {/* Si igresa actualizar info de la sesion y volver a la homepage */}
           const data = await response.json();
-          localStorage.setItem("sessionInfo", JSON.stringify(data));
-          setSessionType("CLIENTE")
-          setSessionInfo(data)
+          setSessionType(data.rol)
+          localStorage.setItem("token", data.jwt)
           navigate("/");
       } else {
-        try{
-
-          {/* Si no ingresa como cliente intentar como admin */}
-          const response = await fetch("http://localhost:8080/api/administrador/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify( { email , contrasenia } ),
-          credentials: "include",
-        });
-
-          if (response.ok) {
-          {/* Si igresa alctualizar info de sesion y navegar a admin */}
-              const data = await response.json();
-              localStorage.setItem("sessionInfo", JSON.stringify(data));
-              setSessionType("ADMIN")
-              setSessionInfo(data)
-              navigate("/");
-          } else {
-
           {/* Si no ingresa alertar */}
           alert("Usuario o contraseña incorrectos");
-          }
-        } catch (error) {
-          console.error("Error al iniciar sesión:", error);
-        }
       }
     } catch (error) {
       console.error("Error al iniciar sesión:", error);

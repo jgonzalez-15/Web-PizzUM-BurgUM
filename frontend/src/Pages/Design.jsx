@@ -28,7 +28,9 @@ function Design({ type }) {
       try {
         const response = await fetch("http://localhost:8080/api/producto/listar", {
           method: "GET",
-          headers: { "Content-Type": "application/json" }
+          headers: { "Content-Type": "application/json",
+            'Authorization': `Bearer ${localStorage.getItem("token")}`
+           }
         });
 
         if (response.ok) {
@@ -86,7 +88,7 @@ function Design({ type }) {
     try {
       const response = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json"},
         body: JSON.stringify(payload),
         credentials: "include"
       });
