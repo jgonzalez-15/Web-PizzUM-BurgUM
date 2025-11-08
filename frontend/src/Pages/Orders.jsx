@@ -18,7 +18,7 @@ function Orders(){
 
     const handleGetOrders = async () => {
         try{
-          const response = await fetch(`http://localhost:8080/api/cliente/${email}/historial-pedidos`, {
+          const response = await fetch(`http://localhost:8080/api/cliente/historial-pedidos`, {
             method: "GET",
             headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`}
           });
