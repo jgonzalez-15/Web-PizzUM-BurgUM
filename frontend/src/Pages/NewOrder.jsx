@@ -19,7 +19,10 @@ export default function NewOrder() {
         const fetchBebidas = async () => {
             try {
                 const res = await fetch("http://localhost:8080/api/producto/bebidas", {
-                    headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
                     credentials: "include",
                 });
                 if (!res.ok) throw new Error("Error al listar bebidas");
@@ -77,39 +80,55 @@ export default function NewOrder() {
                             </div>
                         ) : (
                             <div className="w-full flex flex-col gap-4">
+                                {/* 🔥 BLOQUE CORREGIDO */}
                                 {items.map((item) => (
                                     <div
                                         key={`${item.tipo}-${item.id || item.idProducto}`}
-                                        className="bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition-all flex flex-col md:flex-row justify-between items-start md:items-center border border-gray-100"
+                                        className="bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition-all
+                                                   flex justify-between items-center flex-wrap gap-4 border border-gray-100"
                                     >
-                                        <div className="flex flex-col gap-1 w-full">
-                                            <h2 className="text-xl font-bold text-gray-800">
+                                        <div className="flex flex-col gap-1 flex-1 min-w-[200px]">
+                                            <h2 className="text-xl font-bold text-gray-800 break-words">
                                                 {item.nombre}
                                             </h2>
+
                                             {item.tipo && (
                                                 <p className="text-sm text-gray-500">
                                                     Tipo:{" "}
-                                                    <span className="text-gray-700">{item.tipo}</span>
+                                                    <span className="text-gray-700">
+                                                        {item.tipo}
+                                                    </span>
                                                 </p>
                                             )}
-                                            {Array.isArray(item.ingredientes) &&
-                                                item.ingredientes.length > 0 && (
-                                                    <p className="text-sm text-gray-500 truncate max-w-md">
-                                                        Ingredientes:{" "}
-                                                        <span className="text-gray-700">
-                                                            {item.ingredientes
-                                                                .map((i) => i.nombre)
-                                                                .join(", ")}
-                                                        </span>
-                                                    </p>
-                                                )}
+
+                                            {item.ingredientes && (
+                                                <p className="text-sm text-gray-500 max-w-full break-words">
+                                                    Ingredientes:{" "}
+                                                    <span className="text-gray-700">
+                                                        {Array.isArray(item.ingredientes)
+                                                            ? item.ingredientes
+                                                                .map(
+                                                                    (i) =>
+                                                                        i.nombre ||
+                                                                        i.producto?.nombre
+                                                                )
+                                                                .join(", ")
+                                                            : item.ingredientes}
+                                                    </span>
+                                                </p>
+                                            )}
+
                                             <p className="text-base font-semibold text-orange-600 mt-1">
                                                 ${item.precio}
                                             </p>
                                         </div>
+
                                         <button
-                                            onClick={() => removeItem(item.id || item.idProducto)}
-                                            className="mt-3 md:mt-0 bg-red-100 hover:bg-red-200 text-red-600 font-semibold px-3 py-1 rounded-xl transition-all text-sm"
+                                            onClick={() =>
+                                                removeItem(item.id || item.idProducto)
+                                            }
+                                            className="bg-red-100 hover:bg-red-200 text-red-600 font-semibold
+                                                       px-3 py-1 rounded-xl transition-all text-sm flex-shrink-0"
                                         >
                                             Quitar
                                         </button>

@@ -20,7 +20,7 @@ export default function CheckoutPage() {
 
   const [creando, setCreando] = useState(false);
   const [pagando, setPagando] = useState(false);
-  const [mensaje, setMensaje] = useState(null); // {type:'error'|'ok', text:string}
+  const [mensaje, setMensaje] = useState(null);
 
   const [pedidoId, setPedidoId] = useState(null);
   const navigate = useNavigate();
@@ -30,9 +30,9 @@ export default function CheckoutPage() {
     const fetchData = async () => {
       try {
         const [domRes, pagoRes] = await Promise.all([
-          fetch(`http://localhost:8080/api/clienteDomicilio/listar`, {headers: { "Content-Type": "application/json",
+          fetch(`http://localhost:8080/api/clienteDomicilio/${email}/listar`, {headers: { "Content-Type": "application/json",
               'Authorization': `Bearer ${localStorage.getItem("token")}`}, credentials: "include" }),
-          fetch(`http://localhost:8080/api/medioDePago/listar`,{headers: { "Content-Type": "application/json",
+          fetch(`http://localhost:8080/api/medioDePago/${email}/listar`,{headers: { "Content-Type": "application/json",
               'Authorization': `Bearer ${localStorage.getItem("token")}`}, credentials: "include" }),
         ]);
         if (domRes.ok) setDomicilios(await domRes.json());
@@ -76,7 +76,7 @@ export default function CheckoutPage() {
     const { nombreTitular, numeroTarjeta, fechaVencimiento } = nuevoPago;
     if (!nombreTitular || !numeroTarjeta || !fechaVencimiento) return;
     try {
-      const respuesta = await fetch(`http://localhost:8080/api/medioDePago/${email}/agregar`, {
+      const respuesta = await fetch(`http://localhost:8080/api/medioDePago/agregar`, {
         method: "POST",
         headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
         body: JSON.stringify({

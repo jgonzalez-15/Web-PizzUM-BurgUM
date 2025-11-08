@@ -5,19 +5,40 @@ export default function AddToCartButton({ item, isPrimary, handle }) {
 
     const handleAdd = async () => {
         let nueva = item;
-        if (!nueva && handle) {
+
+        if (handle && (!nueva || !nueva.idCreacion)) {
             nueva = await handle(false);
         }
 
         if (nueva) {
-            const { idCreacion, ...resto } = nueva;
+            const { idCreacion, ingredientes, ...resto } = nueva;
+
+            let nombresIngredientes = "";
+            if (Array.isArray(ingredientes)) {
+                nombresIngredientes = ingredientes
+                    .map(i => i.producto?.nombre || i.nombre)
+                    .filter(Boolean)
+                    .join(", ");
+            } else if (typeof ingredientes === "string") {
+                nombresIngredientes = ingredientes;
+            }
+
+            let tipo = resto.tipo;
+            if (!tipo) {
+                if (nueva.tamanio) tipo = "Pizza";
+                else if (nueva.cantCarnes) tipo = "Hamburguesa";
+            }
+
             const newItem = {
                 ...resto,
                 id: idCreacion,
+                ingredientes: nombresIngredientes,
+                tipo,
                 cartId,
             };
+
             addItem(newItem);
-            alert(`${newItem.nombre} agregado al carrito 🛒`);
+            alert(`${newItem.nombre} agregado al carrito`);
         }
     };
 

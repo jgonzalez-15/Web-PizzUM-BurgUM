@@ -17,7 +17,7 @@ function Design({ type }) {
   const [glutenFreeOnly, setGlutenFreeOnly] = useState(false);
   const [ingredients, setIngredients] = useState([]);
   const [cantCarnes, setCantCarnes] = useState(1);
-  const [tamanio, setTamanio] = useState(1);
+  const [tamanio, setTamanio] = useState("1");
   const [creacion, setCreacion] = useState();
   const [nombre, setNombre] = useState("Nueva Creacion")
   const { sessionInfo } = useContext(SessionContext);
@@ -109,15 +109,31 @@ function Design({ type }) {
 
       if (response.ok) {
         const data = await response.json();
-        data.nombre = nombre
+        data.nombre = nombre;
+
+        if (Array.isArray(data.ingredientes)) {
+          data.ingredientes = data.ingredientes.map((ing) => {
+            const producto = ingredients.find((p) => p.idProducto === ing.idProducto);
+            return {
+              ...ing,
+              producto: producto
+                  ? { idProducto: producto.idProducto, nombre: producto.nombre, tipo: producto.tipo }
+                  : null,
+            };
+          });
+        }
+
+        if (!data.tipo) {
+          data.tipo = type === "Pizza" ? "Pizza" : "Hamburguesa";
+        }
+
         setCreacion(data);
-        if (favorita){
-          addFavourite(data.idCreacion)
+        if (favorita) {
+          addFavourite(data.idCreacion);
         }
         return data;
-      } else {
-        alert("Los datos son incorrectos");
       }
+
     } catch (error) {
       console.error("Error al crear la creación:", error);
     }
@@ -206,12 +222,18 @@ function Design({ type }) {
 
           <div className="flex flex-col justify-center items-center m-8">
             <h1>Nombra tu creación</h1>
-            <input type="text" className="bg-gray-100 rounded-sm p-2" value={nombre} placeholder="Nueva Creacion" 
-            onChange={(e) => {
-              setNombre(e.target.value);
-              setCreacion({ ...creacion, nombre: e.target.value });
-            }}
+            <input
+                type="text"
+                className="bg-gray-100 rounded-sm p-2"
+                value={nombre}
+                placeholder="Nueva Creacion"
+                onChange={(e) => {
+                  const nuevoNombre = e.target.value;
+                  setNombre(nuevoNombre);
+                  setCreacion(prev => (prev ? { ...prev, nombre: nuevoNombre } : prev));
+                }}
             />
+
           </div>
 
           <div className="flex flex-col md:flex-row justify-center items-center m-8 mb-16">

@@ -36,7 +36,7 @@ public class MedioDePagoController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/listar")
+    @GetMapping("{emailCliente}/listar")
     public ResponseEntity<List<MedioDePagoDTO>> listarMediosPorCliente(Authentication authentication) {
         String email = authentication.getName();
         List<MedioDePagoDTO> medios = medioDePagoService.listarPorCliente(email);

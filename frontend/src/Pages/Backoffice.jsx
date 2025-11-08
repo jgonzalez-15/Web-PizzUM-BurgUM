@@ -17,12 +17,16 @@ function Backoffice() {
   const [editModal, setEditModal] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
 
+  // 👇 NUEVOS ESTADOS PARA VER DETALLES
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showOrderModal, setShowOrderModal] = useState(false);
+
   const handleAddProduct = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch(`http://localhost:8080/api/producto/crearProducto`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
         body: JSON.stringify(newProduct),
         credentials: "include",
       });
@@ -48,7 +52,7 @@ function Backoffice() {
     try {
       const response = await fetch(`http://localhost:8080/api/producto/${editProduct.idProducto}/editar`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
         body: JSON.stringify(editProduct),
         credentials: "include",
       });
@@ -69,7 +73,7 @@ function Backoffice() {
     try {
       const response = await fetch(`http://localhost:8080/api/producto/${p}/eliminar`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
         credentials: "include",
       });
       if (response.ok) {
@@ -87,7 +91,7 @@ function Backoffice() {
     try {
       const response = await fetch("http://localhost:8080/api/administrador/agregarAdmin", {
         method: "POST",
-        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
         body: JSON.stringify(newAdmin),
         credentials: "include",
       });
@@ -106,7 +110,7 @@ function Backoffice() {
     try {
       const response = await fetch("http://localhost:8080/api/producto/listarAdmin", {
         method: "GET",
-        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
       });
       if (response.ok) {
         const data = await response.json();
@@ -139,7 +143,7 @@ function Backoffice() {
     try {
       const response = await fetch("http://localhost:8080/api/pedido/enCurso", {
         method: "GET",
-        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
         credentials: "include",
       });
       if (response.ok) {
@@ -161,7 +165,7 @@ function Backoffice() {
     try {
       const response = await fetch("http://localhost:8080/api/administrador/listar", {
         method: "GET",
-        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
       });
       if (response.ok) {
         const data = await response.json();
@@ -183,7 +187,7 @@ function Backoffice() {
     try {
       const response = await fetch(`http://localhost:8080/api/pedido/${id}/cambiarEstado`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
         credentials: "include",
       });
       if (response.ok) {
@@ -196,6 +200,75 @@ function Backoffice() {
     }
   };
 
+  const handleViewDetails = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/pedido/ver/${id}`, {
+        method: "GET",
+        headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` },
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        alert("Error al obtener los detalles del pedido");
+        return;
+      }
+
+      const data = await response.json();
+
+      const items = [];
+
+      const addItem = (nombre, tipo, precio, cantidad, ingredientes) => {
+        items.push({ nombre, tipo, precio, cantidad, ingredientes });
+      };
+
+      if (Array.isArray(data.pizzas)) {
+        data.pizzas.forEach((p) => {
+          addItem(
+              p.nombre || "Pizza",
+              "Pizza",
+              p.precio || 0,
+              p.cantidad || 1,
+              p.ingredientes || []
+          );
+        });
+      }
+
+      if (Array.isArray(data.hamburguesas)) {
+        data.hamburguesas.forEach((h) => {
+          addItem(
+              h.nombre || "Hamburguesa",
+              "Hamburguesa",
+              h.precio || 0,
+              h.cantidad || 1,
+              h.ingredientes || []
+          );
+        });
+      }
+
+      if (Array.isArray(data.bebidas)) {
+        data.bebidas.forEach((b) => {
+          addItem(b.nombre || "Bebida", "Bebida", b.precio || 0, b.cantidad || 1);
+        });
+      }
+
+      if (Array.isArray(data.productos)) {
+        data.productos.forEach((p) => {
+          addItem(p.nombre || "Producto", p.tipo || "Producto", p.precio || 0, p.cantidad || 1);
+        });
+      }
+
+      setSelectedOrder({
+        ...data,
+        _items: items,
+      });
+      setShowOrderModal(true);
+    } catch (error) {
+      console.error("Error al obtener pedido:", error);
+      alert("Error de conexión con el servidor");
+    }
+  };
+
+
   return (
       <>
         <AdminHeader />
@@ -205,10 +278,9 @@ function Backoffice() {
               {["productos", "pedidos", "administradores"].map((tab) => (
                   <button
                       key={tab}
-                      className={`px-4 py-2 rounded-full border-2 font-bold transition-all ${
-                          activeTab === tab
-                              ? "bg-orange-400 text-white border-orange-400"
-                              : "border-gray-300 bg-white hover:bg-gray-100"
+                      className={`px-4 py-2 rounded-full border-2 font-bold transition-all ${activeTab === tab
+                          ? "bg-orange-400 text-white border-orange-400"
+                          : "border-gray-300 bg-white hover:bg-gray-100"
                       }`}
                       onClick={() => setActiveTab(tab)}
                   >
@@ -216,6 +288,8 @@ function Backoffice() {
                   </button>
               ))}
             </div>
+
+            {/* TAB DE PRODUCTOS */}
             {activeTab === "productos" && (
                 <div className="flex flex-col gap-6 w-full max-w-3xl">
                   <button
@@ -234,13 +308,14 @@ function Backoffice() {
                     <option value="Salsa_Hamburguesa">Salsa para Hamburguesa</option>
                     <option value="Ingrediente">Ingrediente para Hamburguesa</option>
                     <option value="Bebida">Bebida</option>
-
                   </select>
                   {filteredProducts.map((p) => (
                       <AdminProductCard key={p.idProducto} product={p} onEdit={() => openEditModal(p)} onRemove={removeProduct} />
                   ))}
                 </div>
             )}
+
+            {/* TAB DE PEDIDOS */}
             {activeTab === "pedidos" && (
                 <div className="flex flex-col gap-6 w-full max-w-3xl">
                   {orders.map((o) => (
@@ -250,16 +325,26 @@ function Backoffice() {
                           <h2>Fecha: {o.fecha}</h2>
                           <h2 className="text-orange-400">Estado: {o.estado}</h2>
                         </div>
-                        <button
-                            className="bg-orange-400 text-white rounded-xl px-4 py-2 font-bold hover:scale-105 transition-transform"
-                            onClick={(e) => handleAdvanceState(e, o.id)}
-                        >
-                          Avanzar estado
-                        </button>
+                        <div className="flex gap-2">
+                          <button
+                              className="bg-gray-200 text-black rounded-xl px-4 py-2 font-bold hover:scale-105 transition-transform"
+                              onClick={() => handleViewDetails(o.id)}
+                          >
+                            Ver detalles
+                          </button>
+                          <button
+                              className="bg-orange-400 text-white rounded-xl px-4 py-2 font-bold hover:scale-105 transition-transform"
+                              onClick={(e) => handleAdvanceState(e, o.id)}
+                          >
+                            Avanzar estado
+                          </button>
+                        </div>
                       </div>
                   ))}
                 </div>
             )}
+
+            {/* TAB DE ADMINISTRADORES */}
             {activeTab === "administradores" && (
                 <div className="flex flex-col items-center gap-6">
                   <button
@@ -280,6 +365,8 @@ function Backoffice() {
           </div>
           <Footer />
         </div>
+
+        {/* MODAL NUEVO PRODUCTO */}
         {showModal && (
             <div
                 className="fixed inset-0 bg-black/40 flex justify-center items-center z-50"
@@ -316,7 +403,6 @@ function Backoffice() {
                   <option value="Salsa_Hamburguesa">Salsa para Hamburguesa</option>
                   <option value="Ingrediente">Ingrediente para Hamburguesa</option>
                   <option value="Bebida">Bebida</option>
-
                 </select>
                 <label className="m-2">
                   <input type="checkbox" onChange={(e) => setNewProduct({ ...newProduct, sinTacc: e.target.checked })} />
@@ -347,6 +433,8 @@ function Backoffice() {
               </div>
             </div>
         )}
+
+        {/* MODAL EDITAR PRODUCTO */}
         {editModal && (
             <div
                 className="fixed inset-0 bg-black/40 flex justify-center items-center z-50"
@@ -403,6 +491,8 @@ function Backoffice() {
               </div>
             </div>
         )}
+
+        {/* MODAL NUEVO ADMIN */}
         {showAdminModal && (
             <div
                 className="fixed inset-0 bg-black/40 flex justify-center items-center z-50"
@@ -471,6 +561,79 @@ function Backoffice() {
               </div>
             </div>
         )}
+
+        {/* MODAL DETALLES DE PEDIDO */}
+        {showOrderModal && selectedOrder && (
+            <div
+                className="fixed inset-0 bg-black/40 flex justify-center items-center z-50"
+                onClick={(e) => {
+                  if (e.target === e.currentTarget) setShowOrderModal(false);
+                }}
+            >
+              <div className="bg-white rounded-2xl shadow-2xl p-6 w-80 md:w-[600px] max-h-[80vh] overflow-y-auto">
+                <h1 className="text-2xl font-extrabold text-gray-800 mb-4 text-center">
+                  Detalles del Pedido #{selectedOrder.id}
+                </h1>
+
+                <div className="text-gray-700 space-y-2 mb-4">
+                  <p><span className="font-semibold">Fecha:</span> {selectedOrder.fecha}</p>
+                  <p><span className="font-semibold">Estado:</span> {selectedOrder.estado}</p>
+                  <p><span className="font-semibold">Dirección:</span> {selectedOrder.domicilio?.direccion || "No especificada"}</p>
+                  <p><span className="font-semibold">Pago:</span> {selectedOrder.estaPago ? "Pagado" : "No pagado"}</p>
+                  {selectedOrder.medioDePago?.numeroTarjeta && (
+                      <p>
+                        <span className="font-semibold">Tarjeta:</span> **** **** **** {String(selectedOrder.medioDePago.numeroTarjeta).slice(-4)}
+                      </p>
+                  )}
+                  <p><span className="font-semibold">Monto total:</span> ${Number(selectedOrder.precio ?? 0).toFixed(2)}</p>
+                </div>
+
+                {Array.isArray(selectedOrder._items) && selectedOrder._items.length > 0 ? (
+                    <div className="bg-gray-50 rounded-xl p-4 shadow-inner">
+                      <h2 className="text-lg font-semibold text-gray-800 mb-3">Productos:</h2>
+                      <ul className="space-y-3">
+                        {selectedOrder._items.map((item, i) => (
+                            <li key={i} className="border-b pb-2">
+                              <div className="flex justify-between">
+                  <span className="text-gray-800 font-medium">
+                    {item.tipo}: {item.nombre} x{item.cantidad}
+                  </span>
+                                <span className="text-gray-900 font-bold">
+                    ${Number(item.precio).toFixed(2)}
+                  </span>
+                              </div>
+                              {item.ingredientes && item.ingredientes.length > 0 && (
+                                  <ul className="ml-4 mt-1 text-sm text-gray-600 list-disc">
+                                    {item.ingredientes.map((ing, j) => (
+                                        <li key={j}>
+                                          {ing.nombre || ing.producto?.nombre || "Ingrediente"}{" "}
+                                          {ing.cantidad ? `x${ing.cantidad}` : ""}
+                                        </li>
+                                    ))}
+                                  </ul>
+                              )}
+                            </li>
+                        ))}
+                      </ul>
+                    </div>
+                ) : (
+                    <p className="text-gray-500 italic text-center mt-4">
+                      No hay productos registrados en este pedido.
+                    </p>
+                )}
+
+                <div className="flex justify-center mt-6">
+                  <button
+                      onClick={() => setShowOrderModal(false)}
+                      className="bg-orange-400 text-white rounded-2xl py-2 px-6 font-bold hover:scale-105 transition-transform"
+                  >
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+            </div>
+        )}
+
       </>
   );
 }

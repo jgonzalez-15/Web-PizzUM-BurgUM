@@ -18,7 +18,10 @@ export default function ViewCreation() {
             try {
                 const response = await fetch(`http://localhost:8080/api/favorito/${id}`, {
                     method: "GET",
-                    headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
                     credentials: "include",
                 });
 
@@ -39,6 +42,36 @@ export default function ViewCreation() {
         if (id) fetchCreation();
     }, [id]);
 
+    const handleRemoveFavorite = async () => {
+        if (!id) return;
+
+        const confirmar = window.confirm(
+            "¿Seguro que querés eliminar esta creación de tus favoritos?"
+        );
+        if (!confirmar) return;
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/favorito/${id}/eliminar`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+                credentials: "include",
+            });
+
+            if (response.ok) {
+                alert("Creación eliminada de favoritos correctamente.");
+                navigate("/favoritos");
+            } else {
+                alert("No se pudo eliminar la creación de favoritos.");
+            }
+        } catch (error) {
+            console.error("Error al eliminar de favoritos:", error);
+            alert("Ocurrió un error al eliminar de favoritos.");
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen text-lg font-semibold">
@@ -57,12 +90,7 @@ export default function ViewCreation() {
 
     const { nombre, tipo, precio, ingredientes, tamanio, cantidadCarnes } = creation;
 
-    const icono =
-        tipo === "Pizza"
-            ? "🍕"
-            : tipo === "Hamburguesa"
-                ? "🍔"
-                : "⭐";
+    const icono = tipo === "Pizza" ? "🍕" : tipo === "Hamburguesa" ? "🍔" : "";
 
     let detalles;
     if (tipo === "Pizza") {
@@ -80,8 +108,8 @@ export default function ViewCreation() {
                                 key={m.idProducto}
                                 className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
                             >
-                                {m.nombre}
-                            </span>
+                {m.nombre}
+              </span>
                         ))}
                     </div>
                 </div>
@@ -93,8 +121,8 @@ export default function ViewCreation() {
                                 key={s.idProducto}
                                 className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
                             >
-                                {s.nombre}
-                            </span>
+                {s.nombre}
+              </span>
                         ))}
                     </div>
                 </div>
@@ -106,14 +134,13 @@ export default function ViewCreation() {
                                 key={t.idProducto}
                                 className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
                             >
-                                {t.nombre}
-                            </span>
+                {t.nombre}
+              </span>
                         ))}
                     </div>
                 </div>
                 <p className="mt-2 text-gray-600 italic">
-                    Tamaño:{" "}
-                    <span className="font-medium text-gray-700 not-italic">{tamanio}</span>
+                    Tamaño: <span className="font-medium text-gray-700 not-italic">{tamanio}</span>
                 </p>
             </div>
         );
@@ -133,8 +160,8 @@ export default function ViewCreation() {
                                 key={p.idProducto}
                                 className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
                             >
-                                {p.nombre}
-                            </span>
+                {p.nombre}
+              </span>
                         ))}
                     </div>
                 </div>
@@ -146,8 +173,8 @@ export default function ViewCreation() {
                                 key={c.idProducto}
                                 className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
                             >
-                                {cantidadCarnes || 1}x {c.nombre}
-                            </span>
+                {cantidadCarnes || 1}x {c.nombre}
+              </span>
                         ))}
                     </div>
                 </div>
@@ -159,8 +186,8 @@ export default function ViewCreation() {
                                 key={s.idProducto}
                                 className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
                             >
-                                {s.nombre}
-                            </span>
+                {s.nombre}
+              </span>
                         ))}
                     </div>
                 </div>
@@ -172,8 +199,8 @@ export default function ViewCreation() {
                                 key={i.idProducto}
                                 className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
                             >
-                                {i.nombre}
-                            </span>
+                {i.nombre}
+              </span>
                         ))}
                     </div>
                 </div>
@@ -185,20 +212,19 @@ export default function ViewCreation() {
         <div className="flex flex-col min-h-screen">
             <MainHeader />
 
-            {/* Botón fijo debajo del header */}
+            {/* Mismo layout sticky, SOLO cambiamos el color a gris */}
             <div className="sticky top-[70px] left-0 w-full flex justify-start px-10 py-2 z-30">
                 <button
                     onClick={() => navigate("/favoritos")}
-                    className="bg-orange-400 text-white font-bold rounded-2xl px-5 py-2 shadow-xl hover:scale-105 transition-transform text-lg"
+                    className="bg-gray-200 text-gray-800 font-semibold rounded-2xl px-5 py-2 shadow-md hover:bg-gray-300 transition-all text-lg"
                 >
                     ← Volver a mis favoritos
                 </button>
             </div>
 
-            {/* Contenido flexible */}
+            {/* Contenido */}
             <main className="flex-grow flex flex-col justify-start items-center px-8 md:px-20 mt-6 mb-10">
                 <div className="flex flex-col gap-6 bg-white shadow-xl rounded-3xl p-10 md:p-14 max-w-4xl w-full border border-gray-100 relative overflow-hidden">
-
                     {/* Encabezado visual */}
                     <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-orange-400 to-orange-600 rounded-t-3xl flex justify-center items-center text-6xl text-white shadow-inner">
                         {icono}
@@ -221,7 +247,11 @@ export default function ViewCreation() {
                         </div>
 
                         <div className="flex flex-row gap-4 justify-center mt-2">
-                            <SmallButton text="Eliminar de favoritos" isPrimary={false} />
+                            <SmallButton
+                                text="Eliminar de favoritos"
+                                isPrimary={false}
+                                onClick={handleRemoveFavorite}
+                            />
                             <AddToCartButton isPrimary={true} item={creation} />
                         </div>
                     </div>

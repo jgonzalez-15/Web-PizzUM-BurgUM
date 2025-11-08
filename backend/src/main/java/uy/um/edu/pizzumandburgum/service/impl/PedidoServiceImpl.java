@@ -225,6 +225,11 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoMapper.toResponseDTO(guardado);
     }
 
+    @Override
+    public PedidoResponseDTO obtenerPedidoPorId(Long id) {
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(PedidoNoEncontradoException::new);
+        return pedidoMapper.toResponseDTO(pedido);
+    }
 
 
 }

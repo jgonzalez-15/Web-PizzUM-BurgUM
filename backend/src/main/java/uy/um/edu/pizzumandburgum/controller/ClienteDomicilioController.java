@@ -28,7 +28,7 @@ public class ClienteDomicilioController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/listar")
+    @GetMapping("{emailCliente}/listar")
     public ResponseEntity<List<DomicilioResponseDTO>> listarDomiciliosDeCliente(Authentication authentication) {
         String emailCliente = authentication.getName();
         List<DomicilioResponseDTO> domicilios = clienteDomicilioService.listarDomiciliosDeCliente(emailCliente);

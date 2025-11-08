@@ -16,7 +16,7 @@ const Notificaciones = () => {
 
     const handlePagoConfirmado = (pago) => {
       toast.success(
-        `💳 Pago confirmado para el pedido #${pago.idPedido} — ${pago.medioDePago}\nMonto: $${pago.monto}`,
+        `Pago confirmado para el pedido #${pago.idPedido} — ${pago.medioDePago}\nMonto: $${pago.monto}`,
         {
           position: window.innerWidth < 768 ? "top-center" : "top-right",
           autoClose: 7000,

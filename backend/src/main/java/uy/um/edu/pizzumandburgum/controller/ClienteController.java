@@ -48,7 +48,7 @@ public class ClienteController {
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
 
-    @GetMapping("/historial-pedidos")
+    @GetMapping("{email}/historial-pedidos")
     @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<List<PedidoResponseDTO>> listarHistorialPedidos(Authentication authentication) {
         String email = authentication.getName(); // Extracted from JWT subject

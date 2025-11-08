@@ -66,6 +66,7 @@ public class PagoDummyServiceImpl implements PagoDummyService {
         dto.setEstadoPago(pago.getEstadoPago());
         dto.setMonto(pago.getMonto());
         dto.setIdPedido(pedido.getId());
+        dto.setFechaPago(pago.getFechaPago());
 
         return dto;
     }

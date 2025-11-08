@@ -79,4 +79,11 @@ public class PedidoController {
         PedidoResponseDTO nuevoPedido = pedidoService.repetirPedido(idPedido);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPedido);
     }
+
+    @GetMapping("/ver/{id}")
+    public ResponseEntity<PedidoResponseDTO> obtenerPedido(@PathVariable Long id) {
+        PedidoResponseDTO pedido = pedidoService.obtenerPedidoPorId(id);
+        return ResponseEntity.ok(pedido);
+    }
+
 }
