@@ -6,9 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
 import io.github.cdimascio.dotenv.Dotenv;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class JwtUtil {
@@ -23,7 +21,20 @@ public class JwtUtil {
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+    }
+
+    public String generateRefreshToken(String usuario, String role) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(usuario)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
@@ -54,5 +65,19 @@ public class JwtUtil {
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    private final Set<String> blacklistedTokens = Collections.synchronizedSet(new HashSet<>());
+
+    public void invalidateToken(String token) {
+        blacklistedTokens.add(token);
+    }
+
+    public boolean isTokenBlacklisted(String token) {
+        return blacklistedTokens.contains(token);
+    }
+
+    public boolean isTokenValid(String token) {
+        return !isTokenExpired(token) && !isTokenBlacklisted(token);
     }
 }

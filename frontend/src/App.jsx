@@ -1,8 +1,8 @@
 import './App.css'
 import { SessionContext } from './Components/context/SessionContext'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { CartProvider } from './Components/context/CartItems'
-import { useContext} from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import HomePage from './Pages/HomePage'
 import Design from './Pages/Design'
@@ -18,13 +18,41 @@ import Perfil from "./Pages/Perfil";
 import CheckoutPage from './Pages/CheckoutPage';
 
 
-
-
 function App() {
-  const { sessionType } = useContext(SessionContext)
+  const { sessionType, setSessionType, setSessionInfo } = useContext(SessionContext)
+  const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const refreshToken = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/auth/refresh', {
+          method: 'GET',
+          credentials: 'include'
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setSessionType(data.rol);
+          setSessionInfo(data.info);
+          localStorage.setItem("token", data.jwt);
+        } else {
+          setSessionType("INVITADO");
+          setSessionInfo(null);
+          localStorage.removeItem("token");
+        }
+      } catch (error) {
+        setSessionType("INVITADO");
+        setSessionInfo(null);
+        localStorage.removeItem("token");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    refreshToken();
+  }, []);
 
   let routes
-
   if (sessionType == "INVITADO"){
     routes = (
       <>
@@ -76,6 +104,10 @@ function App() {
       </Routes>
       </>
     )
+  }
+
+  if (isLoading) {
+    return null; // or return a loading spinner component if you have one
   }
 
   return (

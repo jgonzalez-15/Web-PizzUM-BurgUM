@@ -78,4 +78,17 @@ public class AdministradorServiceImpl implements AdministradorService {
         return retornar;
     }
 
+    @Override
+    public AdministradorResponseDTO obtenerAdministrador(String email) {
+        Administrador administrador = administradorRepository.findById(email)
+                .orElseThrow(AdministradorNoExiste::new);
+        return new AdministradorResponseDTO(
+                administrador.getEmail(),
+                administrador.getNombre(),
+                administrador.getApellido(),
+                administrador.getContrasenia(),
+                administrador.getTelefono(),
+                administrador.getFechaNac()
+        );
+    }
 }

@@ -11,4 +11,5 @@ public interface AdministradorService {
     AdministradorResponseDTO login(AdministradorRequestDTO dto);
     AdministradorResponseDTO editarPerfil(String email, AdministradorUpdateDTO dto);
     List<AdministradorResponseDTO> listarAdministradores();
+    AdministradorResponseDTO obtenerAdministrador(String email);
 }

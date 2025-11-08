@@ -20,7 +20,8 @@ function Sidebar(){
         });
 
         if (response.ok) {
-            setSessionInfo({})
+            localStorage.removeItem("token")
+            setSessionInfo(null)
             setSessionType("INVITADO")
             navigate("/login")
         } else {
