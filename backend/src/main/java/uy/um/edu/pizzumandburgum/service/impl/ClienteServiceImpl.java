@@ -243,11 +243,6 @@ public class ClienteServiceImpl implements ClienteService {
         Cliente cliente = clienteRepository.findById(email).orElseThrow(ClienteNoExisteException::new);
         return new ClienteResponseDTO(cliente.getEmail(), cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getFechaNac());
     }
-
-    
-
-
-
 }
 
 

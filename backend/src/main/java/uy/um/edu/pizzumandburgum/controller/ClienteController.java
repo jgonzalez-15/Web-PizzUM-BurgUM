@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteRegistrarRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.*;
 import uy.um.edu.pizzumandburgum.dto.update.ClienteUpdateDTO;
+import uy.um.edu.pizzumandburgum.security.JwtUtil;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
 
 import java.util.List;
@@ -27,6 +28,9 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @PostMapping("/registrar")
     public ResponseEntity<ClienteResponseDTO> registrar(@Validated @RequestBody ClienteRegistrarRequestDTO dto) {
         ClienteResponseDTO cliente = clienteService.registrarCliente(dto);
@@ -35,11 +39,16 @@ public class ClienteController {
 
     @PostMapping("/cerrarSesion")
     public ResponseEntity<String> cerrarSesion(HttpServletRequest request, HttpServletResponse response) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            jwtUtil.invalidateToken(token);
+        }
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
-        Cookie cookie = new Cookie("JSESSIONID", null);
+        Cookie cookie = new Cookie("refreshToken", null);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(0);

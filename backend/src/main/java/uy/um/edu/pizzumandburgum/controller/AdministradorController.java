@@ -1,5 +1,8 @@
 package uy.um.edu.pizzumandburgum.controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.AdministradorRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.update.AdministradorUpdateDTO;
+import uy.um.edu.pizzumandburgum.security.JwtUtil;
 import uy.um.edu.pizzumandburgum.service.Interfaces.AdministradorService;
 
 import java.util.List;
@@ -24,6 +28,9 @@ public class AdministradorController {
     @Autowired
     private AdministradorService administradorService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
 
     @PostMapping("/agregarAdmin")
     public ResponseEntity<AdministradorResponseDTO> agregarAdmin(@Validated @RequestBody AdministradorResponseDTO dto) {
@@ -33,8 +40,25 @@ public class AdministradorController {
     }
 
     @PostMapping("/cerrarSesion")
-    public ResponseEntity<String> cerrarSesion(HttpSession sesion){
-        sesion.invalidate();
+    public ResponseEntity<String> cerrarSesion(HttpServletRequest request, HttpServletResponse response){
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            jwtUtil.invalidateToken(token);
+        }
+
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        Cookie refreshCookie = new Cookie("refreshToken", null);
+        refreshCookie.setPath("/");
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setMaxAge(0);
+        refreshCookie.setSecure(false);
+        response.addCookie(refreshCookie);
+
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
 
