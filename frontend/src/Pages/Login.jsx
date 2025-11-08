@@ -31,6 +31,7 @@ function Login(){
         {/* Si igresa actualizar info de la sesion y volver a la homepage */}
           const data = await response.json();
           setSessionType(data.rol)
+          setSessionInfo(data.info)
           localStorage.setItem("token", data.jwt)
           navigate("/");
       } else {

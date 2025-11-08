@@ -66,7 +66,6 @@ public class ClienteController {
     }
 
     @GetMapping("/listar")
-    @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<List<ClienteResponseDTO>> mostrarCliente(HttpSession sesion) {
         List<ClienteResponseDTO> clientes = clienteService.listarClientes();
         return ResponseEntity.ok(clientes);

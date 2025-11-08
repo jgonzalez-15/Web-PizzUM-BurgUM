@@ -43,15 +43,15 @@ public class AuthController {
         String contrasenia = dto.getContrasenia();
 
         try {
-            clienteService.login(email, contrasenia);
+            ClienteResponseDTO cliente = clienteService.login(email, contrasenia);
             String token = jwtUtil.generateToken(email, "CLIENTE");
-            return ResponseEntity.ok(new AuthResponse(token, "CLIENTE"));
+            return ResponseEntity.ok(new AuthResponse(token, "CLIENTE", cliente));
         } catch (Exception e) {}
 
         try {
-            administradorService.login(new AdministradorRequestDTO(email, contrasenia));
+            AdministradorResponseDTO admin = administradorService.login(new AdministradorRequestDTO(email, contrasenia));
             String token = jwtUtil.generateToken(email, "ADMIN");
-            return ResponseEntity.ok(new AuthResponse(token, "ADMIN"));
+            return ResponseEntity.ok(new AuthResponse(token, "ADMIN", admin));
         } catch (Exception e) {}
 
         // Si ambos fallan
