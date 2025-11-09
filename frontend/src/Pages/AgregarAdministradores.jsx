@@ -38,7 +38,7 @@ export default function AgregarAdministradores() {
 
     const crearAdministrador = async () => {
         try {
-            const respuesta = await fetch("http://localhost:8080/api/admin/crear", {
+            const respuesta = await fetch("http://localhost:8080/api/administrador/agregarAdmin", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

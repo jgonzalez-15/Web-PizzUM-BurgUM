@@ -44,6 +44,7 @@ public class PedidoController {
             pedidoService.eliminarPedido(id);
         }
         return ResponseEntity.noContent().build();
+
     }
 
     @PreAuthorize("hasAuthority('CLIENTE') or hasAuthority('ADMIN')")
