@@ -1,0 +1,105 @@
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { SessionContext } from "../Components/context/SessionContext";
+import PieDePagina from "../Components/PieDePagina.jsx";
+
+function InicioDeSesion() {
+    if (window.pageYOffset > 0) window.scrollTo(0, 0);
+
+    const [email, setEmail] = useState("");
+    const [contrasenia, setContrasenia] = useState("");
+    const navigate = useNavigate();
+    const { setSessionType, setSessionInfo } = useContext(SessionContext);
+
+    const iniciarSesion = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch("http://localhost:8080/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, contrasenia }),
+                credentials: "include",
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setSessionType(data.rol);
+                setSessionInfo(data.info);
+                localStorage.setItem("token", data.jwt);
+                navigate("/");
+            } else {
+                alert("Usuario o contraseña incorrectos");
+            }
+        } catch (error) {
+            console.error("Error al iniciar sesión:", error);
+        }
+    };
+
+    return (
+        <div className="flex flex-col min-h-screen bg-gray-50 justify-between">
+            <div className="flex flex-col items-center justify-center flex-1">
+                <div className="bg-white w-80 md:w-96 rounded-2xl shadow-xl p-8 border border-gray-200">
+                    <h1 className="text-center text-2xl md:text-3xl font-extrabold text-gray-800 mb-6">
+                        Iniciar sesión
+                    </h1>
+
+                    <form onSubmit={iniciarSesion} className="flex flex-col gap-4">
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">
+                                Correo electrónico
+                            </label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full bg-gray-100 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">
+                                Contraseña
+                            </label>
+                            <input
+                                type="password"
+                                value={contrasenia}
+                                onChange={(e) => setContrasenia(e.target.value)}
+                                className="w-full bg-gray-100 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                                required
+                            />
+                        </div>
+
+                        <div className="flex justify-center gap-3 mt-4">
+                            <button
+                                type="button"
+                                onClick={() => navigate("/")}
+                                className="px-6 py-2 rounded-2xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold shadow-sm transition-transform duration-150 hover:scale-105"
+                            >
+                                Cancelar
+                            </button>
+
+                            <button
+                                type="submit"
+                                className="px-6 py-2 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-semibold shadow-md transition-transform duration-150 hover:scale-105"
+                            >
+                                Ingresar
+                            </button>
+                        </div>
+                    </form>
+
+                    <Link
+                        to="/register"
+                        className="block text-center text-sm text-blue-700/60 hover:text-blue-700 mt-6 underline"
+                    >
+                        Crear una cuenta nueva
+                    </Link>
+                </div>
+            </div>
+
+            <PieDePagina />
+        </div>
+    );
+}
+
+export default InicioDeSesion;

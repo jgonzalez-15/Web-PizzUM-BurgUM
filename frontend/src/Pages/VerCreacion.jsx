@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import MainHeader from "../Components/MainHeader";
-import Footer from "../Components/Footer";
+import Encabezado from "../Components/Encabezado.jsx";
+import PieDePagina from "../Components/PieDePagina.jsx";
 import SmallButton from "../Components/SmallButton";
-import AddToCartButton from "../Components/AddToCartButton";
+import AddToCartButton from "../Components/BotonAgregarCarrito.jsx";
 
-export default function ViewCreation() {
+export default function VerCreacion() {
     const id = useLocation().state?.creationId;
     const navigate = useNavigate();
 
-    const [loading, setLoading] = useState(true);
-    const [creation, setCreation] = useState(null);
+    const [cargando, setCargando] = useState(true);
+    const [creacion, setCreacion] = useState(null);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchCreation = async () => {
+        const obtenerCreacion = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/favorito/${id}`, {
+                const respuesta = await fetch(`http://localhost:8080/api/favorito/${id}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -25,9 +25,9 @@ export default function ViewCreation() {
                     credentials: "include",
                 });
 
-                if (response.ok) {
-                    const data = await response.json();
-                    setCreation(data);
+                if (respuesta.ok) {
+                    const datos = await respuesta.json();
+                    setCreacion(datos);
                 } else {
                     setError("No se pudo obtener la creación");
                 }
@@ -35,23 +35,21 @@ export default function ViewCreation() {
                 console.error("Error al obtener los detalles:", err);
                 setError("Error al obtener los detalles");
             } finally {
-                setLoading(false);
+                setCargando(false);
             }
         };
 
-        if (id) fetchCreation();
+        if (id) obtenerCreacion();
     }, [id]);
 
-    const handleRemoveFavorite = async () => {
+    const eliminarDeFavoritos = async () => {
         if (!id) return;
 
-        const confirmar = window.confirm(
-            "¿Seguro que querés eliminar esta creación de tus favoritos?"
-        );
+        const confirmar = window.confirm("¿Seguro que querés eliminar esta creación de tus favoritos?");
         if (!confirmar) return;
 
         try {
-            const response = await fetch(`http://localhost:8080/api/favorito/${id}/eliminar`, {
+            const respuesta = await fetch(`http://localhost:8080/api/favorito/${id}/eliminar`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -60,7 +58,7 @@ export default function ViewCreation() {
                 credentials: "include",
             });
 
-            if (response.ok) {
+            if (respuesta.ok) {
                 alert("Creación eliminada de favoritos correctamente.");
                 navigate("/favoritos");
             } else {
@@ -72,7 +70,7 @@ export default function ViewCreation() {
         }
     };
 
-    if (loading) {
+    if (cargando) {
         return (
             <div className="flex justify-center items-center h-screen text-lg font-semibold">
                 Cargando detalles...
@@ -80,7 +78,7 @@ export default function ViewCreation() {
         );
     }
 
-    if (error || !creation) {
+    if (error || !creacion) {
         return (
             <div className="flex flex-col justify-center items-center h-screen text-red-500 text-lg font-semibold">
                 {error || "No se encontró la creación"}
@@ -88,7 +86,7 @@ export default function ViewCreation() {
         );
     }
 
-    const { nombre, tipo, precio, ingredientes, tamanio, cantidadCarnes } = creation;
+    const { nombre, tipo, precio, ingredientes, tamanio, cantidadCarnes } = creacion;
 
     const icono = tipo === "Pizza" ? "🍕" : tipo === "Hamburguesa" ? "🍔" : "";
 
@@ -173,7 +171,7 @@ export default function ViewCreation() {
                                 key={c.idProducto}
                                 className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
                             >
-                {cantidadCarnes || 1}x {c.nombre}
+                {cantidadCarnes || 1} x {c.nombre}
               </span>
                         ))}
                     </div>
@@ -210,9 +208,9 @@ export default function ViewCreation() {
 
     return (
         <div className="flex flex-col min-h-screen">
-            <MainHeader />
+            <Encabezado />
 
-            {/* Mismo layout sticky, SOLO cambiamos el color a gris */}
+            {/* Botón volver a favoritos */}
             <div className="sticky top-[70px] left-0 w-full flex justify-start px-10 py-2 z-30">
                 <button
                     onClick={() => navigate("/favoritos")}
@@ -222,15 +220,15 @@ export default function ViewCreation() {
                 </button>
             </div>
 
-            {/* Contenido */}
+            {/* Contenido principal */}
             <main className="flex-grow flex flex-col justify-start items-center px-8 md:px-20 mt-6 mb-10">
                 <div className="flex flex-col gap-6 bg-white shadow-xl rounded-3xl p-10 md:p-14 max-w-4xl w-full border border-gray-100 relative overflow-hidden">
-                    {/* Encabezado visual */}
+                    {/* Encabezado donde va el icono */}
                     <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-orange-400 to-orange-600 rounded-t-3xl flex justify-center items-center text-6xl text-white shadow-inner">
                         {icono}
                     </div>
 
-                    {/* Contenido principal */}
+                    {/* Datos */}
                     <div className="mt-36 flex flex-col justify-between gap-4">
                         <div className="text-center">
                             <h1 className="text-3xl font-extrabold text-gray-800">{nombre}</h1>
@@ -250,15 +248,15 @@ export default function ViewCreation() {
                             <SmallButton
                                 text="Eliminar de favoritos"
                                 isPrimary={false}
-                                onClick={handleRemoveFavorite}
+                                onClick={eliminarDeFavoritos}
                             />
-                            <AddToCartButton isPrimary={true} item={creation} />
+                            <AddToCartButton isPrimary={true} item={creacion} />
                         </div>
                     </div>
                 </div>
             </main>
 
-            <Footer />
+            <PieDePagina />
         </div>
     );
 }

@@ -57,10 +57,10 @@ public class ClienteController {
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
 
-    @GetMapping("{email}/historial-pedidos")
+    @GetMapping("/historial-pedidos")
     @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<List<PedidoResponseDTO>> listarHistorialPedidos(Authentication authentication) {
-        String email = authentication.getName(); // Extracted from JWT subject
+        String email = authentication.getName();
         List<PedidoResponseDTO> historial = clienteService.historialPedido(email);
         return ResponseEntity.ok(historial);
     }
@@ -75,7 +75,7 @@ public class ClienteController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<ClienteResponseDTO>> mostrarCliente(HttpSession sesion) {
+    public ResponseEntity<List<ClienteResponseDTO>> mostrarCliente() {
         List<ClienteResponseDTO> clientes = clienteService.listarClientes();
         return ResponseEntity.ok(clientes);
     }

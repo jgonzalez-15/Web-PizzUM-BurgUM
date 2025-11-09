@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
-import { useCart } from "../Components/context/CartItems";
-import MainHeader from "../Components/MainHeader";
-import Footer from "../Components/Footer";
-import SmallButton from "../Components/SmallButton";
-import Button from "../Components/Button";
+import { usarCarrito } from "../Components/context/CarritoContexto.jsx";
 
-export default function NewOrder() {
+import EncabezadoPrincipal from "../Components/Encabezado.jsx";
+import PieDePagina from "../Components/PieDePagina.jsx";
+
+export default function NuevoPedido() {
     if (window.pageYOffset > 0) {
         window.scrollTo(0, 0);
     }
 
-    const { items, removeItem, addItem } = useCart();
+    const { items, eliminarItem, agregarItem } = usarCarrito();
     const total = items.reduce((sum, item) => sum + (item.precio || 0), 0);
-    const [bebidasDisponibles, setBebidasDisponibles] = useState([]);
-    const [loadingBebidas, setLoadingBebidas] = useState(true);
+
+    const [bebidas, setBebidas] = useState([]);
+    const [cargandoBebidas, setCargandoBebidas] = useState(true);
 
     useEffect(() => {
-        const fetchBebidas = async () => {
+        const obtenerBebidas = async () => {
             try {
                 const res = await fetch("http://localhost:8080/api/producto/bebidas", {
                     headers: {
@@ -27,24 +27,25 @@ export default function NewOrder() {
                 });
                 if (!res.ok) throw new Error("Error al listar bebidas");
                 const data = await res.json();
-                setBebidasDisponibles(data || []);
+                setBebidas(data || []);
             } catch {
-                setBebidasDisponibles([]);
+                setBebidas([]);
             } finally {
-                setLoadingBebidas(false);
+                setCargandoBebidas(false);
             }
         };
-        fetchBebidas();
+        obtenerBebidas();
     }, []);
 
-    const handleAddDrink = (bebida) => {
+    const agregarBebida = (bebida) => {
         const tieneCreaciones = items.some((i) => i.tipo !== "Bebida");
         if (!tieneCreaciones) {
-            alert("Debes tener al menos una creación antes de agregar bebidas.");
+            alert("Primero debes tener al menos una creación antes de agregar bebidas 🍕🍔");
             return;
         }
         if (!bebida || bebida.idProducto == null) return;
-        const newDrink = {
+
+        const nuevaBebida = {
             id: bebida.idProducto,
             idProducto: bebida.idProducto,
             tipo: "Bebida",
@@ -54,38 +55,41 @@ export default function NewOrder() {
             estaActivo: bebida.estaActivo,
             visible: bebida.visible,
         };
-        addItem(newDrink);
+
+        agregarItem(nuevaBebida);
     };
 
     return (
         <>
-            <MainHeader className="z-10" />
-            <div className="flex flex-col pt-20 w-screen max-w-full min-h-[calc(100vh)] justify-between bg-gray-50">
-                <div className="w-full flex flex-1 flex-col md:flex-row h-full items-start justify-between gap-8 px-6 md:px-16">
+            <EncabezadoPrincipal className="z-10" />
+
+            <div className="flex flex-col pt-24 w-screen max-w-full min-h-[calc(100vh)] justify-between bg-gray-50">
+                <div className="flex flex-col md:flex-row items-start justify-between gap-8 px-6 md:px-16 mb-10">
                     {/* Carrito principal */}
                     <div className="w-full md:w-2/3 flex flex-col items-center md:items-start">
-                        <h1 className="text-3xl font-extrabold text-gray-800 mb-6 mt-2">
+                        <h1 className="text-3xl font-extrabold text-gray-800 mb-6">
                             Tu carrito
                         </h1>
+
                         {items.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center text-center bg-white shadow-md rounded-2xl p-8 w-full md:w-2/3">
+                            <div className="flex flex-col items-center justify-center text-center bg-white shadow-xl rounded-2xl p-8 w-full md:w-2/3 border border-gray-200">
                                 <h2 className="text-gray-600 mb-4">
                                     No hay artículos en tu carrito todavía.
                                 </h2>
-                                <Button
-                                    text="Volver a la página principal"
-                                    isPrimary={true}
-                                    route="/homepage"
-                                />
+                                <button
+                                    onClick={() => (window.location.href = "/homepage")}
+                                    className="w-48 px-6 py-2.5 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.05]"
+                                >
+                                    Volver al inicio
+                                </button>
                             </div>
                         ) : (
                             <div className="w-full flex flex-col gap-4">
-                                {/* 🔥 BLOQUE CORREGIDO */}
+                                {/* Lista de items */}
                                 {items.map((item) => (
                                     <div
                                         key={`${item.tipo}-${item.id || item.idProducto}`}
-                                        className="bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition-all
-                                                   flex justify-between items-center flex-wrap gap-4 border border-gray-100"
+                                        className="bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition-all flex justify-between items-center flex-wrap gap-4 border border-gray-100"
                                     >
                                         <div className="flex flex-col gap-1 flex-1 min-w-[200px]">
                                             <h2 className="text-xl font-bold text-gray-800 break-words">
@@ -95,9 +99,7 @@ export default function NewOrder() {
                                             {item.tipo && (
                                                 <p className="text-sm text-gray-500">
                                                     Tipo:{" "}
-                                                    <span className="text-gray-700">
-                                                        {item.tipo}
-                                                    </span>
+                                                    <span className="text-gray-700">{item.tipo}</span>
                                                 </p>
                                             )}
 
@@ -105,16 +107,12 @@ export default function NewOrder() {
                                                 <p className="text-sm text-gray-500 max-w-full break-words">
                                                     Ingredientes:{" "}
                                                     <span className="text-gray-700">
-                                                        {Array.isArray(item.ingredientes)
-                                                            ? item.ingredientes
-                                                                .map(
-                                                                    (i) =>
-                                                                        i.nombre ||
-                                                                        i.producto?.nombre
-                                                                )
-                                                                .join(", ")
-                                                            : item.ingredientes}
-                                                    </span>
+                            {Array.isArray(item.ingredientes)
+                                ? item.ingredientes
+                                    .map((i) => i.nombre || i.producto?.nombre)
+                                    .join(", ")
+                                : item.ingredientes}
+                          </span>
                                                 </p>
                                             )}
 
@@ -124,11 +122,8 @@ export default function NewOrder() {
                                         </div>
 
                                         <button
-                                            onClick={() =>
-                                                removeItem(item.id || item.idProducto)
-                                            }
-                                            className="bg-red-100 hover:bg-red-200 text-red-600 font-semibold
-                                                       px-3 py-1 rounded-xl transition-all text-sm flex-shrink-0"
+                                            onClick={() => eliminarItem(item.id || item.idProducto)}
+                                            className="w-28 px-4 py-2 rounded-2xl bg-red-100 text-red-600 font-semibold border border-red-200 hover:bg-red-200 transition-all hover:scale-[1.03]"
                                         >
                                             Quitar
                                         </button>
@@ -140,28 +135,32 @@ export default function NewOrder() {
                                     <h3 className="font-semibold text-lg text-gray-800">
                                         Agregar bebida
                                     </h3>
-                                    {loadingBebidas ? (
+
+                                    {cargandoBebidas ? (
                                         <p className="text-gray-600 text-sm">Cargando bebidas...</p>
-                                    ) : bebidasDisponibles.length === 0 ? (
+                                    ) : bebidas.length === 0 ? (
                                         <p className="text-gray-600 text-sm">
-                                            No hay bebidas disponibles.
+                                            No hay bebidas disponibles por el momento.
                                         </p>
                                     ) : (
                                         <>
                                             <p className="text-gray-600 text-sm">
                                                 Elegí una bebida para acompañar tu pedido:
                                             </p>
+
                                             <div className="flex flex-wrap gap-3">
-                                                {bebidasDisponibles.map((b) => (
+                                                {bebidas.map((b) => (
                                                     <button
                                                         key={`bebida-${b.idProducto}`}
-                                                        className="flex flex-col items-center px-4 py-2 bg-orange-50 border border-orange-200 text-orange-600 font-semibold rounded-xl hover:bg-orange-100 transition-all text-sm"
-                                                        onClick={() => handleAddDrink(b)}
+                                                        onClick={() => agregarBebida(b)}
+                                                        className="w-28 flex flex-col items-center px-4 py-3 rounded-2xl shadow-sm border border-orange-200 bg-gradient-to-r from-orange-50 to-orange-100 hover:from-orange-100 hover:to-orange-200 transition-all hover:scale-[1.03]"
                                                     >
-                                                        {b.nombre}
-                                                        <span className="text-xs font-normal text-gray-500 mt-1">
-                                                            ${b.precio}
-                                                        </span>
+                            <span className="text-orange-700 font-semibold">
+                              {b.nombre}
+                            </span>
+                                                        <span className="text-xs text-gray-500 mt-1">
+                              ${b.precio}
+                            </span>
                                                     </button>
                                                 ))}
                                             </div>
@@ -172,14 +171,15 @@ export default function NewOrder() {
                         )}
                     </div>
 
-                    {/* Resumen de pedido */}
-                    <div className="w-full md:w-1/3 bg-white shadow-xl rounded-2xl p-6 border border-gray-100 sticky top-24 self-start">
+                    {/* Resumen del pedido */}
+                    <div className="w-full md:w-1/3 bg-white shadow-xl rounded-2xl p-6 border border-gray-200 sticky top-24 self-start">
                         <h1 className="font-bold text-2xl mb-4 text-gray-800">
-                            Resumen de pedido
+                            Resumen del pedido
                         </h1>
+
                         {items.length === 0 ? (
                             <p className="text-gray-500 text-center mt-10">
-                                No hay artículos en el carrito
+                                No hay artículos en el carrito.
                             </p>
                         ) : (
                             <>
@@ -189,38 +189,43 @@ export default function NewOrder() {
                                             key={`resumen-${item.tipo}-${item.id || item.idProducto}`}
                                             className="flex justify-between py-1"
                                         >
+                      <span className="text-gray-700 font-medium">
+                        {item.nombre}
+                      </span>
                                             <span className="text-gray-700 font-medium">
-                                                {item.nombre}
-                                            </span>
-                                            <span className="text-gray-700 font-medium">
-                                                ${item.precio}
-                                            </span>
+                        ${item.precio}
+                      </span>
                                         </div>
                                     ))}
                                 </div>
+
                                 <div className="flex flex-row justify-between items-center pt-6 border-t mt-4">
                                     <h2 className="font-bold text-xl text-gray-800">Total:</h2>
-                                    <h2 className="font-bold text-xl text-orange-600">
-                                        ${total}
-                                    </h2>
+                                    <h2 className="font-bold text-xl text-orange-600">${total}</h2>
                                 </div>
+
+                                {/* Botones finales uniformes */}
                                 <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-6">
-                                    <SmallButton
-                                        text="Seguir comprando"
-                                        isPrimary={false}
-                                        route="/homepage"
-                                    />
-                                    <SmallButton
-                                        text="Pasar al pago"
-                                        isPrimary={true}
-                                        route="/checkout"
-                                    />
+                                    <button
+                                        onClick={() => (window.location.href = "/")}
+                                        className="w-40 px-6 py-2.5 rounded-2xl bg-white text-gray-700 border border-gray-300 font-semibold shadow-sm hover:shadow-md hover:bg-gray-100 transition-all duration-200 hover:scale-[1.03]"
+                                    >
+                                        Seguir comprando
+                                    </button>
+
+                                    <button
+                                        onClick={() => (window.location.href = "/checkout")}
+                                        className="w-40 px-6 py-2.5 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.05]"
+                                    >
+                                        Pasar al pago
+                                    </button>
                                 </div>
                             </>
                         )}
                     </div>
                 </div>
-                <Footer />
+
+                <PieDePagina />
             </div>
         </>
     );

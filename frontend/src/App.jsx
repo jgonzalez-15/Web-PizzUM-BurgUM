@@ -1,40 +1,40 @@
-import './App.css'
-import { SessionContext } from './Components/context/SessionContext'
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
-import { CartProvider } from './Components/context/CartItems'
-import { useContext, useEffect, useState } from 'react'
+import "./App.css";
+import { useContext, useEffect, useState } from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
-import HomePage from './Pages/HomePage'
-import Design from './Pages/Design'
-import Orders from './Pages/Orders'
-import NewOrder from './Pages/NewOrder'
-import Login from './Pages/Login'
-import Backoffice from './Pages/Backoffice'
-import Favoritos from './Pages/Favoritos'
-import ViewCreation from './Pages/ViewCreation'
-import Register from './Pages/Register'
-import Options from './Pages/Options'
+import { SessionContext } from "./Components/context/SessionContext";
+import { CarritoProveedor } from "./Components/context/CarritoContexto.jsx";
+
+import PaginaPrincipal from "./Pages/PaginaPrincipal.jsx";
+import DiseniarCreacion from "./Pages/DiseniarCreacion.jsx";
+import Pedidos from "./Pages/Pedidos.jsx";
+import NuevoPedido from "./Pages/NuevoPedido.jsx";
+import InicioSesion from "./Pages/InicioSesion.jsx";
+import Backoffice from "./Pages/Backoffice";
+import Favoritos from "./Pages/Favoritos";
+import VerCreacion from "./Pages/VerCreacion.jsx";
+import Registrar from "./Pages/Registrar.jsx";
 import Perfil from "./Pages/Perfil";
-import CheckoutPage from './Pages/CheckoutPage';
-
+import CheckoutPage from "./Pages/PaginaPago.jsx";
 
 function App() {
-  const { sessionType, setSessionType, setSessionInfo } = useContext(SessionContext)
-  const navigate = useNavigate()
-  const [isLoading, setIsLoading] = useState(true)
+  const { sessionType, setSessionType, setSessionInfo } = useContext(SessionContext);
+  const navigate = useNavigate();
+  const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
-    const refreshToken = async () => {
+    const refrescarToken = async () => {
       try {
-        const response = await fetch('http://localhost:8080/auth/refresh', {
-          method: 'GET',
-          credentials: 'include'
+        const respuesta = await fetch("http://localhost:8080/auth/resfrescar", {
+          method: "GET",
+          credentials: "include",
         });
-        if (response.ok) {
-          const data = await response.json();
-          setSessionType(data.rol);
-          setSessionInfo(data.info);
-          localStorage.setItem("token", data.jwt);
+
+        if (respuesta.ok) {
+          const datos = await respuesta.json();
+          setSessionType(datos.rol);
+          setSessionInfo(datos.info);
+          localStorage.setItem("token", datos.jwt);
         } else {
           setSessionType("INVITADO");
           setSessionInfo(null);
@@ -45,76 +45,62 @@ function App() {
         setSessionInfo(null);
         localStorage.removeItem("token");
       } finally {
-        setIsLoading(false);
+        setCargando(false);
       }
     };
 
-    refreshToken();
+    refrescarToken();
   }, []);
 
-  let routes
-  if (sessionType == "INVITADO"){
-    routes = (
-      <>
-      <CartProvider>
-        <Routes>
-          <Route path='/' element={<Navigate to="/homepage" replace/>}/>
-          <Route path='/homepage' element={<HomePage/>}/>
-          <Route path='/design/pizza' element={<Navigate to="/login" replace/>}/>
-          <Route path='/design/burger' element={<Navigate to="/login" replace/>}/>
-          <Route path='/login' element={<Login/>}/>
-          <Route path='/register' element={<Register/>}/>
-          <Route path='/admin' element={<Navigate to="/login" replace/>}/>
-          <Route path='/favoritos' element={<Navigate to="/login" replace/>}/>
-        </Routes>
-      </CartProvider>
-    </>
-    )
-  }else if (sessionType == "CLIENTE"){
-    routes = (
-      <>
-      <CartProvider>
-        <Routes>
-          <Route path='/' element={<Navigate to="/homepage" replace/>}/>
-          <Route path='/homepage' element={<HomePage/>}/>
-          <Route path='/design/pizza' element={<Design type='Pizza'/>}/>
-          <Route path='/design/burger' element={<Design type='Burger'/>}/>
-          <Route path='/viewOrders' element={<Orders/>}/>
-          <Route path='/order' element={<NewOrder/>}/>
-          <Route path='/checkout' element={<CheckoutPage/>}/>
-          <Route path='/login' element={<Login/>}/>
-          <Route path='/register' element={<Register/>}/>
-          <Route path='/favoritos' element={<Favoritos/>}/>
-          <Route path='/viewCreation' element={<ViewCreation/>}/>
-          <Route path='/config' element={<Options/>}/>
-          <Route path="/perfil" element={<Perfil/>} />
-
-        </Routes>
-      </CartProvider>
-    </>
-    )
-  }
-  else if (sessionType == "ADMIN"){
-    routes = (
-      <>
-      <Routes>
-          <Route path='/' element={<Navigate to="/admin" replace/>}/>
-          <Route path='/login' element={<Login/>}/>
-          <Route path='/admin' element={<Backoffice/>}/>
-      </Routes>
-      </>
-    )
-  }
-
-  if (isLoading) {
-    return null; // or return a loading spinner component if you have one
-  }
+  if (cargando) return null;
 
   return (
-    <>
-      {routes}
-    </>
-  )
+      <CarritoProveedor>
+        <Routes>
+          {/* Rutas comunes */}
+          <Route path="/" element={<Navigate to="/homepage" replace />} />
+          <Route path="/homepage" element={<PaginaPrincipal />} />
+          <Route path="/login" element={<InicioSesion />} />
+          <Route path="/register" element={<Registrar />} />
+
+          {/* Invitado */}
+          {sessionType === "INVITADO" && (
+              <>
+                <Route path="/design/pizza" element={<Navigate to="/login" replace />} />
+                <Route path="/design/burger" element={<Navigate to="/login" replace />} />
+                <Route path="/favoritos" element={<Navigate to="/login" replace />} />
+                <Route path="/order" element={<Navigate to="/login" replace />} />
+                <Route path="/viewOrders" element={<Navigate to="/login" replace />} />
+                <Route path="/checkout" element={<Navigate to="/login" replace />} />
+              </>
+          )}
+
+          {/* Cliente */}
+          {sessionType === "CLIENTE" && (
+              <>
+                <Route path="/design/pizza" element={<DiseniarCreacion tipo="Pizza" />} />
+                <Route path="/design/burger" element={<DiseniarCreacion tipo="Hamburguesa" />} />
+                <Route path="/viewOrders" element={<Pedidos />} />
+                <Route path="/order" element={<NuevoPedido />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/favoritos" element={<Favoritos />} />
+                <Route path="/verCreacion" element={<VerCreacion />} />
+                <Route path="/perfil" element={<Perfil />} />
+              </>
+          )}
+
+          {/* Admin */}
+          {sessionType === "ADMIN" && (
+              <>
+                <Route path="/admin" element={<Backoffice />} />
+              </>
+          )}
+
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/homepage" replace />} />
+        </Routes>
+      </CarritoProveedor>
+  );
 }
 
-export default App
+export default App;

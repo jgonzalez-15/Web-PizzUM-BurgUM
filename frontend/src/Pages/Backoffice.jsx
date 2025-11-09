@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AdminHeader from "../Components/AdminHeader";
-import Footer from "../Components/Footer";
+import PieDePagina from "../Components/PieDePagina.jsx";
 import AdminProductCard from "../Components/AdminProductCard";
 
 function Backoffice() {
@@ -17,7 +17,6 @@ function Backoffice() {
   const [editModal, setEditModal] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
 
-  // 👇 NUEVOS ESTADOS PARA VER DETALLES
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showOrderModal, setShowOrderModal] = useState(false);
 
@@ -363,7 +362,7 @@ function Backoffice() {
                 </div>
             )}
           </div>
-          <Footer />
+          <PieDePagina />
         </div>
 
         {/* MODAL NUEVO PRODUCTO */}

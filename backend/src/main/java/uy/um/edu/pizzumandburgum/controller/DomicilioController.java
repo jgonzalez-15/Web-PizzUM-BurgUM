@@ -13,6 +13,7 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.DomicilioService;
 
 @RestController
 @RequestMapping("/api/domicilio")
+@PreAuthorize("hasAuthority('CLIENTE')")
 @CrossOrigin(origins = "http://localhost:5173")
 public class DomicilioController {
     @Autowired
@@ -25,17 +26,14 @@ public class DomicilioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PreAuthorize("hasAuthority('CLIENTE')")
     @PutMapping("/domicilio")
     public ResponseEntity<DomicilioResponseDTO> editarDomicilio(@PathVariable Long idDomicilio, @RequestBody DomicilioUpdateDTO dto) {
         DomicilioResponseDTO response = domicilioService.editarPerfil(idDomicilio, dto);
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{domicilioId}/cliente/{clienteId}")
-    public ResponseEntity<Void> eliminarDomicilio(
-            @PathVariable Long domicilioId,
-            @PathVariable String clienteId) {
+    @DeleteMapping("/{domicilioId}/cliente")
+    public ResponseEntity<Void> eliminarDomicilio(@PathVariable Long domicilioId, @PathVariable String clienteId) {
 
         domicilioService.eliminarDomicilio(domicilioId, clienteId);
         return ResponseEntity.noContent().build();

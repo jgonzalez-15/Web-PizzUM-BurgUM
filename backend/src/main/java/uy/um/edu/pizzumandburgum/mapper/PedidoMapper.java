@@ -54,6 +54,6 @@ public class PedidoMapper {
             }
         }
 
-        return new PedidoResponseDTO(pedido.getId(), pedido.getPrecio(), pedido.getFecha(), pedido.getEstado(), pedido.getClienteAsignado().getEmail(), pedido.isEstaPago(), creacionesDTO, bebidasDTO, numeroMedioDePago);
+        return new PedidoResponseDTO(pedido.getId(), pedido.getPrecio(), pedido.getFecha(), pedido.getEstado(), pedido.getClienteAsignado().getEmail(), pedido.isEstaPago(), pedido.getDomicilio().getId(), creacionesDTO, bebidasDTO, numeroMedioDePago);
     }
 }

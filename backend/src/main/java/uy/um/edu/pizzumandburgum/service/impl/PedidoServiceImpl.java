@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.controller.NotificacionesController;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoBebidaRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.request.PedidoCreacionRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.response.PedidoBebidaResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.PedidoCreacionDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.*;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.CreacionNoEncontradaException;
@@ -17,7 +16,6 @@ import uy.um.edu.pizzumandburgum.exceptions.Pedido.PedidoNoEncontradoException;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.PedidoMapper;
-import uy.um.edu.pizzumandburgum.mapper.ProductoMapper;
 import uy.um.edu.pizzumandburgum.repository.*;
 import uy.um.edu.pizzumandburgum.service.Interfaces.*;
 
@@ -89,7 +87,7 @@ public class PedidoServiceImpl implements PedidoService {
         float precioTotal = 0f;
 
         if (dto.getCreaciones() != null && !dto.getCreaciones().isEmpty()) {
-            for (PedidoCreacionDTO creacionDto : dto.getCreaciones()) {
+            for (PedidoCreacionRequestDTO creacionDto : dto.getCreaciones()) {
 
                 pedidoCrecionService.agregarCreacion(pedido.getId(), creacionDto.getCreacion().getId(), creacionDto.getCantidad());
 

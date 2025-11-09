@@ -80,7 +80,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
     }
 
-    @GetMapping("/refresh")
+    @GetMapping("/resfrescar")
     public ResponseEntity<?> refresh(HttpServletRequest request) {
         String refreshToken = Arrays.stream(request.getCookies())
                 .filter(c -> "refreshToken".equals(c.getName()))

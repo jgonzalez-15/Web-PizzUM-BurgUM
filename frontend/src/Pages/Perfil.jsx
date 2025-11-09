@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import MainHeader from "../Components/MainHeader";
-import Footer from "../Components/Footer";
+import Encabezado from "../Components/Encabezado.jsx";
+import PieDePagina from "../Components/PieDePagina.jsx";
 
 export default function Perfil() {
     const [datos, setDatos] = useState({
@@ -26,14 +26,17 @@ export default function Perfil() {
     const navigate = useNavigate();
     const usuario = JSON.parse(localStorage.getItem("sessionInfo"));
 
-    // Cargar datos del perfil al montar
     useEffect(() => {
         const cargarDatos = async () => {
             try {
-                const respuestaPerfil = await fetch(`http://localhost:8080/api/cliente/obtenerPerfil`, {
-                    headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`}});
-                if (respuestaPerfil.ok) {
-                    const data = await respuestaPerfil.json();
+                const headers = {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                };
+
+                const perfil = await fetch("http://localhost:8080/api/cliente/obtenerPerfil", { headers });
+                if (perfil.ok) {
+                    const data = await perfil.json();
                     setDatos({
                         nombre: data.nombre,
                         apellido: data.apellido,
@@ -44,13 +47,11 @@ export default function Perfil() {
                     });
                 }
 
-                const respuestaDomicilio = await fetch(`http://localhost:8080/api/clienteDomicilio/${usuario.email}/listar`, {
-                    headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`}});
-                if (respuestaDomicilio.ok) setDomicilios(await respuestaDomicilio.json());
+                const dom = await fetch("http://localhost:8080/api/clienteDomicilio/listar", { headers });
+                if (dom.ok) setDomicilios(await dom.json());
 
-                const respuestaMedioDePago = await fetch(`http://localhost:8080/api/medioDePago/${usuario.email}/listar`, {
-                    headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`}});
-                if (respuestaMedioDePago.ok) setPagos(await respuestaMedioDePago.json());
+                const pagosRes = await fetch("http://localhost:8080/api/medioDePago/listar", { headers });
+                if (pagosRes.ok) setPagos(await pagosRes.json());
             } catch (error) {
                 console.error("Error al cargar el perfil:", error);
             }
@@ -60,10 +61,8 @@ export default function Perfil() {
     }, []);
 
     const guardarCambios = async () => {
-        if (datos.contrasenia && datos.contrasenia !== datos.confirmarContrasenia) {
-            alert("Las contraseñas no coinciden");
-            return;
-        }
+        if (datos.contrasenia && datos.contrasenia !== datos.confirmarContrasenia)
+            return alert("Las contraseñas no coinciden");
 
         try {
             const body = {
@@ -74,9 +73,12 @@ export default function Perfil() {
                 contrasenia: datos.contrasenia || null,
             };
 
-            const respuesta = await fetch(`http://localhost:8080/api/cliente/perfil`, {
+            const respuesta = await fetch("http://localhost:8080/api/cliente/perfil", {
                 method: "PUT",
-                headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
                 body: JSON.stringify(body),
                 credentials: "include",
             });
@@ -95,9 +97,9 @@ export default function Perfil() {
         try {
             const crear = await fetch("http://localhost:8080/api/domicilio/crearDomicilio", {
                 method: "POST",
-                headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
+                headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}` },
                 body: JSON.stringify({ direccion }),
-                credentials: "include"
+                credentials: "include",
             });
 
             if (!crear.ok) throw new Error("Error al crear domicilio");
@@ -106,12 +108,9 @@ export default function Perfil() {
 
             const asociar = await fetch("http://localhost:8080/api/clienteDomicilio/asociarDomicilio", {
                 method: "POST",
-                headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
-                body: JSON.stringify({
-                    email: usuario.email,
-                    idDomicilio: nuevo.id,
-                }),
-                credentials: "include"
+                headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}` },
+                body: JSON.stringify({ email: usuario.email, idDomicilio: nuevo.id }),
+                credentials: "include",
             });
 
             if (asociar.ok) {
@@ -128,25 +127,12 @@ export default function Perfil() {
         try {
             const respuesta = await fetch(`http://localhost:8080/api/clienteDomicilio/eliminar/${id}`, {
                 method: "DELETE",
-                headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
-                credentials: "include"
+                headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}` },
+                credentials: "include",
             });
-            if (respuesta.ok) {
-                setDomicilios(domicilios.filter((d) => d.id !== id))
-            } else {
-                let mensajeError = "No se pudo eliminar el domicilio";
-                try {
-                    const data = await respuesta.json();
-                    mensajeError = data.message || JSON.stringify(data);
-                } catch {
-                    const texto = await respuesta.text();
-                    if (texto) mensajeError = texto;
-                }
-                alert(mensajeError);
-            }
+            if (respuesta.ok) setDomicilios(domicilios.filter((d) => d.id !== id));
         } catch (error) {
             console.error("Error eliminando domicilio:", error);
-            alert("Ocurrió un error al intentar eliminar el domicilio.");
         }
     };
 
@@ -156,22 +142,22 @@ export default function Perfil() {
             return alert("Completá todos los campos del método de pago");
 
         try {
-            const respuesta = await fetch(`http://localhost:8080/api/medioDePago/agregar`, {
+            const respuesta = await fetch("http://localhost:8080/api/medioDePago/agregar", {
                 method: "POST",
-                headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
+                headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}` },
                 body: JSON.stringify({
                     nombreTitular,
                     numeroTarjeta: Number(numeroTarjeta),
                     fechaVencimiento: `${fechaVencimiento}-01`,
                 }),
-                credentials: "include"
+                credentials: "include",
             });
 
             if (respuesta.ok) {
                 const data = await respuesta.json();
                 setPagos([...pagos, data]);
                 setNuevoPago({ numeroTarjeta: "", nombreTitular: "", fechaVencimiento: "" });
-            } else alert("Error al agregar método de pago");
+            }
         } catch (error) {
             console.error("Error agregando método de pago:", error);
         }
@@ -182,22 +168,10 @@ export default function Perfil() {
         try {
             const respuesta = await fetch(`http://localhost:8080/api/medioDePago/eliminar/${id}`, {
                 method: "DELETE",
-                headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
-                credentials: "include"
+                headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}` },
+                credentials: "include",
             });
-            if (respuesta.ok) {
-                setPagos(pagos.filter((p) => p.id !== id));
-            } else {
-                let mensajeError = "No se pudo eliminar el método de pago.";
-                try {
-                    const data = await respuesta.json();
-                    mensajeError = data.message || JSON.stringify(data);
-                } catch {
-                    const texto = await respuesta.text();
-                    if (texto) mensajeError = texto;
-                }
-                alert(mensajeError);
-            }
+            if (respuesta.ok) setPagos(pagos.filter((p) => p.id !== id));
         } catch (error) {
             console.error("Error eliminando método de pago:", error);
         }
@@ -205,21 +179,15 @@ export default function Perfil() {
 
     return (
         <>
-            <MainHeader />
+            <Encabezado />
 
-            <div className="pt-24 min-h-screen w-full flex flex-col justify-between items-center bg-white">
-                {/* Título */}
-                <h1 className="font-bold text-3xl mb-6 text-center text-gray-800">
-                    Mi perfil
-                </h1>
+            <div className="pt-24 min-h-screen w-full flex flex-col items-center bg-gray-50 pb-28">
+                <h1 className="font-extrabold text-3xl mb-8 text-gray-800">Mi perfil</h1>
 
-                {/* Contenido */}
                 <div className="flex flex-col gap-8 w-[calc(100vw-4rem)] md:w-[calc(100vw-28rem)] max-w-3xl mb-8">
                     {/* Datos personales */}
-                    <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
-                        <h2 className="font-bold text-xl mb-4 text-gray-800">
-                            Datos personales
-                        </h2>
+                    <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-200">
+                        <h2 className="font-bold text-xl mb-4 text-gray-800">Datos personales</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <input className="bg-gray-100 rounded-2xl p-2" placeholder="Nombre" value={datos.nombre} onChange={(e) => setDatos({ ...datos, nombre: e.target.value })} />
                             <input className="bg-gray-100 rounded-2xl p-2" placeholder="Apellido" value={datos.apellido} onChange={(e) => setDatos({ ...datos, apellido: e.target.value })} />
@@ -231,15 +199,15 @@ export default function Perfil() {
                     </div>
 
                     {/* Domicilios */}
-                    <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
+                    <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-200">
                         <h2 className="font-bold text-xl mb-4 text-gray-800">Domicilios</h2>
                         {domicilios.length === 0 ? (
                             <p className="text-gray-500">No tenés domicilios registrados.</p>
                         ) : (
                             domicilios.map((d) => (
-                                <div key={d.id} className="flex justify-between items-center border rounded-xl p-2 mb-2">
+                                <div key={d.id} className="flex justify-between items-center border rounded-xl p-2 mb-2 bg-gray-50">
                                     <span>{d.direccion}</span>
-                                    <button onClick={() => eliminarDomicilio(d.id)} className="bg-red-500 text-white px-3 py-1 rounded-lg">
+                                    <button onClick={() => eliminarDomicilio(d.id)} className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">
                                         Eliminar
                                     </button>
                                 </div>
@@ -247,20 +215,22 @@ export default function Perfil() {
                         )}
                         <div className="flex gap-2 mt-3">
                             <input className="bg-gray-100 rounded-2xl p-2 flex-1" placeholder="Nueva dirección" value={direccion} onChange={(e) => setDireccion(e.target.value)} />
-                            <button onClick={agregarDomicilio} className="bg-orange-400 text-white font-bold px-3 py-2 rounded-2xl">+ Agregar domicilio</button>
+                            <button onClick={agregarDomicilio} className="bg-orange-400 text-white font-bold px-3 py-2 rounded-2xl hover:scale-105 transition-transform">
+                                + Agregar
+                            </button>
                         </div>
                     </div>
 
                     {/* Métodos de pago */}
-                    <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
+                    <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-200">
                         <h2 className="font-bold text-xl mb-4 text-gray-800">Métodos de pago</h2>
                         {pagos.length === 0 ? (
                             <p className="text-gray-500">No tenés métodos de pago registrados.</p>
                         ) : (
                             pagos.map((m) => (
-                                <div key={m.id} className="flex justify-between items-center border rounded-xl p-2 mb-2">
+                                <div key={m.id} className="flex justify-between items-center border rounded-xl p-2 mb-2 bg-gray-50">
                                     <span>{`${m.numeroTarjeta} - ${m.nombreTitular}`}</span>
-                                    <button onClick={() => eliminarPago(m.id)} className="bg-red-500 text-white px-3 py-1 rounded-lg">
+                                    <button onClick={() => eliminarPago(m.id)} className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">
                                         Eliminar
                                     </button>
                                 </div>
@@ -272,20 +242,25 @@ export default function Perfil() {
                             <input type="month" className="bg-gray-100 rounded-2xl p-2" value={nuevoPago.fechaVencimiento} onChange={(e) => setNuevoPago({ ...nuevoPago, fechaVencimiento: e.target.value })} />
                         </div>
                         <div className="flex justify-end mt-3">
-                            <button onClick={agregarPago} className="bg-orange-400 text-white font-bold px-3 py-2 rounded-2xl">
-                                + Agregar método de pago
+                            <button onClick={agregarPago} className="bg-orange-400 text-white font-bold px-3 py-2 rounded-2xl hover:scale-105 transition-transform">
+                                + Agregar
                             </button>
                         </div>
                     </div>
+                </div>
 
-                    {/* Guardar cambios */}
-                    <button onClick={guardarCambios} className="w-full bg-orange-400 text-white font-bold py-3 rounded-2xl shadow-2xl hover:scale-105 transition-transform text-lg mt-4">
+                {/* Botón para guardar */}
+                <div className="fixed bottom-4 right-4 z-40">
+                    <button
+                        onClick={guardarCambios}
+                        className="bg-orange-500 text-white font-bold py-3 px-6 rounded-2xl shadow-xl hover:scale-105 transition-transform text-lg"
+                    >
                         Guardar cambios
                     </button>
                 </div>
             </div>
 
-            <Footer />
+            <PieDePagina />
         </>
     );
 }

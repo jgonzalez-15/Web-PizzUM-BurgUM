@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { SessionContext } from "./context/SessionContext";
 
-import SidebarItem from "./SidebarItem"
+import ItemDeLaBarraLateraI from "./ItemDeLaBarraLateraI.jsx"
 
 function AdminSidebar(){
     const { setSessionType, setSessionInfo } = useContext(SessionContext)
@@ -30,7 +30,7 @@ function AdminSidebar(){
     return(
         <div className="h-[calc(100vh-4rem)] w-64 justify-between bg-gray-100 flex flex-col">
             <div className="flex flex-col">
-            <SidebarItem text='Administración' route='/admin'/>
+            <ItemDeLaBarraLateraI text='Administración' route='/admin'/>
             </div>
             <div className="w-full border-t">
                 <div className="w-full m-4">

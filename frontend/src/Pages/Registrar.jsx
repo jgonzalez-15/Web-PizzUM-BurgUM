@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "../Components/Footer";
+import PieDePagina from "../Components/PieDePagina.jsx";
+import Encabezado from "../Components/Encabezado.jsx";
 
-export default function Register() {
+export default function Registrar() {
     const [email, setEmail] = useState("");
     const [nombre, setNombre] = useState("");
     const [apellido, setApellido] = useState("");
@@ -17,10 +18,9 @@ export default function Register() {
 
     const navigate = useNavigate();
 
-    const handleRegister = async (e) => {
+    const registrarUsuario = async (e) => {
         e.preventDefault();
 
-        // Validaciones
         if (!email || !nombre || !apellido || !contrasenia || !confirmarContrasenia || !telefono || !fechaNacimiento || !direccion || !numeroTarjeta || !nombreTitular || !fechaVencimiento) {
             alert("Debes completar todos los campos.");
             return;
@@ -37,7 +37,7 @@ export default function Register() {
         }
 
         try {
-            const response = await fetch("http://localhost:8080/api/cliente/registrar", {
+            const respuesta = await fetch("http://localhost:8080/api/cliente/registrar", {
                 method: "POST",
                 headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}`},
                 body: JSON.stringify({
@@ -55,12 +55,12 @@ export default function Register() {
                 credentials: "include",
             });
 
-            if (response.ok) {
+            if (respuesta.ok) {
                 alert("Registro exitoso.");
                 navigate("/login");
             } else {
-                const data = await response.json().catch(() => ({}));
-                alert(data.message || "No se pudo completar el registro. Verificá los datos e intentá nuevamente.");
+                const datos = await respuesta.json().catch(() => ({}));
+                alert(datos.message || "No se pudo completar el registro. Verificá los datos e intentá nuevamente.");
             }
         } catch (error) {
             console.error("Error al registrar usuario:", error);
@@ -70,13 +70,18 @@ export default function Register() {
 
     return (
         <>
+            < Encabezado />
+
             <div className="min-h-screen w-full flex flex-col justify-between items-center bg-white">
-                {/* Botón Volver */}
-                <button
-                    onClick={() => navigate("/")}
-                    className="fixed top-4 left-4 z-20 bg-orange-400 text-white font-bold rounded-2xl px-4 py-2 shadow-xl hover:scale-105 transition-transform">
-                    Volver al inicio
-                </button>
+                {/* Botón volver al inicio */}
+                <div className="sticky top-[70px] left-0 w-full flex justify-start px-10 py-2 z-30">
+                    <button
+                        onClick={() => navigate("/")}
+                        className="bg-gray-200 text-gray-800 font-semibold rounded-2xl px-5 py-2 shadow-md hover:bg-gray-300 transition-all text-lg">
+                        ← Volver al inicio
+                    </button>
+                </div>
+
 
                 {/* Título */}
                 <h1 className="font-bold text-3xl mt-20 mb-6 text-center text-gray-800">
@@ -84,7 +89,7 @@ export default function Register() {
                 </h1>
 
                 {/* Formulario */}
-                <form onSubmit={handleRegister} className="flex flex-col gap-8 w-[calc(100vw-4rem)] md:w-[calc(100vw-28rem)] max-w-3xl mb-8">
+                <form onSubmit={registrarUsuario} className="flex flex-col gap-8 w-[calc(100vw-4rem)] md:w-[calc(100vw-28rem)] max-w-3xl mb-8">
                     {/* Datos del usuario */}
                     <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
                         <h2 className="font-bold text-xl mb-4 text-gray-800">
@@ -194,12 +199,12 @@ export default function Register() {
                         type="submit"
                         className="w-full bg-orange-400 text-white font-bold py-3 rounded-2xl shadow-2xl hover:scale-105 transition-transform text-lg mt-4"
                     >
-                        Registrarse
+                        Registrarme
                     </button>
                 </form>
 
-                {/* Footer */}
-                <Footer />
+                {/* PieDePagina */}
+                <PieDePagina />
             </div>
         </>
     );
