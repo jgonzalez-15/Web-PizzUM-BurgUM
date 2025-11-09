@@ -113,12 +113,15 @@ function InicioDeSesion() {
                         </div>
                     </form>
 
-                    <Link
-                        to="/registrarse"
-                        className="block text-center text-sm text-blue-700/60 hover:text-blue-700 mt-6 underline"
-                    >
-                        Crear una cuenta nueva
-                    </Link>
+                    <p className="text-center text-sm text-gray-600 mt-6">
+                        ¿No tenés cuenta?{" "}
+                        <Link
+                            to="/registrarse"
+                            className="text-orange-500 font-semibold hover:text-orange-600 transition-colors"
+                        >
+                            Registrate acá
+                        </Link>
+                    </p>
                 </div>
             </div>
 

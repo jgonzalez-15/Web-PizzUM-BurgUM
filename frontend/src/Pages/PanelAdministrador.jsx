@@ -1,8 +1,8 @@
 import { NavLink, Outlet } from "react-router-dom";
-import EncabezadoAdmin from "../Components/AdminHeader";
+import EncabezadoAdmin from "../Components/EncabezadoAdmin.jsx";
 import PieDePagina from "../Components/PieDePagina";
 
-export default function PanelAdministracion() {
+export default function PanelAdministrador() {
     const baseBtn =
         "px-5 py-3 rounded-full border-2 font-bold transition-all text-lg";
     const activo = "bg-orange-500 text-white border-orange-500 shadow-md";

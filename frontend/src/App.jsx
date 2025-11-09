@@ -97,8 +97,8 @@ function App() {
           {/* Admin */}
           {sessionType === "ADMIN" && (
               <>
-                <Route path="/admin" element={<Navigate to="/backoffice" replace />} />
-                <Route path="/backoffice" element={<PanelAdministrador />}>
+                <Route path="/admin" element={<Navigate to="/panelAdministrador" replace />} />
+                <Route path="/panelAdministrador" element={<PanelAdministrador />}>
                   <Route index element={<Navigate to="productos" replace />} />
                   <Route path="productos" element={<ProductosAdmin />} />
                   <Route path="pedidos" element={<PedidosAdmin />} />
