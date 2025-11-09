@@ -40,7 +40,7 @@ export default function NuevoPedido() {
     const agregarBebida = (bebida) => {
         const tieneCreaciones = items.some((i) => i.tipo !== "Bebida");
         if (!tieneCreaciones) {
-            alert("Primero debes tener al menos una creación antes de agregar bebidas 🍕🍔");
+            alert("Primero debes tener al menos una creación antes de agregar bebidas");
             return;
         }
         if (!bebida || bebida.idProducto == null) return;
@@ -214,7 +214,7 @@ export default function NuevoPedido() {
                                     </button>
 
                                     <button
-                                        onClick={() => (window.location.href = "/checkout")}
+                                        onClick={() => (window.location.href = "/paginaPago")}
                                         className="w-40 px-6 py-2.5 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.05]"
                                     >
                                         Pasar al pago

@@ -23,7 +23,7 @@ function BarraLateral() {
                 localStorage.removeItem("token");
                 setSessionInfo(null);
                 setSessionType("INVITADO");
-                navegar("/login");
+                navegar("/iniciarSesion");
             } else {
                 alert("No se pudo cerrar la sesión correctamente.");
             }
@@ -37,11 +37,11 @@ function BarraLateral() {
         <div className="h-[calc(100vh-4rem)] w-64 flex flex-col justify-between bg-white border-r border-gray-200 shadow-md">
             {/* Opciones del menú */}
             <div className="flex flex-col mt-4">
-                <ItemDeLaBarraLateraI texto="Inicio" ruta="/homepage" />
+                <ItemDeLaBarraLateraI texto="Inicio" ruta="/paginaPrincipal" />
                 {sessionType === "CLIENTE" && (
                     <>
-                        <ItemDeLaBarraLateraI texto="Tu orden" ruta="/order" />
-                        <ItemDeLaBarraLateraI texto="Tus pedidos" ruta="/viewOrders" />
+                        <ItemDeLaBarraLateraI texto="Tu orden" ruta="/hacerUnPedido" />
+                        <ItemDeLaBarraLateraI texto="Tus pedidos" ruta="/verPedidos" />
                         <ItemDeLaBarraLateraI texto="Tus favoritos" ruta="/favoritos" />
                         <ItemDeLaBarraLateraI texto="Ver tu Perfil" ruta="/perfil" />
                     </>
@@ -52,7 +52,7 @@ function BarraLateral() {
             <div className="border-t border-gray-300 p-4">
                 {sessionType === "INVITADO" ? (
                     <Link
-                        to="/login"
+                        to="/iniciarSesion"
                         className="block w-full text-center font-semibold text-gray-700 bg-orange-100 hover:bg-orange-200 transition-colors py-2 rounded-xl shadow-sm"
                     >
                         Iniciar sesión

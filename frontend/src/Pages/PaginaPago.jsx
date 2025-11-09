@@ -37,7 +37,7 @@ export default function PaginaPago() {
 
   const obtenerDatosCliente = async () => {
     try {
-      const [resDomicilios, resPagos] = await Promise.all([
+      const [respuestaDomicilios, respuestaPagos] = await Promise.all([
         fetch(`http://localhost:8080/api/clienteDomicilio/listar`, {
           headers: {
             "Content-Type": "application/json",
@@ -54,8 +54,8 @@ export default function PaginaPago() {
         }),
       ]);
 
-      if (resDomicilios.ok) setDomicilios(await resDomicilios.json());
-      if (resPagos.ok) setMediosDePago(await resPagos.json());
+      if (respuestaDomicilios.ok) setDomicilios(await respuestaDomicilios.json());
+      if (respuestaPagos.ok) setMediosDePago(await respuestaPagos.json());
     } catch (error) {
       console.error("Error al obtener datos del cliente:", error);
     } finally {
@@ -91,11 +91,26 @@ export default function PaginaPago() {
       });
 
       if (asociar.ok) {
-        setDomicilios((prev) => [...prev, domicilioCreado]);
         setDireccionNueva("");
+        await cargarDomicilios();
       }
     } catch (error) {
       console.error("Error al agregar domicilio:", error);
+    }
+  };
+
+  const cargarDomicilios = async () => {
+    try {
+      const resp = await fetch("http://localhost:8080/api/clienteDomicilio/listar", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        credentials: "include",
+      });
+      if (resp.ok) setDomicilios(await resp.json());
+    } catch (error) {
+      console.error("Error al cargar domicilios:", error);
     }
   };
 
@@ -232,7 +247,7 @@ export default function PaginaPago() {
       const data = await respuesta.json();
       setMensaje({ tipo: "ok", texto: `Pago aprobado: ${data.codigoTransaccion}` });
       clearCart();
-      navigate("/viewOrders");
+      navigate("/verPedidos");
     } catch (error) {
       console.error("Error al procesar pago:", error);
       setMensaje({ tipo: "error", texto: "No se pudo procesar el pago." });
@@ -253,6 +268,7 @@ export default function PaginaPago() {
 
   return (
       <>
+
         <Encabezado />
         <div className="pt-24 min-h-screen flex flex-col justify-between items-center bg-gray-50">
           <h1 className="text-3xl font-bold mb-6 text-gray-800">
@@ -260,7 +276,7 @@ export default function PaginaPago() {
           </h1>
 
           <div className="flex flex-col gap-8 w-[calc(100vw-4rem)] md:w-[calc(100vw-28rem)] max-w-3xl mb-10">
-            {/* DOMICILIO */}
+            {/* Domicilio */}
             <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
               <h2 className="font-bold text-xl mb-4 text-gray-800">
                 Seleccionar domicilio
@@ -293,7 +309,7 @@ export default function PaginaPago() {
               </div>
             </div>
 
-            {/* MÉTODO DE PAGO */}
+            {/* Metodo de pago */}
             <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
               <h2 className="font-bold text-xl mb-4 text-gray-800">
                 Seleccionar método de pago
@@ -349,7 +365,7 @@ export default function PaginaPago() {
               </div>
             </div>
 
-            {/* CONFIRMAR PAGO */}
+            {/* Confirmar pago */}
             <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
               <h2 className="font-bold text-xl mb-4 text-gray-800">
                 Confirmar pago

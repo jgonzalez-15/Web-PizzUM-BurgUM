@@ -114,8 +114,8 @@ export default function Perfil() {
             });
 
             if (asociar.ok) {
-                setDomicilios([...domicilios, nuevo]);
                 setDireccion("");
+                await cargarDomicilios();
             }
         } catch (error) {
             console.error("Error agregando domicilio:", error);
@@ -176,6 +176,22 @@ export default function Perfil() {
             console.error("Error eliminando método de pago:", error);
         }
     };
+
+    const cargarDomicilios = async () => {
+        try {
+            const resp = await fetch("http://localhost:8080/api/clienteDomicilio/listar", {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+                credentials: "include",
+            });
+            if (resp.ok) setDomicilios(await resp.json());
+        } catch (error) {
+            console.error("Error al cargar domicilios:", error);
+        }
+    };
+
 
     return (
         <>

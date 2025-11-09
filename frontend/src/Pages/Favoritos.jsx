@@ -104,7 +104,7 @@ export default function Favoritos() {
                                 Podés crear tus propias pizzas o hamburguesas y guardarlas aquí.
                             </p>
                             <button
-                                onClick={() => navigate("/inicio")}
+                                onClick={() => navigate("/")}
                                 className="mt-6 bg-orange-500 text-white font-semibold rounded-2xl px-6 py-2 hover:bg-orange-600 transition"
                             >
                                 Crear mi primera creación

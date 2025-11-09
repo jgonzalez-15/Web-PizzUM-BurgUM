@@ -57,8 +57,8 @@ export default function PaginaPrincipal() {
                     </p>
 
                     <div className="flex flex-col md:flex-row gap-4 justify-center">
-                        <Boton texto="Crear PizzUM" esPrincipal={true} ruta="/design/pizza" />
-                        <Boton texto="Crear BurgUM" esPrincipal={false} ruta="/design/burger" />
+                        <Boton texto="Crear PizzUM" esPrincipal={true} ruta="/diseniar/pizza" />
+                        <Boton texto="Crear BurgUM" esPrincipal={false} ruta="/diseniar/burger" />
                     </div>
                 </div>
             </section>

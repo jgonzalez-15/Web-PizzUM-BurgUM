@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-import AdminSidebar from "./AdminSidebar"
+import AdminSidebar from "./EncabezadoAdmin.jsx"
 
 
 function AdminHeader(){

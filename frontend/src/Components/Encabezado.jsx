@@ -18,6 +18,7 @@ function Encabezado() {
                     <Link
                         to="/homepage"
                         className="text-center font-extrabold text-2xl text-gray-800 hover:text-orange-500 transition-colors"
+
                     >
                         Pizz<span className="text-orange-500">UM</span> & Burg
                         <span className="text-orange-500">UM</span>
@@ -141,7 +142,7 @@ function Encabezado() {
                         <div className="p-4 border-t border-gray-300 flex justify-center bg-orange-50">
                             <SmallButton
                                 text="Ver mi pedido"
-                                route="/order"
+                                route="/hacerUnPedido"
                                 isPrimary={true}
                             />
                         </div>

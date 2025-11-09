@@ -57,7 +57,7 @@ export default function Registrar() {
 
             if (respuesta.ok) {
                 alert("Registro exitoso.");
-                navigate("/login");
+                navigate("/iniciarSesion");
             } else {
                 const datos = await respuesta.json().catch(() => ({}));
                 alert(datos.message || "No se pudo completar el registro. Verificá los datos e intentá nuevamente.");

@@ -38,6 +38,8 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
 
     @Override
     public MedioDePago obtenerMedioDePago(String email, Long id) {
+
+
         return medioDePagoRepository.findByClienteEmailAndId(email,id ).orElseThrow(MedioDePagoNoExisteException::new);
     }
 

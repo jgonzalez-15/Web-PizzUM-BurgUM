@@ -8,30 +8,51 @@ function InicioDeSesion() {
 
     const [email, setEmail] = useState("");
     const [contrasenia, setContrasenia] = useState("");
+    const [enviando, setEnviando] = useState(false);
+
     const navigate = useNavigate();
     const { setSessionType, setSessionInfo } = useContext(SessionContext);
 
     const iniciarSesion = async (e) => {
         e.preventDefault();
+        if (enviando) return;
+        setEnviando(true);
+
         try {
-            const response = await fetch("http://localhost:8080/auth/login", {
+            const respuesta = await fetch("http://localhost:8080/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, contrasenia }),
                 credentials: "include",
             });
 
-            if (response.ok) {
-                const data = await response.json();
-                setSessionType(data.rol);
-                setSessionInfo(data.info);
-                localStorage.setItem("token", data.jwt);
-                navigate("/");
-            } else {
+            if (!respuesta.ok) {
                 alert("Usuario o contraseña incorrectos");
+                return;
             }
-        } catch (error) {
-            console.error("Error al iniciar sesión:", error);
+
+            const data = await respuesta.json();
+
+            console.log("Datos recibidos:", data);
+
+            const rol = String(data.rol || "").toUpperCase();
+
+            setSessionType(data.rol);
+            setSessionInfo(data.info);
+            localStorage.setItem("token", data.jwt);
+            localStorage.setItem("sessionInfo", JSON.stringify(data.info));
+            localStorage.setItem("sessionType", data.rol);
+
+            if (rol === "ADMIN") {
+                navigate("/admin");
+            } else {
+                navigate("/");
+            }
+        } catch (err) {
+            console.error("Error al iniciar sesión:", err);
+            alert("No se pudo iniciar sesión. Intentalo de nuevo.");
+        } finally {
+            setEnviando(false);
         }
     };
 
@@ -75,21 +96,25 @@ function InicioDeSesion() {
                                 type="button"
                                 onClick={() => navigate("/")}
                                 className="px-6 py-2 rounded-2xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold shadow-sm transition-transform duration-150 hover:scale-105"
+                                disabled={enviando}
                             >
                                 Cancelar
                             </button>
 
                             <button
                                 type="submit"
-                                className="px-6 py-2 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-semibold shadow-md transition-transform duration-150 hover:scale-105"
+                                className={`px-6 py-2 rounded-2xl text-white font-semibold shadow-md transition-transform duration-150 hover:scale-105 ${
+                                    enviando ? "bg-orange-300 cursor-not-allowed" : "bg-orange-500 hover:bg-orange-600"
+                                }`}
+                                disabled={enviando}
                             >
-                                Ingresar
+                                {enviando ? "Ingresando..." : "Ingresar"}
                             </button>
                         </div>
                     </form>
 
                     <Link
-                        to="/register"
+                        to="/registrarse"
                         className="block text-center text-sm text-blue-700/60 hover:text-blue-700 mt-6 underline"
                     >
                         Crear una cuenta nueva
