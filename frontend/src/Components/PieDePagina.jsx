@@ -9,6 +9,7 @@ export default function PieDePagina() {
                     <p className="text-sm text-gray-600 max-w-xs">
                         En <span className="font-semibold text-orange-500">PizzUM & BurgUM </span>
                         trabajamos para ofrecerte la mejor experiencia gastronómica, combinando calidad, sabor y atención.
+                        Nuestro objetivo es transformar el modo de pedir comida, haciéndolo más simple, rápido y delicioso.
                     </p>
                 </div>
 
@@ -21,9 +22,10 @@ export default function PieDePagina() {
                 </div>
 
                 {/* Sección de derechos */}
-                <div className="text-sm text-gray-500 md:text-right">
+                <div className="text-sm text-gray-500 md:text-right mt-5">
                     <p className="font-semibold text-gray-700">Pizz<span className="text-orange-500">UM</span> & Burg<span className="text-orange-500">UM</span></p>
                     <p>© {new Date().getFullYear()} Todos los derechos reservados.</p>
+                    <p className="text-sm text-gray-600 mt-1">Desarollado por CreaTech</p>
                 </div>
             </div>
         </footer>

@@ -25,13 +25,21 @@ export default function ProductosAdmin() {
             });
             if (respuesta.ok) {
                 const datos = await respuesta.json();
-                setProductos(datos);
-            } else alert("No se pudieron obtener los productos.");
+
+                const productosOrdenados = datos.sort((a, b) =>
+                    a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base" })
+                );
+
+                setProductos(productosOrdenados);
+            } else {
+                alert("No se pudieron obtener los productos.");
+            }
         } catch (error) {
             console.error(error);
             alert("Error al conectar con el servidor.");
         }
     };
+
 
     useEffect(() => {
         cargarProductos();

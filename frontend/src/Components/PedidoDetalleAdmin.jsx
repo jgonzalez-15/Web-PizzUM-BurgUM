@@ -13,6 +13,7 @@ export default function PedidoDetalleAdmin({ pedido, Cerrar }) {
                 <div className="space-y-2 mb-6">
                     <p><strong>Fecha:</strong> {pedido.fecha}</p>
                     <p><strong>Estado:</strong> {pedido.estado}</p>
+                    <p><strong>Domicilio:</strong> {pedido.domicilio.direccion}</p>
                     <p><strong>Total:</strong> ${precioTotal.toFixed(2)}</p>
                 </div>
 

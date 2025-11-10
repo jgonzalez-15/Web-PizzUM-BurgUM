@@ -160,7 +160,11 @@ export default function Perfil() {
                 },
                 credentials: "include",
             });
-            if (respuesta.ok) setDomicilios(domicilios.filter((d) => d.id !== id));
+            if (respuesta.ok) {
+                setDomicilios(domicilios.filter((d) => d.id !== id));
+            } else {
+                alert("Error al eliminar domicilio");
+            }
         } catch (error) {
             console.error("Error eliminando domicilio:", error);
         }

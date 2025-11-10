@@ -3,9 +3,7 @@ package uy.um.edu.pizzumandburgum.mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.response.PedidoBebidaResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.PedidoCreacionDTO;
-import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.*;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
 import uy.um.edu.pizzumandburgum.entities.PedidoBebida;
 import uy.um.edu.pizzumandburgum.entities.PedidoCreacion;
@@ -54,6 +52,12 @@ public class PedidoMapper {
             }
         }
 
-        return new PedidoResponseDTO(pedido.getId(), pedido.getPrecio(), pedido.getFecha(), pedido.getEstado(), pedido.getClienteAsignado().getEmail(), pedido.isEstaPago(), pedido.getDomicilio().getId(), creacionesDTO, bebidasDTO, numeroMedioDePago);
+        DomicilioSinPedidosResponseDTO domicilioDTO = null;
+        if (pedido.getDomicilio() != null) {
+            domicilioDTO = new DomicilioSinPedidosResponseDTO(pedido.getDomicilio().getId(), pedido.getDomicilio().getDireccion(), pedido.getDomicilio().isEstaActivo());
+        }
+
+
+        return new PedidoResponseDTO(pedido.getId(), pedido.getPrecio(), pedido.getFecha(), pedido.getEstado(), pedido.getClienteAsignado().getEmail(), pedido.isEstaPago(), domicilioDTO, creacionesDTO, bebidasDTO, numeroMedioDePago);
     }
 }

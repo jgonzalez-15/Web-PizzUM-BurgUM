@@ -5,16 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DomicilioResponseDTO {
+public class DomicilioSinPedidosResponseDTO {
     private Long id;
     private String direccion;
-    private List<PedidoResponseDTO> pedidos;
     private boolean estaActivo;
 }
 

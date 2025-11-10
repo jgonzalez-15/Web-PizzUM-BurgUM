@@ -11,6 +11,8 @@ import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.ClienteDomicilio;
 import uy.um.edu.pizzumandburgum.entities.Domicilio;
 import uy.um.edu.pizzumandburgum.entities.Historicos.HistoricoDomicilioModificaciones;
+import uy.um.edu.pizzumandburgum.entities.Pedido;
+import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioConPedidoEnCursoException;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.SinAccesoAlDomicilioException;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.UnicoDomicilioException;
@@ -57,6 +59,12 @@ public class DomicilioServiceImpl implements DomicilioService {
         Domicilio domicilio = domicilioRepository.findById(idDomicilio).orElseThrow(DomicilioNoExisteException::new);
         if (dto.getDireccion() != null){
             domicilio.setDireccion(dto.getDireccion());
+        }
+
+        for (Pedido pedido : domicilio.getPedidos()) {
+            if (pedido.getEstado() != null && !pedido.getEstado().equalsIgnoreCase("Entregado")) {
+                throw new DomicilioConPedidoEnCursoException();
+            }
         }
         domicilio.setHistorico(viejo.getHistorico());
         domicilioRepository.save(domicilio);
