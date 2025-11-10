@@ -108,7 +108,6 @@ function PedidosFechaAdmin() {
             )}
           </div>
         </div>
-        <PieDePagina />
       </>
   );
 }

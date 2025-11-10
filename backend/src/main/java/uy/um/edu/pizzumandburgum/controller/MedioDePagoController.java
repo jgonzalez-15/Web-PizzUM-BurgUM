@@ -30,7 +30,9 @@ public class MedioDePagoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/{id}/mdp")
+
+
+    @PutMapping("editar/{id}")
     public ResponseEntity<MedioDePagoDTO> editarMDP(@PathVariable  Long id, @RequestBody MedioDePagoUpdateDTO dto) {
         MedioDePagoDTO response = medioDePagoService.editarMDP(id, dto);
         return ResponseEntity.ok(response);

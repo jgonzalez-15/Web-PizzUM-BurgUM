@@ -26,7 +26,7 @@ public class DomicilioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/domicilio")
+    @PutMapping("/editar/{idDomicilio}")
     public ResponseEntity<DomicilioResponseDTO> editarDomicilio(@PathVariable Long idDomicilio, @RequestBody DomicilioUpdateDTO dto) {
         DomicilioResponseDTO response = domicilioService.editarPerfil(idDomicilio, dto);
         return ResponseEntity.ok(response);

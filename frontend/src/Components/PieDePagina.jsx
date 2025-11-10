@@ -15,8 +15,8 @@ export default function PieDePagina() {
                 {/* Sección "Contacto" */}
                 <div>
                     <h3 className="font-bold text-lg mb-2 text-gray-800">Contacto</h3>
-                    <p className="text-sm text-gray-600">📞 +598 939596959</p>
-                    <p className="text-sm text-gray-600">📧 contacto@pizzum&burgum.com</p>
+                    <p className="text-sm text-gray-600">📞 27074461</p>
+                    <p className="text-sm text-gray-600">📧 info@p&b.uy</p>
                     <p className="text-sm text-gray-600">📍 Montevideo, Uruguay</p>
                 </div>
 

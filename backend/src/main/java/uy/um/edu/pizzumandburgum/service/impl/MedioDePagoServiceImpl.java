@@ -64,6 +64,9 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
     public MedioDePagoDTO editarMDP(Long id, MedioDePagoUpdateDTO dto) {
         MedioDePago viejo = medioDePagoRepository.findById(id).orElseThrow(MedioDePagoNoExisteException::new);
         MedioDePago mdp = new MedioDePago();
+
+        mdp.setCliente(viejo.getCliente());
+
         if (dto.getNombreTitular() != null) {
             mdp.setNombreTitular(dto.getNombreTitular());
         }
@@ -73,7 +76,7 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
         if (dto.getNumeroTarjeta() != null) {
             mdp.setNumeroTarjeta(dto.getNumeroTarjeta());
         }
-        mdp.setHistorico(viejo.getHistorico());
+        mdp.setHistorico(new ArrayList<>(viejo.getHistorico()));
         medioDePagoRepository.save(mdp);
         historicoService.registrarActualizacion(viejo,mdp);
 
@@ -82,7 +85,7 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
 
     @Override
     public List<MedioDePagoDTO> listarPorCliente(String email) {
-        List<MedioDePago> medios = medioDePagoRepository.findByClienteEmail(email);
+        List<MedioDePago> medios = medioDePagoRepository.findByClienteEmailAndEstaActivoTrue(email);
         List<MedioDePagoDTO> listaDTO = new ArrayList<>();
 
         for (MedioDePago medio : medios) {
@@ -92,6 +95,7 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
 
         return listaDTO;
     }
+
 
     @Override
     public void eliminarMedioDePago(String email, Long id) {
