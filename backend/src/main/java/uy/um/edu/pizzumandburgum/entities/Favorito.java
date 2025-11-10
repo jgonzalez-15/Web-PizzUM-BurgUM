@@ -26,5 +26,11 @@ public class Favorito {
     @JoinColumn (name = "creacion_id")
     private Creacion creacion;
 
-    private float precio;
+    public float getPrecio() {
+        return this.creacion != null ? this.creacion.getPrecio() : 0f;
+    }
+
+    public void setPrecio(float precio) {
+        this.creacion.setPrecio(precio);
+    }
 }

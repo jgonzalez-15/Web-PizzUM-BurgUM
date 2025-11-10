@@ -32,10 +32,20 @@ export default function PedidoDetalleAdmin({ pedido, Cerrar }) {
                                     <span className="text-sm text-gray-600">
                     x{c.cantidad ?? 1}
                   </span>
+                                    {c.creacion?.tipo === "Pizza" && (
+                                        <div className="text-sm text-gray-600 mt-1">
+                                            Tamaño:{" "}
+                                            {c.creacion.ingredientes
+                                                .filter((ing) => ing.tipo == "Tamanio")
+                                                .map((ing) => ing.nombre)
+                                                .join(", ")}
+                                        </div>
+                                    )}
                                     {c.creacion?.ingredientes?.length > 0 && (
                                         <div className="text-sm text-gray-600 mt-1">
                                             Ingredientes:{" "}
                                             {c.creacion.ingredientes
+                                                .filter((ing) => ing.tipo != "Tamanio")
                                                 .map((ing) => ing.nombre)
                                                 .join(", ")}
                                         </div>

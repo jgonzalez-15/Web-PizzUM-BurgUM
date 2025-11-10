@@ -14,7 +14,6 @@ import java.util.List;
 public class PizzaResponseDTO {
     private long idCreacion;
     private float precio;
-    private String tamanio;
     private ClienteResponseDTO cliente;
     private List<PizzaProductoResponseDTO> ingredientes;
 

@@ -154,6 +154,7 @@ export default function ProductosAdmin() {
                     >
                         <option value="Todos">Todos</option>
                         <option value="Masa">Masa para Pizza</option>
+                        <option value="Tamanio">Tamaño de Pizza</option>
                         <option value="Salsa">Salsa para Pizza</option>
                         <option value="Topping">Topping para Pizza</option>
                         <option value="Pan">Pan para Hamburguesa</option>
@@ -229,6 +230,7 @@ function FormularioProducto({ producto, setProducto, onGuardar, onCancelar, esEd
                     onChange={(e) => setProducto({ ...producto, tipo: e.target.value })}
                 >
                     <option value="Masa">Masa para Pizza</option>
+                    <option value="Tamanio">Tamaño de Pizza</option>
                     <option value="Salsa">Salsa para Pizza</option>
                     <option value="Topping">Topping para Pizza</option>
                     <option value="Pan">Pan para Hamburguesa</option>

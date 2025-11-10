@@ -33,7 +33,6 @@ public class PizzaMapper {
         Pizza pizza = new Pizza();
         Cliente cliente = clienteRepository.findByEmail(dto.getClienteId()).orElseThrow(ClienteNoExisteException::new);
         pizza.setCliente(cliente);
-        pizza.setTamanio(dto.getTamanio());
         List<PizzaProducto>pizzaProductoList = new ArrayList<>();
         for (PizzaProductoRequestDTO pp: dto.getIngredientes()){
             PizzaProducto pizzaProducto = pizzaProductoMapper.toEntity(pp);
@@ -54,6 +53,6 @@ public class PizzaMapper {
                 ingredientesDTO.add(pizzaProductoMapper.toResponseDTO(pp));
             }
         }
-        return new PizzaResponseDTO(pizza.getId(), pizza.getPrecio(),pizza.getTamanio(),clienteDTO,ingredientesDTO);
+        return new PizzaResponseDTO(pizza.getId(), pizza.getPrecio(),clienteDTO,ingredientesDTO);
     }
 }

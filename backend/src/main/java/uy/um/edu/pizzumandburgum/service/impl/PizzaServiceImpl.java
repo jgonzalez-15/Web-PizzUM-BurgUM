@@ -11,6 +11,7 @@ import uy.um.edu.pizzumandburgum.exceptions.Creacion.Hamburguesa.HamburguesaNoEn
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Pizza.PizzaNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Pizza.SinMasaException;
 import uy.um.edu.pizzumandburgum.exceptions.Creacion.Pizza.SinSalsaException;
+import uy.um.edu.pizzumandburgum.exceptions.Creacion.Pizza.SinTamanioException;
 import uy.um.edu.pizzumandburgum.exceptions.Producto.ProductoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.PizzaMapper;
@@ -49,16 +50,23 @@ public class PizzaServiceImpl implements PizzaService {
         Cliente cliente = clienteRepository.findByEmail(dto.getClienteId()).orElseThrow(ClienteNoExisteException::new);
 
         Pizza pizza = new Pizza();
+        boolean tieneTamanio = false;
         boolean tieneMasa = false;
         boolean tieneSalsa = false;
 
         for (PizzaProductoRequestDTO ppdto : dto.getIngredientes()) {
             Producto producto = productoRepository.findById(ppdto.getIdProducto()).orElseThrow(ProductoNoExisteException::new);
-            if ("Masa".equalsIgnoreCase(producto.getTipo())) {
+            if ("Tamanio".equals(producto.getTipo())) {
+                tieneTamanio = true;
+            } if ("Masa".equalsIgnoreCase(producto.getTipo())) {
                 tieneMasa = true;
             } else if ("Salsa".equalsIgnoreCase(producto.getTipo())) {
                 tieneSalsa = true;
             }
+        }
+
+        if (!tieneTamanio) {
+            throw new SinTamanioException();
         }
 
         if (!tieneMasa) {
@@ -69,7 +77,6 @@ public class PizzaServiceImpl implements PizzaService {
             throw new SinSalsaException();
         }
 
-        pizza.setTamanio(dto.getTamanio());
         pizza.setCliente(cliente);
         Pizza guardado = pizzaRepository.save(pizza);
 
