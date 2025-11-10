@@ -45,6 +45,14 @@ export default function BarraLateralAdmin({ cerrarMenu }) {
                 >
                     <span className="text-xl"></span> Administradores
                 </NavLink>
+
+                <NavLink
+                    to="/panelAdministrador/pedidosFecha"
+                    onClick={cerrarMenu}
+                    className={({ isActive }) => `${baseLink} ${isActive ? activo : inactivo}`}
+                >
+                    <span className="text-xl"></span> Pedidos por fecha
+                </NavLink>
             </div>
 
             {/* Botón cerrar sesión */}

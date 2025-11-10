@@ -21,6 +21,8 @@ import PanelAdministrador from "./Pages/PanelAdministrador.jsx";
 import ProductosAdmin from "./Pages/ProductosAdmin.jsx";
 import PedidosAdmin from "./Pages/PedidosAdmin.jsx";
 import AgregarAdministradores from "./pages/AgregarAdministradores.jsx";
+import PedidosFechaAdmin from "./Pages/PedidosFechaAdmin.jsx";
+
 
 function App() {
   const { sessionType, setSessionType, setSessionInfo } = useContext(SessionContext);
@@ -103,7 +105,9 @@ function App() {
                   <Route path="productos" element={<ProductosAdmin />} />
                   <Route path="pedidos" element={<PedidosAdmin />} />
                   <Route path="administradores" element={<AgregarAdministradores />} />
-              </Route>
+                  <Route path="pedidosFecha" element={<PedidosFechaAdmin />} />
+
+                </Route>
                 </>
           )}
 
