@@ -111,6 +111,7 @@ function DiseniarCreacion({ tipo }) {
       }
 
       const nuevaCreacion = await respuesta.json();
+      nuevaCreacion.id = nuevaCreacion.idCreacion;
       nuevaCreacion.nombre = nombre;
       nuevaCreacion.tipo = tipo;
       nuevaCreacion.precio = precioTotal;

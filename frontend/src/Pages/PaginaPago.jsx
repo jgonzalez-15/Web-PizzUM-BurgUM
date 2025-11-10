@@ -7,7 +7,7 @@ import PieDePagina from "../Components/PieDePagina.jsx";
 
 export default function PaginaPago() {
   const { sessionInfo } = useContext(SessionContext);
-  const { items, clearCart } = usarCarrito();
+  const { items, limpiarCarrito } = usarCarrito();
   const navigate = useNavigate();
   const correoCliente = sessionInfo?.email;
 
@@ -91,6 +91,7 @@ export default function PaginaPago() {
       });
 
       if (asociar.ok) {
+
         setDireccionNueva("");
         await cargarDomicilios();
       }
@@ -170,7 +171,7 @@ export default function PaginaPago() {
         }));
 
     try {
-      const respuesta = await fetch("http://localhost:8080/api/pedido/realizar", {
+      const respuesta = await fetch("http://localhost:8080/api/pedido/realizarPedido", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -246,7 +247,7 @@ export default function PaginaPago() {
 
       const data = await respuesta.json();
       setMensaje({ tipo: "ok", texto: `Pago aprobado: ${data.codigoTransaccion}` });
-      clearCart();
+      limpiarCarrito();
       navigate("/verPedidos");
     } catch (error) {
       console.error("Error al procesar pago:", error);

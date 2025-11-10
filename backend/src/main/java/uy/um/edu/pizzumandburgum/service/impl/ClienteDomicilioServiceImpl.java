@@ -58,16 +58,22 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
 
     @Override
     public Domicilio obtenerDomicilio(String clienteId, String direccion) {
-        Cliente cliente = clienteRepository.findByEmail(clienteId).orElseThrow(ClienteNoExisteException::new);
-        Domicilio domicilio = new Domicilio();
-        domicilio.setDireccion(direccion);
-        for (ClienteDomicilio d : cliente.getDomicilios() ){
-            if (d.getDomicilio().equals(domicilio.getDireccion())){
-               return domicilioRepository.findById(d.getDomicilio().getDireccion()).orElseThrow(DomicilioNoExisteException::new);
+        Cliente cliente = clienteRepository.findByEmail(clienteId)
+                .orElseThrow(ClienteNoExisteException::new);
+
+        for (ClienteDomicilio cd : cliente.getDomicilios()) {
+            Domicilio domicilio = cd.getDomicilio();
+            if (domicilio.getDireccion().equalsIgnoreCase(direccion)) {
+                return domicilio;
             }
         }
-        return null;
+
+        return domicilioRepository.findAll().stream()
+                .filter(d -> d.getDireccion().equalsIgnoreCase(direccion))
+                .findFirst()
+                .orElseThrow(DomicilioNoExisteException::new);
     }
+
 
     @Override
     public List<DomicilioResponseDTO> listarDomiciliosDeCliente(String emailCliente) {

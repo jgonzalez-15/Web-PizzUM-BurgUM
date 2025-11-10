@@ -1,6 +1,5 @@
 package uy.um.edu.pizzumandburgum.controller;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -25,11 +24,12 @@ public class PedidoController {
     @Autowired
     private PedidoService pedidoService;
 
+
     @Autowired
     private PedidoRepository pedidoRepository;
 
     @PreAuthorize("hasAuthority('CLIENTE')")
-    @PostMapping("/realizar")
+    @PostMapping("/realizarPedido")
     public ResponseEntity<PedidoResponseDTO> realizarPedido(@RequestBody PedidoRequestDTO dto) {
         PedidoResponseDTO pedido = pedidoService.realizarPedido(dto);
         return ResponseEntity.ok(pedido);
@@ -81,6 +81,7 @@ public class PedidoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPedido);
     }
 
+    @PreAuthorize("hasAuthority('CLIENTE') or hasAuthority('ADMIN')")
     @GetMapping("/ver/{id}")
     public ResponseEntity<PedidoResponseDTO> obtenerPedido(@PathVariable Long id) {
         PedidoResponseDTO pedido = pedidoService.obtenerPedidoPorId(id);

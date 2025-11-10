@@ -4,15 +4,16 @@ export default function ProductosAdmin() {
     const [productos, setProductos] = useState([]);
     const [productosFiltrados, setProductosFiltrados] = useState([]);
     const [tipoFiltro, setTipoFiltro] = useState("Todos");
-    const [mostrarFormularioNuevo, setMostrarFormularioNuevo] = useState(false);
-    const [productoNuevo, setProductoNuevo] = useState({
+    const [mostrarFormulario, setMostrarFormulario] = useState(false);
+    const [productoEditando, setProductoEditando] = useState(null);
+
+    const [productoActual, setProductoActual] = useState({
         nombre: "",
         precio: "",
         tipo: "Masa",
         sinTacc: false,
         visible: true,
     });
-    const [productoEditar, setProductoEditar] = useState(null);
 
     const cargarProductos = async () => {
         try {
@@ -44,50 +45,38 @@ export default function ProductosAdmin() {
         );
     }, [tipoFiltro, productos]);
 
-    const crearProducto = async () => {
+    const guardarProducto = async () => {
+        const esEdicion = !!productoEditando;
+        const url = esEdicion
+            ? `http://localhost:8080/api/producto/${productoActual.idProducto}/editar`
+            : "http://localhost:8080/api/producto/crearProducto";
+
+        const metodo = esEdicion ? "PUT" : "POST";
+
         try {
-            const respuesta = await fetch("http://localhost:8080/api/producto/crearProducto", {
-                method: "POST",
+            const respuesta = await fetch(url, {
+                method: metodo,
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
-                body: JSON.stringify(productoNuevo),
+                body: JSON.stringify(productoActual),
             });
+
             if (respuesta.ok) {
-                setMostrarFormularioNuevo(false);
-                cargarProductos();
-                setProductoNuevo({
+                setMostrarFormulario(false);
+                setProductoEditando(null);
+                setProductoActual({
                     nombre: "",
                     precio: "",
                     tipo: "Masa",
                     sinTacc: false,
                     visible: true,
                 });
-            } else alert("Error al crear el producto.");
-        } catch (error) {
-            console.error(error);
-            alert("Error al conectar con el servidor.");
-        }
-    };
-
-    const guardarEdicion = async () => {
-        try {
-            const respuesta = await fetch(
-                `http://localhost:8080/api/producto/${productoEditar.idProducto}/editar`,
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                    body: JSON.stringify(productoEditar),
-                }
-            );
-            if (respuesta.ok) {
-                setProductoEditar(null);
                 cargarProductos();
-            } else alert("Error al editar el producto.");
+            } else {
+                alert("Error al guardar el producto.");
+            }
         } catch (error) {
             console.error(error);
             alert("Error al conectar con el servidor.");
@@ -115,6 +104,31 @@ export default function ProductosAdmin() {
         }
     };
 
+    const iniciarEdicion = (producto) => {
+        setProductoActual(producto);
+        setProductoEditando(producto);
+        setMostrarFormulario(true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    const iniciarNuevo = () => {
+        setProductoActual({
+            nombre: "",
+            precio: "",
+            tipo: "Masa",
+            sinTacc: false,
+            visible: true,
+        });
+        setProductoEditando(null);
+        setMostrarFormulario(true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    const cancelarFormulario = () => {
+        setMostrarFormulario(false);
+        setProductoEditando(null);
+    };
+
     return (
         <div className="min-h-screen w-full bg-gray-50 flex flex-col items-center py-12 px-4 md:px-8">
             <h1 className="text-3xl font-extrabold text-gray-800 mb-10 text-center">
@@ -122,12 +136,15 @@ export default function ProductosAdmin() {
             </h1>
 
             <div className="w-full max-w-5xl bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                {/* Botones superiores */}
                 <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-8">
                     <button
-                        onClick={() => setMostrarFormularioNuevo(!mostrarFormularioNuevo)}
+                        onClick={mostrarFormulario ? cancelarFormulario : iniciarNuevo}
                         className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-full shadow-md transition-transform transform hover:scale-105 w-full md:w-auto"
                     >
-                        {mostrarFormularioNuevo ? "Cancelar" : "+ Agregar producto"}
+                        {mostrarFormulario
+                            ? "Cancelar"
+                            : "+ Agregar producto"}
                     </button>
 
                     <select
@@ -147,26 +164,18 @@ export default function ProductosAdmin() {
                     </select>
                 </div>
 
-                {mostrarFormularioNuevo && (
+                {/* Formulario */}
+                {mostrarFormulario && (
                     <FormularioProducto
-                        producto={productoNuevo}
-                        setProducto={setProductoNuevo}
-                        onGuardar={crearProducto}
-                        onCancelar={() => setMostrarFormularioNuevo(false)}
-                        esEdicion={false}
+                        producto={productoActual}
+                        setProducto={setProductoActual}
+                        onGuardar={guardarProducto}
+                        onCancelar={cancelarFormulario}
+                        esEdicion={!!productoEditando}
                     />
                 )}
 
-                {productoEditar && (
-                    <FormularioProducto
-                        producto={productoEditar}
-                        setProducto={setProductoEditar}
-                        onGuardar={guardarEdicion}
-                        onCancelar={() => setProductoEditar(null)}
-                        esEdicion={true}
-                    />
-                )}
-
+                {/* Listado */}
                 <div className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
                     {productosFiltrados.length === 0 ? (
                         <p className="text-gray-500 italic text-center col-span-full">
@@ -177,7 +186,7 @@ export default function ProductosAdmin() {
                             <TarjetaProducto
                                 key={producto.idProducto}
                                 producto={producto}
-                                onEditar={() => setProductoEditar(producto)}
+                                onEditar={() => iniciarEdicion(producto)}
                                 onEliminar={() => eliminarProducto(producto.idProducto)}
                             />
                         ))
@@ -190,7 +199,7 @@ export default function ProductosAdmin() {
 
 function FormularioProducto({ producto, setProducto, onGuardar, onCancelar, esEdicion }) {
     return (
-        <div className="bg-gray-50 rounded-2xl p-6 shadow-inner mb-8">
+        <div className="bg-gray-50 rounded-2xl p-6 shadow-inner mb-8 border border-gray-200">
             <h2 className="text-xl font-semibold mb-4 text-center text-gray-700">
                 {esEdicion ? "Editar producto" : "Nuevo producto"}
             </h2>

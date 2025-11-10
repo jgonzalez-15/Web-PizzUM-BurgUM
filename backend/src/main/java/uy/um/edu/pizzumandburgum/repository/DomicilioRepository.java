@@ -8,8 +8,8 @@ import uy.um.edu.pizzumandburgum.entities.Domicilio;
 import java.util.List;
 import java.util.Optional;
 
-public interface DomicilioRepository extends JpaRepository<Domicilio,String> {
-    Optional<Domicilio>findById(Long Domicilio);
+public interface DomicilioRepository extends JpaRepository<Domicilio,Long> {
+    Optional<Domicilio>findById(Long domicilio);
     @Query("SELECT COUNT(cd) FROM ClienteDomicilio cd WHERE cd.cliente.email = :clienteId")
     long countByClienteId(@Param("clienteId") String clienteId);
 

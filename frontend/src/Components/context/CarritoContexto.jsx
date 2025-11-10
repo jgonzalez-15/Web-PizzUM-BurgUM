@@ -1,10 +1,26 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const CarritoContexto = createContext();
 
 export const CarritoProveedor = ({ children }) => {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(() => {
+    try {
+      const itemsGuardados = localStorage.getItem("carrito");
+      return itemsGuardados ? JSON.parse(itemsGuardados) : [];
+    } catch (error) {
+      console.error("Error al cargar carrito:", error);
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("carrito", JSON.stringify(items));
+    } catch (error) {
+      console.error("Error al guardar carrito:", error);
+    }
+  }, [items]);
 
   const agregarItem = (item) => {
     const itemConIdUnico = { ...item, _uuid: uuidv4() };
@@ -21,7 +37,10 @@ export const CarritoProveedor = ({ children }) => {
     });
   };
 
-  const limpiarCarrito = () => setItems([]);
+  const limpiarCarrito = () => {
+    setItems([]);
+    localStorage.removeItem("carrito");
+  };
 
   return (
       <CarritoContexto.Provider

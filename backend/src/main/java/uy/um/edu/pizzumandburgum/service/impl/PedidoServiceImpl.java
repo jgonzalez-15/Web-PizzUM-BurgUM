@@ -63,6 +63,9 @@ public class PedidoServiceImpl implements PedidoService {
     @Autowired
     private FavoritoRepository favoritoRepository;
 
+    @Autowired
+    private PagoDummyRepository pagoDummyRepository;
+
 
     @Override
     public PedidoResponseDTO realizarPedido(PedidoRequestDTO dto) {
@@ -119,22 +122,15 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public void eliminarPedido(Long idPedido) {
-        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow(PedidoNoEncontradoException::new);
+        Pedido pedido = pedidoRepository.findById(idPedido)
+                .orElseThrow(PedidoNoEncontradoException::new);
 
-        List<PedidoCreacion> creacionesDelPedido = new ArrayList<>(pedido.getCreacionesPedido());
-
-        for (PedidoCreacion pc : creacionesDelPedido) {
-            Creacion creacion = pc.getCreacion();
-            pedido.getCreacionesPedido().remove(pc);
-
-            boolean esFavorita = favoritoRepository.existsByCreacionId(creacion.getId());
-
-            if (!esFavorita) {
-                creacionRepository.delete(creacion);
-            }
+        if (!"En Cola".equals(pedido.getEstado())) {
+            throw new IllegalStateException("Solo se pueden cancelar pedidos en cola.");
         }
 
-        pedidoRepository.delete(pedido);
+        pedido.setEstado("Cancelado");
+        pedidoRepository.save(pedido);
     }
 
     @Override

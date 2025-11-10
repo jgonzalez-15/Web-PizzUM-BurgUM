@@ -27,6 +27,7 @@ export default function NuevoPedido() {
                 });
                 if (!res.ok) throw new Error("Error al listar bebidas");
 
+
                 const data = await res.json();
                 setBebidas(data || []);
             } catch {
