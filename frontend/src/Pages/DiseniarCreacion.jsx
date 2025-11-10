@@ -1,22 +1,23 @@
 import { useState, useEffect, useContext } from "react";
-import { DesignContext } from "../Components/context/DesignContext";
+import { DisenioContexto } from "../Components/context/DisenioContexto.jsx";
 import { SessionContext } from "../Components/context/SessionContext";
 import Encabezado from "../Components/Encabezado.jsx";
-import IngredientAdder from "../Components/IngredientAdder.jsx";
 import PieDePagina from "../Components/PieDePagina.jsx";
 import { usarCarrito } from "../Components/context/CarritoContexto.jsx";
+import AgregadorDeIngredientes from "../Components/AgregadorDeIngredientes.jsx";
 
 function DiseniarCreacion({ tipo }) {
   const { sessionInfo } = useContext(SessionContext);
   const { agregarItem } = usarCarrito();
   const clienteId = sessionInfo?.email;
 
-  const [glutenFreeOnly, setGlutenFreeOnly] = useState(false);
-  const [ingredients, setIngredients] = useState([]);
+  const [soloSinGluten, setSoloSinGluten] = useState(false);
+  const [ingredientes, setIngredientes] = useState([]);
   const [cantCarnes, setCantCarnes] = useState(1);
   const [tamanio, setTamanio] = useState("1");
   const [creacion, setCreacion] = useState();
   const [nombre, setNombre] = useState("Nueva creación");
+  const [precioTotal, setPrecioTotal] = useState(0);
 
   useEffect(() => window.scrollTo(0, 0), []);
 
@@ -32,7 +33,7 @@ function DiseniarCreacion({ tipo }) {
         });
         if (respuesta.ok) {
           const productos = await respuesta.json();
-          setIngredients(productos.map((item) => ({ ...item, selected: false })));
+          setIngredientes(productos.map((item) => ({ ...item, seleccionado: false })));
         } else alert("Error al obtener los ingredientes");
       } catch {
         alert("No se pudo conectar con el servidor");
@@ -41,11 +42,24 @@ function DiseniarCreacion({ tipo }) {
     obtenerIngredientes();
   }, []);
 
-  useEffect(() => setCreacion(undefined), [ingredients, cantCarnes, tamanio]);
-  useEffect(() => setIngredients((prev) => prev.map((i) => ({ ...i, selected: false }))), [glutenFreeOnly]);
+  useEffect(() => setCreacion(undefined), [ingredientes, cantCarnes, tamanio]);
+  useEffect(() => setIngredientes((prev) => prev.map((i) => ({ ...i, seleccionado: false }))), [soloSinGluten]);
+
+  useEffect(() => {
+    const seleccionados = ingredientes.filter((i) => i.seleccionado);
+    let total = seleccionados.reduce((sum, i) => {
+      const cantidad = i.tipo === "Hamburguesa" ? cantCarnes : 1;
+      return sum + (i.precio || 0) * cantidad;
+    }, 0);
+    if (tipo === "Pizza") {
+      if (tamanio === "2") total *= 1.3;
+      if (tamanio === "3") total *= 1.6;
+    }
+    setPrecioTotal(total);
+  }, [ingredientes, tamanio, cantCarnes, tipo]);
 
   const crearNuevaCreacion = async (favorita) => {
-    const seleccionados = ingredients.filter((i) => i.selected);
+    const seleccionados = ingredientes.filter((i) => i.seleccionado);
 
     if (tipo === "Pizza") {
       const tieneMasa = seleccionados.some((i) => i.tipo === "Masa");
@@ -99,6 +113,13 @@ function DiseniarCreacion({ tipo }) {
       const nuevaCreacion = await respuesta.json();
       nuevaCreacion.nombre = nombre;
       nuevaCreacion.tipo = tipo;
+      nuevaCreacion.precio = precioTotal;
+      nuevaCreacion.ingredientes = seleccionados.map((i) => ({
+        nombre: i.nombre,
+        tipo: i.tipo,
+        precio: i.precio,
+      }));
+
       setCreacion(nuevaCreacion);
 
       if (favorita) await agregarFavorito(nuevaCreacion.idCreacion);
@@ -144,14 +165,14 @@ function DiseniarCreacion({ tipo }) {
                 </select>
               </label>
             </div>
-            <IngredientAdder text="Elegí tu masa" maxCount={1} allIngredients={ingredients} tipo="Masa" setIngredients={setIngredients} />
-            <IngredientAdder text="Elegí tu salsa" maxCount={1} allIngredients={ingredients} tipo="Salsa" setIngredients={setIngredients} />
-            <IngredientAdder text="Elegí tus toppings" maxCount={0} allIngredients={ingredients} tipo="Topping" setIngredients={setIngredients} />
+            <AgregadorDeIngredientes texto="Elegí tu masa" maximaSeleccion={1} todosLosIngredientes={ingredientes} tipo="Masa" setIngredientes={setIngredientes} />
+            <AgregadorDeIngredientes texto="Elegí tu salsa" maximaSeleccion={1} todosLosIngredientes={ingredientes} tipo="Salsa" setIngredientes={setIngredientes} />
+            <AgregadorDeIngredientes texto="Elegí tus toppings" maximaSeleccion={0} todosLosIngredientes={ingredientes} tipo="Topping" setIngredientes={setIngredientes} />
           </>
       ) : (
           <>
-            <IngredientAdder text="Elegí tu pan" maxCount={1} allIngredients={ingredients} tipo="Pan" setIngredients={setIngredients} />
-            <IngredientAdder text="Elegí tus carnes" maxCount={1} allIngredients={ingredients} tipo="Hamburguesa" setIngredients={setIngredients} />
+            <AgregadorDeIngredientes texto="Elegí tu pan" maximaSeleccion={1} todosLosIngredientes={ingredientes} tipo="Pan" setIngredientes={setIngredientes} />
+            <AgregadorDeIngredientes texto="Elegí tus carnes" maximaSeleccion={1} todosLosIngredientes={ingredientes} tipo="Hamburguesa" setIngredientes={setIngredientes} />
             <div className="mt-4 mb-8 flex justify-start px-10">
               <label className="text-lg font-semibold text-gray-700">
                 Cantidad de carnes:{" "}
@@ -166,13 +187,13 @@ function DiseniarCreacion({ tipo }) {
                 </select>
               </label>
             </div>
-            <IngredientAdder text="Elegí tus salsas" maxCount={0} allIngredients={ingredients} tipo="Salsa_Hamburguesa" setIngredients={setIngredients} />
-            <IngredientAdder text="Elegí tus ingredientes" maxCount={0} allIngredients={ingredients} tipo="Ingrediente" setIngredients={setIngredients} />
+            <AgregadorDeIngredientes texto="Elegí tus salsas" maximaSeleccion={0} todosLosIngredientes={ingredientes} tipo="Salsa_Hamburguesa" setIngredientes={setIngredientes} />
+            <AgregadorDeIngredientes texto="Elegí tus ingredientes" maximaSeleccion={0} todosLosIngredientes={ingredientes} tipo="Ingrediente" setIngredientes={setIngredientes} />
           </>
       );
 
   return (
-      <DesignContext.Provider value={{ glutenFreeOnly, setGlutenFreeOnly }}>
+      <DisenioContexto.Provider value={{ soloSinGluten, setSoloSinGluten }}>
         <div className="min-h-screen bg-white flex flex-col">
           <Encabezado />
 
@@ -185,29 +206,26 @@ function DiseniarCreacion({ tipo }) {
                 Personalizala con tus ingredientes favoritos
               </p>
 
-              {/* Switch sin gluten */}
               <div className="flex justify-end items-center gap-3 mb-8">
                 <span className="text-gray-700 font-medium">Solo sin gluten</span>
                 <div
                     className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-all ${
-                        glutenFreeOnly ? "bg-orange-500" : "bg-gray-300"
+                        soloSinGluten ? "bg-orange-500" : "bg-gray-300"
                     }`}
-                    onClick={() => setGlutenFreeOnly(!glutenFreeOnly)}
+                    onClick={() => setSoloSinGluten(!soloSinGluten)}
                 >
                   <div
                       className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
-                          glutenFreeOnly ? "translate-x-6" : "translate-x-0"
+                          soloSinGluten ? "translate-x-6" : "translate-x-0"
                       }`}
                   ></div>
                 </div>
               </div>
 
-              {/* Sección ingredientes */}
               <section className="w-full space-y-10">{content}</section>
 
               <hr className="my-10 border-gray-300" />
 
-              {/* Nombrar creación */}
               <section className="flex flex-col items-center mt-12 mb-8">
                 <h2 className="text-lg font-semibold text-gray-700 mb-2">
                   Nombrá tu creación
@@ -218,9 +236,11 @@ function DiseniarCreacion({ tipo }) {
                     value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
                 />
+                <p className="mt-3 text-orange-600 font-semibold text-lg">
+                  Precio: ${precioTotal.toFixed(2)}
+                </p>
               </section>
 
-              {/* Botones */}
               <div className="flex flex-col md:flex-row justify-center items-center gap-6 mt-8">
                 <button
                     onClick={() => crearNuevaCreacion(true)}
@@ -247,7 +267,7 @@ function DiseniarCreacion({ tipo }) {
 
           <PieDePagina />
         </div>
-      </DesignContext.Provider>
+      </DisenioContexto.Provider>
   );
 }
 

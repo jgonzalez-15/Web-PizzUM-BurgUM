@@ -3,7 +3,7 @@ import { usarCarrito } from "../Components/context/CarritoContexto";
 export default function BotonAgregarCarrito({ item, esPrincipal = true, handle }) {
     const { agregarItem } = usarCarrito();
 
-    const manejarAgregar = async () => {
+    const agregar = async () => {
         let nuevo = item;
 
         if (handle && (!nuevo || !nuevo.idCreacion)) {
@@ -53,7 +53,7 @@ export default function BotonAgregarCarrito({ item, esPrincipal = true, handle }
         : "bg-gray-200 text-gray-800 hover:bg-gray-300";
 
     return (
-        <button onClick={manejarAgregar} className={`${clasesBase} ${clasesColor}`}>
+        <button onClick={agregar} className={`${clasesBase} ${clasesColor}`}>
             Agregar al carrito
         </button>
     );

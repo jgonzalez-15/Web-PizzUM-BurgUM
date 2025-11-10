@@ -4,6 +4,9 @@ import { usarCarrito } from "./context/CarritoContexto.jsx";
 import BarraLateral from "./BarraLateral.jsx";
 import SmallButton from "./SmallButton";
 
+import carritoImg from "../assets/carrito.png";
+
+
 function Encabezado() {
     const [menuAbierto, setMenuAbierto] = useState(false);
     const [mostrarCarrito, setMostrarCarrito] = useState(false);
@@ -16,9 +19,8 @@ function Encabezado() {
                 {/* Encabezado */}
                 <header className="flex justify-center items-center fixed top-0 w-full h-16 bg-white border-b border-gray-300 shadow-md">
                     <Link
-                        to="/homepage"
+                        to="/paginaPrincipal"
                         className="text-center font-extrabold text-2xl text-gray-800 hover:text-orange-500 transition-colors"
-
                     >
                         Pizz<span className="text-orange-500">UM</span> & Burg
                         <span className="text-orange-500">UM</span>
@@ -47,11 +49,14 @@ function Encabezado() {
                     }}
                 >
                     <div className="relative">
-                        <div className="h-8 w-8 bg-[url('src/assets/carrito.png')] bg-center bg-contain bg-no-repeat" />
+                        <div
+                            className="h-8 w-8 bg-center bg-contain bg-no-repeat"
+                            style={{ backgroundImage: `url(${carritoImg})` }}
+                        />
                         {items.length > 0 && (
                             <span className="absolute -top-1 -right-2 bg-orange-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5">
-                {items.length}
-              </span>
+                                {items.length}
+                            </span>
                         )}
                     </div>
                 </div>
@@ -105,29 +110,26 @@ function Encabezado() {
 
                                     return (
                                         <div
-                                            key={item.id || item.idProducto}
-                                            className="flex items-center justify-between bg-orange-50/40 hover:bg-orange-100
-                                 transition-all p-3 mb-2 rounded-2xl shadow-sm border border-orange-100"
+                                            key={item._uuid}
+                                            className="flex items-center justify-between bg-orange-50/40 hover:bg-orange-100 transition-all p-3 mb-2 rounded-2xl shadow-sm border border-orange-100"
                                         >
                                             <div className="flex items-center gap-3 overflow-hidden">
                                                 <div className="text-2xl">{icono}</div>
                                                 <div className="flex flex-col truncate">
-                          <span className="font-semibold text-gray-800 truncate">
-                            {item.nombre}
-                          </span>
+                                                    <span className="font-semibold text-gray-800 truncate">
+                                                        {item.nombre}
+                                                    </span>
                                                     {item.precio && (
                                                         <span className="text-sm text-orange-600 font-medium">
-                              ${item.precio}
-                            </span>
+                                                            ${item.precio}
+                                                        </span>
                                                     )}
                                                 </div>
                                             </div>
 
                                             <button
                                                 className="text-red-500 hover:text-red-600 text-lg font-bold transition-transform hover:scale-110"
-                                                onClick={() =>
-                                                    eliminarItem(item.id || item.idProducto)
-                                                }
+                                                onClick={() => eliminarItem(item._uuid)}
                                                 title="Eliminar"
                                             >
                                                 ✕

@@ -33,8 +33,6 @@ function InicioDeSesion() {
 
             const data = await respuesta.json();
 
-            console.log("Datos recibidos:", data);
-
             const rol = String(data.rol || "").toUpperCase();
 
             setSessionType(data.rol);

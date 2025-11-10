@@ -1,17 +1,19 @@
 import { createContext, useContext, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const CarritoContexto = createContext();
 
 export const CarritoProveedor = ({ children }) => {
   const [items, setItems] = useState([]);
 
-  const agregarItem = (item) => setItems((prev) => [...prev, item]);
+  const agregarItem = (item) => {
+    const itemConIdUnico = { ...item, _uuid: uuidv4() };
+    setItems((prev) => [...prev, itemConIdUnico]);
+  };
 
-  const eliminarItem = (id) => {
+  const eliminarItem = (uuid) => {
     setItems((prev) => {
-      const actualizados = prev.filter(
-          (item) => item.id !== id && item.idProducto !== id
-      );
+      const actualizados = prev.filter((item) => item._uuid !== uuid);
       const quedanCreaciones = actualizados.some((i) => i.tipo !== "Bebida");
       return quedanCreaciones
           ? actualizados

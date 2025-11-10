@@ -26,6 +26,7 @@ export default function NuevoPedido() {
                     credentials: "include",
                 });
                 if (!res.ok) throw new Error("Error al listar bebidas");
+
                 const data = await res.json();
                 setBebidas(data || []);
             } catch {
@@ -65,7 +66,6 @@ export default function NuevoPedido() {
 
             <div className="flex flex-col pt-24 w-screen max-w-full min-h-[calc(100vh)] justify-between bg-gray-50">
                 <div className="flex flex-col md:flex-row items-start justify-between gap-8 px-6 md:px-16 mb-10">
-                    {/* Carrito principal */}
                     <div className="w-full md:w-2/3 flex flex-col items-center md:items-start">
                         <h1 className="text-3xl font-extrabold text-gray-800 mb-6">
                             Tu carrito
@@ -85,10 +85,9 @@ export default function NuevoPedido() {
                             </div>
                         ) : (
                             <div className="w-full flex flex-col gap-4">
-                                {/* Lista de items */}
                                 {items.map((item) => (
                                     <div
-                                        key={`${item.tipo}-${item.id || item.idProducto}`}
+                                        key={item._uuid}
                                         className="bg-white p-5 rounded-2xl shadow-md hover:shadow-lg transition-all flex justify-between items-center flex-wrap gap-4 border border-gray-100"
                                     >
                                         <div className="flex flex-col gap-1 flex-1 min-w-[200px]">
@@ -107,12 +106,12 @@ export default function NuevoPedido() {
                                                 <p className="text-sm text-gray-500 max-w-full break-words">
                                                     Ingredientes:{" "}
                                                     <span className="text-gray-700">
-                            {Array.isArray(item.ingredientes)
-                                ? item.ingredientes
-                                    .map((i) => i.nombre || i.producto?.nombre)
-                                    .join(", ")
-                                : item.ingredientes}
-                          </span>
+                                                        {Array.isArray(item.ingredientes)
+                                                            ? item.ingredientes
+                                                                .map((i) => i.nombre || i.producto?.nombre)
+                                                                .join(", ")
+                                                            : item.ingredientes}
+                                                    </span>
                                                 </p>
                                             )}
 
@@ -122,7 +121,7 @@ export default function NuevoPedido() {
                                         </div>
 
                                         <button
-                                            onClick={() => eliminarItem(item.id || item.idProducto)}
+                                            onClick={() => eliminarItem(item._uuid)}
                                             className="w-28 px-4 py-2 rounded-2xl bg-red-100 text-red-600 font-semibold border border-red-200 hover:bg-red-200 transition-all hover:scale-[1.03]"
                                         >
                                             Quitar
@@ -130,7 +129,6 @@ export default function NuevoPedido() {
                                     </div>
                                 ))}
 
-                                {/* Agregar bebida */}
                                 <div className="mt-6 bg-white p-6 rounded-2xl shadow-md border border-gray-100 flex flex-col gap-4">
                                     <h3 className="font-semibold text-lg text-gray-800">
                                         Agregar bebida
@@ -149,18 +147,18 @@ export default function NuevoPedido() {
                                             </p>
 
                                             <div className="flex flex-wrap gap-3">
-                                                {bebidas.map((b) => (
+                                                {bebidas.map((b, index) => (
                                                     <button
-                                                        key={`bebida-${b.idProducto}`}
+                                                        key={`bebida-${b.idProducto || index}`}
                                                         onClick={() => agregarBebida(b)}
                                                         className="w-28 flex flex-col items-center px-4 py-3 rounded-2xl shadow-sm border border-orange-200 bg-gradient-to-r from-orange-50 to-orange-100 hover:from-orange-100 hover:to-orange-200 transition-all hover:scale-[1.03]"
                                                     >
-                            <span className="text-orange-700 font-semibold">
-                              {b.nombre}
-                            </span>
+                                                        <span className="text-orange-700 font-semibold">
+                                                            {b.nombre}
+                                                        </span>
                                                         <span className="text-xs text-gray-500 mt-1">
-                              ${b.precio}
-                            </span>
+                                                            ${b.precio}
+                                                        </span>
                                                     </button>
                                                 ))}
                                             </div>
@@ -171,7 +169,6 @@ export default function NuevoPedido() {
                         )}
                     </div>
 
-                    {/* Resumen del pedido */}
                     <div className="w-full md:w-1/3 bg-white shadow-xl rounded-2xl p-6 border border-gray-200 sticky top-24 self-start">
                         <h1 className="font-bold text-2xl mb-4 text-gray-800">
                             Resumen del pedido
@@ -186,15 +183,15 @@ export default function NuevoPedido() {
                                 <div className="flex flex-col">
                                     {items.map((item) => (
                                         <div
-                                            key={`resumen-${item.tipo}-${item.id || item.idProducto}`}
+                                            key={`resumen-${item._uuid}`}
                                             className="flex justify-between py-1"
                                         >
-                      <span className="text-gray-700 font-medium">
-                        {item.nombre}
-                      </span>
                                             <span className="text-gray-700 font-medium">
-                        ${item.precio}
-                      </span>
+                                                {item.nombre}
+                                            </span>
+                                            <span className="text-gray-700 font-medium">
+                                                ${item.precio}
+                                            </span>
                                         </div>
                                     ))}
                                 </div>
@@ -204,7 +201,6 @@ export default function NuevoPedido() {
                                     <h2 className="font-bold text-xl text-orange-600">${total}</h2>
                                 </div>
 
-                                {/* Botones finales uniformes */}
                                 <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-6">
                                     <button
                                         onClick={() => (window.location.href = "/")}
