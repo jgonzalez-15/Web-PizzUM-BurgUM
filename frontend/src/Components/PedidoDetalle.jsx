@@ -22,9 +22,14 @@ export default function PedidoDetalle({ pedido, Cerrar }) {
                             <li key={i} className="my-2">
                                 <span className="font-semibold">{c.creacion?.nombre ?? "Sin nombre"}</span>
                                 {" "}(${c.creacion?.precio ?? 0})<br />
+                                {c.creacion?.tipo === "Pizza" && (
+                                    <span className="text-sm text-gray-600">
+                                        Tamaño: {c.creacion.ingredientes.filter((ing) => ing.tipo == "Tamanio").map((ing) => ing.nombre).join(", ")}<br />
+                                    </span>
+                                )}
                                 {c.creacion?.ingredientes?.length > 0 && (
                                     <span className="text-sm text-gray-600">
-                                        Ingredientes: {c.creacion.ingredientes.map((ing) => ing.nombre).join(", ")}
+                                        Ingredientes: {c.creacion.ingredientes.filter((ing) => ing.tipo != "Tamanio").map((ing) => ing.nombre).join(", ")}
                                     </span>
                                 )}
                             </li>

@@ -85,7 +85,6 @@ public class FavoritoServiceImpl implements FavoritoService {
 
         if (favorito.getCreacion() instanceof Pizza pizza) {
             dto.setTipo("Pizza");
-            dto.setTamanio(pizza.getTamanio());
 
             for (PizzaProducto pp : pizza.getIngredientes()) {
                 Map<String, Object> ingrediente = new HashMap<>();

@@ -37,8 +37,4 @@ public class FavoritoMapper {
         dto.setTipo(favorito.getCreacion().getClass().getSimpleName());
         return dto;
     }
-
-
-
-
 }

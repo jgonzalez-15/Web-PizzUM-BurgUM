@@ -13,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 public class PizzaRequestDTO {
     private String clienteId;
-    private String tamanio;
     private List<PizzaProductoRequestDTO> ingredientes;
 }
 

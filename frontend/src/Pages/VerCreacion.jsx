@@ -92,12 +92,26 @@ export default function VerCreacion() {
 
     let detalles;
     if (tipo === "Pizza") {
+        const tamanio = ingredientes.filter((i) => i.tipo === "Tamanio");
         const masas = ingredientes.filter((i) => i.tipo === "Masa");
         const salsas = ingredientes.filter((i) => i.tipo === "Salsa");
         const toppings = ingredientes.filter((i) => i.tipo === "Topping");
 
         detalles = (
             <div className="flex flex-col gap-4 text-gray-700">
+                <div>
+                    <h3 className="font-semibold text-lg text-gray-800 mb-1">Tamaño:</h3>
+                    <div className="flex flex-wrap gap-2">
+                        {tamanio.map((m) => (
+                            <span
+                                key={m.idProducto}
+                                className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
+                            >
+                {m.nombre}
+              </span>
+                        ))}
+                    </div>
+                </div>
                 <div>
                     <h3 className="font-semibold text-lg text-gray-800 mb-1">Masa:</h3>
                     <div className="flex flex-wrap gap-2">
@@ -137,9 +151,6 @@ export default function VerCreacion() {
                         ))}
                     </div>
                 </div>
-                <p className="mt-2 text-gray-600 italic">
-                    Tamaño: <span className="font-medium text-gray-700 not-italic">{tamanio}</span>
-                </p>
             </div>
         );
     } else if (tipo === "Hamburguesa") {
