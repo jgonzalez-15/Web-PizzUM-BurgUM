@@ -102,13 +102,13 @@ export default function NuevoPedido() {
                                                     <span className="text-gray-700">{item.tipo}</span>
                                                 </p>
                                             )}
-
                                             {item.ingredientes && (
                                                 <p className="text-sm text-gray-500 max-w-full break-words">
                                                     Ingredientes:{" "}
                                                     <span className="text-gray-700">
                                                         {Array.isArray(item.ingredientes)
                                                             ? item.ingredientes
+                                                                .filter((i) => i.tipo != "Tamanio")
                                                                 .map((i) => i.nombre || i.producto?.nombre)
                                                                 .join(", ")
                                                             : item.ingredientes}

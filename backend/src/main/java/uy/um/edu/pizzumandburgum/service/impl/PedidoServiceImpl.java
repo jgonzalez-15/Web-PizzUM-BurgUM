@@ -69,55 +69,58 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public PedidoResponseDTO realizarPedido(PedidoRequestDTO dto) {
-        Cliente cliente = clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(ClienteNoExisteException::new);
+        try {
+            Cliente cliente = clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(ClienteNoExisteException::new);
 
-        MedioDePago medioDePago = medioDePagoService.obtenerMedioDePago(cliente.getEmail(), dto.getIdMedioDePago());
+            MedioDePago medioDePago = medioDePagoService.obtenerMedioDePago(cliente.getEmail(), dto.getIdMedioDePago());
 
-        Domicilio domicilioTemp = domicilioRepository.findById(dto.getIdDomicilio()).orElseThrow(DomicilioNoExisteException::new);
+            Domicilio domicilioTemp = domicilioRepository.findById(dto.getIdDomicilio()).orElseThrow(DomicilioNoExisteException::new);
 
-        Domicilio domicilio = clienteDomicilioService.obtenerDomicilio(cliente.getEmail(), domicilioTemp.getDireccion());
+            Domicilio domicilio = clienteDomicilioService.obtenerDomicilio(cliente.getEmail(), domicilioTemp.getDireccion());
 
-        Pedido pedido = pedidoMapper.toEntity(dto);
-        pedido.setEstado("En Cola");
-        pedido.setEstaPago(false);
-        pedido.setClienteAsignado(cliente);
-        pedido.setDomicilio(domicilio);
-        pedido.setMedioDePago(medioDePago);
-        pedido.setFecha(LocalDate.now());
+            Pedido pedido = pedidoMapper.toEntity(dto);
+            pedido.setEstado("En Cola");
+            pedido.setClienteAsignado(cliente);
+            pedido.setDomicilio(domicilio);
+            pedido.setMedioDePago(medioDePago);
+            pedido.setFecha(LocalDate.now());
 
-        pedido = pedidoRepository.save(pedido);
+            pedido = pedidoRepository.save(pedido);
 
-        float precioTotal = 0f;
+            float precioTotal = 0f;
 
-        if (dto.getCreaciones() != null && !dto.getCreaciones().isEmpty()) {
-            for (PedidoCreacionRequestDTO creacionDto : dto.getCreaciones()) {
+            if (dto.getCreaciones() != null && !dto.getCreaciones().isEmpty()) {
+                for (PedidoCreacionRequestDTO creacionDto : dto.getCreaciones()) {
 
-                pedidoCrecionService.agregarCreacion(pedido.getId(), creacionDto.getCreacion().getId(), creacionDto.getCantidad());
+                    pedidoCrecionService.agregarCreacion(pedido.getId(), creacionDto.getCreacion().getId(), creacionDto.getCantidad());
 
-                Creacion creacion = creacionRepository.findById(creacionDto.getCreacion().getId()).orElseThrow(CreacionNoEncontradaException::new);
+                    Creacion creacion = creacionRepository.findById(creacionDto.getCreacion().getId()).orElseThrow(CreacionNoEncontradaException::new);
 
-                precioTotal += creacion.getPrecio() * creacionDto.getCantidad();
+                    precioTotal += creacion.getPrecio() * creacionDto.getCantidad();
+                }
             }
-        }
 
 
-        if (dto.getBebidas() != null && !dto.getBebidas().isEmpty()) {
-            for (PedidoBebidaRequestDTO bebidaDto : dto.getBebidas()) {
-                pedidoBebidaService.agregarBebida(pedido.getId(), bebidaDto.getProducto().getIdProducto(), bebidaDto.getCantidad());
+            if (dto.getBebidas() != null && !dto.getBebidas().isEmpty()) {
+                for (PedidoBebidaRequestDTO bebidaDto : dto.getBebidas()) {
+                    pedidoBebidaService.agregarBebida(pedido.getId(), bebidaDto.getProducto().getIdProducto(), bebidaDto.getCantidad());
 
-                Producto bebida = productoRepository.findByIdProducto(bebidaDto.getProducto().getIdProducto()).orElseThrow(ProductoNoExisteException::new);
+                    Producto bebida = productoRepository.findByIdProducto(bebidaDto.getProducto().getIdProducto()).orElseThrow(ProductoNoExisteException::new);
 
 
-
-                precioTotal += bebida.getPrecio() * bebidaDto.getCantidad();
+                    precioTotal += bebida.getPrecio() * bebidaDto.getCantidad();
+                }
             }
+
+            pedido.setPrecio(precioTotal);
+            pedido = pedidoRepository.save(pedido);
+            cliente.getPedidos().add(pedido);
+
+            return pedidoMapper.toResponseDTO(pedido);
         }
-
-        pedido.setPrecio(precioTotal);
-        pedido = pedidoRepository.save(pedido);
-        cliente.getPedidos().add(pedido);
-
-        return pedidoMapper.toResponseDTO(pedido);
+        catch (ClienteNoExisteException e) {
+            return null;
+        }
     }
 
     @Override
