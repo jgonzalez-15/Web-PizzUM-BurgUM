@@ -42,7 +42,7 @@ function DiseniarCreacion({ tipo }) {
     obtenerIngredientes();
   }, []);
 
-  useEffect(() => setCreacion(undefined), [ingredientes, cantCarnes, tamanio]);
+  useEffect(() => setCreacion(undefined), [ingredientes, cantCarnes]);
   useEffect(() => setIngredientes((prev) => prev.map((i) => ({ ...i, seleccionado: false }))), [soloSinGluten]);
 
   useEffect(() => {
@@ -84,10 +84,6 @@ function DiseniarCreacion({ tipo }) {
       esFavorita: favorita,
       nombre,
     };
-
-    if (tipo === "Pizza")
-      datosEnvio.tamanio =
-          tamanio === "1" ? "Chica" : tamanio === "2" ? "Mediana" : "Grande";
 
     const endpoint =
         tipo === "Pizza"
@@ -152,20 +148,7 @@ function DiseniarCreacion({ tipo }) {
   const content =
       tipo === "Pizza" ? (
           <>
-            <div className="mt-4 mb-8 flex justify-start px-10">
-              <label className="text-lg font-semibold text-gray-700">
-                Tamaño de pizza:{" "}
-                <select
-                    value={tamanio}
-                    onChange={(e) => setTamanio(e.target.value)}
-                    className="ml-2 border-2 rounded-lg p-2 bg-gray-50 text-gray-800 focus:ring-2 focus:ring-orange-400 outline-none"
-                >
-                  <option value="1">Chica</option>
-                  <option value="2">Mediana</option>
-                  <option value="3">Grande</option>
-                </select>
-              </label>
-            </div>
+            <AgregadorDeIngredientes texto="Elegí tu tamaño de pizza" maximaSeleccion={1} todosLosIngredientes={ingredientes} tipo="Tamanio" setIngredientes={setIngredientes} />
             <AgregadorDeIngredientes texto="Elegí tu masa" maximaSeleccion={1} todosLosIngredientes={ingredientes} tipo="Masa" setIngredientes={setIngredientes} />
             <AgregadorDeIngredientes texto="Elegí tu salsa" maximaSeleccion={1} todosLosIngredientes={ingredientes} tipo="Salsa" setIngredientes={setIngredientes} />
             <AgregadorDeIngredientes texto="Elegí tus toppings" maximaSeleccion={0} todosLosIngredientes={ingredientes} tipo="Topping" setIngredientes={setIngredientes} />

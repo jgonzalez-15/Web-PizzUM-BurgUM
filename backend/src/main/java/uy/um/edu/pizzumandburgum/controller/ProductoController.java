@@ -34,13 +34,6 @@ public class ProductoController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/modificar")
-    public ResponseEntity<Void> modificarProducto(@RequestBody ProductoModificarRequestDTO productoModificarRequestDTO) {
-        productoService.modificarProducto(productoModificarRequestDTO.getViejo(),productoModificarRequestDTO.getNuevo());
-        return ResponseEntity.ok().build();
-    }
-
     @PreAuthorize("hasAuthority('CLIENTE') or hasAuthority('ADMIN')")
     @GetMapping("/listar")
     public ResponseEntity<List<ProductoResponseDTO>> listarProductos() {
@@ -55,23 +48,27 @@ public class ProductoController {
         return ResponseEntity.ok(productos);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}/ocultar")
     public ResponseEntity<Void> ocultarProducto(@PathVariable Long id) {
         productoService.ocultarProducto(id);
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}/mostrar")
     public ResponseEntity<Void> mostrarProducto(@PathVariable Long id) {
         productoService.mostrarProducto(id);
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/listarAdmin")
     public ResponseEntity<List<ProductoResponseDTO>> listarAdmin() {
         return ResponseEntity.ok(productoService.listarProductosAdmin());
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}/editar")
     public ResponseEntity<ProductoResponseDTO> editarProducto(
             @PathVariable Long id,

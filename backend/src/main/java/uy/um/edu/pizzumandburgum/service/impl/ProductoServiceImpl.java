@@ -16,6 +16,7 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.ProductoService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -26,6 +27,9 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Autowired
     private ProductoMapper productoMapper;
+
+    @Autowired
+    private ProductoCreacionUpdater productoCreacionUpdater;
 
     @Autowired
     private HistoricoProductoModificacionService historicoService;
@@ -82,22 +86,31 @@ public class ProductoServiceImpl implements ProductoService {
         productoRepository.save(producto);
     }
 
-
     @Override
-    public void modificarProducto(ProductoRequestDTO productoviejoDTO, ProductoRequestDTO productonuevoDTO) {
-        Producto productoViejo = productoMapper.toEntity(productoviejoDTO);
-        Producto productoNuevo = new Producto();
-        productoNuevo.setTipo(productonuevoDTO.getTipo());
-        productoNuevo.setPrecio(productonuevoDTO.getPrecio());
-        productoNuevo.setSinTacc(productonuevoDTO.isSinTacc());
-        productoNuevo.setNombre(productonuevoDTO.getNombre());
-        productoNuevo.setHistorico(productoViejo.getHistorico());
-        productoRepository.save(productoViejo);
-        historicoService.registrarActualizacion(productoViejo,productoNuevo);
+    public ProductoResponseDTO editarProducto(Long idProducto, ProductoRequestDTO dto) {
+        Producto producto = productoRepository.findByIdProducto(idProducto).orElseThrow(ProductoNoExisteException::new);
 
+        Float precioViejo = producto.getPrecio();
+
+        producto.setNombre(dto.getNombre());
+        producto.setPrecio(dto.getPrecio());
+        producto.setSinTacc(dto.isSinTacc());
+        producto.setVisible(dto.isVisible());
+        producto.setTipo(dto.getTipo());
+
+        productoRepository.save(producto);
+
+        // Si cambió el precio, actualizar precios de creaciones que usan este producto
+        if (!Objects.equals(precioViejo, producto.getPrecio())) {
+            productoCreacionUpdater.actualizarPreciosPorProducto(producto);
+        }
+
+        historicoService.registrarActualizacion(producto, producto);
+
+        return productoMapper.toResponseDTO(producto);
     }
 
-    @Override
+        @Override
     public List<ProductoResponseDTO> listarProductos() {
         List<ProductoResponseDTO> resultado = new ArrayList<>();
         for (Producto producto : productoRepository.findAll()) {
@@ -117,22 +130,6 @@ public class ProductoServiceImpl implements ProductoService {
             }
         }
         return resultado;
-    }
-
-    @Override
-    public ProductoResponseDTO editarProducto(Long idProducto, ProductoRequestDTO dto) {
-        Producto producto = productoRepository.findByIdProducto(idProducto).orElseThrow(ProductoNoExisteException::new);
-
-        producto.setNombre(dto.getNombre());
-        producto.setPrecio(dto.getPrecio());
-        producto.setSinTacc(dto.isSinTacc());
-        producto.setVisible(dto.isVisible());
-        producto.setTipo(dto.getTipo());
-
-        productoRepository.save(producto);
-        historicoService.registrarActualizacion(producto, producto);
-
-        return productoMapper.toResponseDTO(producto);
     }
 
 
