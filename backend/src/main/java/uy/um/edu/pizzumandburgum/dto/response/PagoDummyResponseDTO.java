@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 public class PagoDummyResponseDTO {
     private String codigoTransaccion;
     private float monto;
-    private LocalDateTime fechaPago;
+    private LocalDate fechaPago;
     private String estadoPago;
     private Long idPedido;
 }

@@ -68,6 +68,7 @@ public class PedidoController {
         return ResponseEntity.ok(pedidoResponseDTOS);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/rango/{fechaInicio}/{fechaFin}")
     public ResponseEntity<List<PedidoResponseDTO>> listarPedidosPorRango(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin) {
         List<PedidoResponseDTO> pedidos = pedidoService.listarPedidosPorRangoFechas(fechaInicio, fechaFin);

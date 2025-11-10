@@ -16,7 +16,7 @@ import uy.um.edu.pizzumandburgum.repository.PedidoRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.MedioDePagoService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PagoDummyService;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -50,7 +50,7 @@ public class PagoDummyServiceImpl implements PagoDummyService {
         PagoDummy pago = new PagoDummy();
         pago.setCodigoTransaccion("DUMMY-" + UUID.randomUUID());
         pago.setMonto(pedido.getPrecio());
-        pago.setFechaPago(LocalDateTime.now());
+        pago.setFechaPago(LocalDate.now());
         pago.setEstadoPago("APROBADO");
         pago.setPedido(pedido);
 

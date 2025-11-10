@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -20,7 +20,7 @@ public class Calificacion {
 
     private Integer puntuacion;
     private String comentario;
-    private LocalDateTime fecha;
+    private LocalDate fecha;
 
     @OneToOne
     @JoinColumn(name = "id_pedido")

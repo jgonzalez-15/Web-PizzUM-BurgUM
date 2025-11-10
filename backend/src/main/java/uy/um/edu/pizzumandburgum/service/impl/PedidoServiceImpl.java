@@ -188,10 +188,7 @@ public class PedidoServiceImpl implements PedidoService {
             throw new FechaInvalidaException();
         }
 
-        LocalDateTime inicioDelDia = fechaInicio.atStartOfDay();
-        LocalDateTime finDelDia = fechaFin.atTime(LocalTime.MAX);
-
-        List<Pedido> pedidos = pedidoRepository.findByFechaBetween(inicioDelDia, finDelDia);
+        List<Pedido> pedidos = pedidoRepository.findByFechaBetween(fechaInicio, fechaFin);
 
         List<PedidoResponseDTO> pedidosDTO = new ArrayList<>();
         for (Pedido pedido : pedidos) {
