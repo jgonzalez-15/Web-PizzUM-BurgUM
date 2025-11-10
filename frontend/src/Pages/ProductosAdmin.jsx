@@ -213,6 +213,7 @@ function FormularioProducto({ producto, setProducto, onGuardar, onCancelar, esEd
                 {esEdicion ? "Editar producto" : "Nuevo producto"}
             </h2>
 
+            {producto.tipo != "Tamanio" ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input
                     placeholder="Nombre"
@@ -238,7 +239,6 @@ function FormularioProducto({ producto, setProducto, onGuardar, onCancelar, esEd
                     onChange={(e) => setProducto({ ...producto, tipo: e.target.value })}
                 >
                     <option value="Masa">Masa para Pizza</option>
-                    <option value="Tamanio">Tamaño de Pizza</option>
                     <option value="Salsa">Salsa para Pizza</option>
                     <option value="Topping">Topping para Pizza</option>
                     <option value="Pan">Pan para Hamburguesa</option>
@@ -267,6 +267,32 @@ function FormularioProducto({ producto, setProducto, onGuardar, onCancelar, esEd
                     </label>
                 </div>
             </div>
+            ):
+            (
+                <>
+                <input
+                    type="number"
+                    placeholder="Precio"
+                    className="border border-gray-300 rounded-xl p-2 w-full focus:ring-2 focus:ring-orange-400 outline-none"
+                    value={producto.precio}
+                    onChange={(e) =>
+                        setProducto({
+                            ...producto,
+                            precio: e.target.value === "" ? "" : parseFloat(e.target.value),
+                        })
+                        
+                    }
+                />
+                <label className="flex items-center mt-2">
+                        <input
+                            type="checkbox"
+                            checked={producto.visible}
+                            onChange={(e) => setProducto({ ...producto, visible: e.target.checked })}
+                        />
+                        <span>Visible</span>
+                </label>
+                </>
+            )}
 
             <div className="flex flex-col md:flex-row justify-end gap-4 mt-6">
                 <button
@@ -320,12 +346,14 @@ function TarjetaProducto({ producto, onEditar, onEliminar }) {
                 >
                     Editar
                 </button>
+                {producto.tipo != "Tamanio" && (
                 <button
                     className="bg-red-500 text-white rounded-xl px-4 py-2 font-semibold hover:bg-red-600 transition w-full sm:w-auto"
                     onClick={onEliminar}
                 >
                     Eliminar
                 </button>
+                )}
             </div>
         </div>
     );
