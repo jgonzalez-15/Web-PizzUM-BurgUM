@@ -29,12 +29,12 @@ public class RepositoryController {
     }
 
     @GetMapping("/tickets")
-    public ResponseEntity<List<PedidoResponseDTO>> obtenerTickets(@RequestParam LocalDate inicio, @RequestParam LocalDate fin, HttpSession sesion) {
-        return ResponseEntity.ok(reporteService.obtenerTicketsDeVenta(inicio, fin));
+    public ResponseEntity<List<PedidoResponseDTO>> obtenerTickets(@RequestParam LocalDate fecha) {
+        return ResponseEntity.ok(reporteService.obtenerTicketsDeVenta(fecha));
     }
 
     @GetMapping("/usuarios/cantidad")
-    public ResponseEntity<Long> obtenerCantidadUsuarios(HttpSession sesion) {
+    public ResponseEntity<List<Object>> obtenerCantidadUsuarios() {
         return ResponseEntity.ok(reporteService.obtenerCantidadUsuarios());
     }
 }

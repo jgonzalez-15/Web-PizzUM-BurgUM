@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ReporteService {
-    Long obtenerCantidadUsuarios();
+    List<Object> obtenerCantidadUsuarios();
     List<MedioDePagoDTO> obtenerDatosTarjetas();
-    List<PedidoResponseDTO> obtenerTicketsDeVenta(LocalDate inicio, LocalDate fin);
+    List<PedidoResponseDTO> obtenerTicketsDeVenta(LocalDate fecha);
 }

@@ -2,10 +2,16 @@ package uy.um.edu.pizzumandburgum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
+import uy.um.edu.pizzumandburgum.entities.Administrador;
+import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.MedioDePago;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
+import uy.um.edu.pizzumandburgum.mapper.AdministradorMapper;
+import uy.um.edu.pizzumandburgum.mapper.ClienteMapper;
 import uy.um.edu.pizzumandburgum.mapper.MedioDePagoMapper;
 import uy.um.edu.pizzumandburgum.mapper.PedidoMapper;
 import uy.um.edu.pizzumandburgum.repository.AdministradorRepository;
@@ -40,9 +46,27 @@ public class ReporteServiceImpl implements ReporteService {
     @Autowired
     private PedidoMapper pedidoMapper;
 
+    @Autowired
+    private AdministradorMapper administradorMapper;
+    @Autowired
+    private ClienteMapper clienteMapper;
+
     @Override
-    public Long obtenerCantidadUsuarios() {
-        return clienteRepository.count() + administradorRepository.count();
+    public List<Object> obtenerCantidadUsuarios() {
+        List<Cliente> clientes = clienteRepository.findAll();
+        List<ClienteResponseDTO> clientesResponseDTO = new ArrayList<>();
+        for (Cliente cliente : clientes) {
+            clientesResponseDTO.add(clienteMapper.toResponseDTO(cliente));
+        }
+        List<Administrador> administradores = administradorRepository.findAll();
+        List<AdministradorResponseDTO> administradoresResponseDTO = new ArrayList<>();
+        for (Administrador administrador : administradores) {
+            administradoresResponseDTO.add(administradorMapper.toResponseDTO(administrador));
+        }
+        List<Object> result = new ArrayList<>();
+        result.add(clientesResponseDTO);
+        result.add(administradoresResponseDTO);
+        return result;
     }
 
     @Override
@@ -57,16 +81,14 @@ public class ReporteServiceImpl implements ReporteService {
     }
 
     @Override
-    public List<PedidoResponseDTO> obtenerTicketsDeVenta(LocalDate inicio, LocalDate fin) {
+    public List<PedidoResponseDTO> obtenerTicketsDeVenta(LocalDate fecha) {
         List<Pedido> pedidos = pedidoRepository.findAll();
         List<PedidoResponseDTO> resultado = new ArrayList<>();
         for (Pedido pedido : pedidos) {
             PedidoResponseDTO dto = pedidoMapper.toResponseDTO(pedido);
-            if ((dto.getFecha().isEqual(inicio) || dto.getFecha().isAfter(inicio) && (dto.getFecha().isEqual(fin)|| dto.getFecha().isBefore(fin)))) {
+            if ((dto.getFecha().isEqual(fecha))) {
                 resultado.add(dto);
-                resultado.sort(Comparator.comparing(PedidoResponseDTO::getFecha));
             }
-
         }
         return resultado;
     }
