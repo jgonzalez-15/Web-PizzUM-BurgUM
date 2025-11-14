@@ -18,7 +18,7 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.AdministradorService;
 import java.util.List;
 
 @RestController
-@PreAuthorize("hasAuthority('ADMIN')")
+//@PreAuthorize("hasAuthority('ADMIN')")
 @RequestMapping("/api/administrador")
 @CrossOrigin(origins = "http://localhost:5173")
 public class AdministradorController {

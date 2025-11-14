@@ -131,7 +131,7 @@ public class ClienteServiceImpl implements ClienteService {
             throw new EmailNoExisteException();
         }
 
-        return new ClienteResponseDTO(cliente.getEmail(), cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getFechaNac());
+        return new ClienteResponseDTO(cliente.getEmail(), cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getFechaNac(),cliente.getCedula());
     }
 
     @Override
@@ -241,7 +241,7 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public ClienteResponseDTO obtenerCliente(String email) {
         Cliente cliente = clienteRepository.findById(email).orElseThrow(ClienteNoExisteException::new);
-        return new ClienteResponseDTO(cliente.getEmail(), cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getFechaNac());
+        return new ClienteResponseDTO(cliente.getEmail(), cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getFechaNac(), cliente.getCedula());
     }
 }
 

@@ -31,4 +31,6 @@ public abstract class Usuario {
 
     private LocalDate fechaNac;
 
+    private Long cedula;
+
 }

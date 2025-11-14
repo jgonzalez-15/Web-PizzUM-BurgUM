@@ -15,7 +15,7 @@ public class ClienteMapper {
     }
 
     public ClienteResponseDTO toResponseDTO(Cliente cliente) {
-        return new ClienteResponseDTO(cliente.getEmail(),cliente.getNombre(),cliente.getApellido(),cliente.getTelefono(),cliente.getFechaNac());
+        return new ClienteResponseDTO(cliente.getEmail(),cliente.getNombre(),cliente.getApellido(),cliente.getTelefono(),cliente.getFechaNac(), cliente.getCedula());
     }
 
 }

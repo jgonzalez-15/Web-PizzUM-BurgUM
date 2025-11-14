@@ -15,13 +15,14 @@ export default function Registrar() {
     const [numeroTarjeta, setNumeroTarjeta] = useState("");
     const [nombreTitular, setNombreTitular] = useState("");
     const [fechaVencimiento, setFechaVencimiento] = useState("");
+    const [cedula, setCedula] = useState("")
 
     const navigate = useNavigate();
 
     const registrarUsuario = async (e) => {
         e.preventDefault();
 
-        if (!email || !nombre || !apellido || !contrasenia || !confirmarContrasenia || !telefono || !fechaNacimiento || !direccion || !numeroTarjeta || !nombreTitular || !fechaVencimiento) {
+        if (!email || !nombre || !apellido || !contrasenia || !confirmarContrasenia || !telefono || !fechaNacimiento || !direccion || !numeroTarjeta || !nombreTitular || !fechaVencimiento, !cedula) {
             alert("Debes completar todos los campos.");
             return;
         }
@@ -51,6 +52,7 @@ export default function Registrar() {
                     mediosDePago: [
                         { numeroTarjeta: parseInt(numeroTarjeta), nombreTitular, fechaVencimiento: fechaVencimiento + "-01", },
                     ],
+                    cedula: cedula
                 }),
                 credentials: "include",
             });
@@ -130,6 +132,13 @@ export default function Registrar() {
                                 className="bg-gray-100 rounded-2xl p-2"
                                 value={fechaNacimiento}
                                 onChange={(e) => setFechaNacimiento(e.target.value)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Cedula"
+                                className="bg-gray-100 rounded-2xl p-2"
+                                value={cedula}
+                                onChange={(e) => setCedula(e.target.value)}
                             />
                         </div>
 

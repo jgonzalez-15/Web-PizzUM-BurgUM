@@ -21,4 +21,5 @@ public class ClienteRegistrarRequestDTO {
     private LocalDate fechaNac;
     private List<DomicilioRequestDTO> domicilios;
     private List<MedioDePagoRequestDTO>  mediosDePago;
+    private Long cedula;
 }

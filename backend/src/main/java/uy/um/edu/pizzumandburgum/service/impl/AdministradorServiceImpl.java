@@ -43,7 +43,7 @@ public class AdministradorServiceImpl implements AdministradorService {
         if (!Objects.equals(administrador.getContrasenia(), dto.getContrasenia())){
             throw new ContraseniaInvalidaException();
         }
-        return new AdministradorResponseDTO(administrador.getEmail(), administrador.getNombre(), administrador.getApellido(), administrador.getContrasenia(), administrador.getTelefono(), administrador.getFechaNac());
+        return new AdministradorResponseDTO(administrador.getEmail(), administrador.getNombre(), administrador.getApellido(), administrador.getContrasenia(), administrador.getTelefono(), administrador.getFechaNac(), administrador.getCedula(), administrador.getDomicilio());
 
     }
 
@@ -88,7 +88,9 @@ public class AdministradorServiceImpl implements AdministradorService {
                 administrador.getApellido(),
                 administrador.getContrasenia(),
                 administrador.getTelefono(),
-                administrador.getFechaNac()
+                administrador.getFechaNac(),
+                administrador.getCedula(),
+                administrador.getDomicilio()
         );
     }
 }

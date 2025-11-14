@@ -18,6 +18,6 @@ public class AdministradorMapper {
     }
 
     public AdministradorResponseDTO toResponseDTO(Administrador admin) {
-        return new AdministradorResponseDTO(admin.getEmail(), admin.getNombre(), admin.getApellido(), admin.getContrasenia(), admin.getTelefono(), admin.getFechaNac());
+        return new AdministradorResponseDTO(admin.getEmail(), admin.getNombre(), admin.getApellido(), admin.getContrasenia(), admin.getTelefono(), admin.getFechaNac(), admin.getCedula(), admin.getDomicilio());
     }
 }

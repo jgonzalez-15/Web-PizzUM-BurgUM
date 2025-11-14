@@ -15,6 +15,7 @@ public class ClienteResponseDTO {
     private String email;
     private String nombre;
     private String apellido;
-    private long telefono;
+    private Long telefono;
     private LocalDate fechaNac;
+    private Long cedula;
 }

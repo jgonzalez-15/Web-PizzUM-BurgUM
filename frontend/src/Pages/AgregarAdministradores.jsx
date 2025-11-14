@@ -10,6 +10,8 @@ export default function AgregarAdministradores() {
         apellido: "",
         telefono: "",
         fechaNac: "",
+        cedula: "",
+        domicilio: "",
     });
 
     const cargarAdministradores = async () => {
@@ -37,6 +39,25 @@ export default function AgregarAdministradores() {
     }, []);
 
     const crearAdministrador = async () => {
+
+        if (!nuevoAdmin.email ||
+            !nuevoAdmin.contrasenia ||
+            !nuevoAdmin.nombre ||
+            !nuevoAdmin.apellido ||
+            !nuevoAdmin.telefono ||
+            !nuevoAdmin.fechaNac ||
+            !nuevoAdmin.cedula ||
+            !nuevoAdmin.domicilio)
+        {
+            alert("Debes completar todos los campos antes de guardar.");
+            return;
+        }
+
+        if (nuevoAdmin.contrasenia.length < 8) {
+            alert("La contraseña debe tener al menos 8 caracteres.");
+            return;
+        }
+
         try {
             const respuesta = await fetch("http://localhost:8080/api/administrador/agregarAdmin", {
                 method: "POST",
@@ -44,7 +65,16 @@ export default function AgregarAdministradores() {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
-                body: JSON.stringify(nuevoAdmin),
+                body: JSON.stringify({
+                    email: nuevoAdmin.email,
+                    contrasenia: nuevoAdmin.contrasenia,
+                    nombre: nuevoAdmin.nombre,
+                    apellido: nuevoAdmin.apellido,
+                    telefono: nuevoAdmin.telefono ? parseInt(nuevoAdmin.telefono) : null,
+                    fechaNac: nuevoAdmin.fechaNac,
+                    cedula: nuevoAdmin.cedula ? parseInt(nuevoAdmin.cedula) : null,
+                    domicilio: nuevoAdmin.domicilio,
+                }),
             });
 
             if (respuesta.ok) {
@@ -56,6 +86,8 @@ export default function AgregarAdministradores() {
                     apellido: "",
                     telefono: "",
                     fechaNac: "",
+                    cedula: "",
+                    domicilio: "",
                 });
                 cargarAdministradores();
             } else {
@@ -144,6 +176,26 @@ export default function AgregarAdministradores() {
                                     setNuevoAdmin({ ...nuevoAdmin, fechaNac: e.target.value })
                                 }
                             />
+                            {/* Nuevo campo: Cédula */}
+                            <input
+                                type="text"
+                                placeholder="Cédula"
+                                className="border border-gray-300 rounded-xl p-2 w-full focus:ring-2 focus:ring-orange-400 outline-none"
+                                value={nuevoAdmin.cedula}
+                                onChange={(e) =>
+                                    setNuevoAdmin({ ...nuevoAdmin, cedula: e.target.value })
+                                }
+                            />
+                            {/* Nuevo campo: Domicilio */}
+                            <input
+                                type="text"
+                                placeholder="Domicilio"
+                                className="border border-gray-300 rounded-xl p-2 w-full focus:ring-2 focus:ring-orange-400 outline-none"
+                                value={nuevoAdmin.domicilio}
+                                onChange={(e) =>
+                                    setNuevoAdmin({ ...nuevoAdmin, domicilio: e.target.value })
+                                }
+                            />
                         </div>
 
                         <div className="flex justify-end mt-6">
@@ -170,6 +222,12 @@ export default function AgregarAdministradores() {
                                     {(admin.nombre || admin.apellido) && (
                                         <p className="text-sm text-gray-500">
                                             {admin.nombre} {admin.apellido}
+                                        </p>
+                                    )}
+                                    {(admin.cedula || admin.domicilio) && (
+                                        <p className="text-xs text-gray-400">
+                                            {admin.cedula && `Cédula: ${admin.cedula}`}{" "}
+                                            {admin.domicilio && `- Domicilio: ${admin.domicilio}`}
                                         </p>
                                     )}
                                 </div>
