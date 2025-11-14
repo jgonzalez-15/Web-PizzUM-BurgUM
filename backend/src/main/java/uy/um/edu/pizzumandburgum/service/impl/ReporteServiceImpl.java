@@ -2,10 +2,7 @@ package uy.um.edu.pizzumandburgum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
-import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.*;
 import uy.um.edu.pizzumandburgum.entities.Administrador;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.MedioDePago;
@@ -24,6 +21,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReporteServiceImpl implements ReporteService {
@@ -73,13 +71,18 @@ public class ReporteServiceImpl implements ReporteService {
     }
 
     @Override
-    public List<PedidoResponseDTO> obtenerTicketsDeVenta(LocalDate fecha) {
+    public List<TicketResponseDTO> obtenerTicketsDeVenta(LocalDate fecha) {
         List<Pedido> pedidos = pedidoRepository.findAll();
-        List<PedidoResponseDTO> resultado = new ArrayList<>();
+        List<TicketResponseDTO> resultado = new ArrayList<>();
         for (Pedido pedido : pedidos) {
             PedidoResponseDTO dto = pedidoMapper.toResponseDTO(pedido);
             if ((dto.getFecha().isEqual(fecha)) && !dto.getEstado().equals("En Cola") && !dto.getEstado().equals("Cancelado")) {
-                resultado.add(dto);
+                Optional<Cliente> cliente = clienteRepository.findByEmail(dto.getIdClienteAsignado());
+                Long idPedido = pedido.getId();
+                String email =  cliente.get().getEmail();
+                Long cedula = cliente.get().getCedula();
+                float precio = pedido.getPrecio();
+                resultado.add(new TicketResponseDTO(idPedido, email, cedula, precio));
             }
         }
         return resultado;
