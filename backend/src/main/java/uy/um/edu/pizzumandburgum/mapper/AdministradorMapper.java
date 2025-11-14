@@ -1,18 +1,22 @@
 package uy.um.edu.pizzumandburgum.mapper;
 
 import org.springframework.stereotype.Component;
+import uy.um.edu.pizzumandburgum.dto.request.AdministradorRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Administrador;
 
 @Component
 public class AdministradorMapper {
-    public Administrador toEntity(AdministradorResponseDTO dto) {
+    public Administrador toEntity(AdministradorRequestDTO dto) {
         Administrador admin = new Administrador();
         admin.setNombre(dto.getNombre());
         admin.setApellido(dto.getApellido());
+        admin.setContrasenia(dto.getContrasenia());
         admin.setEmail(dto.getEmail());
         admin.setFechaNac(dto.getFechaNac());
         admin.setTelefono(dto.getTelefono());
+        admin.setCedula(dto.getCedula());
+        admin.setDomicilio(dto.getDomicilio());
         return admin;
     }
 

@@ -2,6 +2,7 @@ package uy.um.edu.pizzumandburgum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uy.um.edu.pizzumandburgum.dto.request.AdministradorLoginRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.AdministradorRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.update.AdministradorUpdateDTO;
@@ -27,7 +28,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     private AdministradorMapper administradorMapper;
 
     @Override
-    public AdministradorResponseDTO agregarAdmin(AdministradorResponseDTO dto) {
+    public AdministradorResponseDTO agregarAdmin(AdministradorRequestDTO dto) {
         Administrador admin = administradorMapper.toEntity(dto);
         if (administradorRepository.findByEmail(admin.getEmail()).isPresent()) {
             throw new AdministradorYaExisteException();
@@ -37,7 +38,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     }
 
     @Override
-    public AdministradorResponseDTO login(AdministradorRequestDTO dto) {
+    public AdministradorResponseDTO login(AdministradorLoginRequestDTO dto) {
         Administrador administrador = administradorRepository.findById(dto.getEmail()).orElseThrow(ClienteNoExisteException::new);
 
         if (!Objects.equals(administrador.getContrasenia(), dto.getContrasenia())){
@@ -56,7 +57,7 @@ public class AdministradorServiceImpl implements AdministradorService {
         if (dto.getApellido() != null) {
             administrador.setApellido(dto.getApellido());
         }
-        if (dto.getContrasenia() != null) {
+        if (dto.getContrasenia() != null && !dto.getContrasenia().isBlank()) {
             administrador.setContrasenia(dto.getContrasenia());
         }
         if (dto.getTelefono() != 0) {
@@ -65,6 +66,13 @@ public class AdministradorServiceImpl implements AdministradorService {
         if (dto.getFechaNac() != null) {
             administrador.setFechaNac(dto.getFechaNac());
         }
+        if (dto.getCedula() != null) {
+            administrador.setCedula(dto.getCedula());
+        }
+        if (dto.getDomicilio() != null) {
+            administrador.setDomicilio(dto.getDomicilio());
+        }
+        administradorRepository.save(administrador);
         return administradorMapper.toResponseDTO(administrador);
     }
 
@@ -92,4 +100,12 @@ public class AdministradorServiceImpl implements AdministradorService {
                 administrador.getDomicilio()
         );
     }
+
+    @Override
+    public void eliminarAdministrador(String email) {
+        Administrador admin = administradorRepository.findById(email).orElseThrow(AdministradorNoExiste::new);
+
+        administradorRepository.delete(admin);
+    }
+
 }

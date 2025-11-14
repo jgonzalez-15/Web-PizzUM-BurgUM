@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { SessionContext } from "../Components/context/SessionContext";
 import PieDePagina from "../Components/PieDePagina.jsx";
+import Encabezado from "../Components/Encabezado.jsx";
 
 function InicioDeSesion() {
     if (window.pageYOffset > 0) window.scrollTo(0, 0);
@@ -55,6 +56,8 @@ function InicioDeSesion() {
     };
 
     return (
+        <>
+            <Encabezado />
         <div className="flex flex-col min-h-screen bg-gray-50 justify-between">
             <div className="flex flex-col items-center justify-center flex-1">
                 <div className="bg-white w-80 md:w-96 rounded-2xl shadow-xl p-8 border border-gray-200">
@@ -125,6 +128,7 @@ function InicioDeSesion() {
 
             <PieDePagina />
         </div>
+        </>
     );
 }
 

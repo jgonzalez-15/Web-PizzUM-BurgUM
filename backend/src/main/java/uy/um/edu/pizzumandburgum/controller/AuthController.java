@@ -8,7 +8,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
-import uy.um.edu.pizzumandburgum.dto.request.AdministradorRequestDTO;
+import uy.um.edu.pizzumandburgum.dto.request.AdministradorLoginRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.AuthRequest;
 import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.AuthResponse;
@@ -60,7 +60,7 @@ public class AuthController {
         } catch (Exception e) {}
 
         try {
-            AdministradorResponseDTO admin = administradorService.login(new AdministradorRequestDTO(email, contrasenia));
+            AdministradorResponseDTO admin = administradorService.login(new AdministradorLoginRequestDTO(email, contrasenia));
             String token = jwtUtil.generateToken(email, "ADMIN");
             String refreshToken = jwtUtil.generateRefreshToken(email, "ADMIN");
 

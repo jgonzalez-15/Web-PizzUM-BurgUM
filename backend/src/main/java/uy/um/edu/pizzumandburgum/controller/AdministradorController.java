@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import uy.um.edu.pizzumandburgum.dto.request.AdministradorRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.update.AdministradorUpdateDTO;
 import uy.um.edu.pizzumandburgum.security.JwtUtil;
@@ -18,7 +19,7 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.AdministradorService;
 import java.util.List;
 
 @RestController
-//@PreAuthorize("hasAuthority('ADMIN')")
+@PreAuthorize("hasAuthority('ADMIN')")
 @RequestMapping("/api/administrador")
 @CrossOrigin(origins = "http://localhost:5173")
 public class AdministradorController {
@@ -27,11 +28,12 @@ public class AdministradorController {
     private AdministradorService administradorService;
 
     @Autowired
+
     private JwtUtil jwtUtil;
 
 
     @PostMapping("/agregarAdmin")
-    public ResponseEntity<AdministradorResponseDTO> agregarAdmin(@Validated @RequestBody AdministradorResponseDTO dto) {
+    public ResponseEntity<AdministradorResponseDTO> agregarAdmin(@Validated @RequestBody AdministradorRequestDTO dto) {
         AdministradorResponseDTO admin = administradorService.agregarAdmin(dto);
 
         return ResponseEntity.ok(admin);
@@ -60,16 +62,25 @@ public class AdministradorController {
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
 
-    @PutMapping("/perfil")
-    public ResponseEntity<AdministradorResponseDTO> editarPerfil(Authentication authentication, @RequestBody AdministradorUpdateDTO dto) {
-        String email = authentication.getName();
+    @PutMapping("/editar/{email}")
+    public ResponseEntity<AdministradorResponseDTO> editarPerfil(@PathVariable String email, @RequestBody AdministradorUpdateDTO dto) {
         AdministradorResponseDTO response = administradorService.editarPerfil(email, dto);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/listar")
+
+
+
     public ResponseEntity<List<AdministradorResponseDTO>> mostrarAdministradores() {
         List<AdministradorResponseDTO> administradores = administradorService.listarAdministradores();
         return ResponseEntity.ok(administradores);
     }
+
+    @DeleteMapping("/eliminar/{email}")
+    public ResponseEntity<String> eliminarAdmin(@PathVariable String email) {
+        administradorService.eliminarAdministrador(email);
+        return ResponseEntity.ok("Administrador eliminado correctamente");
+    }
+
 }

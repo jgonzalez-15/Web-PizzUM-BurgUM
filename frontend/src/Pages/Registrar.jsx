@@ -22,7 +22,7 @@ export default function Registrar() {
     const registrarUsuario = async (e) => {
         e.preventDefault();
 
-        if (!email || !nombre || !apellido || !contrasenia || !confirmarContrasenia || !telefono || !fechaNacimiento || !direccion || !numeroTarjeta || !nombreTitular || !fechaVencimiento, !cedula) {
+        if (!email || !nombre || !apellido || !contrasenia || !confirmarContrasenia || !telefono || !fechaNacimiento || !direccion || !numeroTarjeta || !nombreTitular || !fechaVencimiento || !cedula) {
             alert("Debes completar todos los campos.");
             return;
         }
@@ -90,70 +90,78 @@ export default function Registrar() {
                     Crear cuenta
                 </h1>
 
-                {/* Formulario */}
-                <form onSubmit={registrarUsuario} className="flex flex-col gap-8 w-[calc(100vw-4rem)] md:w-[calc(100vw-28rem)] max-w-3xl mb-8">
+                <form
+                    onSubmit={registrarUsuario}
+                    className="flex flex-col gap-10 w-[calc(100vw-4rem)] md:w-[calc(100vw-28rem)] max-w-3xl mb-16"
+                >
                     {/* Datos del usuario */}
-                    <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
-                        <h2 className="font-bold text-xl mb-4 text-gray-800">
+                    <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-200">
+                        <h2 className="font-bold text-2xl mb-6 text-gray-800 text-center">
                             Datos personales
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <input
                                 type="email"
                                 placeholder="Correo electrónico"
-                                className="bg-gray-100 rounded-2xl p-2"
+                                className="bg-gray-100 rounded-xl p-3 border border-gray-300 focus:ring-2 focus:ring-orange-400 outline-none"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
+
                             <input
                                 type="text"
                                 placeholder="Nombre"
-                                className="bg-gray-100 rounded-2xl p-2"
+                                className="bg-gray-100 rounded-xl p-3 border border-gray-300 focus:ring-2 focus:ring-orange-400 outline-none"
                                 value={nombre}
                                 onChange={(e) => setNombre(e.target.value)}
                             />
+
                             <input
                                 type="text"
                                 placeholder="Apellido"
-                                className="bg-gray-100 rounded-2xl p-2"
+                                className="bg-gray-100 rounded-xl p-3 border border-gray-300 focus:ring-2 focus:ring-orange-400 outline-none"
                                 value={apellido}
                                 onChange={(e) => setApellido(e.target.value)}
                             />
+
                             <input
                                 type="tel"
                                 placeholder="Teléfono"
-                                className="bg-gray-100 rounded-2xl p-2"
+                                className="bg-gray-100 rounded-xl p-3 border border-gray-300 focus:ring-2 focus:ring-orange-400 outline-none"
                                 value={telefono}
                                 onChange={(e) => setTelefono(e.target.value)}
                             />
+
                             <input
                                 type="date"
-                                placeholder="Fecha de nacimiento"
-                                className="bg-gray-100 rounded-2xl p-2"
+                                className="bg-gray-100 rounded-xl p-3 border border-gray-300 focus:ring-2 focus:ring-orange-400 outline-none"
                                 value={fechaNacimiento}
                                 onChange={(e) => setFechaNacimiento(e.target.value)}
                             />
+
                             <input
                                 type="text"
-                                placeholder="Cedula"
-                                className="bg-gray-100 rounded-2xl p-2"
+                                placeholder="Cédula"
+                                className="bg-gray-100 rounded-xl p-3 border border-gray-300 focus:ring-2 focus:ring-orange-400 outline-none"
                                 value={cedula}
                                 onChange={(e) => setCedula(e.target.value)}
                             />
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
                             <input
                                 type="password"
                                 placeholder="Contraseña"
-                                className="bg-gray-100 rounded-2xl p-2"
+                                className="bg-gray-100 rounded-xl p-3 border border-gray-300 focus:ring-2 focus:ring-orange-400 outline-none"
                                 value={contrasenia}
                                 onChange={(e) => setContrasenia(e.target.value)}
                             />
+
                             <input
                                 type="password"
                                 placeholder="Confirmar contraseña"
-                                className="bg-gray-100 rounded-2xl p-2"
+                                className="bg-gray-100 rounded-xl p-3 border border-gray-300 focus:ring-2 focus:ring-orange-400 outline-none"
                                 value={confirmarContrasenia}
                                 onChange={(e) => setConfirmarContrasenia(e.target.value)}
                             />
@@ -161,42 +169,46 @@ export default function Registrar() {
                     </div>
 
                     {/* Domicilio */}
-                    <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
-                        <h2 className="font-bold text-xl mb-4 text-gray-800">
+                    <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-200">
+                        <h2 className="font-bold text-2xl mb-6 text-gray-800 text-center">
                             Domicilio
                         </h2>
+
                         <input
                             type="text"
                             placeholder="Dirección completa"
-                            className="bg-gray-100 rounded-2xl w-full p-2"
+                            className="bg-gray-100 rounded-xl w-full p-3 border border-gray-300 focus:ring-2 focus:ring-orange-400 outline-none"
                             value={direccion}
                             onChange={(e) => setDireccion(e.target.value)}
                         />
                     </div>
 
                     {/* Medio de pago */}
-                    <div className="bg-gray-50 shadow-2xl rounded-2xl p-8">
-                        <h2 className="font-bold text-xl mb-4 text-gray-800">
+                    <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-200">
+                        <h2 className="font-bold text-2xl mb-6 text-gray-800 text-center">
                             Medio de pago
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <input
                                 type="text"
                                 placeholder="Número de tarjeta"
-                                className="bg-gray-100 rounded-2xl p-2"
+                                className="bg-gray-100 rounded-xl p-3 border border-gray-300 focus:ring-2 focus:ring-orange-400 outline-none"
                                 value={numeroTarjeta}
                                 onChange={(e) => setNumeroTarjeta(e.target.value)}
                             />
+
                             <input
                                 type="text"
                                 placeholder="Titular de la tarjeta"
-                                className="bg-gray-100 rounded-2xl p-2"
+                                className="bg-gray-100 rounded-xl p-3 border border-gray-300 focus:ring-2 focus:ring-orange-400 outline-none"
                                 value={nombreTitular}
                                 onChange={(e) => setNombreTitular(e.target.value)}
                             />
+
                             <input
                                 type="month"
-                                className="bg-gray-100 rounded-2xl p-2"
+                                className="bg-gray-100 rounded-xl p-3 border border-gray-300 focus:ring-2 focus:ring-orange-400 outline-none"
                                 value={fechaVencimiento}
                                 onChange={(e) => setFechaVencimiento(e.target.value)}
                             />
@@ -206,11 +218,12 @@ export default function Registrar() {
                     {/* Botón final */}
                     <button
                         type="submit"
-                        className="w-full bg-orange-400 text-white font-bold py-3 rounded-2xl shadow-2xl hover:scale-105 transition-transform text-lg mt-4"
+                        className="w-full bg-orange-500 text-white font-bold py-3 rounded-2xl shadow-xl hover:bg-orange-600 hover:scale-[1.02] transition-transform text-lg mt-2"
                     >
                         Registrarme
                     </button>
                 </form>
+
 
                 {/* PieDePagina */}
                 <PieDePagina />
