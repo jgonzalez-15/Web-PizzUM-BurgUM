@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
+import uy.um.edu.pizzumandburgum.dto.response.TicketResponseDTO;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ReporteService;
 
 import java.time.LocalDate;
@@ -30,7 +31,7 @@ public class RepositoryController {
     }
 
     @GetMapping("/tickets/{fecha}")
-    public ResponseEntity<List<PedidoResponseDTO>> obtenerTickets(@PathVariable LocalDate fecha) {
+    public ResponseEntity<List<TicketResponseDTO>> obtenerTickets(@PathVariable LocalDate fecha) {
         return ResponseEntity.ok(reporteService.obtenerTicketsDeVenta(fecha));
     }
 
