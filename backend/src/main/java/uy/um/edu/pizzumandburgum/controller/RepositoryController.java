@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ReporteService;
@@ -28,13 +29,13 @@ public class RepositoryController {
         return ResponseEntity.ok(reporteService.obtenerDatosTarjetas());
     }
 
-    @GetMapping("/tickets")
-    public ResponseEntity<List<PedidoResponseDTO>> obtenerTickets(@RequestParam LocalDate fecha) {
+    @GetMapping("/tickets/{fecha}")
+    public ResponseEntity<List<PedidoResponseDTO>> obtenerTickets(@PathVariable LocalDate fecha) {
         return ResponseEntity.ok(reporteService.obtenerTicketsDeVenta(fecha));
     }
 
-    @GetMapping("/usuarios/cantidad")
-    public ResponseEntity<List<Object>> obtenerCantidadUsuarios() {
+    @GetMapping("/administradores")
+    public ResponseEntity<List<AdministradorResponseDTO>> obtenerCantidadUsuarios() {
         return ResponseEntity.ok(reporteService.obtenerCantidadUsuarios());
     }
 }

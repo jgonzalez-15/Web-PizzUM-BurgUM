@@ -15,7 +15,6 @@ public class AdministradorResponseDTO {
     private String email;
     private String nombre;
     private String apellido;
-    private String contrasenia;
     private Long telefono;
     private LocalDate fechaNac;
     private Long cedula;

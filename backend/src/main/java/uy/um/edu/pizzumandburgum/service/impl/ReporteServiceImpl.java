@@ -52,21 +52,13 @@ public class ReporteServiceImpl implements ReporteService {
     private ClienteMapper clienteMapper;
 
     @Override
-    public List<Object> obtenerCantidadUsuarios() {
-        List<Cliente> clientes = clienteRepository.findAll();
-        List<ClienteResponseDTO> clientesResponseDTO = new ArrayList<>();
-        for (Cliente cliente : clientes) {
-            clientesResponseDTO.add(clienteMapper.toResponseDTO(cliente));
-        }
+    public List<AdministradorResponseDTO> obtenerCantidadUsuarios() {
         List<Administrador> administradores = administradorRepository.findAll();
         List<AdministradorResponseDTO> administradoresResponseDTO = new ArrayList<>();
         for (Administrador administrador : administradores) {
             administradoresResponseDTO.add(administradorMapper.toResponseDTO(administrador));
         }
-        List<Object> result = new ArrayList<>();
-        result.add(clientesResponseDTO);
-        result.add(administradoresResponseDTO);
-        return result;
+        return administradoresResponseDTO;
     }
 
     @Override
@@ -86,7 +78,7 @@ public class ReporteServiceImpl implements ReporteService {
         List<PedidoResponseDTO> resultado = new ArrayList<>();
         for (Pedido pedido : pedidos) {
             PedidoResponseDTO dto = pedidoMapper.toResponseDTO(pedido);
-            if ((dto.getFecha().isEqual(fecha))) {
+            if ((dto.getFecha().isEqual(fecha)) && !dto.getEstado().equals("En Cola") && !dto.getEstado().equals("Cancelado")) {
                 resultado.add(dto);
             }
         }

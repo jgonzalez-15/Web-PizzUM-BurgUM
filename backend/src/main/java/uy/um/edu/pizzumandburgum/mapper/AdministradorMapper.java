@@ -11,13 +11,12 @@ public class AdministradorMapper {
         admin.setNombre(dto.getNombre());
         admin.setApellido(dto.getApellido());
         admin.setEmail(dto.getEmail());
-        admin.setContrasenia(dto.getContrasenia());
         admin.setFechaNac(dto.getFechaNac());
         admin.setTelefono(dto.getTelefono());
         return admin;
     }
 
     public AdministradorResponseDTO toResponseDTO(Administrador admin) {
-        return new AdministradorResponseDTO(admin.getEmail(), admin.getNombre(), admin.getApellido(), admin.getContrasenia(), admin.getTelefono(), admin.getFechaNac(), admin.getCedula(), admin.getDomicilio());
+        return new AdministradorResponseDTO(admin.getEmail(), admin.getNombre(), admin.getApellido(), admin.getTelefono(), admin.getFechaNac(), admin.getCedula(), admin.getDomicilio());
     }
 }
