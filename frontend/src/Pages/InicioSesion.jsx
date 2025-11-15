@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { SessionContext } from "../Components/context/SessionContext";
+import { usarCarrito } from "../Components/context/CarritoContexto.jsx";
+
 import PieDePagina from "../Components/PieDePagina.jsx";
 import Encabezado from "../Components/Encabezado.jsx";
 
@@ -13,6 +15,7 @@ function InicioDeSesion() {
 
     const navigate = useNavigate();
     const { setSessionType, setSessionInfo } = useContext(SessionContext);
+    const { limpiarCarrito } = usarCarrito()
 
     const iniciarSesion = async (e) => {
         e.preventDefault();
@@ -38,6 +41,7 @@ function InicioDeSesion() {
 
             setSessionType(data.rol);
             setSessionInfo(data.info);
+            limpiarCarrito()
             localStorage.setItem("token", data.jwt);
             localStorage.setItem("sessionInfo", JSON.stringify(data.info));
             localStorage.setItem("sessionType", data.rol);

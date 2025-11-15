@@ -15,18 +15,14 @@ import VerCreacion from "./Pages/VerCreacion.jsx";
 import Registrar from "./Pages/Registrar.jsx";
 import Perfil from "./Pages/Perfil";
 import CheckoutPage from "./Pages/PaginaPago.jsx";
-
-
 import PanelAdministrador from "./Pages/PanelAdministrador.jsx";
 import ProductosAdmin from "./Pages/ProductosAdmin.jsx";
 import PedidosAdmin from "./Pages/PedidosAdmin.jsx";
 import AgregarAdministradores from "./pages/AgregarAdministradores.jsx";
 import PedidosFechaAdmin from "./Pages/PedidosFechaAdmin.jsx";
 
-
 function App() {
   const { sessionType, setSessionType, setSessionInfo } = useContext(SessionContext);
-  const navigate = useNavigate();
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
@@ -57,6 +53,12 @@ function App() {
     };
 
     refrescarToken();
+
+    const intervalo = setInterval(() => {
+      refrescarToken();
+    }, 1000*60*15);
+
+    return () => clearInterval(intervalo);
   }, []);
 
   if (cargando) return null;

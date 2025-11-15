@@ -49,6 +49,7 @@ function Pedidos() {
         }
     };
 
+
     const cancelarPedido = async (idPedido) => {
         if (!window.confirm("¿Seguro que querés cancelar este pedido?")) return;
         try {
@@ -102,8 +103,17 @@ function Pedidos() {
     };
 
     useEffect(() => {
-        if (correo) obtenerPedidos();
-    }, [correo]);
+        if(correo) obtenerPedidos();
+    }, []);
+
+    useEffect(() => {
+    const intervalo = setInterval(() => {
+        if(correo) obtenerPedidos();
+    }, 5000);
+
+    return () => clearInterval(intervalo);
+    }, []);
+
 
     return (
         <>

@@ -7,7 +7,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteDomicilioRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.response.ClienteDomicilioResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.DomicilioResponseDTO;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteDomicilioService;
 

@@ -1,10 +1,12 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { SessionContext } from "./context/SessionContext";
+import { usarCarrito } from "./context/CarritoContexto";
 
 export default function BarraLateral() {
     const { sessionType, setSessionType, setSessionInfo } = useContext(SessionContext);
     const navigate = useNavigate();
+    const { limpiarCarrito } = usarCarrito()
 
     const cerrarSesion = async (e) => {
         e.preventDefault();
@@ -19,6 +21,7 @@ export default function BarraLateral() {
             });
 
             if (respuesta.ok) {
+                limpiarCarrito()
                 localStorage.removeItem("token");
                 setSessionInfo(null);
                 setSessionType("INVITADO");
