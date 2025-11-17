@@ -31,6 +31,9 @@ public class Domicilio {
     @OneToMany(mappedBy = "domicilio", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HistoricoDomicilioModificaciones> historico = new ArrayList<>();
 
+    @OneToOne(mappedBy = "domicilio")
+    private Administrador administrador;
+
 }
 
 

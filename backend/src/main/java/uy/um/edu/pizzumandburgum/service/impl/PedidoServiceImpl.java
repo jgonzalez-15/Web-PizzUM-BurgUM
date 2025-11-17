@@ -67,6 +67,7 @@ public class PedidoServiceImpl implements PedidoService {
     private PagoDummyRepository pagoDummyRepository;
 
 
+
     @Override
     public PedidoResponseDTO realizarPedido(PedidoRequestDTO dto) {
         try {
@@ -172,9 +173,15 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public List<PedidoResponseDTO> pedidosEnCurso() {
         List<Pedido> pedidos = pedidoRepository.findAll();
+        List<Pedido> pagos = new ArrayList<>();
+        for (Pedido pedido: pedidos){
+            if (pedido.isEstaPago()){
+                pagos.add(pedido);
+            }
+        }
         List<Pedido> convertir = new ArrayList<>();
         List<PedidoResponseDTO> pedidoResponseDTOS = new ArrayList<>();
-        for (Pedido pedido: pedidos){
+        for (Pedido pedido: pagos){
             if (!pedido.getEstado().equals("Entregado")){
                 convertir.add(pedido);
             }

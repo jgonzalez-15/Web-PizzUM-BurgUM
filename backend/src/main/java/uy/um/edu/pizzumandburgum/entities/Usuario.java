@@ -31,6 +31,7 @@ public abstract class Usuario {
 
     private LocalDate fechaNac;
 
+    @Column(unique = true)
     private Long cedula;
 
 }
