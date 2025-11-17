@@ -61,10 +61,10 @@ function InicioDeSesion() {
 
     return (
         <>
-            <Encabezado />
+        <Encabezado />
         <div className="flex flex-col min-h-screen bg-gray-50 justify-between">
-            <div className="flex flex-col items-center justify-center flex-1">
-                <div className="bg-white w-80 md:w-96 rounded-2xl shadow-xl p-8 border border-gray-200">
+            <div className="flex flex-col pt-16 items-center justify-center flex-1">
+                <div className="bg-white w-80 md:w-96 rounded-2xl m-8 shadow-xl p-8 border border-gray-200">
                     <h1 className="text-center text-2xl md:text-3xl font-extrabold text-gray-800 mb-6">
                         Iniciar sesión
                     </h1>
