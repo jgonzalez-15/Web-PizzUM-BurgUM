@@ -19,5 +19,5 @@ public class AdministradorRequestDTO {
     private Long telefono;
     private LocalDate fechaNac;
     private Long cedula;
-    private String domicilio;
+    private Long domicilio;
 }

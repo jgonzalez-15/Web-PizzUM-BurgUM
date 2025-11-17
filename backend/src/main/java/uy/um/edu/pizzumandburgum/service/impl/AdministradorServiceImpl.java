@@ -7,13 +7,16 @@ import uy.um.edu.pizzumandburgum.dto.request.AdministradorRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.update.AdministradorUpdateDTO;
 import uy.um.edu.pizzumandburgum.entities.Administrador;
+import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Administrador.AdministradorNoExiste;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Administrador.AdministradorYaExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.ContraseniaInvalidaException;
 import uy.um.edu.pizzumandburgum.mapper.AdministradorMapper;
 import uy.um.edu.pizzumandburgum.repository.AdministradorRepository;
+import uy.um.edu.pizzumandburgum.repository.DomicilioRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.AdministradorService;
+import uy.um.edu.pizzumandburgum.service.Interfaces.Historicos.HistoricoAdministradorService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,13 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Autowired
     private AdministradorMapper administradorMapper;
 
+    @Autowired
+    private DomicilioRepository domicilioRepository;
+
+    @Autowired
+    private HistoricoAdministradorService historicoAdministradorService;
+
+
     @Override
     public AdministradorResponseDTO agregarAdmin(AdministradorRequestDTO dto) {
         Administrador admin = administradorMapper.toEntity(dto);
@@ -34,6 +44,7 @@ public class AdministradorServiceImpl implements AdministradorService {
             throw new AdministradorYaExisteException();
         }
         administradorRepository.save(admin);
+        historicoAdministradorService.RegistrarAgregar(admin);
         return administradorMapper.toResponseDTO(admin);
     }
 
@@ -44,12 +55,13 @@ public class AdministradorServiceImpl implements AdministradorService {
         if (!Objects.equals(administrador.getContrasenia(), dto.getContrasenia())){
             throw new ContraseniaInvalidaException();
         }
-        return new AdministradorResponseDTO(administrador.getEmail(), administrador.getNombre(), administrador.getApellido(), administrador.getTelefono(), administrador.getFechaNac(), administrador.getCedula(), administrador.getDomicilio());
+        return new AdministradorResponseDTO(administrador.getEmail(), administrador.getNombre(), administrador.getApellido(), administrador.getTelefono(), administrador.getFechaNac(), administrador.getCedula(), administrador.getDomicilio().getDireccion());
 
     }
 
     @Override
     public AdministradorResponseDTO editarPerfil(String email, AdministradorUpdateDTO dto) {
+        Administrador viejo = administradorRepository.findById(email).orElseThrow(AdministradorNoExiste::new);
         Administrador administrador = administradorRepository.findById(email).orElseThrow(AdministradorNoExiste::new);
         if (dto.getNombre() != null) {
             administrador.setNombre(dto.getNombre());
@@ -70,9 +82,12 @@ public class AdministradorServiceImpl implements AdministradorService {
             administrador.setCedula(dto.getCedula());
         }
         if (dto.getDomicilio() != null) {
-            administrador.setDomicilio(dto.getDomicilio());
+            administrador.setDomicilio(domicilioRepository.findById(dto.getDomicilio()).orElseThrow(DomicilioNoExisteException::new));
         }
         administradorRepository.save(administrador);
+
+        historicoAdministradorService.registrarActualizacion(viejo,administrador);
+
         return administradorMapper.toResponseDTO(administrador);
     }
 
@@ -81,7 +96,9 @@ public class AdministradorServiceImpl implements AdministradorService {
         List <Administrador> administradores = administradorRepository.findAll();
         List <AdministradorResponseDTO>retornar = new ArrayList<>();
         for (Administrador administrador: administradores) {
+            if (administrador.isEstaActivo()){
             retornar.add(administradorMapper.toResponseDTO(administrador));
+            }
         }
         return retornar;
     }
@@ -97,14 +114,15 @@ public class AdministradorServiceImpl implements AdministradorService {
                 administrador.getTelefono(),
                 administrador.getFechaNac(),
                 administrador.getCedula(),
-                administrador.getDomicilio()
+                administrador.getDomicilio().getDireccion()
         );
     }
 
     @Override
     public void eliminarAdministrador(String email) {
         Administrador admin = administradorRepository.findById(email).orElseThrow(AdministradorNoExiste::new);
-
+        admin.setEstaActivo(false);
+        historicoAdministradorService.RegistrarEliminar(admin);
         administradorRepository.delete(admin);
     }
 
