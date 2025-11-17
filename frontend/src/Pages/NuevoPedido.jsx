@@ -69,9 +69,47 @@ export default function NuevoPedido() {
                 <div className="flex flex-col md:flex-row items-start justify-between gap-8 px-6 md:px-16 mb-10">
                     <div className="w-full md:w-2/3 flex flex-col items-center md:items-start">
                         <h1 className="text-3xl font-extrabold text-gray-800 mb-6">
+                            Bebidas
+                        </h1>
+                        <div className="mb-6 bg-white p-6 rounded-2xl shadow-md border border-gray-100 flex flex-col gap-4">
+                                    <h3 className="font-semibold text-lg text-gray-800">
+                                        Agregar bebida
+                                    </h3>
+
+                                    {cargandoBebidas ? (
+                                        <p className="text-gray-600 text-sm">Cargando bebidas...</p>
+                                    ) : bebidas.length === 0 ? (
+                                        <p className="text-gray-600 text-sm">
+                                            No hay bebidas disponibles por el momento.
+                                        </p>
+                                    ) : (
+                                        <>
+                                            <p className="text-gray-600 text-sm">
+                                                Elegí una bebida para acompañar tu pedido:
+                                            </p>
+
+                                            <div className="flex flex-wrap gap-3">
+                                                {bebidas.map((b, index) => (
+                                                    <button
+                                                        key={`bebida-${b.idProducto || index}`}
+                                                        onClick={() => agregarBebida(b)}
+                                                        className="w-28 flex flex-col items-center px-4 py-3 rounded-2xl shadow-sm border border-orange-200 bg-gradient-to-r from-orange-50 to-orange-100 hover:from-orange-100 hover:to-orange-200 transition-all hover:scale-[1.03]"
+                                                    >
+                                                        <span className="text-orange-700 font-semibold">
+                                                            {b.nombre}
+                                                        </span>
+                                                        <span className="text-xs text-gray-500 mt-1">
+                                                            ${b.precio}
+                                                        </span>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                        <h1 className="text-3xl font-extrabold text-gray-800 mb-6">
                             Tu carrito
                         </h1>
-
                         {items.length === 0 ? (
                             <div className="flex flex-col items-center justify-center text-center bg-white shadow-xl rounded-2xl p-8 w-full md:w-2/3 border border-gray-200">
                                 <h2 className="text-gray-600 mb-4">
@@ -129,43 +167,6 @@ export default function NuevoPedido() {
                                         </button>
                                     </div>
                                 ))}
-
-                                <div className="mt-6 bg-white p-6 rounded-2xl shadow-md border border-gray-100 flex flex-col gap-4">
-                                    <h3 className="font-semibold text-lg text-gray-800">
-                                        Agregar bebida
-                                    </h3>
-
-                                    {cargandoBebidas ? (
-                                        <p className="text-gray-600 text-sm">Cargando bebidas...</p>
-                                    ) : bebidas.length === 0 ? (
-                                        <p className="text-gray-600 text-sm">
-                                            No hay bebidas disponibles por el momento.
-                                        </p>
-                                    ) : (
-                                        <>
-                                            <p className="text-gray-600 text-sm">
-                                                Elegí una bebida para acompañar tu pedido:
-                                            </p>
-
-                                            <div className="flex flex-wrap gap-3">
-                                                {bebidas.map((b, index) => (
-                                                    <button
-                                                        key={`bebida-${b.idProducto || index}`}
-                                                        onClick={() => agregarBebida(b)}
-                                                        className="w-28 flex flex-col items-center px-4 py-3 rounded-2xl shadow-sm border border-orange-200 bg-gradient-to-r from-orange-50 to-orange-100 hover:from-orange-100 hover:to-orange-200 transition-all hover:scale-[1.03]"
-                                                    >
-                                                        <span className="text-orange-700 font-semibold">
-                                                            {b.nombre}
-                                                        </span>
-                                                        <span className="text-xs text-gray-500 mt-1">
-                                                            ${b.precio}
-                                                        </span>
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
                             </div>
                         )}
                     </div>
