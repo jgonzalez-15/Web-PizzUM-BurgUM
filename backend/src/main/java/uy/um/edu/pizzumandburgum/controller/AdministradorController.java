@@ -83,4 +83,11 @@ public class AdministradorController {
         return ResponseEntity.ok("Administrador eliminado correctamente");
     }
 
+    @PutMapping("/{email}/domicilio/{idDomicilio}")
+    public ResponseEntity<Void> asociarDomicilio(@PathVariable String email, @PathVariable Long idDomicilio) {
+
+        administradorService.asociarDomicilio(idDomicilio, email);
+        return ResponseEntity.noContent().build();
+    }
+
 }

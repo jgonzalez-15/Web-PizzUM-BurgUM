@@ -14,4 +14,5 @@ public interface AdministradorService {
     List<AdministradorResponseDTO> listarAdministradores();
     AdministradorResponseDTO obtenerAdministrador(String email);
     void eliminarAdministrador(String email);
+    void asociarDomicilio(Long idDomicilio,String email);
 }

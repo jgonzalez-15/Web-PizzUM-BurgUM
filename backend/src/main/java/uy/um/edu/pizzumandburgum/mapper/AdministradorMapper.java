@@ -24,7 +24,6 @@ public class AdministradorMapper {
         admin.setFechaNac(dto.getFechaNac());
         admin.setTelefono(dto.getTelefono());
         admin.setCedula(dto.getCedula());
-        admin.setDomicilio(domicilioRepository.findById(dto.getDomicilio()).orElseThrow(()-> new DomicilioNoExisteException()));
         return admin;
     }
 
