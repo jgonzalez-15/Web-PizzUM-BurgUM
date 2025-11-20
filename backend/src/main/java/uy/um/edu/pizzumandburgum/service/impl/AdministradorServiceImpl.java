@@ -57,7 +57,7 @@ public class AdministradorServiceImpl implements AdministradorService {
         Domicilio domicilioGuardado = domicilioRepository.saveAndFlush(domicilio);
         administradorRepository.save(admin);
         domicilioGuardado.setAdministrador(admin);
-        admin.setDomicilio(domicilioGuardado);
+        asociarDomicilio(domicilioGuardado.getId(), admin.getEmail());
         historicoAdministradorService.RegistrarAgregar(admin);
         return administradorMapper.toResponseDTO(admin);
     }
@@ -72,11 +72,14 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     public AdministradorResponseDTO login(AdministradorLoginRequestDTO dto) {
         Administrador administrador = administradorRepository.findById(dto.getEmail()).orElseThrow(AdministradorNoExiste::new);
-
         if (!Objects.equals(administrador.getContrasenia(), dto.getContrasenia())){
             throw new ContraseniaInvalidaException();
         }
-        return new AdministradorResponseDTO(administrador.getEmail(), administrador.getNombre(), administrador.getApellido(), administrador.getTelefono(), administrador.getFechaNac(), administrador.getCedula(), administrador.getDomicilio().getDireccion());
+        String domicilio = "";
+        if (administrador.getDomicilio() != null) {
+            domicilio = administrador.getDomicilio().getDireccion();
+        }
+        return new AdministradorResponseDTO(administrador.getEmail(), administrador.getNombre(), administrador.getApellido(), administrador.getTelefono(), administrador.getFechaNac(), administrador.getCedula(), domicilio);
 
     }
 
@@ -103,7 +106,9 @@ public class AdministradorServiceImpl implements AdministradorService {
             administrador.setCedula(dto.getCedula());
         }
         if (dto.getDomicilio() != null) {
-            administrador.setDomicilio(domicilioRepository.findById(dto.getDomicilio()).orElseThrow(DomicilioNoExisteException::new));
+            Domicilio domicilio = domicilioMapper.toEntity(dto.getDomicilio());
+            Domicilio domicilioGuardado = domicilioRepository.saveAndFlush(domicilio);
+            asociarDomicilio(domicilioGuardado.getId(), administrador.getEmail());
         }
         administradorRepository.save(administrador);
 
@@ -128,6 +133,10 @@ public class AdministradorServiceImpl implements AdministradorService {
     public AdministradorResponseDTO obtenerAdministrador(String email) {
         Administrador administrador = administradorRepository.findById(email)
                 .orElseThrow(AdministradorNoExiste::new);
+        String domicilio = "";
+        if (administrador.getDomicilio() != null) {
+            domicilio = administrador.getDomicilio().getDireccion();
+        }
         return new AdministradorResponseDTO(
                 administrador.getEmail(),
                 administrador.getNombre(),
@@ -135,7 +144,7 @@ public class AdministradorServiceImpl implements AdministradorService {
                 administrador.getTelefono(),
                 administrador.getFechaNac(),
                 administrador.getCedula(),
-                administrador.getDomicilio().getDireccion()
+                domicilio
         );
     }
 

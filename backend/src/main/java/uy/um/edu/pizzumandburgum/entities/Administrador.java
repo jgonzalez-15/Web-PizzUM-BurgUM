@@ -18,8 +18,9 @@ import java.util.List;
 @Setter
 public class Administrador extends Usuario{
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "domicilio_id")
+    @JoinColumn(name = "id_domicilio")
     private Domicilio domicilio;
+
     @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean estaActivo = true;
 
