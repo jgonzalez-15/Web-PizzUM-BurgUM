@@ -88,8 +88,11 @@ public class DomicilioServiceImpl implements DomicilioService {
         if (cantidadDomicilios <= 1) {
             throw new UnicoDomicilioException();
         }
+        domicilio.setEstaActivo(false);
         historicoService.RegistrarEliminar(domicilio);
 
         clienteDomicilioService.eliminarDomicilioDeCliente(clienteId,domicilioId);
     }
+
+
 }

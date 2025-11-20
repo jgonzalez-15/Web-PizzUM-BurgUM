@@ -232,8 +232,9 @@ public class ClienteServiceImpl implements ClienteService {
         List<DomicilioResponseDTO>domicilios = new ArrayList<>();
         for (ClienteDomicilio cd : cliente.getDomicilios()){
             Domicilio domicilio = domicilioRepository.findById(cd.getDomicilio().getId()).orElseThrow(DomicilioNoExisteException::new);
+            if (domicilio.isEstaActivo()){
             DomicilioResponseDTO dto = domicilioMapper.toResponseDTO(domicilio);
-            domicilios.add(dto);
+            domicilios.add(dto);}
         }
         return domicilios;
     }
