@@ -29,7 +29,7 @@ function Encabezado() {
 
                 {/* Botón menú lateral */}
                 <div
-                    className="m-2 h-12 w-12 bg-gray-100 hover:bg-gray-200 fixed top-1 left-1 flex items-center justify-center rounded-lg shadow-sm transition-all cursor-pointer z-30"
+                    className="m-1 h-12 w-12 bg-gray-100 hover:bg-gray-200 fixed top-1 left-1 flex items-center justify-center rounded-lg shadow-sm transition-all cursor-pointer z-30"
                     onClick={() => {
                         setMenuAbierto(!menuAbierto);
                         setMostrarCarrito(false);
@@ -42,7 +42,7 @@ function Encabezado() {
 
                 {/* Botón carrito */}
                 <div
-                    className="m-2 h-12 w-12 fixed top-1 right-1 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-all cursor-pointer shadow-sm z-30"
+                    className="m-1 h-12 w-12 fixed top-1 right-1 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-all cursor-pointer shadow-sm z-30"
                     onClick={() => {
                         setMostrarCarrito(!mostrarCarrito);
                         setMenuAbierto(false);

@@ -168,14 +168,14 @@ export default function AgregarAdministradores() {
     };
 
     return (
-        <div className="min-h-screen w-full bg-gray-50 flex flex-col items-center py-10 px-6">
+        <div className="min-h-screen w-full bg-gray-50 flex flex-col items-center py-10 px-3 md:px-6">
             <h1 className="text-3xl font-extrabold text-gray-800 mb-6 text-center">
                 Administradores
             </h1>
 
-            <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+            <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl p-4 md:p-8 border border-gray-200">
 
-                <div className="flex justify-between mb-8">
+                <div className="flex justify-center mb-4 md:mb-8">
                     <button
                         onClick={() => {
                             setMostrarFormulario(!mostrarFormulario);
@@ -219,10 +219,10 @@ export default function AgregarAdministradores() {
                             ))}
                         </div>
 
-                        <div className="flex justify-end mt-6 gap-4">
+                        <div className="flex md:flex-row flex-col justify-end mt-6 gap-4">
                             <button
                                 onClick={cerrarFormulario}
-                                className="bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-full py-2 px-6"
+                                className="bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-2xl py-2 px-6"
                             >
                                 Cancelar
                             </button>
@@ -230,14 +230,14 @@ export default function AgregarAdministradores() {
                             {editando ? (
                                 <button
                                     onClick={actualizarAdministrador}
-                                    className="bg-orange-500 hover:bg-orange-600 text-white rounded-full py-2 px-6"
+                                    className="bg-orange-500 hover:bg-orange-600 text-white rounded-2xl py-2 px-6"
                                 >
                                     Guardar cambios
                                 </button>
                             ) : (
                                 <button
                                     onClick={crearAdministrador}
-                                    className="bg-orange-500 hover:bg-orange-600 text-white rounded-full py-2 px-6"
+                                    className="bg-orange-500 hover:bg-orange-600 text-white rounded-2xl py-2 px-6"
                                 >
                                     Crear administrador
                                 </button>
@@ -252,7 +252,7 @@ export default function AgregarAdministradores() {
                         administradores.map((admin) => (
                             <div
                                 key={admin.email}
-                                className="py-3 flex justify-between items-center hover:bg-gray-100 px-3 rounded-xl transition"
+                                className="py-3 flex md:flex-row flex-col justify-between items-center hover:bg-gray-100 px-3 rounded-xl transition"
                             >
                                 <div>
                                     <p className="font-semibold text-gray-800">{admin.nombre} {admin.apellido}</p>
@@ -261,20 +261,22 @@ export default function AgregarAdministradores() {
                                     </p>
                                 </div>
 
-                                <div className="flex gap-3">
-                                    <button
-                                        onClick={() => editarAdministrador(admin)}
-                                        className="bg-orange-500 hover:bg-orange-600 text-white text-sm px-4 py-1.5 rounded-full font-semibold shadow"
-                                    >
-                                        Ver / Editar
-                                    </button>
+                                <div className="mt-3">
+                                    <div className="flex gap-3">
+                                        <button
+                                            onClick={() => editarAdministrador(admin)}
+                                            className="bg-orange-500 hover:bg-orange-600 text-white text-sm px-4 py-1.5 rounded-2xl font-semibold shadow"
+                                        >
+                                            Ver / Editar
+                                        </button>
 
-                                    <button
-                                        onClick={() => eliminarAdministrador(admin.email)}
-                                        className="bg-red-500 hover:bg-red-600 text-white text-sm px-4 py-1.5 rounded-full font-semibold shadow"
-                                    >
-                                        Eliminar
-                                    </button>
+                                        <button
+                                            onClick={() => eliminarAdministrador(admin.email)}
+                                            className="bg-red-500 hover:bg-red-600 text-white text-sm px-4 py-1.5 rounded-2xl font-semibold shadow"
+                                        >
+                                            Eliminar
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))
