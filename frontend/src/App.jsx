@@ -106,7 +106,6 @@ function App() {
                   <Route path="productos" element={<ProductosAdmin />} />
                   <Route path="pedidos" element={<PedidosAdmin />} />
                   <Route path="administradores" element={<AgregarAdministradores />} />
-
                 </Route>
                 </>
           )}

@@ -20,7 +20,7 @@ function EncabezadoAdmin() {
 
             {/* Botón menú lateral */}
             <div
-                className="m-2 h-12 w-12 bg-gray-100 hover:bg-gray-200 fixed top-1 left-1 flex items-center justify-center rounded-lg shadow-sm transition-all cursor-pointer z-30"
+                className="m-1 h-12 w-12 bg-gray-100 hover:bg-gray-200 fixed top-1 left-1 flex items-center justify-center rounded-lg shadow-sm transition-all cursor-pointer z-30"
                 onClick={() => setMenuAbierto(!menuAbierto)}
             >
                 <button className="text-2xl font-bold text-gray-700">

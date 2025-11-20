@@ -79,8 +79,8 @@ export default function PedidosAdmin() {
     };
 
     return (
-        <div className="min-h-screen w-full bg-gray-50 flex flex-col items-center py-10 px-6">
-            <h1 className="text-3xl font-extrabold text-gray-800 mb-8 text-center">
+        <div className="w-full bg-gray-50 flex flex-col items-center py-10 px-3 md:px-6">
+            <h1 className="m-1 text-2xl md:text-3xl font-extrabold text-gray-800 mb-8 text-center">
                 Pedidos en curso
             </h1>
 
@@ -93,7 +93,7 @@ export default function PedidosAdmin() {
                     pedidos.map((pedido) => (
                         <div
                             key={pedido.id}
-                            className="w-full flex justify-between items-center bg-white rounded-2xl shadow-md p-4 border border-gray-100"
+                            className="w-full flex justify-between items-center bg-white rounded-2xl shadow-md p-4 border border-gray-100 gap-4"
                         >
                             <div>
                                 <h1 className="font-bold text-lg text-gray-800">
@@ -104,7 +104,7 @@ export default function PedidosAdmin() {
                                     Estado: {pedido.estado}
                                 </h2>
                             </div>
-                            <div className="flex gap-3">
+                            <div className="flex flex-col gap-3">
                                 <button
                                     className="bg-gray-200 text-black rounded-xl px-4 py-2 font-bold hover:scale-105 transition-transform"
                                     onClick={() => verDetalles(pedido.id)}

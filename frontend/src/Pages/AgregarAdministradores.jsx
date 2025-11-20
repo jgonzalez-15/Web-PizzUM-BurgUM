@@ -168,14 +168,14 @@ export default function AgregarAdministradores() {
     };
 
     return (
-        <div className="min-h-screen w-full bg-gray-50 flex flex-col items-center py-10 px-3 md:px-6">
-            <h1 className="text-3xl font-extrabold text-gray-800 mb-6 text-center">
+        <div className="w-full bg-gray-50 flex flex-col items-center py-10 px-3 md:px-6">
+            <h1 className="m-1 text-2xl md:text-3xl font-extrabold text-gray-800 mb-6 text-center">
                 Administradores
             </h1>
 
-            <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl p-4 md:p-8 border border-gray-200">
+            <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl p-4 pt-8 md:p-8 border border-gray-200">
 
-                <div className="flex justify-center mb-4 md:mb-8">
+                <div className="flex justify-center mb-8">
                     <button
                         onClick={() => {
                             setMostrarFormulario(!mostrarFormulario);
@@ -247,12 +247,12 @@ export default function AgregarAdministradores() {
                 )}
 
                 {/* Lista */}
-                <div className="divide-y divide-gray-200">
+                <div className="divide-y divide-gray-200 flex flex-col md:flex-row justify-center md:justify-between md:gap-5">
                     {administradores.length > 0 ? (
                         administradores.map((admin) => (
                             <div
                                 key={admin.email}
-                                className="py-3 flex md:flex-row flex-col justify-between items-center hover:bg-gray-100 px-3 rounded-xl transition"
+                                className="py-3 flex md:flex-row flex-col justify-between md:items-center w-full hover:bg-gray-100 px-3 rounded-xl transition md:bg-gray-50"
                             >
                                 <div>
                                     <p className="font-semibold text-gray-800">{admin.nombre} {admin.apellido}</p>
@@ -261,7 +261,7 @@ export default function AgregarAdministradores() {
                                     </p>
                                 </div>
 
-                                <div className="mt-3">
+                                <div className="mt-3 md:mt-0">
                                     <div className="flex gap-3">
                                         <button
                                             onClick={() => editarAdministrador(admin)}

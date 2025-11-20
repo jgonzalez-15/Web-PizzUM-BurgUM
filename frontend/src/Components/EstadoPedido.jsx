@@ -21,9 +21,10 @@ export default function EstadoPedido({ pedido, Cancelar, VerDetalles }) {
 
     return (
         <div className="w-full flex flex-row justify-between items-center bg-gray-50 rounded-2xl shadow-xl h-32">
-            <div className="m-4 flex flex-col">
+            <div className="m-4 flex flex-col truncate">
                 <h1 className="font-bold text-xl">Pedido #{pedido.id}</h1>
-                <h2>Fecha: {pedido.fecha}</h2>
+                <h2 className="truncate">Fecha: {pedido.fecha}</h2>
+                <h2 className="text-orange-400">{pedido.estado}</h2>
             </div>
 
             <div className="m-4 flex flex-row gap-4 items-center">
@@ -40,7 +41,7 @@ export default function EstadoPedido({ pedido, Cancelar, VerDetalles }) {
                     ))}
                 </div>
 
-                <div className="flex flex-row gap-2">
+                <div className="flex flex-col md:flex-row gap-2">
                     <button
                         onClick={() => VerDetalles(pedido.id)}
                         className="z-0 h-12 rounded-2xl shadow-2xl font-bold px-4 text-sm bg-orange-500 text-white hover:bg-orange-600 transition-transform hover:scale-105"

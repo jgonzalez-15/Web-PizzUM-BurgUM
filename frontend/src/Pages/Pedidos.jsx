@@ -6,8 +6,6 @@ import PieDePagina from "../Components/PieDePagina.jsx";
 import PedidoDetalle from "../Components/PedidoDetalle.jsx";
 
 function Pedidos() {
-    if (window.pageYOffset > 0) window.scrollTo(0, 0);
-
     const [pedidosActivos, setPedidosActivos] = useState([]);
     const [historialPedidos, setHistorialPedidos] = useState([]);
     const [mostrarHistorial, setMostrarHistorial] = useState(false);
@@ -15,6 +13,10 @@ function Pedidos() {
 
     const { sessionInfo } = useContext(SessionContext);
     const correo = sessionInfo?.email;
+
+    useEffect(() => {
+        if (window.pageYOffset > 0) window.scrollTo(0, 0);
+    }, []);
 
     const obtenerPedidos = async () => {
         try {
@@ -126,8 +128,8 @@ function Pedidos() {
 
                 {/* Pedidos en curso */}
                 <div className="flex flex-col items-center w-full px-6 md:px-16 mb-10">
-                    <div className="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-8 border border-gray-200 mb-8">
-                        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                    <div className="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-4 md:p-8 border border-gray-200 mb-8">
+                        <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4">
                             Pedidos en curso
                         </h2>
                         {pedidosActivos.length > 0 ? (
@@ -149,9 +151,9 @@ function Pedidos() {
                     </div>
 
                     {/* Historial */}
-                    <div className="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-8 border border-gray-200">
+                    <div className="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-4 md:p-8 border border-gray-200">
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-2xl font-semibold text-gray-800">
+                            <h2 className="text-xl md:text-2xl font-semibold text-gray-800">
                                 Historial de pedidos
                             </h2>
                             <button

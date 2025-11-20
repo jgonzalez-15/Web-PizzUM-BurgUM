@@ -44,7 +44,7 @@ export default function PanelAdministrador() {
                         </NavLink>
                     </nav>
 
-                    <section className="w-full max-w-6xl bg-white rounded-2xl shadow-lg border border-gray-100 p-10">
+                    <section className="w-full max-w-6xl bg-white rounded-2xl shadow-lg border border-gray-100 p-5 md:p-10">
                         <Outlet />
                     </section>
                 </main>

@@ -138,8 +138,8 @@ export default function ProductosAdmin() {
     };
 
     return (
-        <div className="min-h-screen w-full bg-gray-50 flex flex-col items-center py-12 px-4 md:px-8">
-            <h1 className="text-3xl font-extrabold text-gray-800 mb-10 text-center">
+        <div className="w-full bg-gray-50 flex flex-col items-center py-10 px-3 md:px-6">
+            <h1 className="m-1 text-2xl md:text-3xl font-extrabold text-gray-800 mb-10 text-center">
                 Panel de Productos
             </h1>
 
