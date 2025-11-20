@@ -28,6 +28,10 @@ public class AdministradorMapper {
     }
 
     public AdministradorResponseDTO toResponseDTO(Administrador admin) {
-        return new AdministradorResponseDTO(admin.getEmail(), admin.getNombre(), admin.getApellido(), admin.getTelefono(), admin.getFechaNac(), admin.getCedula(), admin.getDomicilio().getDireccion());
+        String domicilio = "";
+        if (admin.getDomicilio() != null) {
+            domicilio = admin.getDomicilio().getDireccion();
+        }
+        return new AdministradorResponseDTO(admin.getEmail(), admin.getNombre(), admin.getApellido(), admin.getTelefono(), admin.getFechaNac(), admin.getCedula(), domicilio);
     }
 }

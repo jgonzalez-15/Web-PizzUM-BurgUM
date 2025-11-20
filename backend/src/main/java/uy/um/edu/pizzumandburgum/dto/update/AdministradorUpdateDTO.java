@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uy.um.edu.pizzumandburgum.dto.request.DomicilioRequestDTO;
 
 import java.time.LocalDate;
 
@@ -18,5 +19,5 @@ public class AdministradorUpdateDTO {
     private Long telefono;
     private LocalDate fechaNac;
     private Long cedula;
-    private Long domicilio;
+    private DomicilioRequestDTO domicilio;
 }
