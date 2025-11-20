@@ -14,9 +14,11 @@ import uy.um.edu.pizzumandburgum.exceptions.Usuario.Administrador.AdministradorY
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.ContraseniaInvalidaException;
 import uy.um.edu.pizzumandburgum.mapper.AdministradorMapper;
+import uy.um.edu.pizzumandburgum.mapper.DomicilioMapper;
 import uy.um.edu.pizzumandburgum.repository.AdministradorRepository;
 import uy.um.edu.pizzumandburgum.repository.DomicilioRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.AdministradorService;
+import uy.um.edu.pizzumandburgum.service.Interfaces.DomicilioService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.Historicos.HistoricoAdministradorService;
 
 import java.util.ArrayList;
@@ -37,6 +39,12 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Autowired
     private HistoricoAdministradorService historicoAdministradorService;
 
+    @Autowired
+    private DomicilioService domicilioService;
+
+    @Autowired
+    private  DomicilioMapper domicilioMapper;
+
 
     @Override
     public AdministradorResponseDTO agregarAdmin(AdministradorRequestDTO dto) {
@@ -44,7 +52,12 @@ public class AdministradorServiceImpl implements AdministradorService {
         if (administradorRepository.findByEmail(admin.getEmail()).isPresent()) {
             throw new AdministradorYaExisteException();
         }
+
+        Domicilio domicilio = domicilioMapper.toEntity(dto.getDomicilio());
+        Domicilio domicilioGuardado = domicilioRepository.saveAndFlush(domicilio);
         administradorRepository.save(admin);
+        domicilioGuardado.setAdministrador(admin);
+        admin.setDomicilio(domicilioGuardado);
         historicoAdministradorService.RegistrarAgregar(admin);
         return administradorMapper.toResponseDTO(admin);
     }

@@ -89,8 +89,9 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
         List<MedioDePagoDTO> listaDTO = new ArrayList<>();
 
         for (MedioDePago medio : medios) {
+            if (medio.isEstaActivo()){
             MedioDePagoDTO dto = medioDePagoMapper.toResponseDTO(medio);
-            listaDTO.add(dto);
+            listaDTO.add(dto);}
         }
 
         return listaDTO;
