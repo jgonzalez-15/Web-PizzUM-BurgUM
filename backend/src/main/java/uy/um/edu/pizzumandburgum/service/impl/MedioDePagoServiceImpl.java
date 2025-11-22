@@ -60,27 +60,27 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
         return medioDePagoMapper.toResponseDTO(medioDePago);
     }
 
-    @Override
     public MedioDePagoDTO editarMDP(Long id, MedioDePagoUpdateDTO dto) {
-        MedioDePago viejo = medioDePagoRepository.findById(id).orElseThrow(MedioDePagoNoExisteException::new);
-        MedioDePago mdp = new MedioDePago();
+        MedioDePago viejo = medioDePagoRepository.findById(id)
+                .orElseThrow(MedioDePagoNoExisteException::new);
 
-        mdp.setCliente(viejo.getCliente());
+        MedioDePago copiaParaHistorico = clonarMedioDePago(viejo);
 
         if (dto.getNombreTitular() != null) {
-            mdp.setNombreTitular(dto.getNombreTitular());
+            viejo.setNombreTitular(dto.getNombreTitular());
         }
         if (dto.getFechaVencimiento() != null) {
-            mdp.setFechaVencimiento(dto.getFechaVencimiento());
+            viejo.setFechaVencimiento(dto.getFechaVencimiento());
         }
         if (dto.getNumeroTarjeta() != null) {
-            mdp.setNumeroTarjeta(dto.getNumeroTarjeta());
+            viejo.setNumeroTarjeta(dto.getNumeroTarjeta());
         }
-        mdp.setHistorico(new ArrayList<>(viejo.getHistorico()));
-        medioDePagoRepository.save(mdp);
-        historicoService.registrarActualizacion(viejo,mdp);
 
-        return medioDePagoMapper.toResponseDTO(mdp);
+        MedioDePago actualizado = medioDePagoRepository.save(viejo);
+
+        historicoService.registrarActualizacion(copiaParaHistorico, actualizado);
+
+        return medioDePagoMapper.toResponseDTO(actualizado);
     }
 
     @Override
@@ -110,6 +110,16 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
         medio.setEstaActivo(false);
         medioDePagoRepository.save(medio);
         historicoService.RegistrarEliminar(medio);
+    }
+
+    private MedioDePago clonarMedioDePago(MedioDePago original) {
+        MedioDePago copia = new MedioDePago();
+        copia.setId(original.getId());
+        copia.setCliente(original.getCliente());
+        copia.setNombreTitular(original.getNombreTitular());
+        copia.setFechaVencimiento(original.getFechaVencimiento());
+        copia.setNumeroTarjeta(original.getNumeroTarjeta());
+        return copia;
     }
 
 }
