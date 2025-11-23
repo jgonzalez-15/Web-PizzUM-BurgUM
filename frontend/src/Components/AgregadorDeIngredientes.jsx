@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { DisenioContexto } from "./context/DisenioContexto.jsx";
+import { ContextoDisenio } from "./context/ContextoDisenio.jsx";
 import Ingrediente from "./Ingrediente.jsx";
 
 export default function AgregadorDeIngredientes({
@@ -9,7 +9,7 @@ export default function AgregadorDeIngredientes({
                                                     setIngredientes,
                                                     tipo,
                                                 }) {
-    const { soloSinGluten } = useContext(DisenioContexto);
+    const { soloSinGluten } = useContext(ContextoDisenio);
 
     const ingredientesPorTipo = todosLosIngredientes.filter(
         (i) => i.tipo === tipo

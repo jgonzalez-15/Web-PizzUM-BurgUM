@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { usarCarrito } from "../Components/context/CarritoContexto.jsx";
+import { usarCarrito } from "../Components/context/ContextoCarrito.jsx";
 
 import EncabezadoPrincipal from "../Components/Encabezado.jsx";
 import PieDePagina from "../Components/PieDePagina.jsx";

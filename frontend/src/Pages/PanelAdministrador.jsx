@@ -42,6 +42,14 @@ export default function PanelAdministrador() {
                         >
                             Administradores
                         </NavLink>
+                        <NavLink
+                            to="pedidosFecha"
+                            className={({ isActive }) =>
+                                `${baseBtn} ${isActive ? activo : inactivo}`
+                            }
+                        >
+                            Pedidos por Fecha
+                        </NavLink>
                     </nav>
 
                     <section className="w-full max-w-6xl bg-white rounded-2xl shadow-lg border border-gray-100 p-5 md:p-10">

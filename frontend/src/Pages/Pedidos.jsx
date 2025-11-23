@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { SessionContext } from "../Components/context/SessionContext";
+import { ContextoSesion } from "../Components/context/ContextoSesion.jsx";
 import EncabezadoPrincipal from "../Components/Encabezado.jsx";
 import EstadoPedido from "../Components/EstadoPedido.jsx";
 import PieDePagina from "../Components/PieDePagina.jsx";
@@ -11,7 +11,7 @@ function Pedidos() {
     const [mostrarHistorial, setMostrarHistorial] = useState(false);
     const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
 
-    const { sessionInfo } = useContext(SessionContext);
+    const { sessionInfo } = useContext(ContextoSesion);
     const correo = sessionInfo?.email;
 
     useEffect(() => {

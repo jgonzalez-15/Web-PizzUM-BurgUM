@@ -1,13 +1,13 @@
 import { useState, useEffect, useContext } from "react";
-import { DisenioContexto } from "../Components/context/DisenioContexto.jsx";
-import { SessionContext } from "../Components/context/SessionContext";
+import { ContextoDisenio } from "../Components/context/ContextoDisenio.jsx";
+import { ContextoSesion } from "../Components/context/ContextoSesion.jsx";
 import Encabezado from "../Components/Encabezado.jsx";
 import PieDePagina from "../Components/PieDePagina.jsx";
-import { usarCarrito } from "../Components/context/CarritoContexto.jsx";
+import { usarCarrito } from "../Components/context/ContextoCarrito.jsx";
 import AgregadorDeIngredientes from "../Components/AgregadorDeIngredientes.jsx";
 
 function DiseniarCreacion({ tipo }) {
-  const { sessionInfo } = useContext(SessionContext);
+  const { sessionInfo } = useContext(ContextoSesion);
   const { agregarItem } = usarCarrito();
   const clienteId = sessionInfo?.email;
 
@@ -177,7 +177,7 @@ function DiseniarCreacion({ tipo }) {
       );
 
   return (
-      <DisenioContexto.Provider value={{ soloSinGluten, setSoloSinGluten }}>
+      <ContextoDisenio.Provider value={{ soloSinGluten, setSoloSinGluten }}>
         <div className="min-h-screen bg-white flex flex-col">
           <Encabezado />
 
@@ -251,7 +251,7 @@ function DiseniarCreacion({ tipo }) {
 
           <PieDePagina />
         </div>
-      </DisenioContexto.Provider>
+      </ContextoDisenio.Provider>
   );
 }
 

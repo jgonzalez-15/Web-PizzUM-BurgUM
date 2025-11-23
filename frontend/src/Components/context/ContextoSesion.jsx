@@ -1,14 +1,14 @@
 import { createContext, useState } from 'react';
 
-export const SessionContext = createContext();
+export const ContextoSesion = createContext();
 
 export const SessionProvider = ({ children }) => {
   const [sessionType, setSessionType] = useState("INVITADO");
   const [sessionInfo, setSessionInfo] = useState({});
 
   return (
-    <SessionContext.Provider value={{ sessionType, setSessionType, sessionInfo, setSessionInfo }}>
+    <ContextoSesion.Provider value={{ sessionType, setSessionType, sessionInfo, setSessionInfo }}>
       {children}
-    </SessionContext.Provider>
+    </ContextoSesion.Provider>
   );
 };

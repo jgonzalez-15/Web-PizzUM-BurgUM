@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
-import { SessionContext } from "../Components/context/SessionContext";
+import { ContextoSesion } from "../Components/context/ContextoSesion.jsx";
 
 import Boton from "../Components/Boton.jsx";
 import Favourite from "../Components/Favorito.jsx";
@@ -11,7 +11,7 @@ export default function PaginaPrincipal() {
     if (window.pageYOffset > 0) window.scrollTo(0, 0);
 
     const [listaFavoritos, setListaFavoritos] = useState([]);
-    const { sessionType } = useContext(SessionContext);
+    const { sessionType } = useContext(ContextoSesion);
 
     const obtenerFavoritos = async () => {
         try {

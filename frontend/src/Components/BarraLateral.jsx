@@ -1,10 +1,10 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { SessionContext } from "./context/SessionContext";
-import { usarCarrito } from "./context/CarritoContexto";
+import { ContextoSesion } from "./context/ContextoSesion.jsx";
+import { usarCarrito } from "./context/ContextoCarrito.jsx";
 
 export default function BarraLateral() {
-    const { sessionType, setSessionType, setSessionInfo } = useContext(SessionContext);
+    const { sessionType, setSessionType, setSessionInfo } = useContext(ContextoSesion);
     const navigate = useNavigate();
     const { limpiarCarrito } = usarCarrito()
 

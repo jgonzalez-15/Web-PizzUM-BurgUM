@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-const CarritoContexto = createContext();
+const ContextoCarrito = createContext();
 
 export const CarritoProveedor = ({ children }) => {
   const [items, setItems] = useState(() => {
@@ -43,12 +43,12 @@ export const CarritoProveedor = ({ children }) => {
   };
 
   return (
-      <CarritoContexto.Provider
+      <ContextoCarrito.Provider
           value={{ items, agregarItem, eliminarItem, limpiarCarrito }}
       >
         {children}
-      </CarritoContexto.Provider>
+      </ContextoCarrito.Provider>
   );
 };
 
-export const usarCarrito = () => useContext(CarritoContexto);
+export const usarCarrito = () => useContext(ContextoCarrito);

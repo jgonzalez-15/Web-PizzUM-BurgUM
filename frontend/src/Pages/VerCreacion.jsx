@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Encabezado from "../Components/Encabezado.jsx";
 import PieDePagina from "../Components/PieDePagina.jsx";
-import SmallButton from "../Components/SmallButton";
+import BotonChico from "../Components/BotonChico.jsx";
 import AddToCartButton from "../Components/BotonAgregarCarrito.jsx";
 
 export default function VerCreacion() {
@@ -256,7 +256,7 @@ export default function VerCreacion() {
                         </div>
 
                         <div className="flex flex-row gap-4 justify-center mt-2">
-                            <SmallButton
+                            <BotonChico
                                 text="Eliminar de favoritos"
                                 isPrimary={false}
                                 onClick={eliminarDeFavoritos}

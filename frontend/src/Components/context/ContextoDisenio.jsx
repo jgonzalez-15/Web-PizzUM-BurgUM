@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-export const DisenioContexto = createContext({
+export const ContextoDisenio = createContext({
     soloSinGluten: false,
     setSoloSinGluten: () => {},
 });

@@ -2,8 +2,8 @@ import "./App.css";
 import { useContext, useEffect, useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
-import { SessionContext } from "./Components/context/SessionContext";
-import { CarritoProveedor } from "./Components/context/CarritoContexto.jsx";
+import { ContextoSesion } from "./Components/context/ContextoSesion.jsx";
+import { CarritoProveedor } from "./Components/context/ContextoCarrito.jsx";
 
 import PaginaPrincipal from "./Pages/PaginaPrincipal.jsx";
 import DiseniarCreacion from "./Pages/DiseniarCreacion.jsx";
@@ -19,9 +19,10 @@ import PanelAdministrador from "./Pages/PanelAdministrador.jsx";
 import ProductosAdmin from "./Pages/ProductosAdmin.jsx";
 import PedidosAdmin from "./Pages/PedidosAdmin.jsx";
 import AgregarAdministradores from "./Pages/AgregarAdministradores.jsx";
+import PedidosFechaAdmin from "./Pages/PedidosFechaAdmin.jsx";
 
 function App() {
-  const { sessionType, setSessionType, setSessionInfo } = useContext(SessionContext);
+  const { sessionType, setSessionType, setSessionInfo } = useContext(ContextoSesion);
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
@@ -106,6 +107,8 @@ function App() {
                   <Route path="productos" element={<ProductosAdmin />} />
                   <Route path="pedidos" element={<PedidosAdmin />} />
                   <Route path="administradores" element={<AgregarAdministradores />} />
+                  <Route path="pedidosFecha" element={<PedidosFechaAdmin />} />
+
                 </Route>
                 </>
           )}

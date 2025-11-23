@@ -1,12 +1,12 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { SessionContext } from "../Components/context/SessionContext";
-import { usarCarrito } from "../Components/context/CarritoContexto.jsx";
+import { ContextoSesion } from "../Components/context/ContextoSesion.jsx";
+import { usarCarrito } from "../Components/context/ContextoCarrito.jsx";
 import Encabezado from "../Components/Encabezado.jsx";
 import PieDePagina from "../Components/PieDePagina.jsx";
 
 export default function PaginaPago() {
-  const { sessionInfo } = useContext(SessionContext);
+  const { sessionInfo } = useContext(ContextoSesion);
   const { items, limpiarCarrito } = usarCarrito();
   const navigate = useNavigate();
   const correoCliente = sessionInfo?.email;

@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { usarCarrito } from "./context/CarritoContexto.jsx";
+import { usarCarrito } from "./context/ContextoCarrito.jsx";
 import BarraLateral from "./BarraLateral.jsx";
-import SmallButton from "./SmallButton";
+import BotonChico from "./BotonChico.jsx";
 
 import carritoImg from "../assets/carrito.png";
 
@@ -142,7 +142,7 @@ function Encabezado() {
 
                         {/* Botón para ver pedido */}
                         <div className="p-4 border-t border-gray-300 flex justify-center bg-orange-50">
-                            <SmallButton
+                            <BotonChico
                                 text="Ver mi pedido"
                                 route="/hacerUnPedido"
                                 isPrimary={true}

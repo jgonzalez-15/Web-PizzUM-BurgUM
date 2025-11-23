@@ -1,4 +1,4 @@
-import { usarCarrito } from "../Components/context/CarritoContexto";
+import { usarCarrito } from "./context/ContextoCarrito.jsx";
 
 export default function BotonAgregarCarrito({ item, esPrincipal = true, handle }) {
     const { agregarItem } = usarCarrito();
