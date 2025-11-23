@@ -2,7 +2,6 @@ package uy.um.edu.pizzumandburgum.service.impl.Historicos;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uy.um.edu.pizzumandburgum.entities.Historicos.HistoricoDomicilioModificaciones;
 import uy.um.edu.pizzumandburgum.entities.Historicos.HistoricoMDPModificaciones;
 import uy.um.edu.pizzumandburgum.entities.MedioDePago;
 import uy.um.edu.pizzumandburgum.exceptions.MedioDePago.MedioDePagoNoExisteException;

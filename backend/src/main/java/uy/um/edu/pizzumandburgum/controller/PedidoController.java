@@ -24,7 +24,6 @@ public class PedidoController {
     @Autowired
     private PedidoService pedidoService;
 
-
     @Autowired
     private PedidoRepository pedidoRepository;
 

@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uy.um.edu.pizzumandburgum.entities.Administrador;
-import uy.um.edu.pizzumandburgum.entities.Domicilio;
 
 import java.time.LocalDate;
 

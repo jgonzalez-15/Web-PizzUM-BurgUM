@@ -11,14 +11,12 @@ import uy.um.edu.pizzumandburgum.entities.Domicilio;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Administrador.AdministradorNoExiste;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Administrador.AdministradorYaExisteException;
-import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.ContraseniaInvalidaException;
 import uy.um.edu.pizzumandburgum.mapper.AdministradorMapper;
 import uy.um.edu.pizzumandburgum.mapper.DomicilioMapper;
 import uy.um.edu.pizzumandburgum.repository.AdministradorRepository;
 import uy.um.edu.pizzumandburgum.repository.DomicilioRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.AdministradorService;
-import uy.um.edu.pizzumandburgum.service.Interfaces.DomicilioService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.Historicos.HistoricoAdministradorService;
 
 import java.util.ArrayList;
@@ -38,9 +36,6 @@ public class AdministradorServiceImpl implements AdministradorService {
 
     @Autowired
     private HistoricoAdministradorService historicoAdministradorService;
-
-    @Autowired
-    private DomicilioService domicilioService;
 
     @Autowired
     private  DomicilioMapper domicilioMapper;
@@ -131,8 +126,7 @@ public class AdministradorServiceImpl implements AdministradorService {
 
     @Override
     public AdministradorResponseDTO obtenerAdministrador(String email) {
-        Administrador administrador = administradorRepository.findById(email)
-                .orElseThrow(AdministradorNoExiste::new);
+        Administrador administrador = administradorRepository.findById(email).orElseThrow(AdministradorNoExiste::new);
         String domicilio = "";
         if (administrador.getDomicilio() != null) {
             domicilio = administrador.getDomicilio().getDireccion();

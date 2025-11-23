@@ -1,6 +1,5 @@
 package uy.um.edu.pizzumandburgum.controller;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +15,13 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.DomicilioService;
 @PreAuthorize("hasAuthority('CLIENTE')")
 @CrossOrigin(origins = "http://localhost:5173")
 public class DomicilioController {
+
     @Autowired
     private DomicilioService domicilioService;
 
     @PostMapping("/crearDomicilio")
     public ResponseEntity<DomicilioResponseDTO> crearDomicilio(@RequestBody DomicilioRequestDTO request) {
         DomicilioResponseDTO response = domicilioService.crearDomicilio(request);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -34,7 +33,6 @@ public class DomicilioController {
 
     @DeleteMapping("/{domicilioId}/cliente")
     public ResponseEntity<Void> eliminarDomicilio(@PathVariable Long domicilioId, @PathVariable String clienteId) {
-
         domicilioService.eliminarDomicilio(domicilioId, clienteId);
         return ResponseEntity.noContent().build();
     }

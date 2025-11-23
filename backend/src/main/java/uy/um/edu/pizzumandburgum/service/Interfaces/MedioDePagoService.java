@@ -1,6 +1,5 @@
 package uy.um.edu.pizzumandburgum.service.Interfaces;
 
-import org.springframework.http.ResponseEntity;
 import uy.um.edu.pizzumandburgum.dto.request.MedioDePagoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
 import uy.um.edu.pizzumandburgum.dto.update.MedioDePagoUpdateDTO;

@@ -1,6 +1,5 @@
 package uy.um.edu.pizzumandburgum.controller;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +28,6 @@ public class MedioDePagoController {
         MedioDePagoDTO response = medioDePagoService.aniadirMedioDePago(request,idCliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
-
 
     @PutMapping("editar/{id}")
     public ResponseEntity<MedioDePagoDTO> editarMDP(@PathVariable  Long id, @RequestBody MedioDePagoUpdateDTO dto) {

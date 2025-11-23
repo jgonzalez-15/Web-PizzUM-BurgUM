@@ -8,7 +8,6 @@ import lombok.Setter;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter

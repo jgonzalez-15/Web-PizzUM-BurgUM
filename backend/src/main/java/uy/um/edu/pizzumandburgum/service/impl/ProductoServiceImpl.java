@@ -29,7 +29,7 @@ public class ProductoServiceImpl implements ProductoService {
     private ProductoMapper productoMapper;
 
     @Autowired
-    private ProductoCreacionUpdater productoCreacionUpdater;
+    private ProductoCreacionUpdaterService productoCreacionUpdater;
 
     @Autowired
     private HistoricoProductoModificacionService historicoService;

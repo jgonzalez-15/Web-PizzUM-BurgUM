@@ -9,7 +9,7 @@ import uy.um.edu.pizzumandburgum.repository.PizzaRepository;
 import uy.um.edu.pizzumandburgum.repository.HamburguesaRepository;
 
 @Service
-public class ProductoCreacionUpdater {
+public class ProductoCreacionUpdaterService {
 
     @Autowired
     private PizzaRepository pizzaRepository;

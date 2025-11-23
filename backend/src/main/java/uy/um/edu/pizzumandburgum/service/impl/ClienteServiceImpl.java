@@ -19,7 +19,6 @@ import uy.um.edu.pizzumandburgum.mapper.*;
 import uy.um.edu.pizzumandburgum.repository.*;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteDomicilioService;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ClienteService;
-import uy.um.edu.pizzumandburgum.service.Interfaces.Historicos.HistoricoClienteModificacionesService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,12 +61,6 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
     private DomicilioMapper domicilioMapper;
-
-    @Autowired
-    private ClienteDomicilioRepository clienteDomicilioRepository;
-
-    @Autowired
-    private HistoricoClienteModificacionesService historicoService;
 
     @Autowired
     private ClienteDomicilioService clienteDomicilioService;

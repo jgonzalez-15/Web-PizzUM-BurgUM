@@ -33,7 +33,6 @@ public class PizzaController {
         return ResponseEntity.ok(pizzas);
     }
 
-
     @PreAuthorize("hasAuthority('CLIENTE') or hasAuthority('ADMIN')")
     @GetMapping("/{idCreacion}/ingredientes")
     public ResponseEntity<List<ProductoResponseDTO>> mostrarIngredientesPizza(@PathVariable Long idCreacion){

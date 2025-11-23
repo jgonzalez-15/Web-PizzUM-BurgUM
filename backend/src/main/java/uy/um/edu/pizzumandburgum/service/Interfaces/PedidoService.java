@@ -2,7 +2,6 @@ package uy.um.edu.pizzumandburgum.service.Interfaces;
 
 import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
-import uy.um.edu.pizzumandburgum.entities.Pedido;
 
 import java.time.LocalDate;
 import java.util.List;

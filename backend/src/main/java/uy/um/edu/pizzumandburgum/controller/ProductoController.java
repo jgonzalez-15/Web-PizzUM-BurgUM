@@ -1,12 +1,10 @@
 package uy.um.edu.pizzumandburgum.controller;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import uy.um.edu.pizzumandburgum.dto.request.ProductoModificarRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.ProductoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.ProductoResponseDTO;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ProductoService;
@@ -70,10 +68,7 @@ public class ProductoController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}/editar")
-    public ResponseEntity<ProductoResponseDTO> editarProducto(
-            @PathVariable Long id,
-            @RequestBody ProductoRequestDTO dto) {
-
+    public ResponseEntity<ProductoResponseDTO> editarProducto(@PathVariable Long id, @RequestBody ProductoRequestDTO dto) {
         ProductoResponseDTO actualizado = productoService.editarProducto(id, dto);
         return ResponseEntity.ok(actualizado);
     }

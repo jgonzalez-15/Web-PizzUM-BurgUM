@@ -33,5 +33,4 @@ public class HistoricoAdministradorDTO {
     private Long telefonoNuevo;
     private LocalDate fechaNacNueva;
     private String domicilioNuevo;
-
 }

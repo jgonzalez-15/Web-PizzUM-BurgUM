@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.request.AdministradorRequestDTO;
@@ -28,14 +27,11 @@ public class AdministradorController {
     private AdministradorService administradorService;
 
     @Autowired
-
     private JwtUtil jwtUtil;
-
 
     @PostMapping("/agregarAdmin")
     public ResponseEntity<AdministradorResponseDTO> agregarAdmin(@Validated @RequestBody AdministradorRequestDTO dto) {
         AdministradorResponseDTO admin = administradorService.agregarAdmin(dto);
-
         return ResponseEntity.ok(admin);
     }
 
@@ -69,9 +65,6 @@ public class AdministradorController {
     }
 
     @GetMapping("/listar")
-
-
-
     public ResponseEntity<List<AdministradorResponseDTO>> mostrarAdministradores() {
         List<AdministradorResponseDTO> administradores = administradorService.listarAdministradores();
         return ResponseEntity.ok(administradores);
@@ -85,7 +78,6 @@ public class AdministradorController {
 
     @PutMapping("/{email}/domicilio/{idDomicilio}")
     public ResponseEntity<Void> asociarDomicilio(@PathVariable String email, @PathVariable Long idDomicilio) {
-
         administradorService.asociarDomicilio(idDomicilio, email);
         return ResponseEntity.noContent().build();
     }

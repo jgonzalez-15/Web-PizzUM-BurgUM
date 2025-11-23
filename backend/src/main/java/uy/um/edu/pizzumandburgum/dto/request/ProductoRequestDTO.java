@@ -16,5 +16,4 @@ public class ProductoRequestDTO {
     private boolean sinTacc;
     private Float precio;
     private boolean visible;
-
 }

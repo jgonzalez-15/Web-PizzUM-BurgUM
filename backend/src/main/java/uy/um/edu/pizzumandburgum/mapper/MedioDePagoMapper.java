@@ -45,12 +45,4 @@ public class MedioDePagoMapper {
         }
         return new MedioDePagoDTO(medioDePago.getId(), medioDePago.getNumeroTarjeta(), medioDePago.getFechaVencimiento(), medioDePago.getNombreTitular(), clienteResponseDTO,pedidos, medioDePago.isEstaActivo());
     }
-
-    public MedioDePago toEntityDTO(MedioDePagoDTO dto) {
-        MedioDePago medioDePago = new MedioDePago();
-        medioDePago.setNombreTitular(dto.getNombreTitular());
-        medioDePago.setNumeroTarjeta(dto.getNumeroTarjeta());
-        medioDePago.setFechaVencimiento(dto.getFechaVencimiento());
-        return medioDePago;
-    }
 }

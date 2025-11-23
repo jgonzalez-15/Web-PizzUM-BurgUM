@@ -2,7 +2,6 @@ package uy.um.edu.pizzumandburgum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uy.um.edu.pizzumandburgum.controller.NotificacionesController;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoBebidaRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoCreacionRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
@@ -20,8 +19,6 @@ import uy.um.edu.pizzumandburgum.repository.*;
 import uy.um.edu.pizzumandburgum.service.Interfaces.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,17 +53,6 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Autowired
     private CreacionRepository creacionRepository;
-
-    @Autowired
-    private NotificacionesController notificacionesController;
-
-    @Autowired
-    private FavoritoRepository favoritoRepository;
-
-    @Autowired
-    private PagoDummyRepository pagoDummyRepository;
-
-
 
     @Override
     public PedidoResponseDTO realizarPedido(PedidoRequestDTO dto) {
@@ -165,7 +151,6 @@ public class PedidoServiceImpl implements PedidoService {
             default:
                 throw new EstadoInvalidoException();
         }
-        notificacionesController.enviarNotificacion("Pedido " + id + " cambiado a " + nuevoEstado);
         pedido.setEstado(nuevoEstado);
         pedidoRepository.save(pedido);
     }

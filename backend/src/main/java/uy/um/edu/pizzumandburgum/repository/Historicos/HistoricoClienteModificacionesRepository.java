@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface HistoricoClienteModificacionesRepository extends JpaRepository<HistoricoClienteModificaciones,Long> {
     List<HistoricoClienteModificaciones> findByClienteOrderByFechaModificacionDesc(Cliente cliente);
-
     List<HistoricoClienteModificaciones> findAllByOrderByFechaModificacionDesc();
-
     List<HistoricoClienteModificaciones> findByTipoModificacionOrderByFechaModificacionDesc(String tipoModificacion);
 }

@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface HistoricoAdministradorRepository extends JpaRepository<HistoricoAdministradorModificaciones,Long> {
     List<HistoricoAdministradorModificaciones> findByAdministradorOrderByFechaModificacionDesc(Administrador administrador);
-
     List<HistoricoAdministradorModificaciones> findAllByOrderByFechaModificacionDesc();
-
     List<HistoricoAdministradorModificaciones> findByTipoModificacionOrderByFechaModificacionDesc(String tipoModificacion);
 }

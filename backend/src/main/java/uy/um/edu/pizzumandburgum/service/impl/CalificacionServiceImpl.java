@@ -65,5 +65,4 @@ public class CalificacionServiceImpl implements CalificacionService {
         return calificacionMapper.toResponseDTO(calificacionRepository.findByPedidoId(idPedido).orElseThrow(CalificacionNoExisteException::new));
     }
 
-
 }

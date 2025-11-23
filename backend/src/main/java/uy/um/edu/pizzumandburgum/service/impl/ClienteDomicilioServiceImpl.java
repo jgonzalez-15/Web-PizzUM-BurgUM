@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uy.um.edu.pizzumandburgum.dto.request.ClienteDomicilioRequestDTO;
-import uy.um.edu.pizzumandburgum.dto.response.ClienteDomicilioResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.DomicilioResponseDTO;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.ClienteDomicilio;
@@ -14,7 +13,6 @@ import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioConPedidoEnCursoE
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.PorLoMenosUnDomicilioException;
 import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.Domicilio.DomicilioNoExisteException;
-import uy.um.edu.pizzumandburgum.mapper.ClienteDomicilioMapper;
 import uy.um.edu.pizzumandburgum.mapper.DomicilioMapper;
 import uy.um.edu.pizzumandburgum.repository.ClienteDomicilioRepository;
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
@@ -34,9 +32,6 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
 
     @Autowired
     private ClienteDomicilioRepository clienteDomicilioRepository;
-
-    @Autowired
-    private ClienteDomicilioMapper clienteDomicilioMapper;
 
     @Autowired
     private DomicilioMapper domicilioMapper;

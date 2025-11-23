@@ -1,6 +1,5 @@
 package uy.um.edu.pizzumandburgum.service.Interfaces.Historicos;
 
-import uy.um.edu.pizzumandburgum.entities.Domicilio;
 import uy.um.edu.pizzumandburgum.entities.MedioDePago;
 
 public interface HistoricoMDPModificacionesService {

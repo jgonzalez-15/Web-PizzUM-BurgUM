@@ -1,6 +1,5 @@
 package uy.um.edu.pizzumandburgum.mapper;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uy.um.edu.pizzumandburgum.dto.request.HamburguesaProductoRequestDTO;
@@ -49,9 +48,7 @@ public class HamburguesaMapper {
                 ingredientesDTO.add(hamburguesaProductoMapper.toResponseDTO(hp));
             }
         }
-
         dto.setIngredientes(ingredientesDTO);
-
         return dto;
     }
 

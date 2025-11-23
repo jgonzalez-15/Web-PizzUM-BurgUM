@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import uy.um.edu.pizzumandburgum.entities.Domicilio;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface DomicilioRepository extends JpaRepository<Domicilio,Long> {

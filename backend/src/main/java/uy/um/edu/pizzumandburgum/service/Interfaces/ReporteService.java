@@ -2,7 +2,6 @@ package uy.um.edu.pizzumandburgum.service.Interfaces;
 
 import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
-import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.TicketResponseDTO;
 
 import java.time.LocalDate;

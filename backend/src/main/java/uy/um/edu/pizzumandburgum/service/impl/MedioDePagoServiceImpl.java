@@ -6,7 +6,6 @@ import uy.um.edu.pizzumandburgum.dto.request.MedioDePagoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
 import uy.um.edu.pizzumandburgum.dto.update.MedioDePagoUpdateDTO;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
-import uy.um.edu.pizzumandburgum.entities.Historicos.HistoricoMDPModificaciones;
 import uy.um.edu.pizzumandburgum.entities.MedioDePago;
 import uy.um.edu.pizzumandburgum.exceptions.MedioDePago.MedioDePagoNoExisteException;
 import uy.um.edu.pizzumandburgum.exceptions.MedioDePago.PorLoMenosUnMedioDePagoException;
@@ -19,7 +18,6 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.MedioDePagoService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MedioDePagoServiceImpl implements MedioDePagoService {
@@ -38,8 +36,6 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
 
     @Override
     public MedioDePago obtenerMedioDePago(String email, Long id) {
-
-
         return medioDePagoRepository.findByClienteEmailAndId(email,id ).orElseThrow(MedioDePagoNoExisteException::new);
     }
 
