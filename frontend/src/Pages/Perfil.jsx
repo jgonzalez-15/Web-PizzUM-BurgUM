@@ -6,6 +6,8 @@ export default function Perfil() {
     const [datos, setDatos] = useState({
         nombre: "",
         apellido: "",
+        email: "",
+        cedula: "",
         telefono: "",
         fechaNac: "",
         contrasenia: "",
@@ -42,6 +44,8 @@ export default function Perfil() {
                 setDatos({
                     nombre: data.nombre,
                     apellido: data.apellido,
+                    cedula: data.cedula,
+                    email: data.email,
                     telefono: data.telefono,
                     fechaNac: data.fechaNac,
                     contrasenia: "",
@@ -67,6 +71,8 @@ export default function Perfil() {
             const body = {
                 nombre: datos.nombre,
                 apellido: datos.apellido,
+                cedula: datos.cedula,
+                email: datos.email,
                 telefono: datos.telefono,
                 fechaNac: datos.fechaNac,
                 contrasenia: datos.contrasenia || null,
@@ -259,6 +265,8 @@ export default function Perfil() {
                     <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-200">
                         <h2 className="font-bold text-xl mb-4 text-gray-800">Datos personales</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input className="bg-gray-200 rounded-2xl p-2" value={datos.email} disabled/>
+                            <input className="bg-gray-100 rounded-2xl p-2" placeholder="Cedula" value={datos.cedula} onChange={(e) => setDatos({ ...datos, cedula: e.target.value })} />
                             <input className="bg-gray-100 rounded-2xl p-2" placeholder="Nombre" value={datos.nombre} onChange={(e) => setDatos({ ...datos, nombre: e.target.value })} />
                             <input className="bg-gray-100 rounded-2xl p-2" placeholder="Apellido" value={datos.apellido} onChange={(e) => setDatos({ ...datos, apellido: e.target.value })} />
                             <input className="bg-gray-100 rounded-2xl p-2" placeholder="Teléfono" value={datos.telefono} onChange={(e) => setDatos({ ...datos, telefono: e.target.value })} />

@@ -91,6 +91,7 @@ public class ClienteServiceImpl implements ClienteService {
         nuevo.setNombre(dto.getNombre());
         nuevo.setTelefono(dto.getTelefono());
         nuevo.setFechaNac(dto.getFechaNac());
+        nuevo.setCedula(dto.getCedula());
         Cliente guardado = clienteRepository.save(nuevo);
 
         for (MedioDePagoRequestDTO medioDePagoRequestDTO : dto.getMediosDePago()) {
@@ -139,11 +140,14 @@ public class ClienteServiceImpl implements ClienteService {
         if (dto.getContrasenia() != null && dto.getContrasenia().isBlank()) {
             cliente.setContrasenia(dto.getContrasenia());
         }
-        if (dto.getTelefono() != 0) {
+        if (dto.getTelefono() != null) {
             cliente.setTelefono(dto.getTelefono());
         }
         if (dto.getFechaNac() != null) {
             cliente.setFechaNac(dto.getFechaNac());
+        }
+        if (dto.getCedula() != null) {
+            cliente.setCedula(dto.getCedula());
         }
 
         clienteRepository.save(cliente);
