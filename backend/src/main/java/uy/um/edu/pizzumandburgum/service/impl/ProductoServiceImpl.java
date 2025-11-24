@@ -100,7 +100,6 @@ public class ProductoServiceImpl implements ProductoService {
 
         productoRepository.save(producto);
 
-        // Si cambió el precio, actualizar precios de creaciones que usan este producto
         if (!Objects.equals(precioViejo, producto.getPrecio())) {
             productoCreacionUpdater.actualizarPreciosPorProducto(producto);
         }

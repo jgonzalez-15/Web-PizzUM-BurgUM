@@ -17,8 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Cliente extends Usuario {
-
-
     @OneToMany(mappedBy = "clienteAsignado", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Pedido> pedidos = new ArrayList<>();

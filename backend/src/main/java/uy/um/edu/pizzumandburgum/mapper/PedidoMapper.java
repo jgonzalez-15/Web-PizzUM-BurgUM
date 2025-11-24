@@ -20,7 +20,6 @@ public class PedidoMapper {
     @Autowired
     private ProductoMapper productoMapper;
 
-
     public Pedido toEntity(PedidoRequestDTO dto) {
         Pedido pedido = new Pedido();
         return pedido;
@@ -54,10 +53,24 @@ public class PedidoMapper {
 
         DomicilioSinPedidosResponseDTO domicilioDTO = null;
         if (pedido.getDomicilio() != null) {
-            domicilioDTO = new DomicilioSinPedidosResponseDTO(pedido.getDomicilio().getId(), pedido.getDomicilio().getDireccion(), pedido.getDomicilio().isEstaActivo());
+            domicilioDTO = new DomicilioSinPedidosResponseDTO(
+                    pedido.getDomicilio().getId(),
+                    pedido.getDomicilio().getDireccion(),
+                    pedido.getDomicilio().isEstaActivo()
+            );
         }
 
-
-        return new PedidoResponseDTO(pedido.getId(), pedido.getPrecio(), pedido.getFecha(), pedido.getEstado(), pedido.getClienteAsignado().getEmail(), pedido.isEstaPago(), domicilioDTO, creacionesDTO, bebidasDTO, numeroMedioDePago);
+        return new PedidoResponseDTO(
+                pedido.getId(),
+                pedido.getPrecio(),
+                pedido.getFecha(),
+                pedido.getEstado(),
+                pedido.getClienteAsignado().getEmail(),
+                pedido.isEstaPago(),
+                domicilioDTO,
+                creacionesDTO,
+                bebidasDTO,
+                numeroMedioDePago
+        );
     }
 }

@@ -25,6 +25,7 @@ import java.util.Objects;
 
 @Service
 public class AdministradorServiceImpl implements AdministradorService {
+
     @Autowired
     private AdministradorRepository administradorRepository;
 
@@ -38,14 +39,15 @@ public class AdministradorServiceImpl implements AdministradorService {
     private HistoricoAdministradorService historicoAdministradorService;
 
     @Autowired
-    private  DomicilioMapper domicilioMapper;
-
+    private DomicilioMapper domicilioMapper;
 
     @Override
     public AdministradorResponseDTO agregarAdmin(AdministradorRequestDTO dto) {
+
         if (administradorRepository.findByEmail(dto.getEmail()).isPresent()) {
             throw new AdministradorYaExisteException();
         }
+
         Administrador admin = administradorMapper.toEntity(dto);
         Domicilio domicilio = domicilioMapper.toEntity(dto.getDomicilio());
         Domicilio domicilioGuardado = domicilioRepository.saveAndFlush(domicilio);
@@ -73,7 +75,14 @@ public class AdministradorServiceImpl implements AdministradorService {
         if (administrador.getDomicilio() != null) {
             domicilio = administrador.getDomicilio().getDireccion();
         }
-        return new AdministradorResponseDTO(administrador.getEmail(), administrador.getNombre(), administrador.getApellido(), administrador.getTelefono(), administrador.getFechaNac(), administrador.getCedula(), domicilio);
+        return new AdministradorResponseDTO(
+                administrador.getEmail(),
+                administrador.getNombre(),
+                administrador.getApellido(),
+                administrador.getTelefono(),
+                administrador.getFechaNac(),
+                administrador.getCedula(),
+                domicilio);
 
     }
 

@@ -20,7 +20,6 @@ public class FavoritoResponseDTO {
     private float precio;
     private String tipo;
     private List<Map<String, Object>> ingredientes;
-
     private Integer cantidadCarnes;
     private String tamanio;
 

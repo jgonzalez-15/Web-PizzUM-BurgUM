@@ -26,6 +26,7 @@ import java.util.Objects;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
+
     @Autowired
     private ClienteRepository clienteRepository;
 
@@ -54,7 +55,7 @@ public class ClienteServiceImpl implements ClienteService {
     private PedidoMapper pedidoMapper;
 
     @Autowired
-    private  PizzaMapper pizzaMapper;
+    private PizzaMapper pizzaMapper;
 
     @Autowired
     private MedioDePagoMapper medioDePagoMapper;
@@ -125,7 +126,14 @@ public class ClienteServiceImpl implements ClienteService {
             throw new EmailNoExisteException();
         }
 
-        return new ClienteResponseDTO(cliente.getEmail(), cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getFechaNac(),cliente.getCedula());
+        return new ClienteResponseDTO(
+                cliente.getEmail(),
+                cliente.getNombre(),
+                cliente.getApellido(),
+                cliente.getTelefono(),
+                cliente.getFechaNac(),
+                cliente.getCedula()
+        );
     }
 
     @Override
@@ -239,7 +247,14 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public ClienteResponseDTO obtenerCliente(String email) {
         Cliente cliente = clienteRepository.findById(email).orElseThrow(ClienteNoExisteException::new);
-        return new ClienteResponseDTO(cliente.getEmail(), cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getFechaNac(), cliente.getCedula());
+        return new ClienteResponseDTO(
+                cliente.getEmail(),
+                cliente.getNombre(),
+                cliente.getApellido(),
+                cliente.getTelefono(),
+                cliente.getFechaNac(),
+                cliente.getCedula()
+        );
     }
 }
 

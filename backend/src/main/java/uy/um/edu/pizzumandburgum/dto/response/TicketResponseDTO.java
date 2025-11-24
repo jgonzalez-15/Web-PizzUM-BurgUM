@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class TicketResponseDTO {
     private Long idPedido;
     private String email;

@@ -22,6 +22,10 @@ public class HamburguesaProductoMapper {
     }
 
     public HamburguesaProductoResponseDTO toResponseDTO(HamburguesaProducto hamburguesaProducto) {
-        return new HamburguesaProductoResponseDTO(hamburguesaProducto.getHamburguesa().getId(),hamburguesaProducto.getProducto().getIdProducto(),hamburguesaProducto.getCantidad());
+        return new HamburguesaProductoResponseDTO(
+                hamburguesaProducto.getHamburguesa().getId(),
+                hamburguesaProducto.getProducto().getIdProducto(),
+                hamburguesaProducto.getCantidad()
+        );
     }
 }

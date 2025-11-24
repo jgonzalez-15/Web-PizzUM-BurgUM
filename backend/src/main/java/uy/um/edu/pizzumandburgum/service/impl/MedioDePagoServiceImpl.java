@@ -21,6 +21,7 @@ import java.util.List;
 
 @Service
 public class MedioDePagoServiceImpl implements MedioDePagoService {
+
     @Autowired
     private MedioDePagoRepository medioDePagoRepository;
 
@@ -32,7 +33,6 @@ public class MedioDePagoServiceImpl implements MedioDePagoService {
 
     @Autowired
     private HistoricoMDPModificacionesService historicoService;
-
 
     @Override
     public MedioDePago obtenerMedioDePago(String email, Long id) {

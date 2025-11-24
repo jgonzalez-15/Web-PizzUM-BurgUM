@@ -26,13 +26,13 @@ public class HistoricoProductoModificacionServiceImpl implements HistoricoProduc
 
     @Autowired
     private HistoricoProductoMapper historicoProductoMapper;
+
     @Override
     public void registrarActualizacion(Producto pAnterior, Producto pNuevo) {
         Producto nuevo = productoRepository.findById(pNuevo.getIdProducto()).orElseThrow(ProductoNoExisteException::new);
         Producto anterior = productoRepository.findById(pAnterior.getIdProducto()).orElseThrow(ProductoNoExisteException::new);
 
         HistoricoProductoModificacion historico = new HistoricoProductoModificacion();
-
 
         historico.setProducto(nuevo);
         historico.setPrecioAnterior(anterior.getPrecio());

@@ -20,7 +20,6 @@ public class PedidoResponseDTO {
     String idClienteAsignado;
     boolean estaPago;
     DomicilioSinPedidosResponseDTO domicilio;
-
     private List<PedidoCreacionDTO> creacionesPedido;
     private List<PedidoBebidaResponseDTO> bebidas;
     private Long idMedioDePago;

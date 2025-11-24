@@ -18,7 +18,11 @@ public class PizzaProductoMapper {
     private ProductoRepository productoRepository;
 
     public PizzaProductoResponseDTO toResponseDTO(PizzaProducto pizzaProducto){
-        return new PizzaProductoResponseDTO(pizzaProducto.getCantidad(),pizzaProducto.getPizza().getId(),productoMapper.toResponseDTO(pizzaProducto.getProducto()));
+        return new PizzaProductoResponseDTO(
+                pizzaProducto.getCantidad(),
+                pizzaProducto.getPizza().getId(),
+                productoMapper.toResponseDTO(pizzaProducto.getProducto())
+        );
     }
 
     public PizzaProducto toEntity (PizzaProductoRequestDTO dto){

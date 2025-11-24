@@ -20,6 +20,7 @@ import uy.um.edu.pizzumandburgum.service.Interfaces.Historicos.HistoricoDomicili
 
 @Service
 public class DomicilioServiceImpl implements DomicilioService {
+
     @Autowired
     private DomicilioRepository domicilioRepository;
 
@@ -78,6 +79,5 @@ public class DomicilioServiceImpl implements DomicilioService {
 
         clienteDomicilioService.eliminarDomicilioDeCliente(clienteId,domicilioId);
     }
-
 
 }

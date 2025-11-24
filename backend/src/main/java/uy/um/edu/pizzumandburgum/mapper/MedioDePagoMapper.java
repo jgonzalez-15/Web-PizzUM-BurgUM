@@ -19,7 +19,7 @@ import java.util.List;
 public class MedioDePagoMapper {
 
     @Autowired
-    private  ClienteRepository clienteRepository;
+    private ClienteRepository clienteRepository;
 
     @Autowired
     private ClienteMapper clienteMapper;
@@ -43,6 +43,14 @@ public class MedioDePagoMapper {
             PedidoResponseDTO pedidoResponseDTO = pedidoMapper.toResponseDTO(pedido);
             pedidos.add(pedidoResponseDTO);
         }
-        return new MedioDePagoDTO(medioDePago.getId(), medioDePago.getNumeroTarjeta(), medioDePago.getFechaVencimiento(), medioDePago.getNombreTitular(), clienteResponseDTO,pedidos, medioDePago.isEstaActivo());
+        return new MedioDePagoDTO(
+                medioDePago.getId(),
+                medioDePago.getNumeroTarjeta(),
+                medioDePago.getFechaVencimiento(),
+                medioDePago.getNombreTitular(),
+                clienteResponseDTO,
+                pedidos,
+                medioDePago.isEstaActivo()
+        );
     }
 }

@@ -30,7 +30,6 @@ public class HamburguesaProductoServiceImpl implements HamburguesaProductoServic
     @Autowired
     private ProductoRepository productoRepository;
 
-
     @Override
     public HamburguesaProductoResponseDTO agregarIngrediente(Long idHamburguesa,HamburguesaProductoRequestDTO dto) {
         Hamburguesa hamburguesa = hamburguesaRepository.findById(idHamburguesa).orElseThrow(HamburguesaNoEncontradaException::new);

@@ -24,6 +24,7 @@ import java.util.List;
 
 @Service
 public class PedidoServiceImpl implements PedidoService {
+
     @Autowired
     private PedidoRepository pedidoRepository;
 

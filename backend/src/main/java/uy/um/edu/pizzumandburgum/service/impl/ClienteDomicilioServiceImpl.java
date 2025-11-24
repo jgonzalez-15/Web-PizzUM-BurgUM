@@ -24,6 +24,7 @@ import java.util.List;
 
 @Service
 public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
+
     @Autowired
     private ClienteRepository clienteRepository;
 
@@ -79,6 +80,7 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
             DomicilioResponseDTO dto = domicilioMapper.toResponseDTO(cd.getDomicilio());
             domicilios.add(dto);
         }
+
         return domicilios;
     }
 
@@ -88,7 +90,6 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
         ClienteDomicilio clienteDomicilio = clienteDomicilioRepository
                 .findByCliente_EmailAndDomicilio_Id(emailCliente, idDomicilio)
                 .orElseThrow(DomicilioNoExisteException::new);
-
 
         long cantidadDomicilios = clienteDomicilioRepository.countByCliente_Email(emailCliente);
         if (cantidadDomicilios <= 1) {
