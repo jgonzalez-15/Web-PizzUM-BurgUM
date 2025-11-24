@@ -35,7 +35,15 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .headers(headers -> headers.frameOptions(frame -> frame.disable())) //Eliminar en produccion
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/api/cliente/registrar", "api/reportes/**", "/h2-console/**").permitAll() //Eliminar /h2-console/** en produccion
+                        .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/assets/**",
+                                "/auth/**",
+                                "/api/cliente/registrar",
+                                "/api/reportes/**",
+                                "/h2-console/**"   // borrar en producción
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
