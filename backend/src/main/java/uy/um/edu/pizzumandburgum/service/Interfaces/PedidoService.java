@@ -14,5 +14,4 @@ public interface PedidoService {
     List<PedidoResponseDTO> pedidosEnCurso();
     List<PedidoResponseDTO> listarPedidosPorRangoFechas(LocalDate fechaInicio, LocalDate fechaFin);
     PedidoResponseDTO obtenerPedidoPorId(Long id);
-    PedidoResponseDTO repetirPedido(Long idPedido);
 }

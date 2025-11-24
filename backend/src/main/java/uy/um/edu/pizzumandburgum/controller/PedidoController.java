@@ -74,13 +74,6 @@ public class PedidoController {
         return ResponseEntity.ok(pedidos);
     }
 
-    @PreAuthorize("hasAuthority('CLIENTE')")
-    @PostMapping("/repetir/{idPedido}")
-    public ResponseEntity<PedidoResponseDTO> repetirPedidoSimple(@PathVariable Long idPedido) {
-        PedidoResponseDTO nuevoPedido = pedidoService.repetirPedido(idPedido);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPedido);
-    }
-
     @PreAuthorize("hasAuthority('CLIENTE') or hasAuthority('ADMIN')")
     @GetMapping("/ver/{id}")
     public ResponseEntity<PedidoResponseDTO> obtenerPedido(@PathVariable Long id) {

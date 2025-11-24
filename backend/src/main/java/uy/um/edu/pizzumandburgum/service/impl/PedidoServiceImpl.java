@@ -193,25 +193,6 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public PedidoResponseDTO repetirPedido(Long idPedido) {
-        Pedido pedidoOriginal = pedidoRepository.findById(idPedido).orElseThrow(PedidoNoEncontradoException::new);
-        Pedido nuevoPedido = new Pedido();
-
-        nuevoPedido.setClienteAsignado(pedidoOriginal.getClienteAsignado());
-        nuevoPedido.setFecha(LocalDate.now());
-        nuevoPedido.setEstado("En cola");
-        nuevoPedido.setMedioDePago(pedidoOriginal.getMedioDePago());
-        nuevoPedido.setDomicilio(pedidoOriginal.getDomicilio());
-        nuevoPedido.setCreacionesPedido(pedidoOriginal.getCreacionesPedido());
-        nuevoPedido.setBebidas(pedidoOriginal.getBebidas());
-        nuevoPedido.setPrecio(pedidoOriginal.getPrecio());
-
-        Pedido guardado = pedidoRepository.save(nuevoPedido);
-
-        return pedidoMapper.toResponseDTO(guardado);
-    }
-
-    @Override
     public PedidoResponseDTO obtenerPedidoPorId(Long id) {
         Pedido pedido = pedidoRepository.findById(id).orElseThrow(PedidoNoEncontradoException::new);
         return pedidoMapper.toResponseDTO(pedido);
