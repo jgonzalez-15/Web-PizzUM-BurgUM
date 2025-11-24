@@ -13,6 +13,13 @@ export default function PedidoDetalle({ pedido, Cerrar }) {
                 <p><strong>Fecha:</strong> {pedido.fecha}</p>
                 <p><strong>Estado:</strong> {pedido.estado}</p>
                 <p><strong>Total:</strong> ${precioTotal.toFixed(2)}</p>
+                {pedido.calificacion != 0 ? 
+                (
+                    <p><strong>Calificación:</strong> {pedido.calificacion} estrellas</p>
+                ):
+                (
+                    <p><strong>Calificación:</strong> Sin calificar</p>
+                )}
 
                 {/* Creaciones */}
                 <h3 className="font-bold mt-6 text-lg">Creaciones</h3>

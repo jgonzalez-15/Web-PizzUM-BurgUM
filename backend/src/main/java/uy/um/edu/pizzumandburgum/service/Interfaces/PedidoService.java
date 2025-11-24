@@ -14,4 +14,5 @@ public interface PedidoService {
     List<PedidoResponseDTO> pedidosEnCurso();
     List<PedidoResponseDTO> listarPedidosPorRangoFechas(LocalDate fechaInicio, LocalDate fechaFin);
     PedidoResponseDTO obtenerPedidoPorId(Long id);
+    void calificar(Long id, int calificacion);
 }

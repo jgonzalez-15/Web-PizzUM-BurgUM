@@ -1,20 +1,26 @@
 package uy.um.edu.pizzumandburgum.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uy.um.edu.pizzumandburgum.dto.request.CalificacionRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.request.PedidoRequestDTO;
 import uy.um.edu.pizzumandburgum.dto.response.PedidoResponseDTO;
+import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
 import uy.um.edu.pizzumandburgum.exceptions.Pedido.PedidoNoEncontradoException;
+import uy.um.edu.pizzumandburgum.exceptions.Usuario.Cliente.ClienteNoExisteException;
+import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
 import uy.um.edu.pizzumandburgum.repository.PedidoRepository;
 import uy.um.edu.pizzumandburgum.service.Interfaces.PedidoService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/pedido")
@@ -81,4 +87,10 @@ public class PedidoController {
         return ResponseEntity.ok(pedido);
     }
 
+    @PreAuthorize("hasAuthority('CLIENTE')")
+    @PostMapping("/calificar")
+    public ResponseEntity<Void> calificarPedido(@RequestBody CalificacionRequestDTO dto) {
+        pedidoService.calificar(dto.getIdPedido(), dto.getCalificacion());
+        return ResponseEntity.noContent().build();
+    }
 }

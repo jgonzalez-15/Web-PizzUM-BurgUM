@@ -24,6 +24,8 @@ public class Pedido {
     LocalDate fecha;
     String estado;
     boolean estaPago;
+    int calificacion;
+
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente clienteAsignado;
@@ -47,10 +49,4 @@ public class Pedido {
     @OneToOne
     @JoinColumn(name = "pedido")
     private PagoDummy dummy;
-
-    @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Calificacion calificacion;
-
-
 }

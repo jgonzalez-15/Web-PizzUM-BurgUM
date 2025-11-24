@@ -70,7 +70,8 @@ public class PedidoMapper {
                 domicilioDTO,
                 creacionesDTO,
                 bebidasDTO,
-                numeroMedioDePago
+                numeroMedioDePago,
+                pedido.getCalificacion()
         );
     }
 }

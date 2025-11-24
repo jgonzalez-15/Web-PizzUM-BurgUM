@@ -44,7 +44,7 @@ function PedidosFechaAdmin() {
                         Pedidos por rango de fechas
                     </h1>
 
-                    <div className="flex justify-center gap-4 mb-6">
+                    <div className="flex flex-col md:flex-row justify-center gap-4 mb-6">
                         <input
                             type="date"
                             value={fechaInicio}
@@ -68,23 +68,27 @@ function PedidosFechaAdmin() {
                     {cargando ? (
                         <p className="text-gray-500 text-center italic">Cargando...</p>
                     ) : pedidos.length > 0 ? (
-                        <table className="w-full border-collapse border border-gray-300 rounded-lg overflow-hidden">
+                        <div className="overflow-x-auto">
+                        <table className="w-full border-collapse border border-gray-300 rounded-lg">
                             <thead className="bg-gray-100">
                             <tr>
-                                <th className="p-3 border">ID</th>
-                                <th className="p-3 border">Cliente</th>
-                                <th className="p-3 border">Estado</th>
-                                <th className="p-3 border">Precio</th>
-                                <th className="p-3 border">Domicilio</th>
+                                <th className="p-2 border">ID</th>
+                                <th className="p-2 border">Fecha</th>
+                                <th className="p-2 border">Cliente</th>
+                                <th className="p-2 border">Estado</th>
+                                <th className="p-2 border">Precio</th>
+                                <th className="p-2 border">Domicilio</th>
+                                <th className="p-2 border">Calificación</th>
                             </tr>
                             </thead>
                             <tbody>
                             {pedidos.map((p) => (
                                 <tr key={p.id} className="hover:bg-gray-50 border-b">
-                                    <td className="p-3 text-center">{p.id}</td>
-                                    <td className="p-3">{p.idClienteAsignado}</td>
+                                    <td className="p-2 text-center">{p.id}</td>
+                                    <td className="p-2 text-center">{p.fecha}</td>
+                                    <td className="p-2">{p.idClienteAsignado}</td>
                                     <td
-                                        className={`p-3 text-center font-semibold ${
+                                        className={`p-2 text-center font-semibold ${
                                             p.estado === "Cancelado"
                                                 ? "text-red-500"
                                                 : p.estado === "Entregado"
@@ -94,12 +98,20 @@ function PedidosFechaAdmin() {
                                     >
                                         {p.estado}
                                     </td>
-                                    <td className="p-3 text-center">${p.precio.toFixed(2)}</td>
-                                    <td className="p-3 text-center">{p.domicilio?.direccion}</td>
+                                    <td className="p-2 text-center">${p.precio.toFixed(2)}</td>
+                                    <td className="p-2 text-center">{p.domicilio?.direccion}</td>
+                                    {p.calificacion != 0 ? 
+                                    (
+                                        <td className="p-2 text-center">{p.calificacion}</td>
+                                    ):
+                                    (
+                                        <td className="p-2 text-center">Sin calificar</td>
+                                    )}
                                 </tr>
                             ))}
                             </tbody>
                         </table>
+                        </div>
                     ) : (
                         <p className="text-gray-500 text-center italic">
                             No hay pedidos entre esas fechas.

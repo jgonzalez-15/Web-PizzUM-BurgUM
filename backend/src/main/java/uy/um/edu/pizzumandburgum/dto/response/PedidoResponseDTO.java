@@ -23,4 +23,5 @@ public class PedidoResponseDTO {
     private List<PedidoCreacionDTO> creacionesPedido;
     private List<PedidoBebidaResponseDTO> bebidas;
     private Long idMedioDePago;
+    int calificacion;
 }

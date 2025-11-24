@@ -104,6 +104,26 @@ function Pedidos() {
         }
     };
 
+    async function enviarCalificacion(idPedido, valor) {
+    try{
+    const respuesta = await fetch(`http://localhost:8080/api/pedido/calificar`, {
+        method: "POST",
+        headers: { 
+            "Content-Type": "application/json", 
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify({ idPedido, calificacion: valor })
+    })
+    if (respuesta.ok) {
+        obtenerPedidos()  
+    } else {
+        alert("No se pudo calificar el pedido")
+    }
+    }catch (error){
+        alert("No se pudo calificar el pedido")
+    };
+}
+
     useEffect(() => {
         if(correo) obtenerPedidos();
     }, []);
@@ -140,6 +160,7 @@ function Pedidos() {
                                         pedido={pedido}
                                         Cancelar={cancelarPedido}
                                         VerDetalles={verDetallesPedido}
+                                        EnviarCalificacion={enviarCalificacion}
                                     />
                                 ))}
                             </div>
@@ -184,6 +205,7 @@ function Pedidos() {
                                                 pedido={pedido}
                                                 Cancelar={cancelarPedido}
                                                 VerDetalles={verDetallesPedido}
+                                                EnviarCalificacion={enviarCalificacion}
                                             />
                                             {pedido.estado === "Cancelado" && (
                                                 <p className="text-red-600 text-sm font-semibold mt-2">

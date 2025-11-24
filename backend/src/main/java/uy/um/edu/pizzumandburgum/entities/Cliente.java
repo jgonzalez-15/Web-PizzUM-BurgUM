@@ -38,11 +38,5 @@ public class Cliente extends Usuario {
     private  List<Favorito> favoritos = new ArrayList<>();
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<Calificacion> calificaciones = new ArrayList<>();
-
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HistoricoClienteModificaciones> historico = new ArrayList<>();
-
-
 }

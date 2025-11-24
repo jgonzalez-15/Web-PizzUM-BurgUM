@@ -72,6 +72,7 @@ public class PedidoServiceImpl implements PedidoService {
             pedido.setDomicilio(domicilio);
             pedido.setMedioDePago(medioDePago);
             pedido.setFecha(LocalDate.now());
+            pedido.setCalificacion(0);
 
             pedido = pedidoRepository.save(pedido);
 
@@ -197,6 +198,13 @@ public class PedidoServiceImpl implements PedidoService {
     public PedidoResponseDTO obtenerPedidoPorId(Long id) {
         Pedido pedido = pedidoRepository.findById(id).orElseThrow(PedidoNoEncontradoException::new);
         return pedidoMapper.toResponseDTO(pedido);
+    }
+
+    @Override
+    public void calificar(Long id, int calificacion) {
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(PedidoNoEncontradoException::new);
+        pedido.setCalificacion(calificacion);
+        pedidoRepository.save(pedido);
     }
 
 
