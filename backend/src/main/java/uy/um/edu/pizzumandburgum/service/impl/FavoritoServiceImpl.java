@@ -110,13 +110,4 @@ public class FavoritoServiceImpl implements FavoritoService {
         dto.setIngredientes(ingredientes);
         return dto;
     }
-
-
-
-
-
-
-
-
-
 }

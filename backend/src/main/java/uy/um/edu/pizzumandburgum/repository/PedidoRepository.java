@@ -7,6 +7,5 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface PedidoRepository extends JpaRepository<Pedido,Long> {
-    Pedido findById(long id);
     List<Pedido> findByFechaBetween(LocalDate inicioDelDia, LocalDate finDelDia);
 }

@@ -43,11 +43,10 @@ public class AdministradorServiceImpl implements AdministradorService {
 
     @Override
     public AdministradorResponseDTO agregarAdmin(AdministradorRequestDTO dto) {
-        Administrador admin = administradorMapper.toEntity(dto);
-        if (administradorRepository.findByEmail(admin.getEmail()).isPresent()) {
+        if (administradorRepository.findByEmail(dto.getEmail()).isPresent()) {
             throw new AdministradorYaExisteException();
         }
-
+        Administrador admin = administradorMapper.toEntity(dto);
         Domicilio domicilio = domicilioMapper.toEntity(dto.getDomicilio());
         Domicilio domicilioGuardado = domicilioRepository.saveAndFlush(domicilio);
         administradorRepository.save(admin);

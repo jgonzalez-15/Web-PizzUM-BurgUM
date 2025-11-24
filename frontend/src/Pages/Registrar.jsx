@@ -215,7 +215,7 @@ export default function Registrar() {
                         </div>
                     </div>
 
-                    {/* Botón final */}
+                    {/* Botón para registrarse */}
                     <button
                         type="submit"
                         className="w-full bg-orange-500 text-white font-bold py-3 rounded-2xl shadow-xl hover:bg-orange-600 hover:scale-[1.02] transition-transform text-lg mt-2"
