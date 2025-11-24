@@ -7,9 +7,9 @@ import uy.um.edu.pizzumandburgum.entities.Administrador;
 import uy.um.edu.pizzumandburgum.entities.Cliente;
 import uy.um.edu.pizzumandburgum.entities.MedioDePago;
 import uy.um.edu.pizzumandburgum.entities.Pedido;
+import uy.um.edu.pizzumandburgum.exceptions.MedioDePago.MedioDePagoNoExisteException;
 import uy.um.edu.pizzumandburgum.mapper.AdministradorMapper;
 import uy.um.edu.pizzumandburgum.mapper.ClienteMapper;
-import uy.um.edu.pizzumandburgum.mapper.MedioDePagoMapper;
 import uy.um.edu.pizzumandburgum.mapper.PedidoMapper;
 import uy.um.edu.pizzumandburgum.repository.AdministradorRepository;
 import uy.um.edu.pizzumandburgum.repository.ClienteRepository;
@@ -35,9 +35,6 @@ public class ReporteServiceImpl implements ReporteService {
     private MedioDePagoRepository medioDePagoRepository;
 
     @Autowired
-    private MedioDePagoMapper medioDePagoMapper;
-
-    @Autowired
     private PedidoRepository pedidoRepository;
 
     @Autowired
@@ -61,10 +58,7 @@ public class ReporteServiceImpl implements ReporteService {
 
     @Override
     public ClienteResponseDTO obtenerClientePorTarjeta(Long numeroTarjeta) {
-        MedioDePago tarjeta = medioDePagoRepository
-                .findByNumeroTarjeta(numeroTarjeta)
-                .orElseThrow(() -> new RuntimeException("Tarjeta no encontrada"));
-
+        MedioDePago tarjeta = medioDePagoRepository.findByNumeroTarjeta(numeroTarjeta).orElseThrow(MedioDePagoNoExisteException::new);
         Cliente cliente = tarjeta.getCliente();
 
         return clienteMapper.toResponseDTO(cliente);
