@@ -2,10 +2,9 @@ package uy.um.edu.pizzumandburgum.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uy.um.edu.pizzumandburgum.dto.response.AdministradorResponseDTO;
-import uy.um.edu.pizzumandburgum.dto.response.MedioDePagoDTO;
+import uy.um.edu.pizzumandburgum.dto.response.ClienteResponseDTO;
 import uy.um.edu.pizzumandburgum.dto.response.TicketResponseDTO;
 import uy.um.edu.pizzumandburgum.service.Interfaces.ReporteService;
 
@@ -21,10 +20,9 @@ public class RepositoryController {
     @Autowired
     private ReporteService reporteService;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/tarjetas")
-    public ResponseEntity<List<MedioDePagoDTO>> obtenerTarjetas() {
-        return ResponseEntity.ok(reporteService.obtenerDatosTarjetas());
+    @GetMapping("/tarjeta/{numero}")
+    public ResponseEntity<ClienteResponseDTO> obtenerTarjetas(@PathVariable Long numero) {
+        return ResponseEntity.ok(reporteService.obtenerClientePorTarjeta(numero));
     }
 
     @GetMapping("/tickets/{fecha}")

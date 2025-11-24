@@ -10,5 +10,5 @@ public interface MedioDePagoRepository extends JpaRepository<MedioDePago, Long> 
     Optional<MedioDePago> findByClienteEmailAndId(String email, Long id);
     Optional<MedioDePago> findById(Long id);
     List<MedioDePago> findByClienteEmailAndEstaActivoTrue(String email);
-
+    Optional<MedioDePago> findByNumeroTarjeta(Long numeroTarjeta);
 }

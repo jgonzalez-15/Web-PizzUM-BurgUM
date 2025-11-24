@@ -29,13 +29,14 @@ public class SecurityConfig {
     }
 
     @Bean
+
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(csrf -> csrf.disable())
-                .headers(headers -> headers.frameOptions(frame -> frame.disable())) //Eliminar en produccion
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/api/cliente/registrar", "api/reportes/**", "/h2-console/**").permitAll() //Eliminar /h2-console/** en produccion
+                        .requestMatchers("/auth/**", "/api/cliente/registrar", "/api/reportes/**", "/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
