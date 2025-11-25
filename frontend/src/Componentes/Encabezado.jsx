@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { usarCarrito } from "./context/ContextoCarrito.jsx";
+import { usarCarrito } from "../Contextos/ContextoCarrito.jsx";
 import BarraLateral from "./BarraLateral.jsx";
 import BotonChico from "./BotonChico.jsx";
 

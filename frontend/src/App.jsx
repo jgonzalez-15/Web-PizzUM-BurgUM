@@ -1,9 +1,8 @@
-import "./App.css";
 import { useContext, useEffect, useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
-import { ContextoSesion } from "./Componentes/context/ContextoSesion.jsx";
-import { CarritoProveedor } from "./Componentes/context/ContextoCarrito.jsx";
+import { ContextoSesion } from "./Contextos/ContextoSesion.jsx";
+import { CarritoProveedor } from "./Contextos/ContextoCarrito.jsx";
 
 import PaginaPrincipal from "./Paginas/PaginaPrincipal.jsx";
 import DiseniarCreacion from "./Paginas/Cliente/DiseniarCreacion.jsx";

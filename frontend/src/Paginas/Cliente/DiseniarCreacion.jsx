@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext } from "react";
-import { ContextoDisenio } from "../../Componentes/context/ContextoDisenio.jsx";
-import { ContextoSesion } from "../../Componentes/context/ContextoSesion.jsx";
+import { ContextoDisenio } from "../../Contextos/ContextoDisenio.jsx";
+import { ContextoSesion } from "../../Contextos/ContextoSesion.jsx";
 import Encabezado from "../../Componentes/Encabezado.jsx";
 import PieDePagina from "../../Componentes/PieDePagina.jsx";
-import { usarCarrito } from "../../Componentes/context/ContextoCarrito.jsx";
+import { usarCarrito } from "../../Contextos/ContextoCarrito.jsx";
 import AgregadorDeIngredientes from "../../Componentes/AgregadorDeIngredientes.jsx";
 
 function DiseniarCreacion({ tipo }) {

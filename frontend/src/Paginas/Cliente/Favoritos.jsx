@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ContextoSesion } from "../../Componentes/context/ContextoSesion.jsx";
+import { ContextoSesion } from "../../Contextos/ContextoSesion.jsx";
 
 import PieDePagina from "../../Componentes/PieDePagina.jsx";
 import Encabezado from "../../Componentes/Encabezado.jsx";

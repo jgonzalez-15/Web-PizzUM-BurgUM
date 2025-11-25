@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
-import { ContextoSesion } from "../Componentes/context/ContextoSesion.jsx";
+import { ContextoSesion } from "../Contextos/ContextoSesion.jsx";
 
 import Boton from "../Componentes/Boton.jsx";
 import Favourite from "../Componentes/Favorito.jsx";

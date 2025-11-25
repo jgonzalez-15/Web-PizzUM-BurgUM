@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import { ContextoSesion } from "../Componentes/context/ContextoSesion.jsx";
-import { usarCarrito } from "../Componentes/context/ContextoCarrito.jsx";
+import { ContextoSesion } from "../Contextos/ContextoSesion.jsx";
+import { usarCarrito } from "../Contextos/ContextoCarrito.jsx";
 
 import PieDePagina from "../Componentes/PieDePagina.jsx";
 import Encabezado from "../Componentes/Encabezado.jsx";

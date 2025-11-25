@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ContextoDisenio } from "./context/ContextoDisenio.jsx";
+import { ContextoDisenio } from "../Contextos/ContextoDisenio.jsx";
 import Ingrediente from "./Ingrediente.jsx";
 
 export default function AgregadorDeIngredientes({

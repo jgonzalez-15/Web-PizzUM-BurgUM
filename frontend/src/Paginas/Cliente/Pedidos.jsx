@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { ContextoSesion } from "../../Componentes/context/ContextoSesion.jsx";
+import { ContextoSesion } from "../../Contextos/ContextoSesion.jsx";
 import EncabezadoPrincipal from "../../Componentes/Encabezado.jsx";
 import EstadoPedido from "../../Componentes/EstadoPedido.jsx";
 import PieDePagina from "../../Componentes/PieDePagina.jsx";

@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { ContextoSesion } from "../../Componentes/context/ContextoSesion.jsx";
-import { usarCarrito } from "../../Componentes/context/ContextoCarrito.jsx";
+import { ContextoSesion } from "../../Contextos/ContextoSesion.jsx";
+import { usarCarrito } from "../../Contextos/ContextoCarrito.jsx";
 import EncabezadoPago from "../../Componentes/EncabezadoPago.jsx";
 import PieDePagina from "../../Componentes/PieDePagina.jsx";
 
