@@ -32,7 +32,6 @@ export default function VerCreacion() {
                     setError("No se pudo obtener la creación");
                 }
             } catch (err) {
-                console.error("Error al obtener los detalles:", err);
                 setError("Error al obtener los detalles");
             } finally {
                 setCargando(false);
@@ -65,7 +64,6 @@ export default function VerCreacion() {
                 alert("No se pudo eliminar la creación de favoritos.");
             }
         } catch (error) {
-            console.error("Error al eliminar de favoritos:", error);
             alert("Ocurrió un error al eliminar de favoritos.");
         }
     };
@@ -86,7 +84,7 @@ export default function VerCreacion() {
         );
     }
 
-    const { nombre, tipo, precio, ingredientes, tamanio, cantidadCarnes } = creacion;
+    const { nombre, tipo, precio, ingredientes, ingredientesInvalidos = [], cantidadCarnes } = creacion;
 
     const icono = tipo === "Pizza" ? "🍕" : tipo === "Hamburguesa" ? "🍔" : "";
 
@@ -103,51 +101,42 @@ export default function VerCreacion() {
                     <h3 className="font-semibold text-lg text-gray-800 mb-1">Tamaño:</h3>
                     <div className="flex flex-wrap gap-2">
                         {tamanio.map((m) => (
-                            <span
-                                key={m.idProducto}
-                                className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
-                            >
-                {m.nombre}
-              </span>
+                            <span key={m.idProducto} className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm">
+                                {m.nombre}
+                            </span>
                         ))}
                     </div>
                 </div>
+
                 <div>
                     <h3 className="font-semibold text-lg text-gray-800 mb-1">Masa:</h3>
                     <div className="flex flex-wrap gap-2">
                         {masas.map((m) => (
-                            <span
-                                key={m.idProducto}
-                                className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
-                            >
-                {m.nombre}
-              </span>
+                            <span key={m.idProducto} className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm">
+                                {m.nombre}
+                            </span>
                         ))}
                     </div>
                 </div>
+
                 <div>
                     <h3 className="font-semibold text-lg text-gray-800 mb-1">Salsa:</h3>
                     <div className="flex flex-wrap gap-2">
                         {salsas.map((s) => (
-                            <span
-                                key={s.idProducto}
-                                className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
-                            >
-                {s.nombre}
-              </span>
+                            <span key={s.idProducto} className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm">
+                                {s.nombre}
+                            </span>
                         ))}
                     </div>
                 </div>
+
                 <div>
                     <h3 className="font-semibold text-lg text-gray-800 mb-1">Toppings:</h3>
                     <div className="flex flex-wrap gap-2">
                         {toppings.map((t) => (
-                            <span
-                                key={t.idProducto}
-                                className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
-                            >
-                {t.nombre}
-              </span>
+                            <span key={t.idProducto} className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm">
+                                {t.nombre}
+                            </span>
                         ))}
                     </div>
                 </div>
@@ -165,51 +154,42 @@ export default function VerCreacion() {
                     <h3 className="font-semibold text-lg text-gray-800 mb-1">Pan:</h3>
                     <div className="flex flex-wrap gap-2">
                         {panes.map((p) => (
-                            <span
-                                key={p.idProducto}
-                                className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
-                            >
-                {p.nombre}
-              </span>
+                            <span key={p.idProducto} className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm">
+                                {p.nombre}
+                            </span>
                         ))}
                     </div>
                 </div>
+
                 <div>
                     <h3 className="font-semibold text-lg text-gray-800 mb-1">Carne:</h3>
                     <div className="flex flex-wrap gap-2">
                         {carnes.map((c) => (
-                            <span
-                                key={c.idProducto}
-                                className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
-                            >
-                {cantidadCarnes || 1} x {c.nombre}
-              </span>
+                            <span key={c.idProducto} className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm">
+                                {cantidadCarnes || 1} x {c.nombre}
+                            </span>
                         ))}
                     </div>
                 </div>
+
                 <div>
                     <h3 className="font-semibold text-lg text-gray-800 mb-1">Salsas:</h3>
                     <div className="flex flex-wrap gap-2">
                         {salsas.map((s) => (
-                            <span
-                                key={s.idProducto}
-                                className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
-                            >
-                {s.nombre}
-              </span>
+                            <span key={s.idProducto} className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm">
+                                {s.nombre}
+                            </span>
                         ))}
                     </div>
                 </div>
+
                 <div>
                     <h3 className="font-semibold text-lg text-gray-800 mb-1">Ingredientes:</h3>
                     <div className="flex flex-wrap gap-2">
                         {extras.map((i) => (
-                            <span
-                                key={i.idProducto}
-                                className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm"
-                            >
-                {i.nombre}
-              </span>
+                            <span key={i.idProducto} className="bg-orange-50 border border-orange-100 text-orange-700 rounded-lg px-3 py-1 text-sm shadow-sm">
+                                {i.nombre}
+                            </span>
                         ))}
                     </div>
                 </div>
@@ -221,7 +201,6 @@ export default function VerCreacion() {
         <div className="flex flex-col min-h-screen">
             <Encabezado />
 
-            {/* Botón volver a favoritos */}
             <div className="sticky top-[70px] left-0 w-full flex justify-start px-10 py-2 z-30">
                 <button
                     onClick={() => navigate("/favoritos")}
@@ -231,20 +210,31 @@ export default function VerCreacion() {
                 </button>
             </div>
 
-            {/* Contenido principal */}
             <main className="flex-grow flex flex-col justify-start items-center px-8 md:px-20 mt-6 mb-10">
                 <div className="flex flex-col gap-6 bg-white shadow-xl rounded-3xl p-10 md:p-14 max-w-4xl w-full border border-gray-100 relative overflow-hidden">
-                    {/* Encabezado donde va el icono */}
+
                     <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-orange-400 to-orange-600 rounded-t-3xl flex justify-center items-center text-6xl text-white shadow-inner">
                         {icono}
                     </div>
 
-                    {/* Datos */}
                     <div className="mt-36 flex flex-col justify-between gap-4">
                         <div className="text-center">
                             <h1 className="text-3xl font-extrabold text-gray-800">{nombre}</h1>
                             <p className="text-lg text-gray-500">{tipo}</p>
                         </div>
+
+                        {ingredientesInvalidos.length > 0 && (
+                            <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4">
+                                <h3 className="font-semibold mb-2">Ingredientes no disponibles:</h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {ingredientesInvalidos.map((inv) => (
+                                        <span key={inv.idProducto} className="bg-red-100 text-red-700 border border-red-300 rounded-lg px-3 py-1 text-sm">
+                                            {inv.nombre}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
                         <div className="border-t border-gray-200 my-2"></div>
 
@@ -261,7 +251,12 @@ export default function VerCreacion() {
                                 isPrimary={false}
                                 onClick={eliminarDeFavoritos}
                             />
-                            <AddToCartButton isPrimary={true} item={creacion} />
+
+                            <AddToCartButton
+                                isPrimary={true}
+                                item={creacion}
+                                disabled={ingredientesInvalidos.length > 0}
+                            />
                         </div>
                     </div>
                 </div>

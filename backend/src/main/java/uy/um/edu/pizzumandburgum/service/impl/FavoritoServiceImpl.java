@@ -77,37 +77,56 @@ public class FavoritoServiceImpl implements FavoritoService {
 
     @Override
     public FavoritoResponseDTO obtenerFavoritoPorId(Long id) {
-        Favorito favorito = favoritoRepository.findById(id).orElseThrow(FavoritoNoEncontradoException::new);
+        Favorito favorito = favoritoRepository.findById(id)
+                .orElseThrow(FavoritoNoEncontradoException::new);
 
         FavoritoResponseDTO dto = favoritoMapper.toResponseDTO(favorito);
 
         List<Map<String, Object>> ingredientes = new ArrayList<>();
+        List<Map<String, Object>> ingredientesInvalidos = new ArrayList<>();
 
-        if (favorito.getCreacion() instanceof Pizza pizza) {
+        Creacion creacion = favorito.getCreacion();
+
+        if (creacion instanceof Pizza pizza) {
             dto.setTipo("Pizza");
 
             for (PizzaProducto pp : pizza.getIngredientes()) {
+
                 Map<String, Object> ingrediente = new HashMap<>();
                 ingrediente.put("idProducto", pp.getProducto().getIdProducto());
                 ingrediente.put("nombre", pp.getProducto().getNombre());
                 ingrediente.put("tipo", pp.getProducto().getTipo());
-                ingredientes.add(ingrediente);
+
+                if (!pp.getProducto().isEstaActivo() || !pp.getProducto().isVisible()) {
+                    ingredientesInvalidos.add(ingrediente);
+                } else {
+                    ingredientes.add(ingrediente);
+                }
             }
 
-        } else if (favorito.getCreacion() instanceof Hamburguesa burger) {
+        } else if (creacion instanceof Hamburguesa burger) {
             dto.setTipo("Hamburguesa");
             dto.setCantidadCarnes(burger.getCantCarnes());
 
             for (HamburguesaProducto hp : burger.getIngredientes()) {
+
                 Map<String, Object> ingrediente = new HashMap<>();
                 ingrediente.put("idProducto", hp.getProducto().getIdProducto());
                 ingrediente.put("nombre", hp.getProducto().getNombre());
                 ingrediente.put("tipo", hp.getProducto().getTipo());
-                ingredientes.add(ingrediente);
+
+                if (!hp.getProducto().isEstaActivo() || !hp.getProducto().isVisible()) {
+                    ingredientesInvalidos.add(ingrediente);
+                } else {
+                    ingredientes.add(ingrediente);
+                }
             }
         }
 
         dto.setIngredientes(ingredientes);
+        dto.setIngredientesInvalidos(ingredientesInvalidos);
+
         return dto;
     }
+
 }

@@ -1,9 +1,11 @@
 import { usarCarrito } from "./context/ContextoCarrito.jsx";
 
-export default function BotonAgregarCarrito({ item, esPrincipal = true, handle }) {
+export default function BotonAgregarCarrito({ item, esPrincipal = true, handle, disabled }) {
     const { agregarItem } = usarCarrito();
 
     const agregar = async () => {
+        if (disabled) return;
+
         let nuevo = item;
 
         if (handle && (!nuevo || !nuevo.idCreacion)) {
@@ -43,18 +45,22 @@ export default function BotonAgregarCarrito({ item, esPrincipal = true, handle }
     };
 
     const clasesBase = `
-    w-full transition-transform duration-150 ease-in-out hover:scale-105
-    font-bold text-lg rounded-2xl shadow-md
-    px-8 py-4 min-w-[230px] text-center tracking-wide
-  `;
+        w-full transition-transform duration-150 ease-in-out hover:scale-105
+        font-bold text-lg rounded-2xl shadow-md
+        px-8 py-4 min-w-[230px] text-center tracking-wide
+    `;
 
     const clasesColor = esPrincipal
         ? "bg-orange-500 text-white hover:bg-orange-600"
         : "bg-gray-200 text-gray-800 hover:bg-gray-300";
 
     return (
-        <button onClick={agregar} className={`${clasesBase} ${clasesColor}`}>
-            Agregar al carrito
+        <button
+            onClick={!disabled ? agregar : undefined}
+            disabled={disabled}
+            className={`${clasesBase} ${clasesColor} ${disabled ? "opacity-50 cursor-not-allowed hover:scale-100" : ""}`}
+        >
+            {disabled ? "Producto no disponible" : "Agregar al carrito"}
         </button>
     );
 }

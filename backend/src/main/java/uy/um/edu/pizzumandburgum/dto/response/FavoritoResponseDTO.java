@@ -22,6 +22,7 @@ public class FavoritoResponseDTO {
     private List<Map<String, Object>> ingredientes;
     private Integer cantidadCarnes;
     private String tamanio;
+    private List<Map<String, Object>> ingredientesInvalidos;
 
 }
 

@@ -29,7 +29,13 @@ export default function Favoritos() {
 
             if (respuesta.ok) {
                 const datos = await respuesta.json();
-                setFavoritos(datos);
+                setFavoritos(
+                    datos.map(f => ({
+                        ...f,
+                        ingredientes: f.ingredientes || [],
+                        ingredientesInvalidos: f.ingredientesInvalidos || []
+                    }))
+                );
             } else {
                 alert("Ocurrió un error al obtener tus favoritos.");
             }
@@ -90,6 +96,7 @@ export default function Favoritos() {
                                         <BotonAgregarCarrito
                                             esPrincipal={true}
                                             item={fav}
+                                            disabled={fav.ingredientesInvalidos?.length > 0}
                                         />
                                     </div>
                                 </div>
