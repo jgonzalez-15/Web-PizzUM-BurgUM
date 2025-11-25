@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PieDePagina from "../Components/PieDePagina.jsx";
-import Encabezado from "../Components/Encabezado.jsx";
+import PieDePagina from "../Componentes/PieDePagina.jsx";
+import Encabezado from "../Componentes/Encabezado.jsx";
 
 export default function Registrar() {
     const [email, setEmail] = useState("");
@@ -22,20 +22,66 @@ export default function Registrar() {
     const registrarUsuario = async (e) => {
         e.preventDefault();
 
+        // Todos los campos deben estar completos
         if (!email || !nombre || !apellido || !contrasenia || !confirmarContrasenia || !telefono || !fechaNacimiento || !direccion || !numeroTarjeta || !nombreTitular || !fechaVencimiento || !cedula) {
             alert("Debes completar todos los campos.");
             return;
         }
 
+        // Las constraseñas deben coincidir
         if (contrasenia !== confirmarContrasenia) {
             alert("Las contraseñas no coinciden.");
             return;
         }
 
+        // La constraseña debe tener por lo menos 8 carácteres
         if (contrasenia.length < 8) {
             alert("La contraseña debe tener al menos 8 caracteres.");
             return;
         }
+
+        // La cédula debe ser de 8 dígitos
+        if (!/^\d{8}$/.test(cedula)) {
+            alert("La cédula debe tener exactamente 8 dígitos.");
+            return;
+        }
+
+        // El teléfono debe ser de 9 dígitos
+        if (!/^\d{9}$/.test(telefono)) {
+            alert("El teléfono debe tener exactamente 9 dígitos.");
+            return;
+        }
+
+        // Se debe ser mayor de 18 años
+        const hoy = new Date();
+        const nacimiento = new Date(fechaNacimiento);
+        const edad = hoy.getFullYear() - nacimiento.getFullYear();
+        const mes = hoy.getMonth() - nacimiento.getMonth();
+        const esMayor18 = edad > 18 || (edad === 18 && mes >= 0 && hoy.getDate() >= nacimiento.getDate());
+        if (!esMayor18) {
+            alert("Debes ser mayor de 18 años para registrarte.");
+            return;
+        }
+
+        // No se puede ingresar una tarjeta vencida
+        if (fechaVencimiento) {
+            const [anio, mesTarjeta] = fechaVencimiento.split("-");
+            const vencimiento = new Date(anio, mesTarjeta - 1);
+
+            const inicioMesActual = new Date(hoy.getFullYear(), hoy.getMonth());
+
+            if (vencimiento < inicioMesActual) {
+                alert("La tarjeta ingresada está vencida.");
+                return;
+            }
+        }
+
+        // Contraseña insegura
+        if (contrasenia === "12345678") {
+            alert("La contraseña es demasiado insegura, elegí una más segura.");
+            return;
+        }
+
 
         try {
             const respuesta = await fetch("http://localhost:8080/api/cliente/registrar", {
@@ -62,6 +108,10 @@ export default function Registrar() {
                 navigate("/iniciarSesion");
             } else {
                 const datos = await respuesta.json().catch(() => ({}));
+                if (respuesta.status === 409 || datos.message === "El email ingresado ya se encuentra registrado en el sistema.") {
+                    alert("El correo electrónico ya está registrado. Por favor usá otro.");
+                    return;
+                }
                 alert(datos.message || "No se pudo completar el registro. Verificá los datos e intentá nuevamente.");
             }
         } catch (error) {

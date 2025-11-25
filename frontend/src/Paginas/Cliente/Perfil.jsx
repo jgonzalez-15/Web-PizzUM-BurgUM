@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Encabezado from "../Components/Encabezado.jsx";
-import PieDePagina from "../Components/PieDePagina.jsx";
+import Encabezado from "../../Componentes/Encabezado.jsx";
+import PieDePagina from "../../Componentes/PieDePagina.jsx";
 
 export default function Perfil() {
     const [datos, setDatos] = useState({
@@ -64,8 +64,42 @@ export default function Perfil() {
     };
 
     const guardarCambios = async () => {
-        if (datos.contrasenia && datos.contrasenia !== datos.confirmarContrasenia)
-            return alert("Las contraseñas no coinciden");
+        if (datos.contrasenia) {
+            if (datos.contrasenia !== datos.confirmarContrasenia) {
+                return alert("Las contraseñas no coinciden.");
+            }
+
+            if (datos.contrasenia.length < 8) {
+                return alert("La contraseña debe tener al menos 8 caracteres.");
+            }
+
+            if (datos.contrasenia === "12345678") {
+                return alert("La contraseña es demasiado insegura, elegí una más segura.");
+            }
+        }
+
+        if (datos.telefono && !/^\d{9}$/.test(datos.telefono)) {
+            return alert("El teléfono debe tener exactamente 9 dígitos.");
+        }
+
+        if (datos.cedula && !/^\d{8}$/.test(datos.cedula)) {
+            return alert("La cédula debe tener exactamente 8 dígitos.");
+        }
+
+        if (datos.fechaNac) {
+            const hoy = new Date();
+            const nacimiento = new Date(datos.fechaNac);
+
+            const edad = hoy.getFullYear() - nacimiento.getFullYear();
+            const mes = hoy.getMonth() - nacimiento.getMonth();
+            const esMayor18 =
+                edad > 18 ||
+                (edad === 18 && (mes > 0 || (mes === 0 && hoy.getDate() >= nacimiento.getDate())));
+
+            if (!esMayor18) {
+                return alert("Debes ser mayor de 18 años.");
+            }
+        }
 
         try {
             const body = {
@@ -180,6 +214,15 @@ export default function Perfil() {
         const { nombreTitular, numeroTarjeta, fechaVencimiento } = nuevoPago;
         if (!nombreTitular || !numeroTarjeta || !fechaVencimiento)
             return alert("Completá todos los campos del método de pago");
+        const hoy = new Date();
+        const [anio, mes] = fechaVencimiento.split("-");
+        const vencimiento = new Date(anio, mes - 1);
+
+        const inicioMesActual = new Date(hoy.getFullYear(), hoy.getMonth());
+
+        if (vencimiento < inicioMesActual) {
+            return alert("La tarjeta ingresada está vencida.");
+        }
 
         try {
             const respuesta = await fetch("http://localhost:8080/api/medioDePago/agregar", {

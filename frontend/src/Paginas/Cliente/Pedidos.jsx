@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect } from "react";
-import { ContextoSesion } from "../Components/context/ContextoSesion.jsx";
-import EncabezadoPrincipal from "../Components/Encabezado.jsx";
-import EstadoPedido from "../Components/EstadoPedido.jsx";
-import PieDePagina from "../Components/PieDePagina.jsx";
-import PedidoDetalle from "../Components/PedidoDetalle.jsx";
+import { ContextoSesion } from "../../Componentes/context/ContextoSesion.jsx";
+import EncabezadoPrincipal from "../../Componentes/Encabezado.jsx";
+import EstadoPedido from "../../Componentes/EstadoPedido.jsx";
+import PieDePagina from "../../Componentes/PieDePagina.jsx";
+import PedidoDetalle from "../../Componentes/PedidoDetalle.jsx";
 
 function Pedidos() {
     const [pedidosActivos, setPedidosActivos] = useState([]);

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { usarCarrito } from "../Components/context/ContextoCarrito.jsx";
+import { usarCarrito } from "../../Componentes/context/ContextoCarrito.jsx";
 
-import EncabezadoPrincipal from "../Components/Encabezado.jsx";
-import PieDePagina from "../Components/PieDePagina.jsx";
+import EncabezadoPrincipal from "../../Componentes/Encabezado.jsx";
+import PieDePagina from "../../Componentes/PieDePagina.jsx";
 
 export default function NuevoPedido() {
     if (window.pageYOffset > 0) {

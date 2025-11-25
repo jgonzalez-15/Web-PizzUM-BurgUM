@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
-import EncabezadoAdmin from "../Components/EncabezadoAdmin.jsx";
-import PieDePagina from "../Components/PieDePagina";
+import EncabezadoAdmin from "../../Componentes/EncabezadoAdmin.jsx";
+import PieDePagina from "../../Componentes/PieDePagina.jsx";
 
 export default function PanelAdministrador() {
     const baseBtn =

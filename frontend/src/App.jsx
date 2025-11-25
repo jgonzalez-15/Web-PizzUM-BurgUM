@@ -2,24 +2,24 @@ import "./App.css";
 import { useContext, useEffect, useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
-import { ContextoSesion } from "./Components/context/ContextoSesion.jsx";
-import { CarritoProveedor } from "./Components/context/ContextoCarrito.jsx";
+import { ContextoSesion } from "./Componentes/context/ContextoSesion.jsx";
+import { CarritoProveedor } from "./Componentes/context/ContextoCarrito.jsx";
 
-import PaginaPrincipal from "./Pages/PaginaPrincipal.jsx";
-import DiseniarCreacion from "./Pages/DiseniarCreacion.jsx";
-import Pedidos from "./Pages/Pedidos.jsx";
-import NuevoPedido from "./Pages/NuevoPedido.jsx";
-import InicioSesion from "./Pages/InicioSesion.jsx";
-import Favoritos from "./Pages/Favoritos";
-import VerCreacion from "./Pages/VerCreacion.jsx";
-import Registrar from "./Pages/Registrar.jsx";
-import Perfil from "./Pages/Perfil";
-import CheckoutPage from "./Pages/PaginaPago.jsx";
-import PanelAdministrador from "./Pages/PanelAdministrador.jsx";
-import ProductosAdmin from "./Pages/ProductosAdmin.jsx";
-import PedidosAdmin from "./Pages/PedidosAdmin.jsx";
-import AgregarAdministradores from "./Pages/AgregarAdministradores.jsx";
-import PedidosFechaAdmin from "./Pages/PedidosFechaAdmin.jsx";
+import PaginaPrincipal from "./Paginas/PaginaPrincipal.jsx";
+import DiseniarCreacion from "./Paginas/Cliente/DiseniarCreacion.jsx";
+import Pedidos from "./Paginas/Cliente/Pedidos.jsx";
+import NuevoPedido from "./Paginas/Cliente/NuevoPedido.jsx";
+import InicioSesion from "./Paginas/InicioSesion.jsx";
+import Favoritos from "./Paginas/Cliente/Favoritos.jsx";
+import VerCreacion from "./Paginas/Cliente/VerCreacion.jsx";
+import Registrar from "./Paginas/Registrar.jsx";
+import Perfil from "./Paginas/Cliente/Perfil.jsx";
+import CheckoutPage from "./Paginas/Cliente/PaginaPago.jsx";
+import PanelAdministrador from "./Paginas/Administrador/PanelAdministrador.jsx";
+import ProductosAdmin from "./Paginas/Administrador/ProductosAdmin.jsx";
+import PedidosAdmin from "./Paginas/Administrador/PedidosAdmin.jsx";
+import AgregarAdministradores from "./Paginas/Administrador/AgregarAdministradores.jsx";
+import PedidosFechaAdmin from "./Paginas/Administrador/PedidosFechaAdmin.jsx";
 
 function App() {
   const { sessionType, setSessionType, setSessionInfo } = useContext(ContextoSesion);

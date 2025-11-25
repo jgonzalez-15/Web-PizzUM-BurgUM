@@ -4,7 +4,7 @@ import { usarCarrito } from "./context/ContextoCarrito.jsx";
 import BarraLateral from "./BarraLateral.jsx";
 import BotonChico from "./BotonChico.jsx";
 
-import carritoImg from "../assets/carrito.png";
+import carritoImg from "../Recursos/carrito.png";
 
 
 function Encabezado() {

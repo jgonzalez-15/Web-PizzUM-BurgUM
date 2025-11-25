@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from "react";
-import { ContextoDisenio } from "../Components/context/ContextoDisenio.jsx";
-import { ContextoSesion } from "../Components/context/ContextoSesion.jsx";
-import Encabezado from "../Components/Encabezado.jsx";
-import PieDePagina from "../Components/PieDePagina.jsx";
-import { usarCarrito } from "../Components/context/ContextoCarrito.jsx";
-import AgregadorDeIngredientes from "../Components/AgregadorDeIngredientes.jsx";
+import { ContextoDisenio } from "../../Componentes/context/ContextoDisenio.jsx";
+import { ContextoSesion } from "../../Componentes/context/ContextoSesion.jsx";
+import Encabezado from "../../Componentes/Encabezado.jsx";
+import PieDePagina from "../../Componentes/PieDePagina.jsx";
+import { usarCarrito } from "../../Componentes/context/ContextoCarrito.jsx";
+import AgregadorDeIngredientes from "../../Componentes/AgregadorDeIngredientes.jsx";
 
 function DiseniarCreacion({ tipo }) {
   const { sessionInfo } = useContext(ContextoSesion);

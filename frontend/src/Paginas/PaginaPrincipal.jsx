@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
-import { ContextoSesion } from "../Components/context/ContextoSesion.jsx";
+import { ContextoSesion } from "../Componentes/context/ContextoSesion.jsx";
 
-import Boton from "../Components/Boton.jsx";
-import Favourite from "../Components/Favorito.jsx";
-import Encabezado from "../Components/Encabezado.jsx";
-import PieDePagina from "../Components/PieDePagina.jsx";
+import Boton from "../Componentes/Boton.jsx";
+import Favourite from "../Componentes/Favorito.jsx";
+import Encabezado from "../Componentes/Encabezado.jsx";
+import PieDePagina from "../Componentes/PieDePagina.jsx";
 
 export default function PaginaPrincipal() {
     if (window.pageYOffset > 0) window.scrollTo(0, 0);

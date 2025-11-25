@@ -118,12 +118,10 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public ClienteResponseDTO login(String email, String contrasenia) {
-        Cliente cliente = clienteRepository.findById(email).orElseThrow(ClienteNoExisteException::new);
+        Cliente cliente = clienteRepository.findById(email).orElseThrow(EmailNoExisteException::new);
 
-        if (!Objects.equals(cliente.getContrasenia(), contrasenia)){
+        if (!cliente.getContrasenia().equals(contrasenia)) {
             throw new ContraseniaInvalidaException();
-        } else if (!Objects.equals(cliente.getEmail(),email)) {
-            throw new EmailNoExisteException();
         }
 
         return new ClienteResponseDTO(
@@ -135,6 +133,7 @@ public class ClienteServiceImpl implements ClienteService {
                 cliente.getCedula()
         );
     }
+
 
     @Override
     public ClienteResponseDTO editarPerfil(String email, ClienteUpdateDTO dto) {

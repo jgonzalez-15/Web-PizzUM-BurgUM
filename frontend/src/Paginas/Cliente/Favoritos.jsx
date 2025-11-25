@@ -1,10 +1,10 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ContextoSesion } from "../Components/context/ContextoSesion.jsx";
+import { ContextoSesion } from "../../Componentes/context/ContextoSesion.jsx";
 
-import PieDePagina from "../Components/PieDePagina.jsx";
-import Encabezado from "../Components/Encabezado.jsx";
-import BotonAgregarCarrito from "../Components/BotonAgregarCarrito.jsx";
+import PieDePagina from "../../Componentes/PieDePagina.jsx";
+import Encabezado from "../../Componentes/Encabezado.jsx";
+import BotonAgregarCarrito from "../../Componentes/BotonAgregarCarrito.jsx";
 
 export default function Favoritos() {
     const [favoritos, setFavoritos] = useState([]);

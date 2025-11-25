@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import PedidoDetalleAdmin from "../Components/PedidoDetalleAdmin.jsx";
+import PedidoDetalleAdmin from "../../Componentes/PedidoDetalleAdmin.jsx";
 
 export default function PedidosAdmin() {
     const [pedidos, setPedidos] = useState([]);

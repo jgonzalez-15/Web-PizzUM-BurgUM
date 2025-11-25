@@ -1,7 +1,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import { SessionProvider } from './Components/context/ContextoSesion.jsx'
+import { SessionProvider } from './Componentes/context/ContextoSesion.jsx'
 import './index.css'
 import App from './App.jsx'
 

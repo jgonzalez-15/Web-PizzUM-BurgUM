@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Encabezado from "../Components/Encabezado.jsx";
-import PieDePagina from "../Components/PieDePagina.jsx";
-import BotonChico from "../Components/BotonChico.jsx";
-import AddToCartButton from "../Components/BotonAgregarCarrito.jsx";
+import Encabezado from "../../Componentes/Encabezado.jsx";
+import PieDePagina from "../../Componentes/PieDePagina.jsx";
+import BotonChico from "../../Componentes/BotonChico.jsx";
+import AddToCartButton from "../../Componentes/BotonAgregarCarrito.jsx";
 
 export default function VerCreacion() {
     const id = useLocation().state?.creationId;
