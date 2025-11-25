@@ -72,41 +72,39 @@ export default function NuevoPedido() {
                             Bebidas
                         </h1>
                         <div className="mb-6 bg-white p-6 rounded-2xl shadow-md border border-gray-100 flex flex-col gap-4">
-                                    <h3 className="font-semibold text-lg text-gray-800">
-                                        Agregar bebida
-                                    </h3>
+                            <h3 className="font-semibold text-lg text-gray-800">
+                                Agregar bebida
+                            </h3>
 
-                                    {cargandoBebidas ? (
-                                        <p className="text-gray-600 text-sm">Cargando bebidas...</p>
-                                    ) : bebidas.length === 0 ? (
-                                        <p className="text-gray-600 text-sm">
-                                            No hay bebidas disponibles por el momento.
-                                        </p>
-                                    ) : (
-                                        <>
-                                            <p className="text-gray-600 text-sm">
-                                                Elegí una bebida para acompañar tu pedido:
-                                            </p>
 
-                                            <div className="flex flex-wrap gap-3">
-                                                {bebidas.map((b, index) => (
-                                                    <button
-                                                        key={`bebida-${b.idProducto || index}`}
-                                                        onClick={() => agregarBebida(b)}
-                                                        className="w-28 flex flex-col items-center px-4 py-3 rounded-2xl shadow-sm border border-orange-200 bg-gradient-to-r from-orange-50 to-orange-100 hover:from-orange-100 hover:to-orange-200 transition-all hover:scale-[1.03]"
-                                                    >
-                                                        <span className="text-orange-700 font-semibold">
-                                                            {b.nombre}
-                                                        </span>
-                                                        <span className="text-xs text-gray-500 mt-1">
-                                                            ${b.precio}
-                                                        </span>
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
+                            {cargandoBebidas ? (
+                                <p className="text-gray-600 text-sm">Cargando bebidas...</p>
+                            ) : bebidas.length === 0 ? (
+                                <p className="text-gray-600 text-sm">
+                                    No hay bebidas disponibles por el momento.
+                                </p>
+                            ) : (
+                                <>
+                                    <p className="text-gray-600 text-sm">
+                                        Elegí una bebida para acompañar tu pedido:
+                                    </p>
+
+
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                                        {bebidas.map((b, index) => (
+                                            <button
+                                                key={`bebida-${b.idProducto || index}`}
+                                                onClick={() => agregarBebida(b)}
+                                                className="relative p-4 rounded-2xl bg-gradient-to-br from-orange-100 to-orange-200 border border-orange-300 shadow-md hover:shadow-xl transition-all hover:scale-[1.06] flex flex-col items-center text-center overflow-hidden group">
+                                                <span className="text-orange-800 font-bold text-lg group-hover:scale-110 transition-transform"> {b.nombre}</span>
+                                                <span className="text-gray-600 text-sm mt-1 group-hover:opacity-80">${b.precio}</span>
+                                                <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-orange-300 rounded-full opacity-30 blur-xl group-hover:opacity-50 transition-all"></div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+                        </div>
                         <h1 className="text-3xl font-extrabold text-gray-800 mb-6">
                             Tu carrito
                         </h1>
@@ -203,21 +201,26 @@ export default function NuevoPedido() {
                                     <h2 className="font-bold text-xl text-orange-600">${total}</h2>
                                 </div>
 
-                                <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-6">
+                                <div className="flex flex-col md:flex-row justify-between items-center gap-4 mt-6 w-full">
+
                                     <button
                                         onClick={() => (window.location.href = "/")}
-                                        className="w-40 px-6 py-2.5 rounded-2xl bg-white text-gray-700 border border-gray-300 font-semibold shadow-sm hover:shadow-md hover:bg-gray-100 transition-all duration-200 hover:scale-[1.03]"
+                                        className="w-full md:w-40 px-6 py-2.5 rounded-2xl bg-white text-gray-700 border border-gray-300 font-semibold shadow-sm hover:shadow-md hover:bg-gray-100 transition-all duration-200 hover:scale-[1.03] overflow-hidden
+"
                                     >
                                         Seguir comprando
                                     </button>
 
                                     <button
                                         onClick={() => (window.location.href = "/paginaPago")}
-                                        className="w-40 px-6 py-2.5 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.05]"
+                                        className="w-full md:w-40 px-6 py-2.5 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.05] overflow-hidden
+"
                                     >
                                         Pasar al pago
                                     </button>
+
                                 </div>
+
                             </>
                         )}
                     </div>
