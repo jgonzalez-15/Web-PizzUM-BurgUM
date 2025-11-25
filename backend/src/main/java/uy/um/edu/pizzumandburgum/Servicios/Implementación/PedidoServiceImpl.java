@@ -1,0 +1,211 @@
+package uy.um.edu.pizzumandburgum.Servicios.Implementación;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import uy.um.edu.pizzumandburgum.DTOs.Request.PedidoBebidaRequestDTO;
+import uy.um.edu.pizzumandburgum.DTOs.Request.PedidoCreacionRequestDTO;
+import uy.um.edu.pizzumandburgum.DTOs.Request.PedidoRequestDTO;
+import uy.um.edu.pizzumandburgum.DTOs.Response.PedidoResponseDTO;
+import uy.um.edu.pizzumandburgum.Entidades.*;
+import uy.um.edu.pizzumandburgum.Excepciones.Creacion.CreacionNoEncontradaException;
+import uy.um.edu.pizzumandburgum.Excepciones.Domicilio.DomicilioNoExisteException;
+import uy.um.edu.pizzumandburgum.Excepciones.Pedido.EstadoInvalidoException;
+import uy.um.edu.pizzumandburgum.Excepciones.Pedido.FechaInvalidaException;
+import uy.um.edu.pizzumandburgum.Excepciones.Pedido.PedidoNoEncontradoException;
+import uy.um.edu.pizzumandburgum.Excepciones.Producto.ProductoNoExisteException;
+import uy.um.edu.pizzumandburgum.Excepciones.Usuario.Cliente.ClienteNoExisteException;
+import uy.um.edu.pizzumandburgum.Mappers.PedidoMapper;
+import uy.um.edu.pizzumandburgum.Repositorios.*;
+import uy.um.edu.pizzumandburgum.Servicios.Interfaces.*;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class PedidoServiceImpl implements PedidoService {
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private PedidoMapper pedidoMapper;
+
+    @Autowired
+    private PedidoBebidaService pedidoBebidaService;
+
+    @Autowired
+    private PedidoCrecionService pedidoCrecionService;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
+    private ClienteDomicilioService clienteDomicilioService;
+
+    @Autowired
+    private MedioDePagoService medioDePagoService;
+
+    @Autowired
+    private ProductoRepository productoRepository;
+
+    @Autowired
+    private DomicilioRepository domicilioRepository;
+
+    @Autowired
+    private CreacionRepository creacionRepository;
+
+    @Override
+    public PedidoResponseDTO realizarPedido(PedidoRequestDTO dto) {
+        try {
+            Cliente cliente = clienteRepository.findByEmail(dto.getIdCliente()).orElseThrow(ClienteNoExisteException::new);
+
+            MedioDePago medioDePago = medioDePagoService.obtenerMedioDePago(cliente.getEmail(), dto.getIdMedioDePago());
+
+            Domicilio domicilioTemp = domicilioRepository.findById(dto.getIdDomicilio()).orElseThrow(DomicilioNoExisteException::new);
+
+            Domicilio domicilio = clienteDomicilioService.obtenerDomicilio(cliente.getEmail(), domicilioTemp.getDireccion());
+
+            Pedido pedido = pedidoMapper.toEntity(dto);
+            pedido.setEstado("En Cola");
+            pedido.setClienteAsignado(cliente);
+            pedido.setDomicilio(domicilio);
+            pedido.setMedioDePago(medioDePago);
+            pedido.setFecha(LocalDate.now());
+            pedido.setCalificacion(0);
+
+            pedido = pedidoRepository.save(pedido);
+
+            float precioTotal = 0f;
+
+            if (dto.getCreaciones() != null && !dto.getCreaciones().isEmpty()) {
+                for (PedidoCreacionRequestDTO creacionDto : dto.getCreaciones()) {
+
+                    pedidoCrecionService.agregarCreacion(pedido.getId(), creacionDto.getCreacion().getId(), creacionDto.getCantidad());
+
+                    Creacion creacion = creacionRepository.findById(creacionDto.getCreacion().getId()).orElseThrow(CreacionNoEncontradaException::new);
+
+                    precioTotal += creacion.getPrecio() * creacionDto.getCantidad();
+                }
+            }
+
+
+            if (dto.getBebidas() != null && !dto.getBebidas().isEmpty()) {
+                for (PedidoBebidaRequestDTO bebidaDto : dto.getBebidas()) {
+                    pedidoBebidaService.agregarBebida(pedido.getId(), bebidaDto.getProducto().getIdProducto(), bebidaDto.getCantidad());
+
+                    Producto bebida = productoRepository.findByIdProducto(bebidaDto.getProducto().getIdProducto()).orElseThrow(ProductoNoExisteException::new);
+
+
+                    precioTotal += bebida.getPrecio() * bebidaDto.getCantidad();
+                }
+            }
+
+            pedido.setPrecio(precioTotal);
+            pedido = pedidoRepository.save(pedido);
+            cliente.getPedidos().add(pedido);
+
+            return pedidoMapper.toResponseDTO(pedido);
+        }
+        catch (ClienteNoExisteException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public void eliminarPedido(Long idPedido) {
+        Pedido pedido = pedidoRepository.findById(idPedido)
+                .orElseThrow(PedidoNoEncontradoException::new);
+
+        if (!"En Cola".equals(pedido.getEstado())) {
+            throw new IllegalStateException("Solo se pueden cancelar pedidos en cola.");
+        }
+
+        pedido.setEstado("Cancelado");
+        pedidoRepository.save(pedido);
+    }
+
+    @Override
+    public String consultarEstado(Long id) {
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(PedidoNoEncontradoException::new);
+        return pedido.getEstado();
+    }
+
+    @Override
+    public void cambiarEstado(Long id) {
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(PedidoNoEncontradoException::new);
+
+        String estadoActual = pedido.getEstado();
+        String nuevoEstado;
+
+        switch (estadoActual) {
+            case "En Cola":
+                nuevoEstado = "En Preparacion";
+                break;
+            case "En Preparacion":
+                nuevoEstado = "En Camino";
+                break;
+            case "En Camino":
+                nuevoEstado = "Entregado";
+                break;
+            case "Entregado":
+                throw new EstadoInvalidoException();
+            default:
+                throw new EstadoInvalidoException();
+        }
+        pedido.setEstado(nuevoEstado);
+        pedidoRepository.save(pedido);
+    }
+
+    @Override
+    public List<PedidoResponseDTO> pedidosEnCurso() {
+        List<Pedido> pedidos = pedidoRepository.findAll();
+        List<Pedido> pagos = new ArrayList<>();
+        for (Pedido pedido: pedidos){
+            if (pedido.isEstaPago()){
+                pagos.add(pedido);
+            }
+        }
+        List<Pedido> convertir = new ArrayList<>();
+        List<PedidoResponseDTO> pedidoResponseDTOS = new ArrayList<>();
+        for (Pedido pedido: pagos){
+            if (!pedido.getEstado().equals("Entregado")){
+                convertir.add(pedido);
+            }
+        }
+        for (Pedido pedido: convertir){
+            pedidoResponseDTOS.add(pedidoMapper.toResponseDTO(pedido));
+        }
+        return pedidoResponseDTOS;
+    }
+
+    @Override
+    public List<PedidoResponseDTO> listarPedidosPorRangoFechas(LocalDate fechaInicio, LocalDate fechaFin) {
+        if (fechaInicio.isAfter(fechaFin)) {
+            throw new FechaInvalidaException();
+        }
+
+        List<Pedido> pedidos = pedidoRepository.findByFechaBetween(fechaInicio, fechaFin);
+
+        List<PedidoResponseDTO> pedidosDTO = new ArrayList<>();
+        for (Pedido pedido : pedidos) {
+            pedidosDTO.add(pedidoMapper.toResponseDTO(pedido));
+        }
+        return pedidosDTO;
+    }
+
+    @Override
+    public PedidoResponseDTO obtenerPedidoPorId(Long id) {
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(PedidoNoEncontradoException::new);
+        return pedidoMapper.toResponseDTO(pedido);
+    }
+
+    @Override
+    public void calificar(Long id, int calificacion) {
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(PedidoNoEncontradoException::new);
+        pedido.setCalificacion(calificacion);
+        pedidoRepository.save(pedido);
+    }
+
+
+}

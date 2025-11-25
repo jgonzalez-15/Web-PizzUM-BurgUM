@@ -1,0 +1,34 @@
+package uy.um.edu.pizzumandburgum.Mappers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import uy.um.edu.pizzumandburgum.DTOs.Request.PizzaProductoRequestDTO;
+import uy.um.edu.pizzumandburgum.DTOs.Response.PizzaProductoResponseDTO;
+import uy.um.edu.pizzumandburgum.Entidades.PizzaProducto;
+import uy.um.edu.pizzumandburgum.Excepciones.Producto.ProductoNoExisteException;
+import uy.um.edu.pizzumandburgum.Repositorios.ProductoRepository;
+
+@Component
+public class PizzaProductoMapper {
+
+    @Autowired
+    private ProductoMapper productoMapper;
+
+    @Autowired
+    private ProductoRepository productoRepository;
+
+    public PizzaProductoResponseDTO toResponseDTO(PizzaProducto pizzaProducto){
+        return new PizzaProductoResponseDTO(
+                pizzaProducto.getCantidad(),
+                pizzaProducto.getPizza().getId(),
+                productoMapper.toResponseDTO(pizzaProducto.getProducto())
+        );
+    }
+
+    public PizzaProducto toEntity (PizzaProductoRequestDTO dto){
+        PizzaProducto pizzaProducto = new PizzaProducto();
+        pizzaProducto.setProducto(productoRepository.findById(dto.getIdProducto()).orElseThrow(ProductoNoExisteException::new));
+        pizzaProducto.setCantidad(dto.getCantidad());
+        return pizzaProducto;
+    }
+}

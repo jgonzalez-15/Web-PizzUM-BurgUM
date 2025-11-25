@@ -1,0 +1,23 @@
+package uy.um.edu.pizzumandburgum.DTOs.Update;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import uy.um.edu.pizzumandburgum.DTOs.Request.DomicilioRequestDTO;
+
+import java.time.LocalDate;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class AdministradorUpdateDTO {
+    private String nombre;
+    private String apellido;
+    private String contrasenia;
+    private Long telefono;
+    private LocalDate fechaNac;
+    private Long cedula;
+    private DomicilioRequestDTO domicilio;
+}

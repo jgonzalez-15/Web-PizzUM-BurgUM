@@ -1,0 +1,20 @@
+package uy.um.edu.pizzumandburgum.DTOs.Response;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class PizzaResponseDTO {
+    private long idCreacion;
+    private float precio;
+    private ClienteResponseDTO cliente;
+    private List<PizzaProductoResponseDTO> ingredientes;
+
+}
