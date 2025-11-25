@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { ContextoSesion } from "../Components/context/ContextoSesion.jsx";
 import { usarCarrito } from "../Components/context/ContextoCarrito.jsx";
-import Encabezado from "../Components/Encabezado.jsx";
+import EncabezadoPago from "../Components/EncabezadoPago.jsx";
 import PieDePagina from "../Components/PieDePagina.jsx";
 
 export default function PaginaPago() {
@@ -270,7 +270,7 @@ export default function PaginaPago() {
   return (
       <>
 
-        <Encabezado />
+        <EncabezadoPago />
         <div className="pt-24 min-h-screen flex flex-col justify-between items-center bg-gray-50">
           <h1 className="text-3xl font-bold mb-6 text-gray-800">
             Finalizar compra
