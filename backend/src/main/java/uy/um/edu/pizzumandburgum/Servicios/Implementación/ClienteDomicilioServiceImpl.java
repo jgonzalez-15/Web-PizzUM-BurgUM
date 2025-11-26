@@ -98,7 +98,7 @@ public class ClienteDomicilioServiceImpl implements ClienteDomicilioService {
 
         Domicilio domicilio = clienteDomicilio.getDomicilio();
         for (Pedido pedido : domicilio.getPedidos()) {
-            if (pedido.getEstado() != null && !pedido.getEstado().equalsIgnoreCase("Entregado")) {
+            if (pedido.getEstado() != null && !pedido.getEstado().equalsIgnoreCase("Entregado") && !pedido.getEstado().equalsIgnoreCase("Cancelado")) {
                 throw new DomicilioConPedidoEnCursoException();
             }
         }
