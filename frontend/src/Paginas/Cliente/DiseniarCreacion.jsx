@@ -51,26 +51,33 @@ function DiseniarCreacion({ tipo }) {
       const cantidad = i.tipo === "Hamburguesa" ? cantCarnes : 1;
       return sum + (i.precio || 0) * cantidad;
     }, 0);
-    if (tipo === "Pizza") {
-      if (tamanio === "2") total *= 1.3;
-      if (tamanio === "3") total *= 1.6;
-    }
     setPrecioTotal(total);
   }, [ingredientes, tamanio, cantCarnes, tipo]);
 
   const crearNuevaCreacion = async (favorita) => {
     const seleccionados = ingredientes.filter((i) => i.seleccionado);
-
     if (tipo === "Pizza") {
       const tieneMasa = seleccionados.some((i) => i.tipo === "Masa");
       const tieneSalsa = seleccionados.some((i) => i.tipo === "Salsa");
-      if (!tieneMasa || !tieneSalsa)
-        return alert("Debes seleccionar una masa y una salsa.");
+      const tieneTamanio = seleccionados.some((i) => i.tipo === "Tamanio");
+      if (!tieneTamanio) {
+        return alert("Debes seleccionar un tamaño.")
+      }
+      if (!tieneMasa) {
+        return alert("Debes seleccionar una masa.");
+      }
+      if (!tieneSalsa) {
+        return alert("Debes seleccionar una salsa.")
+      }
     } else if (tipo === "Hamburguesa") {
       const tienePan = seleccionados.some((i) => i.tipo === "Pan");
       const tieneCarne = seleccionados.some((i) => i.tipo === "Hamburguesa");
-      if (!tienePan || !tieneCarne)
-        return alert("Debes seleccionar un pan y una carne.");
+      if (!tienePan) {
+        return alert("Debes seleccionar un pan.");
+      }
+      if (!tieneCarne) {
+        return alert("Debes seleccionar una carne.")
+      }
     }
 
     const ingredientesFinales = seleccionados.map((i) => ({

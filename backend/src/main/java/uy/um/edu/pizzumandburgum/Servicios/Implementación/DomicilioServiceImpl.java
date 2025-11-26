@@ -51,7 +51,8 @@ public class DomicilioServiceImpl implements DomicilioService {
         }
 
         for (Pedido pedido : domicilio.getPedidos()) {
-            if (pedido.getEstado() != null && !pedido.getEstado().equalsIgnoreCase("Entregado")) {
+            if (pedido.getEstado() != null &&
+                    (!pedido.getEstado().equalsIgnoreCase("Entregado") && !pedido.getEstado().equalsIgnoreCase("Cancelado"))) {
                 throw new DomicilioConPedidoEnCursoException();
             }
         }
@@ -70,10 +71,18 @@ public class DomicilioServiceImpl implements DomicilioService {
             throw new SinAccesoAlDomicilioException();
         }
 
+        for (Pedido pedido : domicilio.getPedidos()) {
+            if (pedido.getEstado() != null &&
+                    (!pedido.getEstado().equalsIgnoreCase("Entregado") && !pedido.getEstado().equalsIgnoreCase("Cancelado"))) {
+                throw new DomicilioConPedidoEnCursoException();
+            }
+        }
+
         long cantidadDomicilios = domicilioRepository.countByClienteId(clienteId);
         if (cantidadDomicilios <= 1) {
             throw new UnicoDomicilioException();
         }
+
         domicilio.setEstaActivo(false);
         historicoService.RegistrarEliminar(domicilio);
 
