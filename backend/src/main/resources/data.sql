@@ -1,31 +1,27 @@
 INSERT INTO usuario (email, nombre, apellido, contrasenia, telefono, fecha_nac, cedula)
 VALUES
-    ('juan@example.com', 'Juan', 'Pérez', '12345678', 59891234567, '1990-05-15', 12345678),
-    ('maria@example.com', 'María', 'Gómez', 'abcd', 59899887766, '1995-11-02', 87654321),
-    ('pepe@example.com', 'Pepe', 'Rodríguez', 'admin123', 59891112222, '1988-01-20', 55555555);
+    ('cliente@example.com', 'Cliente', 'de Prueba', '12345678', 091111111, '1990-05-15', 12345678),
+    ('admin@example.com', 'Admin', 'de Prueba', 'admin123', 091111111, '1988-01-20', 55555555);
 
 INSERT INTO cliente (email)
-VALUES ('juan@example.com'), ('maria@example.com');
+VALUES ('cliente@example.com');
 
 INSERT INTO administrador (email)
-VALUES ('pepe@example.com');
+VALUES ('admin@example.com');
 
 INSERT INTO domicilio (direccion, esta_activo)
 VALUES
     ('Av. Italia 1234, Montevideo', true),
-    ('Bvar. Artigas 567, Montevideo', true),
     ('Ellauri 900, Montevideo', true);
 
 INSERT INTO cliente_domicilio (id_cliente, id_domicilio)
 VALUES
-    ('juan@example.com', 1),
-    ('juan@example.com', 3),
-    ('maria@example.com', 2);
+    ('cliente@example.com', 1),
+    ('cliente@example.com', 2);
 
 INSERT INTO medio_de_pago (numero_tarjeta, fecha_vencimiento, nombre_titular, esta_activo, cliente_id)
 VALUES
-    (4111111111111111, '2027-05-31', 'Juan Pérez', true, 'juan@example.com'),
-    (5555444433332222, '2026-08-30', 'María Gómez', true, 'maria@example.com');
+    (4111111111111111, '2027-05-31', 'Cliente de Prueba', true, 'cliente@example.com');
 
 
 -- Masas
